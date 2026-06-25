@@ -1,0 +1,122 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background: #f4fff4;
+}
+
+header{
+    background: linear-gradient(135deg, #2d9b3d, #4cc95a);
+    padding: 50px 20px;
+    color: white;
+}
+
+.conteiner-header{
+    max-width: 1200px;
+    margin: auto;
+}
+
+header h1{
+    font-size: 35px;
+    margin-bottom: 10px;
+    letter-spacing: 5px;
+    font-weight: bold;
+    
+}
+
+header p{
+    font-size: 16px;
+}
+
+.filtros{
+    max-width: 1200px;
+    margin: -30px auto 30px;
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    display: flex;
+    gap: 20px;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.8);
+}
+
+.campo{
+    flex: 1;
+}
+
+.campo label{
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 16px;
+}
+
+.campo input, .campo select{
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #49b84f;
+    border-radius: 12px;
+    font-size: 16px;
+}
+
+.clinicas{
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 25px;
+    padding: 20px;
+}
+
+.card{
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.topo-card{
+    background: linear-gradient(135deg, #4cc95a, #6be076);
+    color: white;
+    padding: 25px;
+}
+
+.topo-card h2{
+    margin-bottom: 10px;
+}
+
+.conteudo{
+    padding: 25px;
+}
+
+.conteudo p{
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.info-extra{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    font-size: 20px;
+}
+
+.info-extra span{
+    color: #258133;
+}
+
+.info-extra strong{
+    color: #258133;
+}
+
+@media(max-width: 768px){
+    .filtros{
+        flex-direction: column;
+    }
+
+    header h1{
+        font-size: 35px;
+    }
+}

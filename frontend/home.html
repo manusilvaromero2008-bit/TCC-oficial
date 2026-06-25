@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Pet</title>
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.6.0/css/all.css">
+</head>
+<body>
+    <header>
+        <div class="overlay"></div>
+        <div class="container-header">
+            <h1><i class="fa-solid fa-paw"</i>Agenda Pet</i></h1>
+            <p>Encontre a melhor clínica veterinária em Campinas</p>
+        </div>
+    </header>
+
+    <section class="filtros">
+    <div class="campo">
+        <label>Buscar clínicas</label>
+        <input type="text" id="pesquisa" placeholder="Digite o nome da Clínica...">
+    </div>
+
+    <div class="campo">
+        <label>Selecione sua região</label>
+        <select id="regiao">
+            <option value="todas">Todas as regiões</option>
+            <option value="Centro">Centro</option>
+            <option value="Cambuí">Cambuí</option>
+            <option value="Taquaral">Taquaral</option>
+            <option value="Barão Geraldo">Barão Geraldo</option>
+        </select>
+    </div>
+</section>
+
+<section class="clinicas" id="listaClinicas">
+    <div class="card" data-regiao="Centro">
+        <div class="topo-card">
+            <h2>Pet Vida Veterinária</h2>
+            <p><i class="fa-solid fa-location-dot"></i>Centro</p>
+        </div>
+
+        <div class="conteudo">
+            <p><i class="fa-solid fa-map-pin"></i> Av. Francisco Glicério, 1200</p>
+            <p><i class="fa-solid fa-phone"></i> (19) 3234-5678</p>
+            <p><i class="fa-regular fa-clock"></i> Seg-Sex: 8h-18h | Sáb: 8h-12h
+            </p>
+            <div class="info-extra">
+                <span>Consulta</span>
+                <strong>R$ 120</strong>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="card" data-regiao="Cambuí">
+        <div class="topo-card">
+            <h2>Clínica Animal Care</h2>
+            <p><i class="fa-solid fa-location-dot"></i>Cambuí</p>
+        </div>
+
+        <div class="conteudo">
+            <p><i class="fa-solid fa-map-pin"></i>Rua Coronel Quirino, 456</p>
+            <p><i class="fa-solid fa-phone"></i>(19) 3345-6789</p>
+            <p><i class="fa-regular fa-clock"></i>Seg-Sex: 9h-19h | Sáb: 9h-14h</p>
+            <div class="info-extra">
+                <span>Consulta</span>
+                <strong>R$ 150</strong>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card" data-regiao="Taquaral">
+        <div class="topo-card">
+            <h2>VetCare Taquaral</h2>
+            <p><i class="fa-solid fa-location-dot"></i>Taquaral</p>
+        </div>
+
+        <div class="conteudo">
+            <p><i class="fa-solid fa-map-pin"></i>Av. Heitor Penteado, 890</p>
+            <p><i class="fa-solid fa-phone"></i>(19) 3456-7890</p>
+            <p><i class="fa-regular fa-clock"></i>Seg-Dom: 24h
+            </p>
+            <div class="info-extra">
+                <span>Consulta</span>
+                <strong>R$ 100</strong>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card" data-regiao="Barão Geraldo">
+        <div class="topo-card">
+            <h2>Pet Health Barão</h2>
+            <p><i class="fa-solid fa-location-dot"></i>Barão Geraldo</p>
+        </div>
+
+        <div class="conteudo">
+            <p><i class="fa-solid fa-map-pin"></i>Av. Albino J.B de Oliveira, 1500</p>
+            <p><i class="fa-solid fa-phone"></i>(19) 3567-8901</p>
+            <p><i class="fa-regular fa-clock"></i>Seg-Sex: 8h-20h | Sáb-Dom: 8h-16h</p>
+            <div class="info-extra">
+                <span>Consulta</span>
+                <strong>R$ 130</strong>
+            </div>
+        </div>
+    </div>
+    
+</section>
+
+<script src="js/home.js"></script>
+</body>
+</html>
