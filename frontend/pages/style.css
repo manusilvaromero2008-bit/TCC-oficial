@@ -1,13 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Poppins', sans-serif;
+    background: #f4fff4;
+    color: #333;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
 .clinic-header{
     background: linear-gradient(135deg, #2d9b3d, #4cc95a);
     padding: 40px;
     color: white;
-
 }
 
 .clinic-header h1{
     font-size: 42px;
     letter-spacing: 2px;
+    margin-top: 10px;
 }
 
 .voltar{
@@ -16,7 +34,16 @@
     text-decoration: none;
     color: white;
     font-weight: bold;
+    transition: .3s;
 }
+
+.voltar:hover{
+    opacity: .8;
+}
+
+/* =========================
+   BOXES
+========================= */
 
 .box{
     max-width: 1100px;
@@ -24,42 +51,71 @@
     background: white;
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    box-shadow: 0 5px 15px rgba(0,0,0,.08);
 }
 
 .box h2{
-    margin-bottom: 20px;
     color: #2d9b3d;
+    margin-bottom: 20px;
 }
+
+.box p{
+    margin-bottom: 15px;
+    font-size: 17px;
+}
+
+.box i{
+    color: #2d9b3d;
+    margin-right: 8px;
+}
+
+/* =========================
+   PREÇO
+========================= */
 
 .preco-box{
     display: flex;
     justify-content: space-between;
+    align-items: center;
     font-size: 22px;
 }
 
-.preco-box strang{
+.preco-box strong{
     color: #2d9b3d;
 }
 
+/* =========================
+   EXAMES
+========================= */
+
 .grid-exames{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
     gap: 20px;
 }
 
 .exame{
     background: #f7fff7;
-    padding: 20p;
+    padding: 20px;
     border-radius: 15px;
     border: 2px solid #d8f5d8;
+    transition: .3s;
 }
+
+.exame:hover{
+    transform: translateY(-4px);
+}
+
+/* =========================
+   VETERINÁRIOS
+========================= */
 
 .vet-card{
     background: #f7fff7;
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 15px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -67,7 +123,7 @@
 
 .status{
     border: none;
-    padding: 10px 15px;
+    padding: 10px 18px;
     border-radius: 12px;
     font-weight: bold;
 }
@@ -82,8 +138,12 @@
     color: #d9534f;
 }
 
+/* =========================
+   HORÁRIOS
+========================= */
+
 .horarios{
-    display: fex;
+    display: flex;
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 25px;
@@ -96,31 +156,87 @@
     background: #49b84f;
     color: white;
     cursor: pointer;
+    transition: .3s;
 }
 
 .horarios button:hover{
     transform: scale(1.05);
+    background: #2d9b3d;
 }
 
-.btn-agendar, .btn-transporte{
+/* =========================
+   BOTÕES
+========================= */
+
+.btn-agendar,
+.btn-transporte{
     width: 100%;
     padding: 18px;
-    border: none;
     border-radius: 15px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     margin-top: 15px;
-
+    transition: .3s;
 }
 
 .btn-agendar{
     background: #2d9b3d;
     color: white;
+    border: none;
+}
+
+.btn-agendar:hover{
+    background: #248032;
 }
 
 .btn-transporte{
     background: white;
     color: #2d9b3d;
     border: 2px solid #2d9b3d;
+}
+
+.btn-transporte:hover{
+    background: #2d9b3d;
+    color: white;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media (max-width:768px){
+
+    .clinic-header{
+        padding: 30px 20px;
+    }
+
+    .clinic-header h1{
+        font-size: 30px;
+    }
+
+    .box{
+        width: 92%;
+        padding: 20px;
+    }
+
+    .preco-box{
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .vet-card{
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .horarios{
+        justify-content: center;
+    }
+
+    .horarios button{
+        flex: 1 1 100px;
+    }
 }
