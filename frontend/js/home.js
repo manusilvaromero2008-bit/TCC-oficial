@@ -1,36 +1,31 @@
-
 const pesquisa = document.getElementById("pesquisa");
 const regiao = document.getElementById("regiao");
+
 const cards = document.querySelectorAll(".card");
 
-function filtrarClinicas() {
+function filtrar() {
 
-    const textoPesquisa = pesquisa.value.toLowerCase().trim();
-    const regiaoSelecionada = regiao.value;
+    const texto = pesquisa.value.toLowerCase().trim();
+    const filtroRegiao = regiao.value.toLowerCase();
 
     cards.forEach(card => {
 
-        const nomeClinica = card.querySelector("h2").textContent.toLowerCase();
-        const regiaoClinica = card.dataset.regiao;
+        const nome = card.querySelector("h2").textContent.toLowerCase();
+        const regiaoCard = card.dataset.regiao.toLowerCase();
 
-        const correspondePesquisa = nomeClinica.includes(textoPesquisa);
+        const nomeCorreto = nome.includes(texto);
+        const regiaoCorreta =
+            filtroRegiao === "todas" ||
+            regiaoCard === filtroRegiao;
 
-        const correspondeRegiao =
-            regiaoSelecionada === "todas" ||
-            regiaoClinica === regiaoSelecionada;
-
-        if (correspondePesquisa && correspondeRegiao) {
-            card.parentElement.style.display = "block";
-        } else {
-            card.parentElement.style.display = "none";
-        }
-
+        // Esconde ou mostra o LINK inteiro
+        card.parentElement.style.display =
+            nomeCorreto && regiaoCorreta
+                ? "block"
+                : "none";
     });
 
 }
 
-pesquisa.addEventListener("input", filtrarClinicas);
-regiao.addEventListener("change", filtrarClinicas);
-
-
-filtrarClinicas();
+pesquisa.addEventListener("keyup", filtrar);
+regiao.addEventListener("change", filtrar);
