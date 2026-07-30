@@ -1,40 +1,36 @@
+
 const pesquisa = document.getElementById("pesquisa");
 const regiao = document.getElementById("regiao");
 const cards = document.querySelectorAll(".card");
 
-const paginas = {
-    "Pet Vida Veterinária": "petvida.html",
-    "Clínica Animal Care": "animalcare.html",
-    "VetCare Taquaral": "vetcare.html",
-    "Pet Health Barão": "pethealth.html"
-};
+function filtrarClinicas() {
 
-function filtrar() {
-    const texto = pesquisa.value.toLowerCase();
-    const filtroRegiao = regiao.value.toLowerCase();
+    const textoPesquisa = pesquisa.value.toLowerCase().trim();
+    const regiaoSelecionada = regiao.value;
 
     cards.forEach(card => {
-        const nome = card.querySelector("h2").textContent.toLowerCase();
-        const reg = card.dataset.regiao.toLowerCase();
 
-        const pesquisaOk = nome.includes(texto);
-        const regiaoOk = filtroRegiao === "todas" || reg === filtroRegiao;
+        const nomeClinica = card.querySelector("h2").textContent.toLowerCase();
+        const regiaoClinica = card.dataset.regiao;
 
-        card.style.display = pesquisaOk && regiaoOk ? "block" : "none";
+        const correspondePesquisa = nomeClinica.includes(textoPesquisa);
+
+        const correspondeRegiao =
+            regiaoSelecionada === "todas" ||
+            regiaoClinica === regiaoSelecionada;
+
+        if (correspondePesquisa && correspondeRegiao) {
+            card.parentElement.style.display = "block";
+        } else {
+            card.parentElement.style.display = "none";
+        }
+
     });
+
 }
 
-pesquisa.addEventListener("input", filtrar);
-regiao.addEventListener("change", filtrar);
+pesquisa.addEventListener("input", filtrarClinicas);
+regiao.addEventListener("change", filtrarClinicas);
 
-cards.forEach(card => {
-    card.style.cursor = "pointer";
 
-    card.addEventListener("click", () => {
-        const nome = card.querySelector("h2").textContent;
-
-        if (paginas[nome]) {
-            window.location.href = paginas[nome];
-        }
-    });
-});
+filtrarClinicas();
