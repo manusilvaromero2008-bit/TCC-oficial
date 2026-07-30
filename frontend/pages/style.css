@@ -12,9 +12,7 @@ body{
     color: #333;
 }
 
-/* =========================
-   CABEÇALHO
-========================= */
+
 
 .clinic-header{
     background: linear-gradient(135deg, #2d9b3d, #4cc95a);
@@ -41,9 +39,7 @@ body{
     opacity: .8;
 }
 
-/* =========================
-   BOXES
-========================= */
+
 
 .box{
     max-width: 1100px;
@@ -69,9 +65,6 @@ body{
     margin-right: 8px;
 }
 
-/* =========================
-   PREÇO
-========================= */
 
 .preco-box{
     display: flex;
@@ -84,9 +77,7 @@ body{
     color: #2d9b3d;
 }
 
-/* =========================
-   EXAMES
-========================= */
+
 
 .grid-exames{
     display: grid;
@@ -106,9 +97,7 @@ body{
     transform: translateY(-4px);
 }
 
-/* =========================
-   VETERINÁRIOS
-========================= */
+
 
 .vet-card{
     background: #f7fff7;
@@ -138,9 +127,7 @@ body{
     color: #d9534f;
 }
 
-/* =========================
-   HORÁRIOS
-========================= */
+
 
 .horarios{
     display: flex;
@@ -164,9 +151,7 @@ body{
     background: #2d9b3d;
 }
 
-/* =========================
-   BOTÕES
-========================= */
+
 
 .btn-agendar,
 .btn-transporte{
@@ -201,9 +186,7 @@ body{
     color: white;
 }
 
-/* =========================
-   RESPONSIVO
-========================= */
+
 
 @media (max-width:768px){
 
