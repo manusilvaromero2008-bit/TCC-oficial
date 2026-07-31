@@ -1,107 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro</title>
+    <title>Cadastro para Agendamento</title>
+
     <link rel="stylesheet" href="cadastro.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
+
 <body>
-    <header class="cadastro-header">
-        <a href="../../home.html" class="voltar">
-            <i class="fa-solid fa-arrow-left"></i>Voltar
-        </a>
 
-        <h1>
-            <i class="fa-solid fa-paw"></i>
-            Cadastro para Agendamento
-        </h1>
-        <p>Preencha os dados do tutor e do pet para continuar.</p>
+<header class="cadastro-header">
 
-    </header>
+    <a href="../../home.html" class="voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+        Voltar
+    </a>
 
-    <div class="container">
-        <form>
-            <section class="box">
-                <h2>
-                    <i class="fa-solid fa-user"></i>
-                    Dados do Tutor
-                </h2>
+    <h1>
+        <i class="fa-solid fa-paw"></i>
+        Cadastro para Agendamento
+    </h1>
 
-                <div class="campo">
-                    <label>Nome Completo</label>
-                    <input type="text" required>
-                </div>
+    <p>Preencha os dados do tutor e do(s) pet(s).</p>
 
-                <div class="campo">
-                    <label>CPF</label>
-                    <input type="text" required>
-                </div>
+</header>
 
-                <div class="campo">
-                    <label>Telefone</label>
-                    <input type="tel" required>
-                </div>
+<div class="container">
 
-                <div class="campo">
-                    <label>Email</label>
-                    <input type="email" required>
-                </div>
+<form>
 
-            </section>
-
-            <section class="box">
-                <h2>
-                    <i class="fa-solid fa-dog"></i>
-                    Dados do Pet
-                </h2>
-
-                <div class="campo">
-                    <label>Nome do Pet</label>
-                    <input type="text" required>
-                </div>
-                <div class="campo">
-                    <label>Espécie</label>
-                    <select required>
-                        <option>Cachorro</option>
-                        <option>Gato</option>
-                        <option>Ave</option>
-                        <option>Roedor</option>
-                        <option>Outro</option>
-                    </select>
-                </div>
-
-                <div class="campo">
-                    <label>Raça</label>
-                    <input type="text">
-                </div>
-
-                <div class="campo">
-                    <label>Idade</label>
-                    <input type="number">
-                </div>
-
-                <div class="campo">
-                    <label>Sexo</label>
-                    <select>
-                        <option>Macho</option>
-                        <option>Fêmea</option>
-                    </select>
-                </div>
-
-                <div class="campo">
-                    <label>Peso (kg)</label>
-                    <input type="number" step="0.1">
-                </div>
-
-            </section>
-
-            <button class="btn-confirmar">
-                Prosseguir para Agendamento
-            </button>
-        </form>
-    </div>
     
+
+    <section class="box">
+
+        <h2>
+            <i class="fa-solid fa-user"></i>
+            Dados do Tutor
+        </h2>
+
+        <div class="grid">
+
+            <div class="campo">
+                <label>Nome Completo *</label>
+                <input type="text" placeholder="Digite seu nome" required>
+            </div>
+
+            <div class="campo">
+                <label>CPF *</label>
+                <input type="text" placeholder="000.000.000-00" required>
+            </div>
+
+            <div class="campo">
+                <label>Telefone *</label>
+                <input type="tel" placeholder="(19) 99999-9999" required>
+            </div>
+
+            <div class="campo">
+                <label>E-mail *</label>
+                <input type="email" placeholder="email@email.com" required>
+            </div>
+
+            <div class="campo full">
+                <label>Endereço *</label>
+                <input type="text" placeholder="Rua, número e bairro" required>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    
+
+    <section class="box">
+
+        <h2>
+            <i class="fa-solid fa-dog"></i>
+            Dados do(s) Pet(s)
+        </h2>
+
+        <div id="pets">
+
+            
+
+            <div class="pet">
+
+                <h3>
+                    <i class="fa-solid fa-paw"></i>
+                    Pet 1
+                </h3>
+
+                <div class="grid">
+
+                    <div class="campo">
+                        <label>Nome *</label>
+                        <input type="text" placeholder="Nome do pet" required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Espécie *</label>
+                        <select required>
+                            <option>Cão</option>
+                            <option>Gato</option>
+                            <option>Ave</option>
+                            <option>Roedor</option>
+                            <option>Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label>Raça *</label>
+                        <input type="text" placeholder="Raça" required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Idade *</label>
+                        <input type="text" placeholder="Ex: 2 anos" required>
+                    </div>
+
+                    <div class="campo">
+                        <label>Sexo *</label>
+                        <select required>
+                            <option>Macho</option>
+                            <option>Fêmea</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label>Peso *</label>
+                        <input type="text" placeholder="Ex: 5kg" required>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button type="button" id="adicionarPet" class="btn-add">
+            <i class="fa-solid fa-plus"></i>
+            Adicionar outro pet
+        </button>
+
+    </section>
+
+
+    
+
+    <button type="submit" class="btn-confirmar">
+        <i class="fa-solid fa-calendar-check"></i>
+        Prosseguir para Agendamento
+    </button>
+
+</form>
+
+</div>
+
+<script src="../js/cadastro.js"></script>
+
 </body>
+
 </html>
