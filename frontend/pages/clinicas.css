@@ -155,14 +155,17 @@ body{
 
 .btn-agendar,
 .btn-transporte{
+    display: block;
     width: 100%;
     padding: 18px;
     border-radius: 15px;
     font-size: 18px;
     font-weight: bold;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
     margin-top: 15px;
-    transition: .3s;
+    box-sizing: border-box;
 }
 
 .btn-agendar{
