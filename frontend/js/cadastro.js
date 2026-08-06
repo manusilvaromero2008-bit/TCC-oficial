@@ -58,7 +58,7 @@ btnAdicionar.addEventListener("click", () => {
 
 });
 
-// BOTÃO PARA IR PARA A TELA DE DATA E HORÁRIO
+
 
 const btnProsseguir = document.getElementById("btnProsseguir");
 

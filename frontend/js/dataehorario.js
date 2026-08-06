@@ -1,3 +1,6 @@
+const nomeClinica = localStorage.getItem("clinica");
+
+document.getElementById("nomeClinica").textContent = clinica;
 const botoesData = document.querySelectorAll(".datas button");
 const botoesHora = document.querySelectorAll(".horarios button");
 
@@ -7,7 +10,7 @@ const btnContinuar = document.getElementById("btnContinuar");
 cardHorario.style.display = "none";
 btnContinuar.style.display = "none";
 
-// Seleção da data
+
 botoesData.forEach(botao => {
 
     botao.addEventListener("click", () => {
@@ -26,7 +29,7 @@ botoesData.forEach(botao => {
 
 });
 
-// Seleção do horário
+
 botoesHora.forEach(botao => {
 
     botao.addEventListener("click", () => {
@@ -41,7 +44,7 @@ botoesHora.forEach(botao => {
 
 });
 
-// Próxima página
+
 btnContinuar.addEventListener("click", () => {
 
     window.location.href = "servicos.html";

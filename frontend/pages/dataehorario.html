@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendar Consulta</title>
-    <link rel="stylesheet" href="dataehorario.css">
+    <link rel="stylesheet" href="../css/dataehorario.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 <body>
 
@@ -12,7 +14,7 @@
 
     <header>
         <h1>Agendar Consulta</h1>
-        <p>Pet Vida Veterinária</p>
+       <p id="nomeClinica"></p>
     </header>
 
     <div class="etapas">
@@ -38,11 +40,14 @@
 
     </div>
 
-    <!-- CARD DATA -->
+    
 
     <div class="card">
 
-        <h2>📅 Selecione a Data</h2>
+        <h2>
+    <i class="fa-regular fa-calendar"></i>
+    Selecione a Data
+</h2>
 
         <div class="datas">
 
@@ -58,11 +63,14 @@
 
     </div>
 
-    <!-- CARD HORÁRIO -->
+    
 
     <div class="card" id="cardHorario">
 
-        <h2>🕒 Selecione o Horário</h2>
+       <h2>
+    <i class="fa-regular fa-clock"></i>
+    Selecione o Horário
+</h2>
 
         <div class="horarios">
 
