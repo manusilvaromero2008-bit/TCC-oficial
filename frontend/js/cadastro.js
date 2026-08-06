@@ -57,3 +57,11 @@ btnAdicionar.addEventListener("click", () => {
     container.appendChild(novoPet);
 
 });
+
+// BOTÃO PARA IR PARA A TELA DE DATA E HORÁRIO
+
+const btnProsseguir = document.getElementById("btnProsseguir");
+
+btnProsseguir.addEventListener("click", () => {
+    window.location.href = "dataehorario.html";
+});
