@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro para Agendamento</title>
+    <title>Cadastro - Agenda Pet</title>
 
     <link rel="stylesheet" href="../css/cadastro.css">
 
@@ -14,153 +14,158 @@
 
 <body>
 
-<header class="cadastro-header">
+    <header class="cadastro-header">
 
-    <a href="../../home.html" class="voltar">
-        <i class="fa-solid fa-arrow-left"></i>
-        Voltar
-    </a>
+        <a href="../../home.html" class="voltar">
+            <i class="fa-solid fa-arrow-left"></i>
+            Voltar
+        </a>
 
-    <h1>
-        <i class="fa-solid fa-paw"></i>
-        Cadastro para Agendamento
-    </h1>
+        <h1>
+            <i class="fa-solid fa-paw"></i>
+            Cadastro para Agendamento
+        </h1>
 
-    <p>Preencha os dados do tutor e do(s) pet(s).</p>
+        <p>Preencha os dados do tutor e do(s) pet(s).</p>
 
-</header>
+    </header>
 
-<div class="container">
+    <main class="container">
 
-<form>
+        <form>
 
-    
+            <!-- DADOS DO TUTOR -->
 
-    <section class="box">
+            <section class="box">
 
-        <h2>
-            <i class="fa-solid fa-user"></i>
-            Dados do Tutor
-        </h2>
-
-        <div class="grid">
-
-            <div class="campo">
-                <label>Nome Completo *</label>
-                <input type="text" placeholder="Digite seu nome" required>
-            </div>
-
-            <div class="campo">
-                <label>CPF *</label>
-                <input type="text" placeholder="000.000.000-00" required>
-            </div>
-
-            <div class="campo">
-                <label>Telefone *</label>
-                <input type="tel" placeholder="(19) 99999-9999" required>
-            </div>
-
-            <div class="campo">
-                <label>E-mail *</label>
-                <input type="email" placeholder="email@email.com" required>
-            </div>
-
-            <div class="campo full">
-                <label>Endereço *</label>
-                <input type="text" placeholder="Rua, número e bairro" required>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    
-
-    <section class="box">
-
-        <h2>
-            <i class="fa-solid fa-dog"></i>
-            Dados do(s) Pet(s)
-        </h2>
-
-        <div id="pets">
-
-            
-
-            <div class="pet">
-
-                <h3>
-                    <i class="fa-solid fa-paw"></i>
-                    Pet 1
-                </h3>
+                <h2>
+                    <i class="fa-solid fa-user"></i>
+                    Dados do Tutor
+                </h2>
 
                 <div class="grid">
 
                     <div class="campo">
-                        <label>Nome *</label>
-                        <input type="text" placeholder="Nome do pet" required>
+                        <label>Nome Completo *</label>
+                        <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
                     </div>
 
                     <div class="campo">
-                        <label>Espécie *</label>
-                        <select required>
-                            <option>Cão</option>
-                            <option>Gato</option>
-                            <option>Ave</option>
-                            <option>Roedor</option>
-                            <option>Outro</option>
-                        </select>
+                        <label>CPF *</label>
+                        <input type="text" id="cpfTutor" placeholder="000.000.000-00" required>
                     </div>
 
                     <div class="campo">
-                        <label>Raça *</label>
-                        <input type="text" placeholder="Raça" required>
+                        <label>Telefone *</label>
+                        <input type="tel" id="telefoneTutor" placeholder="(19) 99999-9999" required>
                     </div>
 
                     <div class="campo">
-                        <label>Idade *</label>
-                        <input type="text" placeholder="Ex: 2 anos" required>
+                        <label>E-mail *</label>
+                        <input type="email" id="emailTutor" placeholder="email@email.com" required>
                     </div>
 
-                    <div class="campo">
-                        <label>Sexo *</label>
-                        <select required>
-                            <option>Macho</option>
-                            <option>Fêmea</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Peso *</label>
-                        <input type="text" placeholder="Ex: 5kg" required>
+                    <div class="campo full">
+                        <label>Endereço *</label>
+                        <input type="text" id="enderecoTutor" placeholder="Rua, número e bairro" required>
+                        <label> CEP </label>
+                        <input type="text" id="cep" placeholder="Digite o CEP"
                     </div>
 
                 </div>
 
-            </div>
+            </section>
 
-        </div>
+            <!-- DADOS DOS PETS -->
 
-        <button type="button" id="adicionarPet" class="btn-add">
-            <i class="fa-solid fa-plus"></i>
-            Adicionar outro pet
-        </button>
+            <section class="box">
 
-    </section>
+                <h2>
+                    <i class="fa-solid fa-dog"></i>
+                    Dados do(s) Pet(s)
+                </h2>
 
+                <div id="pets">
 
-    
+                    <div class="pet">
 
-    <button type="button" class="btn-confirmar" id="btnProsseguir">
-    Prosseguir para Agendamento
-</button>
+                        <h3>
+                            <i class="fa-solid fa-paw"></i>
+                            Pet 1
+                        </h3>
 
-</form>
+                        <div class="grid">
 
-</div>
+                            <div class="campo">
+                                <label>Nome *</label>
+                                <input type="text" id="nomePet" class="nomePet" placeholder="Nome do pet" required>
+                            </div>
 
-<script src="../js/cadastro.js"></script>
+                            <div class="campo">
+                                <label>Espécie *</label>
+
+                                <select id="especiePet" class="especiePet" required>
+                                    <option>Cão</option>
+                                    <option>Gato</option>
+                                    <option>Ave</option>
+                                    <option>Roedor</option>
+                                    <option>Outro</option>
+                                </select>
+
+                            </div>
+
+                            <div class="campo">
+                                <label>Raça *</label>
+                                <input type="text" id="racaPet" class="racaPet" placeholder="Raça" required>
+                            </div>
+
+                            <div class="campo">
+                                <label>Idade *</label>
+                                <input type="text" id="idadePet" class="idadePet" placeholder="Ex: 2 anos" required>
+                            </div>
+
+                            <div class="campo">
+                                <label>Sexo *</label>
+
+                                <select id="sexoPet" class="sexoPet" required>
+                                    <option>Macho</option>
+                                    <option>Fêmea</option>
+                                </select>
+
+                            </div>
+
+                            <div class="campo">
+                                <label>Peso *</label>
+                                <input type="text" id="pesoPet" class="pesoPet" placeholder="Ex: 5 kg" required>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <button type="button" id="adicionarPet" class="btn-add">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Adicionar outro pet
+
+                </button>
+
+            </section>
+
+            <button type="button" id="btnProsseguir" class="btn-confirmar">
+
+                Prosseguir para Agendamento
+
+            </button>
+
+        </form>
+
+    </main>
+
+    <script src="../js/cadastro.js"></script>
 
 </body>
 

@@ -1,88 +1,107 @@
-// Nome da clínica
-const nomeClinica = localStorage.getItem("clinica");
-document.getElementById("nomeClinica").textContent = nomeClinica;
+document.addEventListener("DOMContentLoaded", () => {
 
-// Elementos da página
-const botoesData = document.querySelectorAll(".datas button");
-const botoesHora = document.querySelectorAll(".horarios button");
+    // ===========================
+    // DADOS DA CLÍNICA
+    // ===========================
 
-const cardHorario = document.getElementById("cardHorario");
-const btnContinuar = document.getElementById("btnContinuar");
+    const clinica = JSON.parse(localStorage.getItem("clinicaDados"));
 
-// Esconde os elementos inicialmente
-cardHorario.style.display = "none";
-btnContinuar.style.display = "none";
+    if (clinica && document.getElementById("nomeClinica")) {
+        document.getElementById("nomeClinica").textContent = clinica.nome;
+    }
 
-// Variáveis que guardarão as escolhas
-let dataSelecionada = "";
-let horarioSelecionado = "";
+    // ===========================
+    // ELEMENTOS
+    // ===========================
 
-// =======================
-// Seleção da Data
-// =======================
+    const botoesData = document.querySelectorAll(".datas button");
+    const botoesHora = document.querySelectorAll(".horarios button");
 
-botoesData.forEach(botao => {
+    const cardHorario = document.getElementById("cardHorario");
+    const btnContinuar = document.getElementById("btnContinuar");
 
-    botao.addEventListener("click", () => {
+    cardHorario.style.display = "none";
+    btnContinuar.style.display = "none";
 
-        botoesData.forEach(b => b.classList.remove("selecionado"));
+    let dataSelecionada = "";
+    let horarioSelecionado = "";
 
-        botao.classList.add("selecionado");
+    // ===========================
+    // DATA
+    // ===========================
 
-        dataSelecionada = botao.textContent.trim();
+    botoesData.forEach(botao => {
 
-        // Salva a data
-        localStorage.setItem("data", dataSelecionada);
+        botao.addEventListener("click", () => {
 
-        // Mostra os horários
-        cardHorario.style.display = "block";
+            botoesData.forEach(b => {
+                b.classList.remove("selecionado");
+            });
 
-        cardHorario.scrollIntoView({
-            behavior: "smooth"
+            botao.classList.add("selecionado");
+
+            dataSelecionada = botao.textContent.trim();
+
+            cardHorario.style.display = "block";
+
+            cardHorario.scrollIntoView({
+                behavior: "smooth"
+            });
+
         });
 
     });
 
-});
+    // ===========================
+    // HORÁRIO
+    // ===========================
 
-// =======================
-// Seleção do Horário
-// =======================
+    botoesHora.forEach(botao => {
 
-botoesHora.forEach(botao => {
+        botao.addEventListener("click", () => {
 
-    botao.addEventListener("click", () => {
+            botoesHora.forEach(b => {
+                b.classList.remove("selecionado");
+            });
 
-        botoesHora.forEach(b => b.classList.remove("selecionado"));
+            botao.classList.add("selecionado");
 
-        botao.classList.add("selecionado");
+            horarioSelecionado = botao.textContent.trim();
 
-        horarioSelecionado = botao.textContent.trim();
+            btnContinuar.style.display = "block";
 
-        // Salva o horário
-        localStorage.setItem("horario", horarioSelecionado);
-
-        // Mostra o botão continuar
-        btnContinuar.style.display = "block";
+        });
 
     });
 
-});
+    // ===========================
+    // CONTINUAR
+    // ===========================
 
+    btnContinuar.addEventListener("click", () => {
 
+        if (!dataSelecionada) {
+            alert("Selecione uma data.");
+            return;
+        }
 
-btnContinuar.addEventListener("click", () => {
+        if (!horarioSelecionado) {
+            alert("Selecione um horário.");
+            return;
+        }
 
-    if (dataSelecionada === "") {
-        alert("Selecione uma data.");
-        return;
-    }
+        const agendamento = JSON.parse(localStorage.getItem("agendamento")) || {};
 
-    if (horarioSelecionado === "") {
-        alert("Selecione um horário.");
-        return;
-    }
+        agendamento.data = dataSelecionada;
+        agendamento.horario = horarioSelecionado;
 
-    window.location.href = "servicos.html";
+        localStorage.setItem(
+            "agendamento",
+            JSON.stringify(agendamento)
+        );
+
+        window.location.href = "servicos.html";
+
+    });
 
 });

@@ -1,259 +1,150 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<link rel="stylesheet" href="../css/servicos.css">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agendar Consulta - Serviços</title>
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
-    <link rel="stylesheet" href="../css/servicos.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-</head>
+<header>
 
-<body>
+    <h1>
+        <i class="fa-solid fa-paw"></i>
+        Agendar Consulta
+    </h1>
 
-    
+    <p id="nomeClinica"></p>
 
-    <header>
+</header>
 
-        <h1>
-            <i class="fa-solid fa-paw"></i>
-            Agendar Consulta
-        </h1>
 
-        <p id="nomeClinica"></p>
 
-    </header>
+<!-- ETAPAS -->
 
-    
+<div class="etapas">
 
-    <div class="etapas">
-
-        <div class="etapa concluida">
-            <div class="numero">
-                <i class="fa-solid fa-check"></i>
-            </div>
-            <span>Data e Hora</span>
+    <div class="etapa concluida">
+        <div class="numero">
+            <i class="fa-solid fa-check"></i>
         </div>
 
-        <div class="linha ativa"></div>
+        <span>Data e Hora</span>
+    </div>
 
-        <div class="etapa ativa">
-            <div class="numero">2</div>
-            <span>Serviço</span>
+
+    <div class="linha ativa"></div>
+
+
+    <div class="etapa ativa">
+
+        <div class="numero">
+            2
         </div>
 
-        <div class="linha"></div>
-
-        <div class="etapa">
-            <div class="numero">3</div>
-            <span>Pet e Transporte</span>
-        </div>
+        <span>Serviço</span>
 
     </div>
 
-    
 
-    <section class="card">
+    <div class="linha"></div>
 
-        <h2>
-            <i class="fa-solid fa-stethoscope"></i>
-            Consultas Disponíveis
-        </h2>
 
-        <div class="servico-card">
+    <div class="etapa">
 
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-stethoscope"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Consulta Geral</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dra. Maria Silva - Clínica Geral
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 120
-                </span>
-
-            </button>
-
+        <div class="numero">
+            3
         </div>
 
-        <div class="servico-card">
-
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-stethoscope"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Consulta Dermatológica</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dra. Ana Costa - Dermatologia
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 180
-                </span>
-
-            </button>
-
-        </div>
-
-    </section>
-
-   
-
-    <section class="card">
-
-        <h2>
-            <i class="fa-solid fa-flask"></i>
-            Exames Disponíveis
-        </h2>
-
-        <div class="servico-card">
-
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-vial"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Hemograma Completo</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dra. Maria Silva - Clínica Geral
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 80
-                </span>
-
-            </button>
-
-        </div>
-
-        <div class="servico-card">
-
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-vial"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Ultrassom Abdominal</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dr. João Santos - Cirurgia
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 150
-                </span>
-
-            </button>
-
-        </div>
-
-        <div class="servico-card">
-
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-vial"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Raio-X</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dr. João Santos - Cirurgia
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 120
-                </span>
-
-            </button>
-
-        </div>
-
-        <div class="servico-card">
-
-            <button class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid fa-vial"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>Endoscopia</h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        Dr. Rafael Torres - Gastroenterologia
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    R$ 350
-                </span>
-
-            </button>
-
-        </div>
-
-    </section>
-
-    
-
-    <div class="botoes">
-
-        <a href="../pages/dataehorario.html" class="btn-voltar">
-            Voltar
-        </a>
-
-        <a href="petetransporte.html" class="btn-continuar">
-            Continuar
-        </a>
+        <span>Pet e Transporte</span>
 
     </div>
 
-    <script src="../js/servicos.js"></script>
+</div>
 
-</body>
 
-</html>
+
+
+
+<!-- CONSULTAS -->
+
+<section class="card">
+
+
+    <h2>
+
+        <i class="fa-solid fa-stethoscope"></i>
+
+        Consultas Disponíveis
+
+    </h2>
+
+
+
+    <!-- SERVIÇOS SERÃO INSERIDOS PELO JS -->
+
+    <div id="listaConsultas"></div>
+
+
+</section>
+
+
+
+
+
+
+<!-- EXAMES -->
+
+<section class="card">
+
+
+    <h2>
+
+        <i class="fa-solid fa-flask"></i>
+
+        Exames Disponíveis
+
+    </h2>
+
+
+
+    <!-- SERVIÇOS SERÃO INSERIDOS PELO JS -->
+
+    <div id="listaExames"></div>
+
+
+</section>
+
+
+
+
+
+
+
+<!-- BOTÕES -->
+
+<div class="botoes">
+
+
+    <a href="dataehorario.html" class="btn-voltar">
+
+        Voltar
+
+    </a>
+
+
+
+    <button 
+        id="btnContinuar" 
+        class="btn-continuar"
+        disabled>
+
+        Continuar
+
+    </button>
+
+
+</div>
+
+
+
+
+
+<script src="../js/servicos.js"></script>
