@@ -1,6 +1,6 @@
 const nomeClinica = localStorage.getItem("clinica");
 
-document.getElementById("nomeClinica").textContent = clinica;
+document.getElementById("nomeClinica").textContent = nomeClinica;
 const servicos = document.querySelectorAll(".servico");
 
 
@@ -54,3 +54,4 @@ btnContinuar.addEventListener("click", () => {
     }
 
 });
+

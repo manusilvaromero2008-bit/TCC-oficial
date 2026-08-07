@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agendar Consulta | Pet Vida Veterinária</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+    <link rel="stylesheet" href="../css/petetransporte.css">
+</head>
+
+<body>
+
+    <!-- CABEÇALHO -->
+    <header class="header">
+
+        <div class="logo-area">
+
+            <div class="logo">
+                <i class="fa-solid fa-paw"></i>
+            </div>
+
+            <div>
+                <h1>Agendar Consulta</h1>
+                <p>Pet Vida Veterinária</p>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- INDICADOR DAS ETAPAS -->
+    <section class="steps">
+
+        <div class="step completed">
+
+            <div class="step-circle">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <span>Data e Hora</span>
+
+        </div>
+
+
+        <div class="line"></div>
+
+
+        <div class="step completed">
+
+            <div class="step-circle">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <span>Serviço</span>
+
+        </div>
+
+
+        <div class="line"></div>
+
+
+        <div class="step active">
+
+            <div class="step-circle">
+                <span>3</span>
+            </div>
+
+            <span>Pet e Transporte</span>
+
+        </div>
+
+    </section>
+
+
+    <main class="container">
+
+
+        <!-- SELECIONE O PET -->
+        <section class="section">
+
+            <div class="section-title">
+
+                <i class="fa-solid fa-paw"></i>
+
+                <h2>Selecione o Pet</h2>
+
+            </div>
+
+
+            <div class="pet-card" id="petCard">
+
+                <div class="pet-icon">
+                    <i class="fa-solid fa-cat"></i>
+                </div>
+
+                <div class="pet-info">
+
+                    <h3 id="petNome">Carregando...</h3>
+
+                    <p id="petDetalhes">Carregando informações...</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- TRANSPORTE -->
+        <section class="section transport-section">
+
+            <div class="section-title">
+
+                <i class="fa-solid fa-car"></i>
+
+                <h2>Transporte do Pet</h2>
+
+            </div>
+
+
+            <p class="transport-description">
+                Nosso serviço de transporte irá buscar seu pet no endereço
+                cadastrado e levá-lo até a clínica. Após o atendimento,
+                seu pet será levado de volta para casa.
+            </p>
+
+
+            <div class="transport-option" id="transportOption">
+
+                <div class="transport-left">
+
+                    <i class="fa-solid fa-car"></i>
+
+                    <span>Solicitar Transporte</span>
+
+                </div>
+
+
+                <div class="checkbox" id="transportCheckbox">
+
+                    <i class="fa-solid fa-check"></i>
+
+                </div>
+
+            </div>
+
+
+            <!-- ENDEREÇO -->
+            <div class="address-card" id="addressCard">
+
+                <h3>Endereço de Coleta:</h3>
+
+                <p id="endereco">Carregando endereço...</p>
+
+                <p id="cep">CEP: --</p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- RESUMO -->
+        <section class="summary">
+
+            <div class="summary-title">
+
+                <i class="fa-solid fa-check"></i>
+
+                <h2>Resumo do Agendamento</h2>
+
+            </div>
+
+
+            <div class="summary-content">
+
+                <p>
+                    <strong>Data:</strong>
+                    <span id="resumoData">--</span>
+                </p>
+
+                <p>
+                    <strong>Horário:</strong>
+                    <span id="resumoHorario">--</span>
+                </p>
+
+                <p>
+                    <strong>Serviço:</strong>
+                    <span id="resumoServico">--</span>
+                </p>
+
+                <p>
+                    <strong>Veterinário:</strong>
+                    <span id="resumoVeterinario">--</span>
+                </p>
+
+                <p>
+                    <strong>Pet:</strong>
+                    <span id="resumoPet">--</span>
+                </p>
+
+                <p>
+                    <strong>Tutor:</strong>
+                    <span id="resumoTutor">--</span>
+                </p>
+
+                <p>
+                    <strong>Telefone:</strong>
+                    <span id="resumoTelefone">--</span>
+                </p>
+
+                <p>
+                    <strong>Transporte:</strong>
+                    <span id="resumoTransporte">Não</span>
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- BOTÕES -->
+        <div class="buttons">
+
+            <button class="btn-back" id="btnVoltar">
+                Voltar
+            </button>
+
+
+            <button class="btn-confirm" id="btnConfirmar">
+
+                <i class="fa-solid fa-check"></i>
+
+                Confirmar Agendamento
+
+            </button>
+
+        </div>
+
+
+    </main>
+
+
+    <script src="../js/petetransporte.js"></script>
+
+</body>
+
+</html>
