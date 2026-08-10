@@ -1,0 +1,245 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #d0efdceb;
+    color: #075E3B;
+}
+
+header {
+    height: 80px;
+    background-color: #fdfcfc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    border-bottom: 3px solid #00BF63;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #075E3B;
+}
+
+.logo span {
+    color: #00BF63;
+}
+
+nav {
+    display: flex;
+    gap: 35px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #075E3B;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #00BF63;
+}
+
+main {
+    min-height: calc(100vh - 150px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.confirmacao {
+    width: 100%;
+    max-width: 1100px;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(7, 94, 59, 0.12);
+}
+
+.icone-confirmacao {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background-color: #00BF63;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+h1 {
+    color: #075E3B;
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 15px;
+}
+
+.mensagem {
+    font-size: 18px;
+    color: #4F665A;
+    line-height: 1.6;
+}
+
+.conteudo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    margin-top: 35px;
+}
+
+.informacoes {
+    width: 480px;
+    background-color: #DDF8E8;
+    border-radius: 18px;
+    padding: 25px;
+    text-align: left;
+    overflow: hidden;
+}
+
+.informacoes h2 {
+    color: #075E3B;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 15px;
+    padding: 15px 5px;
+    border-bottom: 1px solid #B9E8CC;
+    font-size: 16px;
+    min-width: 0;
+}
+
+.item:last-child {
+    border-bottom: none;
+}
+
+.item strong {
+    color: #075E3B;
+    flex-shrink: 0;
+}
+
+.item span {
+    max-width: 70%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    white-space: normal;
+    text-align: right;
+}
+
+.imagem-cachorro {
+    width: 380px;
+    height: 380px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imagem-cachorro img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 20px;
+}
+
+.agradecimento {
+    margin: 30px 0 20px;
+    font-size: 18px;
+    color: #4F665A;
+}
+
+#btnInicio {
+    border: none;
+    background-color: #00BF63;
+    color: #FFFFFF;
+    padding: 15px 35px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+#btnInicio:hover {
+    background-color: #075E3B;
+    transform: translateY(-2px);
+}
+
+footer {
+    background-color: #075E3B;
+    color: #FFFFFF;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 15px;
+}
+
+@media (max-width: 800px) {
+    header {
+        height: auto;
+        padding: 20px;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav {
+        gap: 15px;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .confirmacao {
+        padding: 30px 20px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
+
+    .conteudo {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .informacoes {
+        width: 100%;
+    }
+
+    .item {
+        flex-wrap: wrap;
+    }
+
+    .item span {
+        max-width: 100%;
+        text-align: left;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
+
+    .imagem-cachorro {
+        width: 280px;
+        height: 280px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
