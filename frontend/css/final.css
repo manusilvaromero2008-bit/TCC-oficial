@@ -302,3 +302,34 @@ footer {
         padding: 14px 20px;
     }
 }
+/* BOTÃO VOLTAR PARA O INÍCIO */
+
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    margin-top: 15px;
+    padding: 11px 22px;
+
+    background-color: #36721a;
+    color: white;
+
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+
+    border-radius: 8px;
+
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    background-color: #2d7a0f;
+    transform: translateY(-2px);
+}
+
+.btn-voltar i {
+    font-size: 13px;
+}

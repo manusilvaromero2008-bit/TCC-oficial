@@ -523,3 +523,117 @@ body{
     }
 
 }
+/* BOTÃO CONTINUAR */
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.btn-continuar {
+    background-color: #2f7b0c;
+    color: white;
+    border: none;
+    padding: 14px 35px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    transition: 0.3s;
+}
+
+.btn-continuar:hover {
+    background-color: #4d9a2f;
+    transform: translateY(-2px);
+}
+
+.btn-continuar i {
+    font-size: 14px;
+}
+/* ============================
+   CARD DO PET
+============================ */
+
+.pet-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+
+    padding: 14px 18px;
+    margin-bottom: 10px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+
+/* Quando passar o mouse */
+
+.pet-card:hover {
+    border-color: #65b83f;
+}
+
+
+/* ============================
+   PET SELECIONADO
+============================ */
+
+.pet-card.selecionado {
+    border: 2px solid #65b83f;
+    background-color: #f4faef;
+
+    box-shadow: 0 0 0 2px rgba(101, 184, 63, 0.12);
+}
+
+
+/* Ícone do pet */
+
+.pet-icon {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    background-color: #eaf6e4;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #65b83f;
+
+    flex-shrink: 0;
+}
+
+
+/* Nome e informações */
+
+.pet-info h3 {
+    margin: 0 0 5px 0;
+
+    color: #355f2a;
+
+    font-size: 16px;
+}
+
+.pet-info p {
+    margin: 0;
+
+    color: #777;
+
+    font-size: 13px;
+}

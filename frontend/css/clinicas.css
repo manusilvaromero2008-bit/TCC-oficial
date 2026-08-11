@@ -227,3 +227,69 @@ body{
     }
 }
 
+/* CARD DE TRANSPORTE */
+
+.card-transporte {
+    width: 100%;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 15px 20px;
+
+    background: #f5faf2;
+
+    border: 1px solid #d6f5c7;
+
+    border-radius: 10px;
+
+    margin-top: 10px;
+}
+
+
+/* Ícone do carro */
+
+.icone-transporte {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: transparent;
+
+    color: #65b83f;
+
+    font-size: 18px;
+}
+
+
+/* Texto */
+
+.texto-transporte {
+    flex: 1;
+}
+
+.texto-transporte h3 {
+    margin: 0 0 5px;
+
+    color: #356329;
+
+    font-size: 15px;
+}
+
+.texto-transporte p {
+    margin: 0;
+
+    color: #666;
+
+    font-size: 12px;
+
+    line-height: 1.4;
+}

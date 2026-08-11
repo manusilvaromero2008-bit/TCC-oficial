@@ -8,32 +8,22 @@
 
     <title>Agendar Consulta</title>
 
-
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 
     <link rel="stylesheet" href="../css/petetransporte.css">
 
 </head>
 
-
 <body>
-
 
 <header class="header">
 
-
     <div class="logo-area">
 
-
         <div class="logo">
-
             <i class="fa-solid fa-paw"></i>
-
         </div>
-
-
 
         <div>
 
@@ -41,344 +31,260 @@
                 Agendar Consulta
             </h1>
 
-
             <p id="nomeClinica">
                 Carregando clínica...
             </p>
 
-
         </div>
 
-
     </div>
-
 
 </header>
 
 
-
-
+<!-- ETAPAS DO AGENDAMENTO -->
 
 <section class="steps">
-
 
     <div class="step completed">
 
         <div class="step-circle">
-
             <i class="fa-solid fa-check"></i>
-
         </div>
-
 
         <span>
             Data e Hora
         </span>
 
-
     </div>
-
-
-
 
 
     <div class="line"></div>
 
 
-
-
-
     <div class="step completed">
 
-
         <div class="step-circle">
-
             <i class="fa-solid fa-check"></i>
-
         </div>
-
 
         <span>
             Serviço
         </span>
 
-
     </div>
-
-
-
 
 
     <div class="line"></div>
 
 
-
-
-
     <div class="step active">
 
-
         <div class="step-circle">
-
-            <span>
-                3
-            </span>
-
+            <span>3</span>
         </div>
-
 
         <span>
             Pet e Transporte
         </span>
 
-
     </div>
-
 
 </section>
 
 
-
-
-
+<!-- CONTEÚDO PRINCIPAL -->
 
 <main class="container">
 
 
+    <!-- SELEÇÃO DO PET -->
+
+    <section class="section">
+
+        <div class="section-title">
+
+            <i class="fa-solid fa-paw"></i>
+
+            <h2>
+                Selecione o Pet
+            </h2>
+
+        </div>
+
+        <div id="listaPets"></div>
+
+    </section>
 
 
 
-<section class="section">
+    <!-- TRANSPORTE -->
 
+    <section class="section transport-section">
 
-    <div class="section-title">
-
-
-        <i class="fa-solid fa-paw"></i>
-
-
-        <h2>
-            Selecione o Pet
-        </h2>
-
-
-    </div>
-
-
-
-
-
-    <div id="listaPets"></div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="section transport-section">
-
-
-    <div class="section-title">
-
-
-        <i class="fa-solid fa-car"></i>
-
-
-        <h2>
-            Transporte do Pet
-        </h2>
-
-
-    </div>
-
-
-
-
-
-    <p class="transport-description">
-
-
-        Nosso serviço de transporte irá buscar seu pet no endereço
-        cadastrado e levá-lo até a clínica.
-
-
-    </p>
-
-
-
-
-
-
-
-    <div class="transport-option" id="transportOption">
-
-
-
-        <div class="transport-left">
-
+        <div class="section-title">
 
             <i class="fa-solid fa-car"></i>
 
-
-            <span>
-                Solicitar Transporte
-            </span>
-
+            <h2>
+                Transporte do Pet
+            </h2>
 
         </div>
 
 
+        <p class="transport-description">
+
+            Nosso serviço de transporte irá buscar seu pet no endereço
+            cadastrado e levá-lo até a clínica.
+
+        </p>
+
+
+        <div class="transport-option" id="transportOption">
+
+            <div class="transport-left">
+
+                <i class="fa-solid fa-car"></i>
+
+                <span>
+                    Solicitar Transporte
+                </span>
+
+            </div>
+
+
+            <div class="checkbox" id="transportCheckbox">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- ENDEREÇO -->
+
+        <div class="address-card" id="addressCard">
+
+            <h3>
+                Endereço de Coleta:
+            </h3>
+
+            <p id="endereco">
+                Endereço não informado
+            </p>
+
+            <p id="cep">
+                CEP não informado
+            </p>
+
+        </div>
+
+    </section>
 
 
 
-        <div class="checkbox" id="transportCheckbox">
+    <!-- RESUMO DO AGENDAMENTO -->
 
+    <section class="summary">
+
+        <div class="summary-title">
 
             <i class="fa-solid fa-check"></i>
 
+            <h2>
+                Resumo do Agendamento
+            </h2>
 
         </div>
 
 
+        <div class="summary-content">
 
+            <p>
+                <strong>Clínica:</strong>
+                <span id="resumoClinica">--</span>
+            </p>
 
-    </div>
+            <p>
+                <strong>Data:</strong>
+                <span id="resumoData">--</span>
+            </p>
 
+            <p>
+                <strong>Horário:</strong>
+                <span id="resumoHorario">--</span>
+            </p>
 
+            <p>
+                <strong>Serviço:</strong>
+                <span id="resumoServico">--</span>
+            </p>
 
+            <p>
+                <strong>Veterinário:</strong>
+                <span id="resumoVeterinario">--</span>
+            </p>
 
+            <p>
+                <strong>Pet:</strong>
+                <span id="resumoPet">--</span>
+            </p>
 
+            <p>
+                <strong>Tutor:</strong>
+                <span id="resumoTutor">--</span>
+            </p>
 
+            <p>
+                <strong>Telefone:</strong>
+                <span id="resumoTelefone">--</span>
+            </p>
 
+            <p>
+                <strong>Transporte:</strong>
+                <span id="resumoTransporte">--</span>
+            </p>
 
+        </div>
 
-    <div class="address-card" id="addressCard">
 
+        <!-- BOTÃO CONTINUAR -->
 
-        <h3>
-            Endereço de Coleta:
-        </h3>
+        <div class="button-container">
 
+            <button id="btnContinuar" class="btn-continuar">
 
+                Continuar
 
-        <p id="endereco">
-            Endereço não informado
-        </p>
+                <i class="fa-solid fa-arrow-right"></i>
 
+            </button>
 
+        </div>
 
 
-        <p id="cep">
-            CEP não informado
-        </p>
-
-
-
-    </div>
-
-
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="summary">
-
-
-
-    <div class="summary-title">
-
-
-        <i class="fa-solid fa-check"></i>
-
-
-        <h2>
-            Resumo do Agendamento
-        </h2>
-
-
-
-    </div>
-
-
-
-
-
-
-   <div class="summary-content">
-
-    <p>
-        <strong>Clínica:</strong>
-        <span id="resumoClinica">--</span>
-    </p>
-
-    <p>
-        <strong>Data:</strong>
-        <span id="resumoData">--</span>
-    </p>
-
-    <p>
-        <strong>Horário:</strong>
-        <span id="resumoHorario">--</span>
-    </p>
-
-    <p>
-        <strong>Serviço:</strong>
-        <span id="resumoServico">--</span>
-    </p>
-
-    <p>
-        <strong>Veterinário:</strong>
-        <span id="resumoVeterinario">--</span>
-    </p>
-
-    <p>
-        <strong>Pet:</strong>
-        <span id="resumoPet">--</span>
-    </p>
-
-    <p>
-        <strong>Tutor:</strong>
-        <span id="resumoTutor">--</span>
-    </p>
-
-    <p>
-        <strong>Telefone:</strong>
-        <span id="resumoTelefone">--</span>
-    </p>
-
-    <p>
-        <strong>Transporte:</strong>
-        <span id="resumoTransporte">--</span>
-    </p>
-
-</div>
-
-
-
+    </section>
 
 
 </main>
 
 
-
-
-
+<!-- JAVASCRIPT -->
 
 <script src="../js/petetransporte.js"></script>
+
+
+<script>
+
+    document.getElementById("btnContinuar").addEventListener("click", function () {
+
+        window.location.href = "final.html";
+
+    });
+
+</script>
 
 
 </body>

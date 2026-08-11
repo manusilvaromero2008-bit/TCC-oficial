@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // ELEMENTOS
     // ============================
 
-
     const nomeClinica =
         document.getElementById("nomeClinica");
 
@@ -50,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("resumoTransporte");
 
 
-
     const transportOption =
         document.getElementById("transportOption");
 
@@ -67,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("cep");
 
 
-
     const btnVoltar =
         document.getElementById("btnVoltar");
 
@@ -76,7 +73,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("btnConfirmar");
 
 
-
+    const btnContinuar =
+        document.getElementById("btnContinuar");
 
 
 
@@ -84,13 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // PEGAR DADOS
     // ============================
 
-
-
     const clinicaDados =
         JSON.parse(
             localStorage.getItem("clinicaDados")
         ) || {};
-
 
 
     const tutorDados =
@@ -99,13 +94,10 @@ document.addEventListener("DOMContentLoaded", () => {
         ) || {};
 
 
-
     const pets =
         JSON.parse(
             localStorage.getItem("pets")
         ) || [];
-
-
 
 
     const servico =
@@ -113,11 +105,9 @@ document.addEventListener("DOMContentLoaded", () => {
         || "Não informado";
 
 
-
     const preco =
         localStorage.getItem("precoServico")
         || "";
-
 
 
     const veterinario =
@@ -125,17 +115,37 @@ document.addEventListener("DOMContentLoaded", () => {
         || "Não informado";
 
 
+    /*
+    ==========================================
+    DATA
+    ==========================================
+
+    Primeiro procura por dataAgendamento.
+
+    Se não encontrar, procura por data.
+    */
 
     const data =
-        localStorage.getItem("data")
+        localStorage.getItem("dataAgendamento")
+        || localStorage.getItem("data")
         || "Não informado";
 
 
+
+    /*
+    ==========================================
+    HORÁRIO
+    ==========================================
+
+    Primeiro procura por horarioAgendamento.
+
+    Se não encontrar, procura por horario.
+    */
 
     const horario =
-        localStorage.getItem("horario")
+        localStorage.getItem("horarioAgendamento")
+        || localStorage.getItem("horario")
         || "Não informado";
-
 
 
 
@@ -146,8 +156,6 @@ document.addEventListener("DOMContentLoaded", () => {
         ) || null;
 
 
-
-
     let transporte =
 
         localStorage.getItem("transporte")
@@ -155,16 +163,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-
     // ============================
     // MOSTRAR CLÍNICA
     // ============================
 
-
-    if(nomeClinica){
+    if (nomeClinica) {
 
         nomeClinica.textContent =
             clinicaDados.nome
@@ -173,8 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
-    if(resumoClinica){
+    if (resumoClinica) {
 
         resumoClinica.textContent =
             clinicaDados.nome
@@ -184,22 +186,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-
-
-
-
     // ============================
     // MOSTRAR PETS
     // ============================
 
+    if (listaPets) {
 
 
-    if(listaPets){
-
-
-
-        if(pets.length === 0){
-
+        if (pets.length === 0) {
 
             listaPets.innerHTML = `
 
@@ -209,18 +203,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             `;
 
-
         }
 
 
-
-        pets.forEach((pet)=>{
-
+        pets.forEach((pet) => {
 
 
             const card =
                 document.createElement("div");
-
 
 
             card.classList.add(
@@ -228,10 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-
-
             card.innerHTML = `
-
 
                 <div class="pet-icon">
 
@@ -240,49 +227,47 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
 
-
                 <div class="pet-info">
-
 
                     <h3>
                         ${pet.nome}
                     </h3>
 
-
-
                     <p>
 
                         ${pet.especie || ""}
-                        ${pet.raca ? " • " + pet.raca : ""}
-                        ${pet.idade ? " • " + pet.idade : ""}
+
+                        ${pet.raca
+                            ? " • " + pet.raca
+                            : ""
+                        }
+
+                        ${pet.idade
+                            ? " • " + pet.idade
+                            : ""
+                        }
 
                     </p>
 
-
                 </div>
-
 
             `;
 
 
-
-
             card.addEventListener(
                 "click",
-                ()=>{
+                () => {
 
 
                     document
-                    .querySelectorAll(".pet-card")
-                    .forEach(item=>{
+                        .querySelectorAll(".pet-card")
+                        .forEach(item => {
 
-                        item.classList.remove(
-                            "selecionado"
-                        );
+                            item.classList.remove(
+                                "selecionado"
+                            );
 
-                    });
-
-
+                        });
 
 
                     card.classList.add(
@@ -290,36 +275,25 @@ document.addEventListener("DOMContentLoaded", () => {
                     );
 
 
-
                     petSelecionado = pet;
 
 
-
                     localStorage.setItem(
-
                         "petSelecionado",
-
                         JSON.stringify(pet)
-
                     );
-
 
 
                     atualizarResumoPet();
 
-
-
                 }
-
             );
 
 
-
-
-            if(
+            if (
                 petSelecionado &&
                 petSelecionado.nome === pet.nome
-            ){
+            ) {
 
                 card.classList.add(
                     "selecionado"
@@ -328,50 +302,34 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-
             listaPets.appendChild(card);
 
-
-
         });
-
-
 
     }
 
 
 
+    // ============================
+    // ATUALIZAR PET
+    // ============================
 
+    function atualizarResumoPet() {
 
-
-
-    function atualizarResumoPet(){
-
-
-        if(resumoPet){
-
+        if (resumoPet) {
 
             resumoPet.textContent =
 
                 petSelecionado
-                ? petSelecionado.nome
-                : "Nenhum pet selecionado";
-
+                    ? petSelecionado.nome
+                    : "Nenhum pet selecionado";
 
         }
-
 
     }
 
 
-
     atualizarResumoPet();
-
-
-
-
-
-
 
 
 
@@ -379,51 +337,57 @@ document.addEventListener("DOMContentLoaded", () => {
     // RESUMO
     // ============================
 
+    if (resumoData) {
 
-    if(resumoData)
-        resumoData.textContent = data;
+        resumoData.textContent =
+            data;
 
-
-
-    if(resumoHorario)
-        resumoHorario.textContent = horario;
+    }
 
 
+    if (resumoHorario) {
 
-    if(resumoServico)
+        resumoHorario.textContent =
+            horario;
+
+    }
+
+
+    if (resumoServico) {
 
         resumoServico.textContent =
 
             preco
-            ? `${servico} - ${preco}`
-            : servico;
+                ? `${servico} - ${preco}`
+                : servico;
+
+    }
 
 
-
-
-    if(resumoVeterinario)
+    if (resumoVeterinario) {
 
         resumoVeterinario.textContent =
             veterinario;
 
+    }
 
 
-    if(resumoTutor)
+    if (resumoTutor) {
 
         resumoTutor.textContent =
             tutorDados.nome
             || "Não informado";
 
+    }
 
 
-    if(resumoTelefone)
+    if (resumoTelefone) {
 
         resumoTelefone.textContent =
             tutorDados.telefone
             || "Não informado";
 
-
-
+    }
 
 
 
@@ -431,29 +395,24 @@ document.addEventListener("DOMContentLoaded", () => {
     // ENDEREÇO
     // ============================
 
-
-    if(endereco)
+    if (endereco) {
 
         endereco.textContent =
-
             tutorDados.endereco
             || "Endereço não informado";
 
+    }
 
 
-
-    if(cep)
+    if (cep) {
 
         cep.textContent =
 
             tutorDados.cep
-            ? "CEP: " + tutorDados.cep
-            : "CEP não informado";
+                ? "CEP: " + tutorDados.cep
+                : "CEP não informado";
 
-
-
-
-
+    }
 
 
 
@@ -461,14 +420,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // TRANSPORTE
     // ============================
 
+    function atualizarTransporte() {
 
 
-    function atualizarTransporte(){
-
-
-
-        if(transporte){
-
+        if (transporte) {
 
 
             transportOption?.classList.add(
@@ -476,22 +431,20 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-
             addressCard?.classList.add(
                 "show"
             );
 
 
-
-            if(resumoTransporte)
+            if (resumoTransporte) {
 
                 resumoTransporte.textContent =
                     "Solicitado";
 
+            }
 
 
-        }else{
-
+        } else {
 
 
             transportOption?.classList.remove(
@@ -499,70 +452,51 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-
             addressCard?.classList.remove(
                 "show"
             );
 
 
-
-            if(resumoTransporte)
+            if (resumoTransporte) {
 
                 resumoTransporte.textContent =
                     "Não solicitado";
 
+            }
 
         }
 
-
     }
-
-
 
 
     atualizarTransporte();
 
 
 
-
-
-    if(transportOption){
+    if (transportOption) {
 
 
         transportOption.addEventListener(
             "click",
-            ()=>{
+            () => {
 
 
                 transporte =
                     !transporte;
 
 
-
                 localStorage.setItem(
-
                     "transporte",
-
                     transporte
-
                 );
-
 
 
                 atualizarTransporte();
 
-
-
             }
-
         );
 
-
     }
-
-
-
-
 
 
 
@@ -570,77 +504,78 @@ document.addEventListener("DOMContentLoaded", () => {
     // VOLTAR
     // ============================
 
-
-    if(btnVoltar){
+    if (btnVoltar) {
 
 
         btnVoltar.addEventListener(
             "click",
-            ()=>{
-
+            () => {
 
                 window.location.href =
                     "servicos.html";
 
-
             }
         );
-
 
     }
 
 
 
-
-
-
-
     // ============================
-    // CONFIRMAR
+    // BOTÃO CONTINUAR
     // ============================
 
+    if (btnContinuar) {
 
-    if(btnConfirmar){
 
-
-        btnConfirmar.addEventListener(
+        btnContinuar.addEventListener(
             "click",
-            ()=>{
+            () => {
 
 
+                // Verifica se selecionou um pet
 
-                if(!petSelecionado){
-
+                if (!petSelecionado) {
 
                     alert(
                         "Selecione um pet antes de continuar."
                     );
 
-
                     return;
-
 
                 }
 
 
 
-
+                // ============================
+                // SALVAR AGENDAMENTO FINAL
+                // ============================
 
                 const agendamentoFinal = {
 
-
                     clinica:
-                        clinicaDados.nome,
+                        clinicaDados.nome
+                        || "Não informado",
 
-                    data,
 
-                    horario,
+                    data:
+                        data,
 
-                    servico,
 
-                    preco,
+                    horario:
+                        horario,
 
-                    veterinario,
+
+                    servico:
+                        servico,
+
+
+                    preco:
+                        preco,
+
+
+                    veterinario:
+                        veterinario,
 
 
                     pet:
@@ -651,27 +586,110 @@ document.addEventListener("DOMContentLoaded", () => {
                         tutorDados,
 
 
-                    transporte
-
-
+                    transporte:
+                        transporte
 
                 };
 
 
 
-
-
                 localStorage.setItem(
-
                     "agendamentoFinal",
-
                     JSON.stringify(
                         agendamentoFinal
                     )
-
                 );
 
 
+
+                // ============================
+                // IR PARA PÁGINA FINAL
+                // ============================
+
+                window.location.href =
+                    "final.html";
+
+            }
+        );
+
+    }
+
+
+
+    // ============================
+    // CONFIRMAR
+    // ============================
+
+    if (btnConfirmar) {
+
+
+        btnConfirmar.addEventListener(
+            "click",
+            () => {
+
+
+                if (!petSelecionado) {
+
+
+                    alert(
+                        "Selecione um pet antes de continuar."
+                    );
+
+
+                    return;
+
+                }
+
+
+
+                const agendamentoFinal = {
+
+                    clinica:
+                        clinicaDados.nome
+                        || "Não informado",
+
+
+                    data:
+                        data,
+
+
+                    horario:
+                        horario,
+
+
+                    servico:
+                        servico,
+
+
+                    preco:
+                        preco,
+
+
+                    veterinario:
+                        veterinario,
+
+
+                    pet:
+                        petSelecionado,
+
+
+                    tutor:
+                        tutorDados,
+
+
+                    transporte:
+                        transporte
+
+                };
+
+
+
+                localStorage.setItem(
+                    "agendamentoFinal",
+                    JSON.stringify(
+                        agendamentoFinal
+                    )
+                );
 
 
 
@@ -680,20 +698,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-
-
                 window.location.href =
                     "../../home.html";
 
-
-
             }
-
         );
 
-
     }
-
-
 
 });
