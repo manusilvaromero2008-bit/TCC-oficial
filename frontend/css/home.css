@@ -20,7 +20,6 @@ header{
     margin: auto;
 }
 
-
 .card-link{
     text-decoration: none;
     color: inherit;
@@ -96,15 +95,65 @@ header p{
     transform: translateY(-5px);
 }
 
+
+
+
 .topo-card{
-    background: linear-gradient(135deg, #4cc95a, #6be076);
-    color: white;
+    position: relative;
+    height: 200px;
     padding: 25px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    background-size: cover;
+    background-position: center;
+
+    color: white;
+    overflow: hidden;
+}
+
+
+.topo-card::before{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+
+.topo-card h2,
+.topo-card p{
+    position: relative;
+    z-index: 1;
 }
 
 .topo-card h2{
     margin-bottom: 10px;
 }
+
+
+
+
+.petvida{
+    background-image: url("../assets/petvida.jpg");
+}
+
+.animalcare{
+    background-image: url("../assets/animalcare.jpg");
+}
+
+.vetcare{
+    background-image: url("../assets/vetcare.jpg");
+}
+
+.pethealth{
+    background-image: url("../assets/pethealth.jpg");
+}
+
+
+
 
 .conteudo{
     padding: 25px;
@@ -127,6 +176,9 @@ header p{
     color: #258133;
 }
 
+
+
+
 @media(max-width: 768px){
 
     .filtros{
@@ -135,5 +187,9 @@ header p{
 
     header h1{
         font-size: 35px;
+    }
+
+    .topo-card{
+        height: 200px;
     }
 }
