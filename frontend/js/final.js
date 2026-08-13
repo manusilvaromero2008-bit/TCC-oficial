@@ -1,58 +1,282 @@
-// BOTÃO VOLTAR PARA O INÍCIO
+document.addEventListener("DOMContentLoaded", () => {
 
-const btnInicio = document.getElementById("btnInicio");
+    // ============================
+    // BOTÃO VOLTAR PARA O INÍCIO
+    // ============================
 
-btnInicio.addEventListener("click", function () {
+    const btnInicio =
+        document.getElementById("btnInicio");
 
-    window.location.href = "index.html";
+    if (btnInicio) {
+
+        btnInicio.addEventListener("click", () => {
+
+            window.location.href = "../../home.html";
+
+        });
+
+    }
+
+
+    // ============================
+    // PEGAR AGENDAMENTO FINAL
+    // ============================
+
+    const dadosSalvos =
+        localStorage.getItem("agendamentoFinal");
+
+    let agendamento = null;
+
+    if (dadosSalvos) {
+
+        try {
+
+            agendamento =
+                JSON.parse(dadosSalvos);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao ler agendamentoFinal:",
+                erro
+            );
+
+        }
+
+    }
+
+
+    // Se não encontrou o agendamento
+    if (!agendamento) {
+
+        console.error(
+            "Nenhum agendamento encontrado."
+        );
+
+        return;
+
+    }
+
+
+    // ============================
+    // CLÍNICA
+    // ============================
+
+    const elementoClinica =
+        document.getElementById("unidade");
+
+
+    if (elementoClinica) {
+
+        elementoClinica.textContent =
+            agendamento.clinica ||
+            "Clínica não informada";
+
+    }
+
+
+    // ============================
+    // PET
+    // ============================
+
+    const elementoPet =
+        document.getElementById("pet");
+
+
+    if (elementoPet) {
+
+        let nomePet = "";
+
+        if (
+            agendamento.pet &&
+            typeof agendamento.pet === "object"
+        ) {
+
+            nomePet =
+                agendamento.pet.nome ||
+                "";
+
+        } else {
+
+            nomePet =
+                agendamento.pet ||
+                "";
+
+        }
+
+
+        elementoPet.textContent =
+            nomePet ||
+            "Pet não informado";
+
+    }
+
+
+    // ============================
+    // SERVIÇO
+    // ============================
+
+    const elementoServico =
+        document.getElementById("servico");
+
+
+    if (elementoServico) {
+
+        let textoServico =
+            agendamento.servico ||
+            "Serviço não informado";
+
+
+        if (agendamento.preco) {
+
+            textoServico +=
+                " - " + agendamento.preco;
+
+        }
+
+
+        elementoServico.textContent =
+            textoServico;
+
+    }
+
+
+    // ============================
+    // DATA
+    // ============================
+
+    const elementoData =
+        document.getElementById("data");
+
+
+    if (elementoData) {
+
+        elementoData.textContent =
+            agendamento.data ||
+            "Data não informada";
+
+    }
+
+
+    // ============================
+    // HORÁRIO
+    // ============================
+
+    const elementoHorario =
+        document.getElementById("horario");
+
+
+    if (elementoHorario) {
+
+        elementoHorario.textContent =
+            agendamento.horario ||
+            "Horário não informado";
+
+    }
+
+
+    // ============================
+    // VETERINÁRIO
+    // ============================
+
+    const elementoVeterinario =
+        document.getElementById("veterinario");
+
+
+    if (elementoVeterinario) {
+
+        elementoVeterinario.textContent =
+            agendamento.veterinario ||
+            "Não informado";
+
+    }
+
+
+    // ============================
+    // TUTOR
+    // ============================
+
+    const elementoTutor =
+        document.getElementById("tutor");
+
+
+    if (elementoTutor) {
+
+        let nomeTutor = "";
+
+
+        if (
+            agendamento.tutor &&
+            typeof agendamento.tutor === "object"
+        ) {
+
+            nomeTutor =
+                agendamento.tutor.nome ||
+                "";
+
+        } else {
+
+            nomeTutor =
+                agendamento.tutor ||
+                "";
+
+        }
+
+
+        elementoTutor.textContent =
+            nomeTutor ||
+            "Não informado";
+
+    }
+
+
+    // ============================
+    // TELEFONE
+    // ============================
+
+    const elementoTelefone =
+        document.getElementById("telefone");
+
+
+    if (elementoTelefone) {
+
+        let telefone = "";
+
+
+        if (
+            agendamento.tutor &&
+            typeof agendamento.tutor === "object"
+        ) {
+
+            telefone =
+                agendamento.tutor.telefone ||
+                "";
+
+        }
+
+
+        elementoTelefone.textContent =
+            telefone ||
+            "Não informado";
+
+    }
+
+
+    // ============================
+    // TRANSPORTE
+    // ============================
+
+    const elementoTransporte =
+        document.getElementById("transporte");
+
+
+    if (elementoTransporte) {
+
+        elementoTransporte.textContent =
+            agendamento.transporte
+                ? "Solicitado"
+                : "Não solicitado";
+
+    }
 
 });
-
-
-// PEGAR O NOME DO PET
-// Caso vocês tenham salvado o nome do pet anteriormente,
-// ele aparecerá automaticamente nesta página.
-
-const petSelecionado = localStorage.getItem("petSelecionado");
-
-if (petSelecionado) {
-
-    document.getElementById("pet").textContent = petSelecionado;
-
-}
-
-
-// PEGAR O SERVIÇO ESCOLHIDO
-
-const servicoSelecionado = localStorage.getItem("servicoSelecionado");
-
-if (servicoSelecionado) {
-
-    document.getElementById("servico").textContent =
-        servicoSelecionado;
-
-}
-
-
-// PEGAR A DATA
-
-const dataSelecionada = localStorage.getItem("dataSelecionada");
-
-if (dataSelecionada) {
-
-    document.getElementById("data").textContent =
-        dataSelecionada;
-
-}
-
-
-// PEGAR O HORÁRIO
-
-const horarioSelecionado = localStorage.getItem("horarioSelecionado");
-
-if (horarioSelecionado) {
-
-    document.getElementById("horario").textContent =
-        horarioSelecionado;
-
-}

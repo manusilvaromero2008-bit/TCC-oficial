@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-
     // ============================
     // ELEMENTOS
     // ============================
@@ -8,101 +7,152 @@ document.addEventListener("DOMContentLoaded", () => {
     const nomeClinica =
         document.getElementById("nomeClinica");
 
-
     const listaPets =
         document.getElementById("listaPets");
-
 
     const resumoClinica =
         document.getElementById("resumoClinica");
 
-
     const resumoData =
         document.getElementById("resumoData");
-
 
     const resumoHorario =
         document.getElementById("resumoHorario");
 
-
     const resumoServico =
         document.getElementById("resumoServico");
-
 
     const resumoVeterinario =
         document.getElementById("resumoVeterinario");
 
-
     const resumoPet =
         document.getElementById("resumoPet");
-
 
     const resumoTutor =
         document.getElementById("resumoTutor");
 
-
     const resumoTelefone =
         document.getElementById("resumoTelefone");
-
 
     const resumoTransporte =
         document.getElementById("resumoTransporte");
 
-
     const transportOption =
         document.getElementById("transportOption");
-
 
     const addressCard =
         document.getElementById("addressCard");
 
-
     const endereco =
         document.getElementById("endereco");
-
 
     const cep =
         document.getElementById("cep");
 
-
     const btnVoltar =
         document.getElementById("btnVoltar");
 
-
     const btnConfirmar =
         document.getElementById("btnConfirmar");
-
 
     const btnContinuar =
         document.getElementById("btnContinuar");
 
 
+    // ============================
+    // PEGAR DADOS DA CLÍNICA
+    // ============================
+
+    const clinicaSalva =
+        localStorage.getItem("clinicaDados");
+
+    let clinicaDados = {};
+
+    if (clinicaSalva) {
+
+        try {
+
+            clinicaDados =
+                JSON.parse(clinicaSalva);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar dados da clínica:",
+                erro
+            );
+
+        }
+
+    }
+
 
     // ============================
-    // PEGAR DADOS
+    // PEGAR DADOS DO TUTOR
     // ============================
 
-    const clinicaDados =
-        JSON.parse(
-            localStorage.getItem("clinicaDados")
-        ) || {};
+    const tutorSalvo =
+        localStorage.getItem("tutor");
+
+    let tutorDados = {};
+
+    if (tutorSalvo) {
+
+        try {
+
+            tutorDados =
+                JSON.parse(tutorSalvo);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar dados do tutor:",
+                erro
+            );
+
+        }
+
+    }
 
 
-    const tutorDados =
-        JSON.parse(
-            localStorage.getItem("tutor")
-        ) || {};
+    // ============================
+    // PEGAR PETS
+    // ============================
+
+    const petsSalvos =
+        localStorage.getItem("pets");
+
+    let pets = [];
+
+    if (petsSalvos) {
+
+        try {
+
+            pets =
+                JSON.parse(petsSalvos);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar pets:",
+                erro
+            );
+
+        }
+
+    }
 
 
-    const pets =
-        JSON.parse(
-            localStorage.getItem("pets")
-        ) || [];
-
+    // ============================
+    // SERVIÇO
+    // ============================
 
     const servico =
         localStorage.getItem("servico")
-        || "Não informado";
+        ||
+        localStorage.getItem("servicoSelecionado")
+        ||
+        "Não informado";
 
 
     const preco =
@@ -110,68 +160,92 @@ document.addEventListener("DOMContentLoaded", () => {
         || "";
 
 
+    // ============================
+    // VETERINÁRIO
+    // ============================
+
     const veterinario =
         localStorage.getItem("veterinario")
         || "Não informado";
 
 
-    /*
-    ==========================================
-    DATA
-    ==========================================
-
-    Primeiro procura por dataAgendamento.
-
-    Se não encontrar, procura por data.
-    */
+    // ============================
+    // DATA
+    // ============================
 
     const data =
         localStorage.getItem("dataAgendamento")
-        || localStorage.getItem("data")
-        || "Não informado";
+        ||
+        localStorage.getItem("data")
+        ||
+        "Não informado";
 
 
-
-    /*
-    ==========================================
-    HORÁRIO
-    ==========================================
-
-    Primeiro procura por horarioAgendamento.
-
-    Se não encontrar, procura por horario.
-    */
+    // ============================
+    // HORÁRIO
+    // ============================
 
     const horario =
         localStorage.getItem("horarioAgendamento")
-        || localStorage.getItem("horario")
-        || "Não informado";
+        ||
+        localStorage.getItem("horario")
+        ||
+        "Não informado";
 
 
+    // ============================
+    // PET SELECIONADO
+    // ============================
 
-    let petSelecionado =
+    let petSelecionado = null;
 
-        JSON.parse(
-            localStorage.getItem("petSelecionado")
-        ) || null;
+    const petSalvo =
+        localStorage.getItem("petSelecionado");
 
+    if (petSalvo) {
+
+        try {
+
+            petSelecionado =
+                JSON.parse(petSalvo);
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar pet selecionado:",
+                erro
+            );
+
+        }
+
+    }
+
+
+    // ============================
+    // TRANSPORTE
+    // ============================
 
     let transporte =
-
         localStorage.getItem("transporte")
         === "true";
-
 
 
     // ============================
     // MOSTRAR CLÍNICA
     // ============================
 
+    const nomeDaClinica =
+        clinicaDados.nome
+        ||
+        clinicaDados.unidade
+        ||
+        "Clínica Veterinária";
+
+
     if (nomeClinica) {
 
         nomeClinica.textContent =
-            clinicaDados.nome
-            || "Clínica Veterinária";
+            nomeDaClinica;
 
     }
 
@@ -179,11 +253,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (resumoClinica) {
 
         resumoClinica.textContent =
-            clinicaDados.nome
-            || "Não informado";
+            nomeDaClinica;
 
     }
-
 
 
     // ============================
@@ -192,122 +264,124 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (listaPets) {
 
-
         if (pets.length === 0) {
 
             listaPets.innerHTML = `
-
-                <p>
-                    Nenhum pet cadastrado.
-                </p>
-
+                <p>Nenhum pet cadastrado.</p>
             `;
 
-        }
+        } else {
+
+            pets.forEach((pet) => {
+
+                const card =
+                    document.createElement("div");
+
+                card.classList.add("pet-card");
 
 
-        pets.forEach((pet) => {
+                card.innerHTML = `
+
+                    <div class="pet-icon">
+
+                        <i class="fa-solid fa-paw"></i>
+
+                    </div>
+
+                    <div class="pet-info">
+
+                        <h3>
+                            ${pet.nome || "Pet sem nome"}
+                        </h3>
+
+                        <p>
+
+                            ${pet.especie || ""}
+
+                            ${
+                                pet.raca
+                                    ? " • " + pet.raca
+                                    : ""
+                            }
+
+                            ${
+                                pet.idade
+                                    ? " • " + pet.idade
+                                    : ""
+                            }
+
+                        </p>
+
+                    </div>
+
+                `;
 
 
-            const card =
-                document.createElement("div");
+                // ============================
+                // SELECIONAR PET
+                // ============================
+
+                card.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(".pet-card")
+                            .forEach(item => {
+
+                                item.classList.remove(
+                                    "selecionado"
+                                );
+
+                            });
 
 
-            card.classList.add(
-                "pet-card"
-            );
+                        card.classList.add(
+                            "selecionado"
+                        );
 
 
-            card.innerHTML = `
-
-                <div class="pet-icon">
-
-                    <i class="fa-solid fa-paw"></i>
-
-                </div>
+                        petSelecionado =
+                            pet;
 
 
-                <div class="pet-info">
+                        // Salva o pet selecionado
 
-                    <h3>
-                        ${pet.nome}
-                    </h3>
-
-                    <p>
-
-                        ${pet.especie || ""}
-
-                        ${pet.raca
-                            ? " • " + pet.raca
-                            : ""
-                        }
-
-                        ${pet.idade
-                            ? " • " + pet.idade
-                            : ""
-                        }
-
-                    </p>
-
-                </div>
-
-            `;
+                        localStorage.setItem(
+                            "petSelecionado",
+                            JSON.stringify(pet)
+                        );
 
 
-            card.addEventListener(
-                "click",
-                () => {
+                        atualizarResumoPet();
+
+                    }
+                );
 
 
-                    document
-                        .querySelectorAll(".pet-card")
-                        .forEach(item => {
+                // ============================
+                // MANTER PET SELECIONADO
+                // ============================
 
-                            item.classList.remove(
-                                "selecionado"
-                            );
-
-                        });
-
+                if (
+                    petSelecionado &&
+                    petSelecionado.nome === pet.nome
+                ) {
 
                     card.classList.add(
                         "selecionado"
                     );
 
-
-                    petSelecionado = pet;
-
-
-                    localStorage.setItem(
-                        "petSelecionado",
-                        JSON.stringify(pet)
-                    );
-
-
-                    atualizarResumoPet();
-
                 }
-            );
 
 
-            if (
-                petSelecionado &&
-                petSelecionado.nome === pet.nome
-            ) {
+                listaPets.appendChild(card);
 
-                card.classList.add(
-                    "selecionado"
-                );
+            });
 
-            }
-
-
-            listaPets.appendChild(card);
-
-        });
+        }
 
     }
-
 
 
     // ============================
@@ -332,9 +406,8 @@ document.addEventListener("DOMContentLoaded", () => {
     atualizarResumoPet();
 
 
-
     // ============================
-    // RESUMO
+    // RESUMO DATA
     // ============================
 
     if (resumoData) {
@@ -345,6 +418,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // ============================
+    // RESUMO HORÁRIO
+    // ============================
+
     if (resumoHorario) {
 
         resumoHorario.textContent =
@@ -352,6 +429,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
+    // ============================
+    // RESUMO SERVIÇO
+    // ============================
 
     if (resumoServico) {
 
@@ -364,6 +445,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // ============================
+    // RESUMO VETERINÁRIO
+    // ============================
+
     if (resumoVeterinario) {
 
         resumoVeterinario.textContent =
@@ -371,6 +456,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
+
+    // ============================
+    // RESUMO TUTOR
+    // ============================
 
     if (resumoTutor) {
 
@@ -381,6 +470,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // ============================
+    // RESUMO TELEFONE
+    // ============================
+
     if (resumoTelefone) {
 
         resumoTelefone.textContent =
@@ -388,7 +481,6 @@ document.addEventListener("DOMContentLoaded", () => {
             || "Não informado";
 
     }
-
 
 
     // ============================
@@ -415,21 +507,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     // ============================
     // TRANSPORTE
     // ============================
 
     function atualizarTransporte() {
 
-
         if (transporte) {
-
 
             transportOption?.classList.add(
                 "selected"
             );
-
 
             addressCard?.classList.add(
                 "show"
@@ -443,14 +531,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             }
 
-
         } else {
-
 
             transportOption?.classList.remove(
                 "selected"
             );
-
 
             addressCard?.classList.remove(
                 "show"
@@ -472,14 +557,15 @@ document.addEventListener("DOMContentLoaded", () => {
     atualizarTransporte();
 
 
+    // ============================
+    // CLICAR NO TRANSPORTE
+    // ============================
 
     if (transportOption) {
-
 
         transportOption.addEventListener(
             "click",
             () => {
-
 
                 transporte =
                     !transporte;
@@ -499,13 +585,85 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    // ============================
+    // CRIAR AGENDAMENTO FINAL
+    // ============================
+
+    function criarAgendamentoFinal() {
+
+        if (!petSelecionado) {
+
+            alert(
+                "Selecione um pet antes de continuar."
+            );
+
+            return false;
+
+        }
+
+
+        const agendamentoFinal = {
+
+            clinica:
+                clinicaDados.nome
+                ||
+                clinicaDados.unidade
+                ||
+                "Não informado",
+
+
+            data:
+                data,
+
+
+            horario:
+                horario,
+
+
+            servico:
+                servico,
+
+
+            preco:
+                preco,
+
+
+            veterinario:
+                veterinario,
+
+
+            pet:
+                petSelecionado,
+
+
+            tutor:
+                tutorDados,
+
+
+            transporte:
+                transporte
+
+        };
+
+
+        localStorage.setItem(
+            "agendamentoFinal",
+            JSON.stringify(
+                agendamentoFinal
+            )
+        );
+
+
+        return true;
+
+    }
+
 
     // ============================
     // VOLTAR
     // ============================
 
     if (btnVoltar) {
-
 
         btnVoltar.addEventListener(
             "click",
@@ -520,100 +678,29 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-
     // ============================
-    // BOTÃO CONTINUAR
+    // CONTINUAR
     // ============================
 
     if (btnContinuar) {
-
 
         btnContinuar.addEventListener(
             "click",
             () => {
 
+                if (
+                    criarAgendamentoFinal()
+                ) {
 
-                // Verifica se selecionou um pet
-
-                if (!petSelecionado) {
-
-                    alert(
-                        "Selecione um pet antes de continuar."
-                    );
-
-                    return;
+                    window.location.href =
+                        "final.html";
 
                 }
-
-
-
-                // ============================
-                // SALVAR AGENDAMENTO FINAL
-                // ============================
-
-                const agendamentoFinal = {
-
-                    clinica:
-                        clinicaDados.nome
-                        || "Não informado",
-
-
-                    data:
-                        data,
-
-
-                    horario:
-                        horario,
-
-
-                    servico:
-                        servico,
-
-
-                    preco:
-                        preco,
-
-
-                    veterinario:
-                        veterinario,
-
-
-                    pet:
-                        petSelecionado,
-
-
-                    tutor:
-                        tutorDados,
-
-
-                    transporte:
-                        transporte
-
-                };
-
-
-
-                localStorage.setItem(
-                    "agendamentoFinal",
-                    JSON.stringify(
-                        agendamentoFinal
-                    )
-                );
-
-
-
-                // ============================
-                // IR PARA PÁGINA FINAL
-                // ============================
-
-                window.location.href =
-                    "final.html";
 
             }
         );
 
     }
-
 
 
     // ============================
@@ -622,84 +709,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (btnConfirmar) {
 
-
         btnConfirmar.addEventListener(
             "click",
             () => {
 
-
-                if (!petSelecionado) {
-
+                if (
+                    criarAgendamentoFinal()
+                ) {
 
                     alert(
-                        "Selecione um pet antes de continuar."
+                        "Agendamento confirmado com sucesso!"
                     );
 
 
-                    return;
+                    window.location.href =
+                        "../../home.html";
 
                 }
-
-
-
-                const agendamentoFinal = {
-
-                    clinica:
-                        clinicaDados.nome
-                        || "Não informado",
-
-
-                    data:
-                        data,
-
-
-                    horario:
-                        horario,
-
-
-                    servico:
-                        servico,
-
-
-                    preco:
-                        preco,
-
-
-                    veterinario:
-                        veterinario,
-
-
-                    pet:
-                        petSelecionado,
-
-
-                    tutor:
-                        tutorDados,
-
-
-                    transporte:
-                        transporte
-
-                };
-
-
-
-                localStorage.setItem(
-                    "agendamentoFinal",
-                    JSON.stringify(
-                        agendamentoFinal
-                    )
-                );
-
-
-
-                alert(
-                    "Agendamento confirmado com sucesso!"
-                );
-
-
-                window.location.href =
-                    "../../home.html";
 
             }
         );

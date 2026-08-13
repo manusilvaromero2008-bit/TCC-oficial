@@ -1,70 +1,204 @@
-const pesquisa = document.getElementById("pesquisa");
-const regiao = document.getElementById("regiao");
-const cards = document.querySelectorAll(".card");
+document.addEventListener("DOMContentLoaded", () => {
 
-// ===============================
-// FILTRO DAS CLÍNICAS
-// ===============================
+    const pesquisa = document.getElementById("pesquisa");
+    const regiao = document.getElementById("regiao");
+    const cards = document.querySelectorAll(".card");
 
-function filtrar() {
 
-    const texto = pesquisa.value.toLowerCase().trim();
-    const filtroRegiao = regiao.value.toLowerCase();
+    // ===============================
+    // FILTRAR CLÍNICAS
+    // ===============================
+
+    function filtrar() {
+
+        const texto = pesquisa
+            ? pesquisa.value.toLowerCase().trim()
+            : "";
+
+        const filtroRegiao = regiao
+            ? regiao.value.toLowerCase().trim()
+            : "todas";
+
+
+        cards.forEach(card => {
+
+            const titulo = card.querySelector("h2");
+
+            const nome = titulo
+                ? titulo.textContent.toLowerCase().trim()
+                : "";
+
+            const regiaoCard =
+                (card.dataset.regiao || "")
+                .toLowerCase()
+                .trim();
+
+
+            const nomeCorreto =
+                nome.includes(texto);
+
+            const regiaoCorreta =
+                filtroRegiao === "todas" ||
+                regiaoCard === filtroRegiao;
+
+
+            const link =
+                card.closest(".card-link");
+
+
+            if (link) {
+
+                link.style.display =
+                    nomeCorreto && regiaoCorreta
+                        ? "block"
+                        : "none";
+
+            }
+
+        });
+
+    }
+
+
+    // ===============================
+    // EVENTOS DO FILTRO
+    // ===============================
+
+    if (pesquisa) {
+
+        pesquisa.addEventListener(
+            "input",
+            filtrar
+        );
+
+    }
+
+
+    if (regiao) {
+
+        regiao.addEventListener(
+            "change",
+            filtrar
+        );
+
+    }
+
+
+    // ===============================
+    // SELECIONAR CLÍNICA
+    // ===============================
 
     cards.forEach(card => {
 
-        const nome = card.querySelector("h2").textContent.toLowerCase();
-        const regiaoCard = card.dataset.regiao.toLowerCase();
+        const link =
+            card.closest(".card-link");
 
-        const nomeCorreto = nome.includes(texto);
-        const regiaoCorreta =
-            filtroRegiao === "todas" ||
-            regiaoCard === filtroRegiao;
 
-        card.parentElement.style.display =
-            nomeCorreto && regiaoCorreta
-                ? "block"
-                : "none";
-    });
+        if (!link) {
+            return;
+        }
 
-}
 
-pesquisa.addEventListener("keyup", filtrar);
-regiao.addEventListener("change", filtrar);
+        link.addEventListener("click", function(event) {
 
-// ===============================
-// SALVAR DADOS DA CLÍNICA
-// ===============================
+            const titulo =
+                card.querySelector("h2");
 
-cards.forEach(card => {
 
-    card.parentElement.addEventListener("click", () => {
+            const nome =
+                titulo
+                    ? titulo.textContent.trim()
+                    : "";
 
-        const nome = card.querySelector("h2").textContent;
 
-        const endereco = card.querySelectorAll(".conteudo p")[0].textContent.trim();
+            const regiaoClinica =
+                (card.dataset.regiao || "").trim();
 
-        const telefone = card.querySelectorAll(".conteudo p")[1].textContent.trim();
 
-        const horario = card.querySelectorAll(".conteudo p")[2].textContent.trim();
+            const paragrafos =
+                card.querySelectorAll(".conteudo > p");
 
-        const consulta = card.querySelector(".info-extra strong").textContent;
 
-        const dadosClinica = {
+            const endereco =
+                paragrafos[0]
+                    ? paragrafos[0].textContent.trim()
+                    : "";
 
-            nome: nome,
-            regiao: card.dataset.regiao,
-            endereco: endereco,
-            telefone: telefone,
-            horario: horario,
-            consulta: consulta
 
-        };
+            const telefone =
+                paragrafos[1]
+                    ? paragrafos[1].textContent.trim()
+                    : "";
 
-        localStorage.setItem(
-            "clinicaDados",
-            JSON.stringify(dadosClinica)
-        );
+
+            const horario =
+                paragrafos[2]
+                    ? paragrafos[2].textContent.trim()
+                    : "";
+
+
+            const preco =
+                card.querySelector(
+                    ".info-extra strong"
+                );
+
+
+            const consulta =
+                preco
+                    ? preco.textContent.trim()
+                    : "";
+
+
+            const dadosClinica = {
+
+                nome: nome,
+
+                regiao: regiaoClinica,
+
+                endereco: endereco,
+
+                telefone: telefone,
+
+                horario: horario,
+
+                consulta: consulta
+
+            };
+
+
+            // Salva a clínica escolhida
+
+            localStorage.setItem(
+                "clinicaDados",
+                JSON.stringify(dadosClinica)
+            );
+
+
+            // Salva também somente o nome
+
+            localStorage.setItem(
+                "clinica",
+                nome
+            );
+
+
+            console.log(
+                "Clínica selecionada:",
+                dadosClinica
+            );
+
+
+            // Impede a navegação automática
+
+            event.preventDefault();
+
+
+            // Navega depois de salvar
+
+            window.location.href =
+                link.getAttribute("href");
+
+        });
 
     });
 
