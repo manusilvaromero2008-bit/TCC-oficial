@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ============================
-    // PEGAR DADOS DA CLÍNICA
-    // ============================
+    
 
     const dadosSalvos =
         localStorage.getItem("clinicaDados");
@@ -27,9 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // VERIFICAR CLÍNICA
-    // ============================
+   
 
     if (!clinica) {
 
@@ -42,9 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // NOME DA CLÍNICA
-    // ============================
+    
 
     const titulo =
         document.querySelector(
@@ -62,9 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // INFORMAÇÕES DA CLÍNICA
-    // ============================
+    
 
     const infos =
         document.querySelector(".box");
@@ -76,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
             infos.querySelectorAll("p");
 
 
-        // ENDEREÇO
+        
 
         if (paragrafos[0]) {
 
@@ -88,7 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        // TELEFONE
+       
 
         if (paragrafos[1]) {
 
@@ -100,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        // HORÁRIO
+        
 
         if (paragrafos[2]) {
 
@@ -114,9 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // PREÇO DA CONSULTA
-    // ============================
+    
 
     const preco =
         document.querySelector(
@@ -133,10 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // GARANTIR QUE A CLÍNICA
-    // CONTINUE SALVA
-    // ============================
+    
 
     localStorage.setItem(
         "clinicaDados",
@@ -150,9 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
-    // ============================
-    // DEBUG
-    // ============================
+   
 
     console.log(
         "Clínica atual:",

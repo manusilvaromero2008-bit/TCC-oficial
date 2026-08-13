@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ===========================
-    // DADOS DA CLÍNICA
-    // ===========================
+    
 
     const clinicaDados = localStorage.getItem("clinicaDados");
     const clinica = clinicaDados ? JSON.parse(clinicaDados) : null;
@@ -14,9 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ===========================
-    // ELEMENTOS
-    // ===========================
+    
 
     const botoesData = document.querySelectorAll(".datas button");
     const botoesHora = document.querySelectorAll(".horarios button");
@@ -25,9 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnContinuar = document.getElementById("btnContinuar");
 
 
-    // ===========================
-    // CONFIGURAÇÃO INICIAL
-    // ===========================
+    
 
     if (cardHorario) {
         cardHorario.style.display = "none";
@@ -42,9 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let horarioSelecionado = "";
 
 
-    // ===========================
-    // SELECIONAR DATA
-    // ===========================
+    
 
     botoesData.forEach(botao => {
 
@@ -72,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ===========================
-    // SELECIONAR HORÁRIO
-    // ===========================
+    
 
     botoesHora.forEach(botao => {
 
@@ -97,15 +87,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // ===========================
-    // CONTINUAR
-    // ===========================
+    
 
     if (btnContinuar) {
 
         btnContinuar.addEventListener("click", () => {
 
-            // Verifica data
+            
             if (!dataSelecionada) {
 
                 alert("Selecione uma data.");
@@ -114,7 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Verifica horário
+            
             if (!horarioSelecionado) {
 
                 alert("Selecione um horário.");
@@ -123,9 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ===========================
-            // RECUPERAR DADOS EXISTENTES
-            // ===========================
+            
 
             const agendamentoSalvo =
                 localStorage.getItem("agendamento");
@@ -136,17 +122,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     : {};
 
 
-            // ===========================
-            // DATA E HORÁRIO
-            // ===========================
+            
 
             agendamento.data = dataSelecionada;
             agendamento.horario = horarioSelecionado;
 
 
-            // ===========================
-            // CLÍNICA / UNIDADE
-            // ===========================
+            
+            
 
             if (clinica) {
 
@@ -159,9 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ===========================
-            // SERVIÇO
-            // ===========================
+           
 
             const servicoSelecionado =
                 localStorage.getItem("servicoSelecionado");
@@ -174,9 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ===========================
-            // PET
-            // ===========================
+            
 
             let petSelecionado =
                 localStorage.getItem("petSelecionado");
@@ -196,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Se o pet estiver salvo como JSON
+            
             if (petSelecionado) {
 
                 try {
@@ -229,9 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // ===========================
-            // SALVAR AGENDAMENTO
-            // ===========================
+           
 
             localStorage.setItem(
                 "agendamento",
@@ -239,9 +216,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            // ===========================
-            // SALVAR DATA E HORÁRIO
-            // ===========================
+            
 
             localStorage.setItem(
                 "data",
@@ -264,9 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            // ===========================
-            // IR PARA SERVIÇOS
-            // ===========================
+            
 
             window.location.href = "servicos.html";
 

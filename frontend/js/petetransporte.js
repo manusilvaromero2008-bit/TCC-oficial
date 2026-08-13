@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ============================
-    // ELEMENTOS
-    // ============================
+   
 
     const nomeClinica =
         document.getElementById("nomeClinica");
@@ -59,9 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("btnContinuar");
 
 
-    // ============================
-    // PEGAR DADOS DA CLÍNICA
-    // ============================
+    
 
     const clinicaSalva =
         localStorage.getItem("clinicaDados");
@@ -87,9 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // PEGAR DADOS DO TUTOR
-    // ============================
+    
 
     const tutorSalvo =
         localStorage.getItem("tutor");
@@ -115,9 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // PEGAR PETS
-    // ============================
+   
 
     const petsSalvos =
         localStorage.getItem("pets");
@@ -143,9 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // SERVIÇO
-    // ============================
+   
 
     const servico =
         localStorage.getItem("servico")
@@ -160,18 +150,14 @@ document.addEventListener("DOMContentLoaded", () => {
         || "";
 
 
-    // ============================
-    // VETERINÁRIO
-    // ============================
+   
 
     const veterinario =
         localStorage.getItem("veterinario")
         || "Não informado";
 
 
-    // ============================
-    // DATA
-    // ============================
+   
 
     const data =
         localStorage.getItem("dataAgendamento")
@@ -181,9 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Não informado";
 
 
-    // ============================
-    // HORÁRIO
-    // ============================
+    
 
     const horario =
         localStorage.getItem("horarioAgendamento")
@@ -193,9 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Não informado";
 
 
-    // ============================
-    // PET SELECIONADO
-    // ============================
+   
 
     let petSelecionado = null;
 
@@ -221,18 +203,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // TRANSPORTE
-    // ============================
+    
 
     let transporte =
         localStorage.getItem("transporte")
         === "true";
 
 
-    // ============================
-    // MOSTRAR CLÍNICA
-    // ============================
+   
 
     const nomeDaClinica =
         clinicaDados.nome
@@ -258,9 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // MOSTRAR PETS
-    // ============================
+    
 
     if (listaPets) {
 
@@ -317,9 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
 
 
-                // ============================
-                // SELECIONAR PET
-                // ============================
+                
 
                 card.addEventListener(
                     "click",
@@ -345,7 +319,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             pet;
 
 
-                        // Salva o pet selecionado
+                        
 
                         localStorage.setItem(
                             "petSelecionado",
@@ -359,9 +333,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-                // ============================
-                // MANTER PET SELECIONADO
-                // ============================
+                
 
                 if (
                     petSelecionado &&
@@ -384,9 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // ATUALIZAR PET
-    // ============================
+    
 
     function atualizarResumoPet() {
 
@@ -406,9 +376,7 @@ document.addEventListener("DOMContentLoaded", () => {
     atualizarResumoPet();
 
 
-    // ============================
-    // RESUMO DATA
-    // ============================
+   
 
     if (resumoData) {
 
@@ -418,9 +386,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // RESUMO HORÁRIO
-    // ============================
+    
 
     if (resumoHorario) {
 
@@ -430,9 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // RESUMO SERVIÇO
-    // ============================
+    
 
     if (resumoServico) {
 
@@ -445,9 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // RESUMO VETERINÁRIO
-    // ============================
+    
 
     if (resumoVeterinario) {
 
@@ -457,9 +419,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // RESUMO TUTOR
-    // ============================
+    
 
     if (resumoTutor) {
 
@@ -470,9 +430,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // RESUMO TELEFONE
-    // ============================
+   
 
     if (resumoTelefone) {
 
@@ -483,10 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // ENDEREÇO
-    // ============================
-
+    
     if (endereco) {
 
         endereco.textContent =
@@ -507,9 +462,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // TRANSPORTE
-    // ============================
+    
 
     function atualizarTransporte() {
 
@@ -557,9 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
     atualizarTransporte();
 
 
-    // ============================
-    // CLICAR NO TRANSPORTE
-    // ============================
+   
 
     if (transportOption) {
 
@@ -585,9 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // CRIAR AGENDAMENTO FINAL
-    // ============================
+    
 
     function criarAgendamentoFinal() {
 
@@ -659,9 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // VOLTAR
-    // ============================
+    
 
     if (btnVoltar) {
 
@@ -678,9 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // CONTINUAR
-    // ============================
+    
 
     if (btnContinuar) {
 
@@ -703,9 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // CONFIRMAR
-    // ============================
+    
 
     if (btnConfirmar) {
 

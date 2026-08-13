@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
 
 
-    // ============================
-    // MOSTRAR CLÍNICA
-    // ============================
+    
 
     const clinicaDados = JSON.parse(
         localStorage.getItem("clinicaDados")
@@ -25,9 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // LISTAS DE SERVIÇOS
-    // ============================
+   
 
     const listaConsultas =
         document.getElementById("listaConsultas");
@@ -49,9 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // PEGAR SERVIÇOS DA CLÍNICA
-    // ============================
+    
 
     const servicos =
         JSON.parse(
@@ -62,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // Caso não tenha serviços cadastrados
+    
 
     if(servicos.length === 0){
 
@@ -89,10 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // CRIAR CARDS
-    // ============================
-
+   
 
     servicos.forEach(servico => {
 
@@ -227,9 +218,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // CONTINUAR
-    // ============================
+    
 
 
     btnContinuar.addEventListener(

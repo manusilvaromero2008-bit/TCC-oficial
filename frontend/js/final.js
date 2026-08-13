@@ -1,8 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ============================
-    // BOTÃO VOLTAR PARA O INÍCIO
-    // ============================
+   
 
     const btnInicio =
         document.getElementById("btnInicio");
@@ -18,9 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // PEGAR AGENDAMENTO FINAL
-    // ============================
+   
 
     const dadosSalvos =
         localStorage.getItem("agendamentoFinal");
@@ -46,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // Se não encontrou o agendamento
+    
     if (!agendamento) {
 
         console.error(
@@ -58,9 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // CLÍNICA
-    // ============================
+    
 
     const elementoClinica =
         document.getElementById("unidade");
@@ -75,10 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // PET
-    // ============================
-
+   
     const elementoPet =
         document.getElementById("pet");
 
@@ -112,9 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // SERVIÇO
-    // ============================
+   
 
     const elementoServico =
         document.getElementById("servico");
@@ -141,9 +130,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // DATA
-    // ============================
+    
 
     const elementoData =
         document.getElementById("data");
@@ -158,9 +145,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // HORÁRIO
-    // ============================
+  
 
     const elementoHorario =
         document.getElementById("horario");
@@ -175,9 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // VETERINÁRIO
-    // ============================
+   
 
     const elementoVeterinario =
         document.getElementById("veterinario");
@@ -192,9 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // TUTOR
-    // ============================
+    
 
     const elementoTutor =
         document.getElementById("tutor");
@@ -230,9 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // TELEFONE
-    // ============================
+   
 
     const elementoTelefone =
         document.getElementById("telefone");
@@ -262,9 +241,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ============================
-    // TRANSPORTE
-    // ============================
+    
 
     const elementoTransporte =
         document.getElementById("transporte");

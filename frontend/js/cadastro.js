@@ -9,9 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // ADICIONAR NOVO PET
-    // ============================
+   
 
     btnAdicionar.addEventListener("click", () => {
 
@@ -122,16 +120,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    // ============================
-    // SALVAR CADASTRO
-    // ============================
+    
 
 
     btnProsseguir.addEventListener("click", () => {
 
 
 
-        // TUTOR
+       
 
         const tutor = {
 
@@ -167,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        // PETS
+       
 
         const pets = [];
 
@@ -230,7 +226,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-            // só salva se tiver nome
+            
 
             if(pet.nome.trim() !== ""){
 
@@ -247,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-        // SALVAR NO LOCAL STORAGE
+        
 
 
         localStorage.setItem(

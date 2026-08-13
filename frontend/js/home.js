@@ -5,9 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cards = document.querySelectorAll(".card");
 
 
-    // ===============================
-    // FILTRAR CLÍNICAS
-    // ===============================
+    
 
     function filtrar() {
 
@@ -60,9 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ===============================
-    // EVENTOS DO FILTRO
-    // ===============================
+    
 
     if (pesquisa) {
 
@@ -84,9 +80,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // ===============================
-    // SELECIONAR CLÍNICA
-    // ===============================
+    
 
     cards.forEach(card => {
 
@@ -166,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
 
-            // Salva a clínica escolhida
+            
 
             localStorage.setItem(
                 "clinicaDados",
@@ -174,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            // Salva também somente o nome
+            
 
             localStorage.setItem(
                 "clinica",
@@ -188,13 +182,12 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
 
-            // Impede a navegação automática
+            
 
             event.preventDefault();
 
 
-            // Navega depois de salvar
-
+           
             window.location.href =
                 link.getAttribute("href");
 
