@@ -1,26 +1,60 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Arial, sans-serif;
     background: #f4fff4;
 }
 
+<<<<<<< HEAD
 header{
     background: linear-gradient(135deg, #430fd4, #4cc95a);
     padding: 50px 20px;
+=======
+header {
+    position: relative;
+    height: 280px;
+    background-image: url("../assets/logo.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+>>>>>>> 4a9df6a94659774dd165893cd546e4f2d334f02c
     color: white;
+    overflow: hidden;
 }
 
-.container-header{
+header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.container-header {
+    position: relative;
+    z-index: 1;
     max-width: 1200px;
     margin: auto;
+    padding: 75px 20px 0;
+    text-align: center;
 }
 
-.card-link{
+header h1 {
+    font-size: 55px;
+    margin-bottom: 15px;
+    letter-spacing: 4px;
+    font-weight: bold;
+}
+
+header p {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.card-link {
     text-decoration: none;
     color: inherit;
     display: block;
@@ -28,53 +62,51 @@ header{
 
 .card-link:visited,
 .card-link:hover,
-.card-link:active{
+.card-link:active {
     text-decoration: none;
     color: inherit;
 }
 
-header h1{
-    font-size: 35px;
-    margin-bottom: 10px;
-    letter-spacing: 5px;
-    font-weight: bold;
-}
-
-header p{
-    font-size: 16px;
-}
-
-.filtros{
+.filtros {
+    position: relative;
+    z-index: 5;
     max-width: 1200px;
-    margin: -30px auto 30px;
+    margin: -35px auto 30px;
     background: white;
-    padding: 30px;
+    padding: 35px;
     border-radius: 20px;
     display: flex;
-    gap: 20px;
+    gap: 30px;
     box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
 }
 
-.campo{
+.campo {
     flex: 1;
 }
 
-.campo label{
+.campo label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-weight: bold;
+    font-size: 18px;
 }
 
 .campo input,
-.campo select{
+.campo select {
     width: 100%;
+<<<<<<< HEAD
     padding: 15px;
     border: 2px solid #1d3bd1;
+=======
+    padding: 16px;
+    border: 2px solid #49b84f;
+>>>>>>> 4a9df6a94659774dd165893cd546e4f2d334f02c
     border-radius: 12px;
     font-size: 16px;
+    background: white;
 }
 
-.clinicas{
+.clinicas {
     max-width: 1200px;
     margin: auto;
     display: grid;
@@ -83,7 +115,7 @@ header p{
     padding: 20px;
 }
 
-.card{
+.card {
     background: white;
     border-radius: 20px;
     overflow: hidden;
@@ -91,80 +123,66 @@ header p{
     transition: 0.3s;
 }
 
-.card:hover{
+.card:hover {
     transform: translateY(-5px);
 }
 
-
-
-
-.topo-card{
+.topo-card {
     position: relative;
     height: 200px;
     padding: 25px;
-
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-
     background-size: cover;
     background-position: center;
-
     color: white;
     overflow: hidden;
 }
 
-
-.topo-card::before{
+.topo-card::before {
     content: "";
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.35);
 }
 
-
 .topo-card h2,
-.topo-card p{
+.topo-card p {
     position: relative;
     z-index: 1;
 }
 
-.topo-card h2{
+.topo-card h2 {
     margin-bottom: 10px;
 }
 
-
-
-
-.petvida{
+.petvida {
     background-image: url("../assets/petvida.jpg");
 }
 
-.animalcare{
+.animalcare {
     background-image: url("../assets/animalcare.jpg");
 }
 
-.vetcare{
+.vetcare {
     background-image: url("../assets/vetcare.jpg");
 }
 
-.pethealth{
+.pethealth {
     background-image: url("../assets/pethealth.jpg");
 }
 
-
-
-
-.conteudo{
+.conteudo {
     padding: 25px;
 }
 
-.conteudo p{
+.conteudo p {
     margin-bottom: 15px;
     color: #555;
 }
 
-.info-extra{
+.info-extra {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
@@ -172,24 +190,35 @@ header p{
 }
 
 .info-extra span,
-.info-extra strong{
+.info-extra strong {
     color: #258133;
 }
 
+@media (max-width: 768px) {
 
+    header {
+        height: 280px;
+    }
 
+    .container-header {
+        padding: 60px 15px 0;
+    }
 
-@media(max-width: 768px){
+    header h1 {
+        font-size: 38px;
+    }
 
-    .filtros{
+    header p {
+        font-size: 16px;
+    }
+
+    .filtros {
         flex-direction: column;
+        margin: -25px 15px 30px;
+        padding: 25px;
     }
 
-    header h1{
-        font-size: 35px;
-    }
-
-    .topo-card{
+    .topo-card {
         height: 200px;
     }
 }
