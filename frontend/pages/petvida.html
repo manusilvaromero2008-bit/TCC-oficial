@@ -20,67 +20,48 @@
 <header class="clinic-header header-petvida">
 
     <a href="../../home.html" class="voltar">
-
         <i class="fa-solid fa-arrow-left"></i>
-
         Voltar
-
     </a>
 
     <h1>
-
         <i class="fa-solid fa-hospital"></i>
-
         Pet Vida Veterinária
-
     </h1>
 
 </header>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-circle-info"></i>
-
         Informações da Clínica
-
     </h2>
 
     <p>
-
         <i class="fa-solid fa-location-dot"></i>
-
         Av. Francisco Glicério, 1200 - Centro, Campinas
-
     </p>
 
     <p>
-
         <i class="fa-solid fa-phone"></i>
-
         (19) 3234-5678
-
     </p>
 
     <p>
-
         <i class="fa-regular fa-clock"></i>
-
         Seg-Sex: 8h às 18h | Sáb: 8h às 12h
-
     </p>
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-money-bill-wave"></i>
-
         Consulta
-
     </h2>
 
     <div class="preco-box">
@@ -97,14 +78,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-flask"></i>
-
         Exames Disponíveis
-
     </h2>
 
     <div class="grid-exames">
@@ -129,14 +108,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-user-doctor"></i>
-
         Veterinários
-
     </h2>
 
     <div class="vet-card">
@@ -177,11 +154,12 @@
 
 </section>
 
+
 <section class="box">
 
     <a href="cadastro.html"
         class="btn-agendar"
-        onclick="salvarClinica()">
+        id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
 
@@ -212,73 +190,88 @@
 
 </section>
 
+
 <script>
 
-function salvarClinica() {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const clinicaDados = {
-
+    const clinica = {
+        id: 1,
         nome: "Pet Vida Veterinária",
-
         regiao: "Centro",
-
         endereco: "Av. Francisco Glicério, 1200 - Centro, Campinas",
-
         telefone: "(19) 3234-5678",
-
-        horario: "Seg-Sex: 8h às 18h | Sáb: 8h às 12h"
-
+        horario: "Seg-Sex: 8h às 18h | Sáb: 8h às 12h",
+        consulta: "R$ 120"
     };
+
 
     const servicosClinica = [
 
         {
+            id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
-            veterinario: "Maria Silva - Clínica Geral",
+            veterinario: "Dra. Maria Silva - Clínica Geral",
             preco: "R$ 120"
         },
 
         {
+            id: 2,
             nome: "Consulta Dermatológica",
             tipo: "Consulta",
-            veterinario: "Ana Costa - Dermatologia",
+            veterinario: "Dra. Ana Costa - Dermatologia",
             preco: "R$ 180"
         },
 
         {
+            id: 3,
             nome: "Hemograma Completo",
             tipo: "Exame",
-            veterinario: "Maria Silva - Clínica Geral",
+            veterinario: "Dra. Maria Silva - Clínica Geral",
             preco: "R$ 80"
         },
 
         {
+            id: 4,
             nome: "Ultrassom Abdominal",
             tipo: "Exame",
-            veterinario: "João Santos - Cirurgia",
+            veterinario: "Dr. João Santos - Cirurgia",
             preco: "R$ 150"
         },
 
         {
+            id: 5,
             nome: "Raio-X",
             tipo: "Exame",
-            veterinario: "João Santos - Cirurgia",
+            veterinario: "Dr. João Santos - Cirurgia",
             preco: "R$ 120"
         },
 
         {
+            id: 6,
             nome: "Teste FIV/FELV",
             tipo: "Exame",
-            veterinario: "Maria Silva - Clínica Geral",
+            veterinario: "Dra. Maria Silva - Clínica Geral",
             preco: "R$ 100"
         }
 
     ];
 
+
+    localStorage.setItem(
+        "clinica",
+        clinica.nome
+    );
+
+    localStorage.setItem(
+        "clinicaId",
+        clinica.id
+    );
+
     localStorage.setItem(
         "clinicaDados",
-        JSON.stringify(clinicaDados)
+        JSON.stringify(clinica)
     );
 
     localStorage.setItem(
@@ -286,7 +279,34 @@ function salvarClinica() {
         JSON.stringify(servicosClinica)
     );
 
-}
+
+    const btnAgendar = document.getElementById("btnAgendar");
+
+    btnAgendar.addEventListener("click", () => {
+
+        localStorage.setItem(
+            "clinica",
+            clinica.nome
+        );
+
+        localStorage.setItem(
+            "clinicaId",
+            clinica.id
+        );
+
+        localStorage.setItem(
+            "clinicaDados",
+            JSON.stringify(clinica)
+        );
+
+        localStorage.setItem(
+            "servicosClinica",
+            JSON.stringify(servicosClinica)
+        );
+
+    });
+
+});
 
 </script>
 

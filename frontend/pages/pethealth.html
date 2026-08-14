@@ -20,67 +20,48 @@
 <header class="clinic-header header-pethealth">
 
     <a href="../../home.html" class="voltar">
-
         <i class="fa-solid fa-arrow-left"></i>
-
         Voltar
-
     </a>
 
     <h1>
-
         <i class="fa-solid fa-hospital"></i>
-
         Pet Health Barão
-
     </h1>
 
 </header>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-circle-info"></i>
-
         Informações da Clínica
-
     </h2>
 
     <p>
-
         <i class="fa-solid fa-location-dot"></i>
-
         Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas
-
     </p>
 
     <p>
-
         <i class="fa-solid fa-phone"></i>
-
         (19) 3567-8901
-
     </p>
 
     <p>
-
         <i class="fa-regular fa-clock"></i>
-
         Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h
-
     </p>
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-money-bill-wave"></i>
-
         Consulta
-
     </h2>
 
     <div class="preco-box">
@@ -97,14 +78,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-flask"></i>
-
         Exames Disponíveis
-
     </h2>
 
     <div class="grid-exames">
@@ -129,14 +108,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-user-doctor"></i>
-
         Veterinários
-
     </h2>
 
     <div class="vet-card">
@@ -145,7 +122,9 @@
             Dr. Marcos Pereira - Gastroenterologia
         </span>
 
-        <button class="status disponivel">
+        <button
+            type="button"
+            class="status disponivel">
             Disponível
         </button>
 
@@ -157,7 +136,9 @@
             Dra. Juliana Martins - Clínica Geral
         </span>
 
-        <button class="status disponivel">
+        <button
+            type="button"
+            class="status disponivel">
             Disponível
         </button>
 
@@ -169,7 +150,9 @@
             Dr. Rafael Torres - Cirurgia
         </span>
 
-        <button class="status disponivel">
+        <button
+            type="button"
+            class="status disponivel">
             Disponível
         </button>
 
@@ -177,22 +160,26 @@
 
 </section>
 
+
 <section class="box">
 
-    <a href="cadastro.html"
+    <a
+        href="cadastro.html"
         class="btn-agendar"
         onclick="salvarClinica()">
 
         <i class="fa-solid fa-calendar-check"></i>
-
         Agendar Consulta
 
     </a>
 
+
     <div class="card-transporte" id="cardTransporte">
 
         <div class="icone-transporte">
+
             <i class="fa-solid fa-car"></i>
+
         </div>
 
         <div class="texto-transporte">
@@ -212,27 +199,34 @@
 
 </section>
 
+
 <script>
 
 function salvarClinica() {
 
     const clinicaDados = {
 
+        id: 4,
+
         nome: "Pet Health Barão",
 
         regiao: "Barão Geraldo",
 
-        endereco: "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
+        endereco:
+            "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
 
         telefone: "(19) 3567-8901",
 
-        horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h"
+        horario:
+            "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h"
 
     };
+
 
     const servicosClinica = [
 
         {
+            id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
             veterinario: "Juliana Martins - Clínica Geral",
@@ -240,6 +234,7 @@ function salvarClinica() {
         },
 
         {
+            id: 2,
             nome: "Hemograma Completo",
             tipo: "Exame",
             veterinario: "Juliana Martins - Clínica Geral",
@@ -247,6 +242,7 @@ function salvarClinica() {
         },
 
         {
+            id: 3,
             nome: "Ultrassom Abdominal",
             tipo: "Exame",
             veterinario: "Marcos Pereira - Gastroenterologia",
@@ -254,6 +250,7 @@ function salvarClinica() {
         },
 
         {
+            id: 4,
             nome: "Endoscopia",
             tipo: "Exame",
             veterinario: "Marcos Pereira - Gastroenterologia",
@@ -261,6 +258,7 @@ function salvarClinica() {
         },
 
         {
+            id: 5,
             nome: "Raio-X",
             tipo: "Exame",
             veterinario: "Rafael Torres - Cirurgia",
@@ -269,10 +267,24 @@ function salvarClinica() {
 
     ];
 
+
+    localStorage.setItem(
+        "clinica",
+        clinicaDados.nome
+    );
+
+
+    localStorage.setItem(
+        "clinicaId",
+        clinicaDados.id
+    );
+
+
     localStorage.setItem(
         "clinicaDados",
         JSON.stringify(clinicaDados)
     );
+
 
     localStorage.setItem(
         "servicosClinica",
@@ -282,6 +294,7 @@ function salvarClinica() {
 }
 
 </script>
+
 
 <script src="../js/clinicas.js"></script>
 

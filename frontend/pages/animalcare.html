@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -11,6 +12,7 @@
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -28,6 +30,7 @@
     </h1>
 
 </header>
+
 
 <section class="box">
 
@@ -53,6 +56,7 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
@@ -73,6 +77,7 @@
     </div>
 
 </section>
+
 
 <section class="box">
 
@@ -102,6 +107,7 @@
     </div>
 
 </section>
+
 
 <section class="box">
 
@@ -148,16 +154,18 @@
 
 </section>
 
+
 <section class="box">
 
     <a href="cadastro.html"
        class="btn-agendar"
-       onclick="salvarClinica()">
+       id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
         Agendar Consulta
 
     </a>
+
 
     <div class="card-transporte" id="cardTransporte">
 
@@ -182,11 +190,14 @@
 
 </section>
 
+
 <script>
 
-function salvarClinica() {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const clinicaDados = {
+    const clinica = {
+
+        id: 2,
 
         nome: "Clínica Animal Care",
 
@@ -196,62 +207,114 @@ function salvarClinica() {
 
         telefone: "(19) 3345-6789",
 
-        horario: "Seg-Sex: 9h às 19h | Sáb: 9h às 14h"
+        horario: "Seg-Sex: 9h às 19h | Sáb: 9h às 14h",
+
+        consulta: "R$ 150"
 
     };
+
 
     const servicosClinica = [
 
         {
+            id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
-            veterinario: "Paula Oliveira - Clínica Geral",
+            veterinario: "Dra. Paula Oliveira - Clínica Geral",
             preco: "R$ 150"
         },
 
         {
+            id: 2,
             nome: "Hemograma Completo",
             tipo: "Exame",
-            veterinario: "Paula Oliveira - Clínica Geral",
+            veterinario: "Dra. Paula Oliveira - Clínica Geral",
             preco: "R$ 90"
         },
 
         {
+            id: 3,
             nome: "Ecocardiograma",
             tipo: "Exame",
-            veterinario: "Carlos Mendes - Cardiologia",
+            veterinario: "Dr. Carlos Mendes - Cardiologia",
             preco: "R$ 280"
         },
 
         {
+            id: 4,
             nome: "Tomografia",
             tipo: "Exame",
-            veterinario: "Carlos Mendes - Cardiologia",
+            veterinario: "Dr. Carlos Mendes - Cardiologia",
             preco: "R$ 450"
         },
 
         {
+            id: 5,
             nome: "Raio-X",
             tipo: "Exame",
-            veterinario: "Ricardo Alves - Ortopedia",
+            veterinario: "Dr. Ricardo Alves - Ortopedia",
             preco: "R$ 130"
         }
 
     ];
 
+
+    localStorage.setItem(
+        "clinica",
+        clinica.nome
+    );
+
+
+    localStorage.setItem(
+        "clinicaId",
+        clinica.id
+    );
+
+
     localStorage.setItem(
         "clinicaDados",
-        JSON.stringify(clinicaDados)
+        JSON.stringify(clinica)
     );
+
 
     localStorage.setItem(
         "servicosClinica",
         JSON.stringify(servicosClinica)
     );
 
-}
+
+    const btnAgendar =
+        document.getElementById("btnAgendar");
+
+
+    btnAgendar.addEventListener("click", () => {
+
+        localStorage.setItem(
+            "clinica",
+            clinica.nome
+        );
+
+        localStorage.setItem(
+            "clinicaId",
+            clinica.id
+        );
+
+        localStorage.setItem(
+            "clinicaDados",
+            JSON.stringify(clinica)
+        );
+
+        localStorage.setItem(
+            "servicosClinica",
+            JSON.stringify(servicosClinica)
+        );
+
+    });
+
+});
 
 </script>
+
 
 <script src="../js/clinicas.js"></script>
 

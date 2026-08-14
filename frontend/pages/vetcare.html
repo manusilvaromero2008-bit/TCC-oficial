@@ -20,67 +20,48 @@
 <header class="clinic-header header-vetcare">
 
     <a href="../../home.html" class="voltar">
-
         <i class="fa-solid fa-arrow-left"></i>
-
         Voltar
-
     </a>
 
     <h1>
-
         <i class="fa-solid fa-hospital"></i>
-
         VetCare Taquaral
-
     </h1>
 
 </header>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-circle-info"></i>
-
         Informações da Clínica
-
     </h2>
 
     <p>
-
         <i class="fa-solid fa-location-dot"></i>
-
         Av. Heitor Penteado, 890 - Taquaral, Campinas
-
     </p>
 
     <p>
-
         <i class="fa-solid fa-phone"></i>
-
         (19) 3456-7890
-
     </p>
 
     <p>
-
         <i class="fa-regular fa-clock"></i>
-
         Atendimento 24 horas
-
     </p>
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-money-bill-wave"></i>
-
         Consulta
-
     </h2>
 
     <div class="preco-box">
@@ -97,14 +78,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-flask"></i>
-
         Exames Disponíveis
-
     </h2>
 
     <div class="grid-exames">
@@ -129,14 +108,12 @@
 
 </section>
 
+
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-user-doctor"></i>
-
         Veterinários
-
     </h2>
 
     <div class="vet-card">
@@ -145,7 +122,7 @@
             Dra. Fernanda Lima - Emergência
         </span>
 
-        <button class="status disponivel">
+        <button class="status disponivel" type="button">
             Disponível
         </button>
 
@@ -157,7 +134,7 @@
             Dr. Pedro Rocha - Clínica Geral
         </span>
 
-        <button class="status disponivel">
+        <button class="status disponivel" type="button">
             Disponível
         </button>
 
@@ -169,7 +146,7 @@
             Dr. Ricardo Silva - Ortopedia
         </span>
 
-        <button class="status disponivel">
+        <button class="status disponivel" type="button">
             Disponível
         </button>
 
@@ -177,17 +154,19 @@
 
 </section>
 
+
 <section class="box">
 
-    <a href="cadastro.html"
+    <a
+        href="cadastro.html"
         class="btn-agendar"
         onclick="salvarClinica()">
 
         <i class="fa-solid fa-calendar-check"></i>
-
         Agendar Consulta
 
     </a>
+
 
     <div class="card-transporte" id="cardTransporte">
 
@@ -212,11 +191,14 @@
 
 </section>
 
+
 <script>
 
 function salvarClinica() {
 
     const clinicaDados = {
+
+        id: 3,
 
         nome: "VetCare Taquaral",
 
@@ -230,9 +212,11 @@ function salvarClinica() {
 
     };
 
+
     const servicosClinica = [
 
         {
+            id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
             veterinario: "Pedro Rocha - Clínica Geral",
@@ -240,6 +224,7 @@ function salvarClinica() {
         },
 
         {
+            id: 2,
             nome: "Hemograma Completo",
             tipo: "Exame",
             veterinario: "Pedro Rocha - Clínica Geral",
@@ -247,6 +232,7 @@ function salvarClinica() {
         },
 
         {
+            id: 3,
             nome: "Raio-X",
             tipo: "Exame",
             veterinario: "Ricardo Silva - Ortopedia",
@@ -254,25 +240,41 @@ function salvarClinica() {
         },
 
         {
+            id: 4,
             nome: "Ultrassom",
             tipo: "Exame",
-            veterinario: "Fernanda Lima - Emergência",
+            veterinario: "Dra. Fernanda Lima - Emergência",
             preco: "R$ 140"
         },
 
         {
+            id: 5,
             nome: "Exame de Urina",
             tipo: "Exame",
-            veterinario: "Fernanda Lima - Emergência",
+            veterinario: "Dra. Fernanda Lima - Emergência",
             preco: "R$ 60"
         }
 
     ];
 
+
+    localStorage.setItem(
+        "clinica",
+        clinicaDados.nome
+    );
+
+
+    localStorage.setItem(
+        "clinicaId",
+        clinicaDados.id
+    );
+
+
     localStorage.setItem(
         "clinicaDados",
         JSON.stringify(clinicaDados)
     );
+
 
     localStorage.setItem(
         "servicosClinica",
@@ -282,6 +284,7 @@ function salvarClinica() {
 }
 
 </script>
+
 
 <script src="../js/clinicas.js"></script>
 
