@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Perfil - Agenda Pet</title>
+
+    <link rel="stylesheet" href="../css/perfil.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            <i class="fa-solid fa-paw"></i>
+            <span>Agenda Pet</span>
+        </div>
+
+        <button id="btnInicio" class="btn-inicio">
+            <i class="fa-solid fa-house"></i>
+            Início
+        </button>
+
+    </header>
+
+    <main>
+
+        <section class="perfil-container">
+
+            <div class="titulo-pagina">
+
+                <div class="icone-perfil">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+
+                <div>
+                    <h1>Meu Perfil</h1>
+                    <p>Gerencie seus dados e os dados dos seus pets.</p>
+                </div>
+
+            </div>
+
+            <section id="areaCadastro" class="card cadastro-inicial">
+
+                <div class="cadastro-icone">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <div class="cadastro-texto">
+
+                    <h2>Você ainda não possui um cadastro</h2>
+
+                    <p>
+                        Cadastre seus dados e os dados dos seus pets
+                        para facilitar seus próximos agendamentos.
+                    </p>
+
+                    <button
+                        type="button"
+                        id="btnCadastrar"
+                        class="btn-cadastrar">
+
+                        <i class="fa-solid fa-user-plus"></i>
+                        Cadastrar meus dados
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <div id="areaPerfil" class="area-perfil hidden">
+
+                <section class="card">
+
+                    <div class="card-titulo">
+
+                        <h2>
+                            <i class="fa-solid fa-user"></i>
+                            Dados do Tutor
+                        </h2>
+
+                        <button
+                            type="button"
+                            id="btnEditarTutor"
+                            class="btn-editar">
+
+                            <i class="fa-solid fa-pen"></i>
+                            Editar
+
+                        </button>
+
+                    </div>
+
+
+                    <div id="dadosTutor" class="dados">
+
+                        <div class="campo-perfil">
+
+                            <strong>Nome</strong>
+
+                            <span id="perfilNome">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                        <div class="campo-perfil">
+
+                            <strong>CPF</strong>
+
+                            <span id="perfilCpf">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                        <div class="campo-perfil">
+
+                            <strong>Telefone</strong>
+
+                            <span id="perfilTelefone">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                        <div class="campo-perfil">
+
+                            <strong>E-mail</strong>
+
+                            <span id="perfilEmail">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                        <div class="campo-perfil">
+
+                            <strong>Endereço</strong>
+
+                            <span id="perfilEndereco">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                        <div class="campo-perfil">
+
+                            <strong>CEP</strong>
+
+                            <span id="perfilCep">
+                                Não informado
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <form id="formTutor" class="formulario hidden">
+
+                        <div class="campo">
+
+                            <label for="nomeTutor">
+                                Nome *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nomeTutor"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="cpfTutor">
+                                CPF *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cpfTutor"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="telefoneTutor">
+                                Telefone *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="telefoneTutor"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="emailTutor">
+                                E-mail *
+                            </label>
+
+                            <input
+                                type="email"
+                                id="emailTutor"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="enderecoTutor">
+                                Endereço *
+                            </label>
+
+                            <input
+                                type="text"
+                                id="enderecoTutor"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="campo">
+
+                            <label for="cepTutor">
+                                CEP
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cepTutor"
+                            >
+
+                        </div>
+
+                        <div class="botoes-form">
+
+                            <button
+                                type="button"
+                                id="btnCancelarTutor"
+                                class="btn-cancelar">
+
+                                Cancelar
+
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn-salvar">
+
+                                <i class="fa-solid fa-check"></i>
+                                Salvar alterações
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+                <section class="card">
+
+                    <div class="card-titulo">
+
+                        <h2>
+                            <i class="fa-solid fa-paw"></i>
+                            Meus Pets
+                        </h2>
+
+                        <button
+                            type="button"
+                            id="btnAdicionarPet"
+                            class="btn-adicionar">
+
+                            <i class="fa-solid fa-plus"></i>
+                            Adicionar pet
+
+                        </button>
+
+                    </div>
+
+
+                    <div id="listaPets" class="lista-pets"></div>
+
+                </section>
+
+
+                <div class="mensagem" id="mensagem"></div>
+
+
+                <button
+                    type="button"
+                    id="btnAgendar"
+                    class="btn-agendar">
+
+                    <i class="fa-solid fa-calendar-plus"></i>
+
+                    Agendar consulta
+
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <div id="modalPet" class="modal">
+
+        <div class="modal-conteudo">
+
+            <div class="modal-cabecalho">
+
+                <h2 id="tituloModalPet">
+                    Adicionar Pet
+                </h2>
+
+                <button
+                    type="button"
+                    id="btnFecharModal"
+                    class="btn-fechar">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+            <form id="formPet">
+
+                <div class="campo">
+
+                    <label for="nomePet">
+                        Nome *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nomePet"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="especiePet">
+                        Espécie *
+                    </label>
+
+                    <select
+                        id="especiePet"
+                        required
+                    >
+
+                        <option value="Cão">
+                            Cão
+                        </option>
+
+                        <option value="Gato">
+                            Gato
+                        </option>
+
+                        <option value="Ave">
+                            Ave
+                        </option>
+
+                        <option value="Roedor">
+                            Roedor
+                        </option>
+
+                        <option value="Outro">
+                            Outro
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="racaPet">
+                        Raça *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="racaPet"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="idadePet">
+                        Idade *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="idadePet"
+                        placeholder="Ex: 2 anos"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="sexoPet">
+                        Sexo *
+                    </label>
+
+                    <select
+                        id="sexoPet"
+                        required
+                    >
+
+                        <option value="Macho">
+                            Macho
+                        </option>
+
+                        <option value="Fêmea">
+                            Fêmea
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="pesoPet">
+                        Peso *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="pesoPet"
+                        placeholder="Ex: 5 kg"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="botoes-form">
+
+                    <button
+                        type="button"
+                        id="btnCancelarPet"
+                        class="btn-cancelar">
+
+                        Cancelar
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="btn-salvar">
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Salvar pet
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="../js/perfil.js"></script>
+
+</body>
+
+</html>

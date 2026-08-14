@@ -29,8 +29,12 @@
         Pet Health Barão
     </h1>
 
-</header>
+    <a href="perfil.html" class="btn-perfil">
+        <i class="fa-solid fa-user"></i>
+        Meu Perfil
+    </a>
 
+</header>
 
 <section class="box">
 
@@ -56,7 +60,6 @@
 
 </section>
 
-
 <section class="box">
 
     <h2>
@@ -77,7 +80,6 @@
     </div>
 
 </section>
-
 
 <section class="box">
 
@@ -107,7 +109,6 @@
     </div>
 
 </section>
-
 
 <section class="box">
 
@@ -160,19 +161,17 @@
 
 </section>
 
-
 <section class="box">
 
     <a
-        href="cadastro.html"
+        href="#"
         class="btn-agendar"
-        onclick="salvarClinica()">
+        id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
         Agendar Consulta
 
     </a>
-
 
     <div class="card-transporte" id="cardTransporte">
 
@@ -199,10 +198,9 @@
 
 </section>
 
-
 <script>
 
-function salvarClinica() {
+document.addEventListener("DOMContentLoaded", () => {
 
     const clinicaDados = {
 
@@ -212,16 +210,15 @@ function salvarClinica() {
 
         regiao: "Barão Geraldo",
 
-        endereco:
-            "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
+        endereco: "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
 
         telefone: "(19) 3567-8901",
 
-        horario:
-            "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h"
+        horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h",
+
+        consulta: "R$ 130"
 
     };
-
 
     const servicosClinica = [
 
@@ -229,7 +226,7 @@ function salvarClinica() {
             id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
-            veterinario: "Juliana Martins - Clínica Geral",
+            veterinario: "Dra. Juliana Martins - Clínica Geral",
             preco: "R$ 130"
         },
 
@@ -237,7 +234,7 @@ function salvarClinica() {
             id: 2,
             nome: "Hemograma Completo",
             tipo: "Exame",
-            veterinario: "Juliana Martins - Clínica Geral",
+            veterinario: "Dra. Juliana Martins - Clínica Geral",
             preco: "R$ 85"
         },
 
@@ -245,7 +242,7 @@ function salvarClinica() {
             id: 3,
             nome: "Ultrassom Abdominal",
             tipo: "Exame",
-            veterinario: "Marcos Pereira - Gastroenterologia",
+            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
             preco: "R$ 160"
         },
 
@@ -253,7 +250,7 @@ function salvarClinica() {
             id: 4,
             nome: "Endoscopia",
             tipo: "Exame",
-            veterinario: "Marcos Pereira - Gastroenterologia",
+            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
             preco: "R$ 350"
         },
 
@@ -261,40 +258,96 @@ function salvarClinica() {
             id: 5,
             nome: "Raio-X",
             tipo: "Exame",
-            veterinario: "Rafael Torres - Cirurgia",
+            veterinario: "Dr. Rafael Torres - Cirurgia",
             preco: "R$ 125"
         }
 
     ];
-
 
     localStorage.setItem(
         "clinica",
         clinicaDados.nome
     );
 
-
     localStorage.setItem(
         "clinicaId",
         clinicaDados.id
     );
-
 
     localStorage.setItem(
         "clinicaDados",
         JSON.stringify(clinicaDados)
     );
 
-
     localStorage.setItem(
         "servicosClinica",
         JSON.stringify(servicosClinica)
     );
 
-}
+    const btnAgendar =
+        document.getElementById("btnAgendar");
+
+    if (btnAgendar) {
+
+        btnAgendar.addEventListener("click", (event) => {
+
+            event.preventDefault();
+
+            const tutorSalvo =
+                localStorage.getItem("tutor");
+
+            const petsSalvos =
+                localStorage.getItem("pets");
+
+            let cadastroCompleto = false;
+
+            try {
+
+                const tutor =
+                    tutorSalvo
+                        ? JSON.parse(tutorSalvo)
+                        : null;
+
+                const pets =
+                    petsSalvos
+                        ? JSON.parse(petsSalvos)
+                        : [];
+
+                cadastroCompleto =
+                    tutor &&
+                    tutor.nome &&
+                    tutor.cpf &&
+                    tutor.telefone &&
+                    tutor.email &&
+                    tutor.endereco &&
+                    Array.isArray(pets) &&
+                    pets.length > 0;
+
+            } catch (erro) {
+
+                cadastroCompleto = false;
+
+            }
+
+            if (cadastroCompleto) {
+
+                window.location.href =
+                    "dataehorario.html";
+
+            } else {
+
+                window.location.href =
+                    "cadastro.html";
+
+            }
+
+        });
+
+    }
+
+});
 
 </script>
-
 
 <script src="../js/clinicas.js"></script>
 

@@ -122,7 +122,9 @@
             Dr. Carlos Mendes - Cardiologia
         </span>
 
-        <button class="status disponivel">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -134,7 +136,9 @@
             Dra. Paula Oliveira - Clínica Geral
         </span>
 
-        <button class="status disponivel">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -146,7 +150,9 @@
             Dr. Ricardo Alves - Ortopedia
         </span>
 
-        <button class="status disponivel">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -157,20 +163,24 @@
 
 <section class="box">
 
-    <a href="cadastro.html"
-       class="btn-agendar"
-       id="btnAgendar">
+    <a
+        href="dataehorario.html"
+        class="btn-agendar"
+        id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
         Agendar Consulta
 
     </a>
 
-
-    <div class="card-transporte" id="cardTransporte">
+    <div
+        class="card-transporte"
+        id="cardTransporte">
 
         <div class="icone-transporte">
+
             <i class="fa-solid fa-car"></i>
+
         </div>
 
         <div class="texto-transporte">
@@ -264,18 +274,15 @@ document.addEventListener("DOMContentLoaded", () => {
         clinica.nome
     );
 
-
     localStorage.setItem(
         "clinicaId",
         clinica.id
     );
 
-
     localStorage.setItem(
         "clinicaDados",
         JSON.stringify(clinica)
     );
-
 
     localStorage.setItem(
         "servicosClinica",
@@ -287,29 +294,33 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("btnAgendar");
 
 
-    btnAgendar.addEventListener("click", () => {
+    if (btnAgendar) {
 
-        localStorage.setItem(
-            "clinica",
-            clinica.nome
-        );
+        btnAgendar.addEventListener("click", () => {
 
-        localStorage.setItem(
-            "clinicaId",
-            clinica.id
-        );
+            localStorage.setItem(
+                "clinica",
+                clinica.nome
+            );
 
-        localStorage.setItem(
-            "clinicaDados",
-            JSON.stringify(clinica)
-        );
+            localStorage.setItem(
+                "clinicaId",
+                clinica.id
+            );
 
-        localStorage.setItem(
-            "servicosClinica",
-            JSON.stringify(servicosClinica)
-        );
+            localStorage.setItem(
+                "clinicaDados",
+                JSON.stringify(clinica)
+            );
 
-    });
+            localStorage.setItem(
+                "servicosClinica",
+                JSON.stringify(servicosClinica)
+            );
+
+        });
+
+    }
 
 });
 

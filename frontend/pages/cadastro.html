@@ -1,39 +1,34 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <title>Cadastro - Agenda Pet</title>
 
-<title>Cadastro - Agenda Pet</title>
+    <link rel="stylesheet" href="../css/cadastro.css">
 
-<link rel="stylesheet" href="../css/cadastro.css">
-
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
-
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
 <body>
 
-
 <header class="cadastro-header">
 
-    <a href="../../home.html" class="voltar">
+    <a href="perfil.html" class="voltar">
         <i class="fa-solid fa-arrow-left"></i>
         Voltar
     </a>
 
     <h1>
         <i class="fa-solid fa-paw"></i>
-        Cadastro para Agendamento
+        Meu Cadastro
     </h1>
 
     <p>
-        Preencha os dados do tutor e do(s) pet(s).
+        Cadastre seus dados e os dados dos seus pets.
     </p>
 
 </header>
@@ -42,9 +37,6 @@
 <main class="container">
 
     <form id="formCadastro">
-
-
-        
 
         <section class="box">
 
@@ -154,20 +146,14 @@
         </section>
 
 
-        
-
         <section class="box">
 
             <h2>
                 <i class="fa-solid fa-dog"></i>
-                Dados do(s) Pet(s)
+                Meus Pets
             </h2>
 
-
             <div id="pets">
-
-
-                
 
                 <div class="pet">
 
@@ -176,9 +162,7 @@
                         Pet 1
                     </h3>
 
-
                     <div class="grid">
-
 
                         <div class="campo">
 
@@ -303,11 +287,9 @@
 
                         </div>
 
-
                     </div>
 
                 </div>
-
 
             </div>
 
@@ -327,18 +309,17 @@
         </section>
 
 
-       
-
         <button
             type="button"
             id="btnProsseguir"
             class="btn-confirmar"
         >
 
-            Prosseguir para Agendamento
+            <i class="fa-solid fa-check"></i>
+
+            Salvar cadastro
 
         </button>
-
 
     </form>
 
@@ -346,7 +327,6 @@
 
 
 <script src="../js/cadastro.js"></script>
-
 
 </body>
 

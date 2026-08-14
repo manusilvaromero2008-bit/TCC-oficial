@@ -32,8 +32,29 @@ header::before {
     z-index: 1;
     max-width: 1200px;
     margin: auto;
-    padding: 75px 20px 0;
-    text-align: center;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-perfil {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 18px;
+    background: white;
+    color: #0757a6;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    transition: 0.3s;
+}
+
+.btn-perfil:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 header h1 {
@@ -184,13 +205,17 @@ header p {
 }
 
 @media (max-width: 768px) {
-
     header {
         height: 280px;
     }
 
     .container-header {
-        padding: 60px 15px 0;
+        padding: 20px 15px;
+    }
+
+    .btn-perfil {
+        padding: 10px 14px;
+        font-size: 14px;
     }
 
     header h1 {

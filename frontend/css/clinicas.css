@@ -65,11 +65,47 @@ body {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .voltar:hover {
-    opacity: .8;
+    opacity: 0.8;
+}
+
+.btn-perfil {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 20px;
+
+    background: rgba(255, 255, 255, 0.95);
+    color: #0757a6;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+
+    transition: 0.3s;
+
+    z-index: 2;
+}
+
+.btn-perfil:hover {
+    background: #0757a6;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-perfil i {
+    color: inherit;
+    margin: 0;
 }
 
 .box {
@@ -78,7 +114,7 @@ body {
     background: white;
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
 }
 
 .box h2 {
@@ -118,7 +154,7 @@ body {
     padding: 20px;
     border-radius: 15px;
     border: 2px solid #0757a6;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .exame:hover {
@@ -166,7 +202,7 @@ body {
     background: #49b84f;
     color: white;
     cursor: pointer;
-    transition: .3s;
+    transition: 0.3s;
 }
 
 .horarios button:hover {
@@ -253,6 +289,7 @@ body {
 }
 
 @media (max-width: 768px) {
+
     .clinic-header {
         min-height: 280px;
         padding: 30px 20px;
@@ -260,6 +297,17 @@ body {
 
     .clinic-header h1 {
         font-size: 30px;
+    }
+
+    .voltar {
+        margin-top: 50px;
+    }
+
+    .btn-perfil {
+        top: 20px;
+        right: 20px;
+        padding: 10px 14px;
+        font-size: 14px;
     }
 
     .box {

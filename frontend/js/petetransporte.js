@@ -156,32 +156,8 @@ document.addEventListener("DOMContentLoaded", () => {
         "Não informado";
 
 
-    const agendamentoAtualSalvo =
-        localStorage.getItem("agendamento");
-
-
-    let agendamentoAtual = {};
-
-
-    if (agendamentoAtualSalvo) {
-
-        try {
-
-            agendamentoAtual =
-                JSON.parse(agendamentoAtualSalvo);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar agendamento atual:",
-                erro
-            );
-
-            agendamentoAtual = {};
-
-        }
-
-    }
+    localStorage.removeItem("petSelecionado");
+    localStorage.removeItem("transporte");
 
 
     if (nomeClinica) {
@@ -274,7 +250,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 card.classList.add("pet-card");
 
-                card.dataset.index = index;
+                card.dataset.index =
+                    index;
 
                 card.innerHTML = `
 
@@ -299,30 +276,40 @@ document.addEventListener("DOMContentLoaded", () => {
                 `;
 
 
-                card.addEventListener("click", () => {
+                card.addEventListener(
+                    "click",
+                    () => {
 
-                    document
-                        .querySelectorAll(".pet-card")
-                        .forEach(item => {
-                            item.classList.remove("selecionado");
-                        });
+                        document
+                            .querySelectorAll(".pet-card")
+                            .forEach(item => {
 
+                                item.classList.remove(
+                                    "selecionado"
+                                );
 
-                    card.classList.add("selecionado");
-
-
-                    petSelecionado = pet;
-
-
-                    localStorage.setItem(
-                        "petSelecionado",
-                        JSON.stringify(pet)
-                    );
+                            });
 
 
-                    atualizarResumoPet();
+                        card.classList.add(
+                            "selecionado"
+                        );
 
-                });
+
+                        petSelecionado =
+                            pet;
+
+
+                        localStorage.setItem(
+                            "petSelecionado",
+                            JSON.stringify(pet)
+                        );
+
+
+                        atualizarResumoPet();
+
+                    }
+                );
 
 
                 listaPets.appendChild(card);
@@ -361,8 +348,10 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             if (resumoTransporte) {
+
                 resumoTransporte.textContent =
                     "Solicitado";
+
             }
 
         } else {
@@ -376,8 +365,10 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
             if (resumoTransporte) {
+
                 resumoTransporte.textContent =
                     "Não solicitado";
+
             }
 
         }
@@ -399,10 +390,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 transporte =
                     !transporte;
 
+
                 localStorage.setItem(
                     "transporte",
                     transporte.toString()
                 );
+
 
                 atualizarTransporte();
 
@@ -460,16 +453,10 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
 
-        const agendamentoCompleto = {
-            ...agendamentoAtual,
-            ...agendamentoFinal
-        };
-
-
         localStorage.setItem(
             "agendamentoFinal",
             JSON.stringify(
-                agendamentoCompleto
+                agendamentoFinal
             )
         );
 
@@ -477,7 +464,7 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.setItem(
             "agendamento",
             JSON.stringify(
-                agendamentoCompleto
+                agendamentoFinal
             )
         );
 

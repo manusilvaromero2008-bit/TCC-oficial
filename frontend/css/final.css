@@ -189,14 +189,37 @@ h1 {
     transform: translateY(-2px);
 }
 
-footer {
-    background-color: #033b74;
+#btnOutroPet {
+    border: 2px solid #0757a6;
+    background-color: #ffffff;
+    color: #0757a6;
+    padding: 14px 30px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-left: 10px;
+}
+
+#btnOutroPet:hover {
+    background-color: #0757a6;
     color: #ffffff;
-    min-height: 70px;
+    transform: translateY(-2px);
+}
+
+.botoes-final {
     display: flex;
+    justify-content: center;
     align-items: center;
-    justify-content: space-around;
-    padding: 15px;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.botoes-final #btnInicio,
+.botoes-final #btnOutroPet {
+    margin: 0;
 }
 
 .btn-voltar {
@@ -222,6 +245,16 @@ footer {
 
 .btn-voltar i {
     font-size: 13px;
+}
+
+footer {
+    background-color: #033b74;
+    color: #ffffff;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 15px;
 }
 
 @media (max-width: 800px) {
@@ -280,6 +313,21 @@ footer {
         height: 280px;
     }
 
+    .botoes-final {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    #btnInicio,
+    #btnOutroPet {
+        width: 100%;
+        margin: 0;
+    }
+
+    .btn-voltar {
+        width: 100%;
+    }
+
     footer {
         flex-direction: column;
         gap: 10px;
@@ -323,7 +371,8 @@ footer {
         height: 230px;
     }
 
-    #btnInicio {
+    #btnInicio,
+    #btnOutroPet {
         width: 100%;
         padding: 14px 20px;
     }

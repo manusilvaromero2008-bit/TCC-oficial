@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,7 +11,6 @@
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 </head>
 
 <body>
@@ -30,7 +28,6 @@
     </h1>
 
 </header>
-
 
 <section class="box">
 
@@ -56,7 +53,6 @@
 
 </section>
 
-
 <section class="box">
 
     <h2>
@@ -77,7 +73,6 @@
     </div>
 
 </section>
-
 
 <section class="box">
 
@@ -108,7 +103,6 @@
 
 </section>
 
-
 <section class="box">
 
     <h2>
@@ -122,7 +116,9 @@
             Dra. Fernanda Lima - Emergência
         </span>
 
-        <button class="status disponivel" type="button">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -134,7 +130,9 @@
             Dr. Pedro Rocha - Clínica Geral
         </span>
 
-        <button class="status disponivel" type="button">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -146,7 +144,9 @@
             Dr. Ricardo Silva - Ortopedia
         </span>
 
-        <button class="status disponivel" type="button">
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
         </button>
 
@@ -154,24 +154,24 @@
 
 </section>
 
-
 <section class="box">
 
     <a
         href="cadastro.html"
         class="btn-agendar"
-        onclick="salvarClinica()">
+        id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
         Agendar Consulta
 
     </a>
 
-
     <div class="card-transporte" id="cardTransporte">
 
         <div class="icone-transporte">
+
             <i class="fa-solid fa-car"></i>
+
         </div>
 
         <div class="texto-transporte">
@@ -191,12 +191,11 @@
 
 </section>
 
-
 <script>
 
-function salvarClinica() {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const clinicaDados = {
+    const clinica = {
 
         id: 3,
 
@@ -208,10 +207,11 @@ function salvarClinica() {
 
         telefone: "(19) 3456-7890",
 
-        horario: "Atendimento 24 horas"
+        horario: "Atendimento 24 horas",
+
+        consulta: "R$ 100"
 
     };
-
 
     const servicosClinica = [
 
@@ -219,7 +219,7 @@ function salvarClinica() {
             id: 1,
             nome: "Consulta Geral",
             tipo: "Consulta",
-            veterinario: "Pedro Rocha - Clínica Geral",
+            veterinario: "Dr. Pedro Rocha - Clínica Geral",
             preco: "R$ 100"
         },
 
@@ -227,7 +227,7 @@ function salvarClinica() {
             id: 2,
             nome: "Hemograma Completo",
             tipo: "Exame",
-            veterinario: "Pedro Rocha - Clínica Geral",
+            veterinario: "Dr. Pedro Rocha - Clínica Geral",
             preco: "R$ 75"
         },
 
@@ -235,7 +235,7 @@ function salvarClinica() {
             id: 3,
             nome: "Raio-X",
             tipo: "Exame",
-            veterinario: "Ricardo Silva - Ortopedia",
+            veterinario: "Dr. Ricardo Silva - Ortopedia",
             preco: "R$ 110"
         },
 
@@ -257,34 +257,40 @@ function salvarClinica() {
 
     ];
 
+    const btnAgendar =
+        document.getElementById("btnAgendar");
 
-    localStorage.setItem(
-        "clinica",
-        clinicaDados.nome
-    );
+    if (btnAgendar) {
 
+        btnAgendar.addEventListener("click", () => {
 
-    localStorage.setItem(
-        "clinicaId",
-        clinicaDados.id
-    );
+            localStorage.setItem(
+                "clinica",
+                clinica.nome
+            );
 
+            localStorage.setItem(
+                "clinicaId",
+                clinica.id
+            );
 
-    localStorage.setItem(
-        "clinicaDados",
-        JSON.stringify(clinicaDados)
-    );
+            localStorage.setItem(
+                "clinicaDados",
+                JSON.stringify(clinica)
+            );
 
+            localStorage.setItem(
+                "servicosClinica",
+                JSON.stringify(servicosClinica)
+            );
 
-    localStorage.setItem(
-        "servicosClinica",
-        JSON.stringify(servicosClinica)
-    );
+        });
 
-}
+    }
+
+});
 
 </script>
-
 
 <script src="../js/clinicas.js"></script>
 
