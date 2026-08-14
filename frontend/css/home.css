@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background: #f4fff4;
+    background: #e0effa65;
 }
 
 header {
@@ -89,7 +89,7 @@ header p {
 .campo select {
     width: 100%;
     padding: 16px;
-    border: 2px solid #49b84f;
+    border: 2px solid #0757a6;
     border-radius: 12px;
     font-size: 16px;
     background: white;
@@ -180,7 +180,7 @@ header p {
 
 .info-extra span,
 .info-extra strong {
-    color: #258133;
+    color: #04407c;
 }
 
 @media (max-width: 768px) {

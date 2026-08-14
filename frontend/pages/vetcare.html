@@ -3,579 +3,283 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>VetCare Taquaral</title>
+    <title>VetCare Taquaral</title>
 
-<link rel="stylesheet" href="../css/clinicas.css">
+    <link rel="stylesheet" href="../css/clinicas.css">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
-
 <body>
 
+<header class="clinic-header header-vetcare">
 
-<header class="clinic-header">
+    <a href="../../home.html" class="voltar">
 
+        <i class="fa-solid fa-arrow-left"></i>
 
-<a href="../../home.html" class="voltar">
+        Voltar
 
-<i class="fa-solid fa-arrow-left"></i>
+    </a>
 
-Voltar
+    <h1>
 
-</a>
+        <i class="fa-solid fa-hospital"></i>
 
+        VetCare Taquaral
 
-
-<h1>
-
-<i class="fa-solid fa-hospital"></i>
-
-VetCare Taquaral
-
-</h1>
-
+    </h1>
 
 </header>
 
-
-
-
-
-
 <section class="box">
 
+    <h2>
 
-<h2>
+        <i class="fa-solid fa-circle-info"></i>
 
-<i class="fa-solid fa-circle-info"></i>
+        Informações da Clínica
 
-Informações da Clínica
+    </h2>
 
-</h2>
+    <p>
 
+        <i class="fa-solid fa-location-dot"></i>
 
+        Av. Heitor Penteado, 890 - Taquaral, Campinas
 
-<p>
+    </p>
 
-<i class="fa-solid fa-location-dot"></i>
+    <p>
 
-Av. Heitor Penteado, 890 - Taquaral, Campinas
+        <i class="fa-solid fa-phone"></i>
 
-</p>
+        (19) 3456-7890
 
+    </p>
 
+    <p>
 
-<p>
+        <i class="fa-regular fa-clock"></i>
 
-<i class="fa-solid fa-phone"></i>
+        Atendimento 24 horas
 
-(19) 3456-7890
-
-</p>
-
-
-
-<p>
-
-<i class="fa-regular fa-clock"></i>
-
-Atendimento 24 horas
-
-</p>
-
+    </p>
 
 </section>
 
-
-
-
-
-
-
 <section class="box">
 
+    <h2>
 
-<h2>
+        <i class="fa-solid fa-money-bill-wave"></i>
 
-<i class="fa-solid fa-money-bill-wave"></i>
+        Consulta
 
-Consulta
+    </h2>
 
-</h2>
+    <div class="preco-box">
 
+        <span>
+            Valor da Consulta
+        </span>
 
-
-
-<div class="preco-box">
-
-
-<span>
-
-Valor da Consulta
-
-</span>
-
-
-
-<strong>
-
-R$ 100,00
-
-</strong>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-<i class="fa-solid fa-flask"></i>
-
-Exames Disponíveis
-
-</h2>
-
-
-
-
-<div class="grid-exames">
-
-
-<div class="exame">
-
-Hemograma Completo - R$ 75,00
-
-</div>
-
-
-
-<div class="exame">
-
-Raio-X - R$ 110,00
-
-</div>
-
-
-
-<div class="exame">
-
-Ultrassom - R$ 140,00
-
-</div>
-
-
-
-<div class="exame">
-
-Exame de Urina - R$ 60,00
-
-</div>
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-<i class="fa-solid fa-user-doctor"></i>
-
-Veterinários
-
-</h2>
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dra. Fernanda Lima - Emergência
-
-</span>
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Pedro Rocha - Clínica Geral
-
-</span>
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Ricardo Silva - Ortopedia
-
-</span>
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-
-<a href="cadastro.html"
-class="btn-agendar"
-onclick="salvarClinica()">
-
-
-
-<i class="fa-solid fa-calendar-check"></i>
-
-Agendar Consulta
-
-
-
-</a>
-
-
-
-
-
-
-<div class="card-transporte" id="cardTransporte">
-
-    <div class="icone-transporte">
-        <i class="fa-solid fa-car"></i>
-    </div>
-
-    <div class="texto-transporte">
-
-        <h3>
-            Transporte para seu pet disponível
-        </h3>
-
-        <p>
-            Durante o agendamento, você poderá solicitar
-            o transporte do seu pet até a clínica.
-        </p>
+        <strong>
+            R$ 100,00
+        </strong>
 
     </div>
 
-    
+</section>
 
-</div>
+<section class="box">
 
+    <h2>
 
+        <i class="fa-solid fa-flask"></i>
+
+        Exames Disponíveis
+
+    </h2>
+
+    <div class="grid-exames">
+
+        <div class="exame">
+            Hemograma Completo - R$ 75,00
+        </div>
+
+        <div class="exame">
+            Raio-X - R$ 110,00
+        </div>
+
+        <div class="exame">
+            Ultrassom - R$ 140,00
+        </div>
+
+        <div class="exame">
+            Exame de Urina - R$ 60,00
+        </div>
+
+    </div>
 
 </section>
 
+<section class="box">
 
+    <h2>
 
+        <i class="fa-solid fa-user-doctor"></i>
 
+        Veterinários
 
+    </h2>
 
+    <div class="vet-card">
 
+        <span>
+            Dra. Fernanda Lima - Emergência
+        </span>
 
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dr. Pedro Rocha - Clínica Geral
+        </span>
+
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dr. Ricardo Silva - Ortopedia
+        </span>
+
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+</section>
+
+<section class="box">
+
+    <a href="cadastro.html"
+        class="btn-agendar"
+        onclick="salvarClinica()">
+
+        <i class="fa-solid fa-calendar-check"></i>
+
+        Agendar Consulta
+
+    </a>
+
+    <div class="card-transporte" id="cardTransporte">
+
+        <div class="icone-transporte">
+            <i class="fa-solid fa-car"></i>
+        </div>
+
+        <div class="texto-transporte">
+
+            <h3>
+                Transporte para seu pet disponível
+            </h3>
+
+            <p>
+                Durante o agendamento, você poderá solicitar
+                o transporte do seu pet até a clínica.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
 
 <script>
 
+function salvarClinica() {
 
-function salvarClinica(){
+    const clinicaDados = {
 
+        nome: "VetCare Taquaral",
 
+        regiao: "Taquaral",
 
-const clinicaDados = {
+        endereco: "Av. Heitor Penteado, 890 - Taquaral, Campinas",
 
+        telefone: "(19) 3456-7890",
 
-nome:
+        horario: "Atendimento 24 horas"
 
-"VetCare Taquaral",
+    };
 
+    const servicosClinica = [
 
+        {
+            nome: "Consulta Geral",
+            tipo: "Consulta",
+            veterinario: "Pedro Rocha - Clínica Geral",
+            preco: "R$ 100"
+        },
 
-regiao:
+        {
+            nome: "Hemograma Completo",
+            tipo: "Exame",
+            veterinario: "Pedro Rocha - Clínica Geral",
+            preco: "R$ 75"
+        },
 
-"Taquaral",
+        {
+            nome: "Raio-X",
+            tipo: "Exame",
+            veterinario: "Ricardo Silva - Ortopedia",
+            preco: "R$ 110"
+        },
 
+        {
+            nome: "Ultrassom",
+            tipo: "Exame",
+            veterinario: "Fernanda Lima - Emergência",
+            preco: "R$ 140"
+        },
 
+        {
+            nome: "Exame de Urina",
+            tipo: "Exame",
+            veterinario: "Fernanda Lima - Emergência",
+            preco: "R$ 60"
+        }
 
-endereco:
+    ];
 
-"Av. Heitor Penteado, 890 - Taquaral, Campinas",
+    localStorage.setItem(
+        "clinicaDados",
+        JSON.stringify(clinicaDados)
+    );
 
-
-
-telefone:
-
-"(19) 3456-7890",
-
-
-
-horario:
-
-"Atendimento 24 horas"
-
-
-};
-
-
-
-
-
-
-
-
-const servicosClinica = [
-
-
-
-{
-
-
-nome:
-
-"Consulta Geral",
-
-
-tipo:
-
-"Consulta",
-
-
-veterinario:
-
-"Pedro Rocha - Clínica Geral",
-
-
-preco:
-
-"R$ 100"
-
-
-},
-
-
-
-
-{
-
-
-nome:
-
-"Hemograma Completo",
-
-
-tipo:
-
-"Exame",
-
-
-veterinario:
-
-"Pedro Rocha - Clínica Geral",
-
-
-preco:
-
-"R$ 75"
-
-
-},
-
-
-
-
-{
-
-
-nome:
-
-"Raio-X",
-
-
-tipo:
-
-"Exame",
-
-
-veterinario:
-
-"Ricardo Silva - Ortopedia",
-
-
-preco:
-
-"R$ 110"
-
-
-},
-
-
-
-
-{
-
-
-nome:
-
-"Ultrassom",
-
-
-tipo:
-
-"Exame",
-
-
-veterinario:
-
-"Fernanda Lima - Emergência",
-
-
-preco:
-
-"R$ 140"
-
-
-},
-
-
-
-
-{
-
-
-nome:
-
-"Exame de Urina",
-
-
-tipo:
-
-"Exame",
-
-
-veterinario:
-
-"Fernanda Lima - Emergência",
-
-
-preco:
-
-"R$ 60"
-
+    localStorage.setItem(
+        "servicosClinica",
+        JSON.stringify(servicosClinica)
+    );
 
 }
-
-
-
-];
-
-
-
-
-
-
-
-localStorage.setItem(
-
-"clinicaDados",
-
-JSON.stringify(clinicaDados)
-
-);
-
-
-
-
-
-
-
-localStorage.setItem(
-
-"servicosClinica",
-
-JSON.stringify(servicosClinica)
-
-);
-
-
-
-}
-
-
 
 </script>
 

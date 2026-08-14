@@ -8,21 +8,16 @@
 
     <title>Pet Vida Veterinária</title>
 
-
     <link rel="stylesheet" href="../css/clinicas.css">
-
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
-
 <body>
 
-
-<header class="clinic-header">
-
+<header class="clinic-header header-petvida">
 
     <a href="../../home.html" class="voltar">
 
@@ -32,9 +27,6 @@
 
     </a>
 
-
-
-
     <h1>
 
         <i class="fa-solid fa-hospital"></i>
@@ -43,17 +35,9 @@
 
     </h1>
 
-
 </header>
 
-
-
-
-
-
-
 <section class="box">
-
 
     <h2>
 
@@ -63,9 +47,6 @@
 
     </h2>
 
-
-
-
     <p>
 
         <i class="fa-solid fa-location-dot"></i>
@@ -73,8 +54,6 @@
         Av. Francisco Glicério, 1200 - Centro, Campinas
 
     </p>
-
-
 
     <p>
 
@@ -84,8 +63,6 @@
 
     </p>
 
-
-
     <p>
 
         <i class="fa-regular fa-clock"></i>
@@ -94,17 +71,9 @@
 
     </p>
 
-
 </section>
 
-
-
-
-
-
-
 <section class="box">
-
 
     <h2>
 
@@ -114,40 +83,21 @@
 
     </h2>
 
-
-
-
     <div class="preco-box">
 
-
         <span>
-
             Valor da Consulta
-
         </span>
 
-
-
         <strong>
-
             R$ 120,00
-
         </strong>
-
 
     </div>
 
-
 </section>
 
-
-
-
-
-
-
 <section class="box">
-
 
     <h2>
 
@@ -157,56 +107,29 @@
 
     </h2>
 
-
-
-
     <div class="grid-exames">
 
-
         <div class="exame">
-
             Hemograma Completo - R$ 80,00
-
         </div>
 
-
-
         <div class="exame">
-
             Ultrassom Abdominal - R$ 150,00
-
         </div>
 
-
-
         <div class="exame">
-
             Raio-X - R$ 120,00
-
         </div>
-
-
 
         <div class="exame">
-
             Teste FIV/FELV - R$ 100,00
-
         </div>
-
 
     </div>
 
-
 </section>
 
-
-
-
-
-
-
 <section class="box">
-
 
     <h2>
 
@@ -216,323 +139,154 @@
 
     </h2>
 
-
-
-
-
     <div class="vet-card">
 
-
         <span>
-
             Dra. Maria Silva - Clínica Geral
-
         </span>
 
-
-
         <button class="status disponivel">
-
             Disponível
-
         </button>
-
 
     </div>
 
-
-
-
-
     <div class="vet-card">
 
-
         <span>
-
             Dr. João Santos - Cirurgia
-
         </span>
 
-
-
         <button class="status disponivel">
-
             Disponível
-
         </button>
 
-
     </div>
-
-
-
-
 
     <div class="vet-card">
 
-
         <span>
-
             Dra. Ana Costa - Dermatologia
-
         </span>
 
-
-
         <button class="status disponivel">
-
             Disponível
-
         </button>
 
-
     </div>
-
-
 
 </section>
 
-
-
-
-
-
-
-
 <section class="box">
 
-
-
     <a href="cadastro.html"
-       class="btn-agendar"
-       onclick="salvarClinica()">
-
-
+        class="btn-agendar"
+        onclick="salvarClinica()">
 
         <i class="fa-solid fa-calendar-check"></i>
 
         Agendar Consulta
 
-
-
     </a>
-
-
-
-
 
     <div class="card-transporte" id="cardTransporte">
 
         <div class="icone-transporte">
             <i class="fa-solid fa-car"></i>
         </div>
-    
+
         <div class="texto-transporte">
-    
+
             <h3>
                 Transporte para seu pet disponível
             </h3>
-    
+
             <p>
                 Durante o agendamento, você poderá solicitar
                 o transporte do seu pet até a clínica.
             </p>
-    
+
         </div>
 
+    </div>
 
 </section>
 
-
-
-
-
-
-
-
-
 <script>
 
-
-function salvarClinica(){
-
-
+function salvarClinica() {
 
     const clinicaDados = {
 
+        nome: "Pet Vida Veterinária",
 
-        nome:
-        "Pet Vida Veterinária",
+        regiao: "Centro",
 
+        endereco: "Av. Francisco Glicério, 1200 - Centro, Campinas",
 
-        regiao:
-        "Centro",
+        telefone: "(19) 3234-5678",
 
-
-        endereco:
-        "Av. Francisco Glicério, 1200 - Centro, Campinas",
-
-
-        telefone:
-        "(19) 3234-5678",
-
-
-        horario:
-        "Seg-Sex: 8h às 18h | Sáb: 8h às 12h"
-
+        horario: "Seg-Sex: 8h às 18h | Sáb: 8h às 12h"
 
     };
 
-
-
-
-
-
     const servicosClinica = [
 
-
-
         {
-
-            nome:
-            "Consulta Geral",
-
-            tipo:
-            "Consulta",
-
-            veterinario:
-            "Maria Silva - Clínica Geral",
-
-            preco:
-            "R$ 120"
-
+            nome: "Consulta Geral",
+            tipo: "Consulta",
+            veterinario: "Maria Silva - Clínica Geral",
+            preco: "R$ 120"
         },
 
-
-
         {
-
-            nome:
-            "Consulta Dermatológica",
-
-            tipo:
-            "Consulta",
-
-            veterinario:
-            "Ana Costa - Dermatologia",
-
-            preco:
-            "R$ 180"
-
+            nome: "Consulta Dermatológica",
+            tipo: "Consulta",
+            veterinario: "Ana Costa - Dermatologia",
+            preco: "R$ 180"
         },
 
-
-
         {
-
-            nome:
-            "Hemograma Completo",
-
-            tipo:
-            "Exame",
-
-            veterinario:
-            "Maria Silva - Clínica Geral",
-
-            preco:
-            "R$ 80"
-
+            nome: "Hemograma Completo",
+            tipo: "Exame",
+            veterinario: "Maria Silva - Clínica Geral",
+            preco: "R$ 80"
         },
 
-
-
         {
-
-            nome:
-            "Ultrassom Abdominal",
-
-            tipo:
-            "Exame",
-
-            veterinario:
-            "João Santos - Cirurgia",
-
-            preco:
-            "R$ 150"
-
+            nome: "Ultrassom Abdominal",
+            tipo: "Exame",
+            veterinario: "João Santos - Cirurgia",
+            preco: "R$ 150"
         },
 
-
-
         {
-
-            nome:
-            "Raio-X",
-
-            tipo:
-            "Exame",
-
-            veterinario:
-            "João Santos - Cirurgia",
-
-            preco:
-            "R$ 120"
-
+            nome: "Raio-X",
+            tipo: "Exame",
+            veterinario: "João Santos - Cirurgia",
+            preco: "R$ 120"
         },
 
-
-
         {
-
-            nome:
-            "Teste FIV/FELV",
-
-            tipo:
-            "Exame",
-
-            veterinario:
-            "Maria Silva - Clínica Geral",
-
-            preco:
-            "R$ 100"
-
+            nome: "Teste FIV/FELV",
+            tipo: "Exame",
+            veterinario: "Maria Silva - Clínica Geral",
+            preco: "R$ 100"
         }
-
-
 
     ];
 
-
-
-
-
-
     localStorage.setItem(
-
         "clinicaDados",
-
         JSON.stringify(clinicaDados)
-
     );
-
-
-
-
-
 
     localStorage.setItem(
-
         "servicosClinica",
-
         JSON.stringify(servicosClinica)
-
     );
-
-
 
 }
-
-
 
 </script>
 

@@ -6,14 +6,14 @@
 
 body{
     font-family: Arial, Helvetica, sans-serif;
-    background: #f4fff4;
+    background: #e0effa65;
     color: #333;
 }
 
 
 
 .cadastro-header{
-    background: linear-gradient(135deg, #2d9b3d, #4cc95a);
+    background: linear-gradient(135deg, #0756a6cc, #63b1f0);
     color: white;
     padding: 40px;
 }
@@ -29,7 +29,7 @@ body{
 
 .voltar{
     display: inline-block;
-    color: white;
+    color: rgb(255, 255, 255);
     text-decoration: none;
     font-weight: bold;
     transition: .3s;
@@ -50,7 +50,7 @@ body{
 
 
 .box{
-    background: white;
+    background: rgb(255, 255, 255);
     border-radius: 20px;
     padding: 30px;
     margin-bottom: 30px;
@@ -58,13 +58,13 @@ body{
 }
 
 .box h2{
-    color: #2d9b3d;
+    color: #044281;
     margin-bottom: 25px;
     font-size: 28px;
 }
 
 .box h3{
-    color: #2d9b3d;
+    color: #044281;
     margin-bottom: 20px;
     font-size: 22px;
 }
@@ -72,7 +72,7 @@ body{
 
 
 .pet{
-    border: 2px solid #d8f5d8;
+    border: 2px solid #0756a654;
     border-radius: 18px;
     padding: 25px;
     margin-bottom: 25px;
@@ -100,13 +100,13 @@ body{
 .campo label{
     margin-bottom: 8px;
     font-weight: bold;
-    color: #155724;
+    color: #000000;
 }
 
 .campo input,
 .campo select{
     padding: 14px;
-    border: 2px solid #cfeecf;
+    border: 2px solid #0756a638;
     border-radius: 12px;
     font-size: 16px;
     outline: none;
@@ -116,7 +116,7 @@ body{
 
 .campo input:focus,
 .campo select:focus{
-    border-color: #2d9b3d;
+    border-color: #0756a6;
     box-shadow: 0 0 8px rgba(45,155,61,.25);
 }
 
@@ -124,9 +124,9 @@ body{
 .btn-add{
     width: 100%;
     padding: 18px;
-    border: 2px dashed #2d9b3d;
-    background: #f3fff3;
-    color: #2d9b3d;
+    border: 2px dashed #0757a6;
+    background: #eff8ff;
+    color: #0757a6;
     font-size: 18px;
     font-weight: bold;
     border-radius: 15px;
@@ -135,7 +135,7 @@ body{
 }
 
 .btn-add:hover{
-    background: #2d9b3d;
+    background: #78a1c5;
     color: white;
 }
 
@@ -146,7 +146,7 @@ body{
     padding: 18px;
     border: none;
     border-radius: 15px;
-    background: #2d9b3d;
+    background: #0756a6cc;
     color: white;
     font-size: 20px;
     font-weight: bold;
@@ -155,7 +155,7 @@ body{
 }
 
 .btn-confirmar:hover{
-    background: #258133;
+    background: #0757a6;
     transform: translateY(-2px);
 }
 

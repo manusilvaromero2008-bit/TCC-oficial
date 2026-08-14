@@ -1,32 +1,65 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: 'Poppins', sans-serif;
-    background: #f4fff4;
+    background: #e0effa65;
     color: #333;
 }
 
-
-
-.clinic-header{
-    background: linear-gradient(135deg, #2d9b3d, #4cc95a);
+.clinic-header {
+    position: relative;
+    min-height: 190px;
     padding: 40px;
     color: white;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.clinic-header h1{
+.clinic-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.clinic-header > * {
+    position: relative;
+    z-index: 1;
+}
+
+.header-petvida {
+    background-image: url("../assets/petvida.jpg");
+}
+
+.header-animalcare {
+    background-image: url("../assets/animalcare.jpg");
+}
+
+.header-vetcare {
+    background-image: url("../assets/vetcare.jpg");
+}
+
+.header-pethealth {
+    background-image: url("../assets/pethealth.jpg");
+}
+
+.clinic-header h1 {
     font-size: 42px;
     letter-spacing: 2px;
     margin-top: 10px;
 }
 
-.voltar{
+.voltar {
     display: inline-block;
     margin-bottom: 20px;
     text-decoration: none;
@@ -35,108 +68,98 @@ body{
     transition: .3s;
 }
 
-.voltar:hover{
+.voltar:hover {
     opacity: .8;
 }
 
-
-
-.box{
+.box {
     max-width: 1100px;
     margin: 30px auto;
     background: white;
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.08);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .08);
 }
 
-.box h2{
-    color: #2d9b3d;
+.box h2 {
+    color: #0757a6;
     margin-bottom: 20px;
 }
 
-.box p{
+.box p {
     margin-bottom: 15px;
     font-size: 17px;
 }
 
-.box i{
-    color: #2d9b3d;
+.box i {
+    color: #0757a6;
     margin-right: 8px;
 }
 
-
-.preco-box{
+.preco-box {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 22px;
 }
 
-.preco-box strong{
-    color: #2d9b3d;
+.preco-box strong {
+    color: #0757a6;
 }
 
-
-
-.grid-exames{
+.grid-exames {
     display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 20px;
 }
 
-.exame{
-    background: #f7fff7;
+.exame {
+    background: #76b3e41d;
     padding: 20px;
     border-radius: 15px;
-    border: 2px solid #d8f5d8;
+    border: 2px solid #0757a6;
     transition: .3s;
 }
 
-.exame:hover{
+.exame:hover {
     transform: translateY(-4px);
 }
 
-
-
-.vet-card{
-    background: #f7fff7;
+.vet-card {
+    background: #76b3e41d;
     padding: 20px;
     border-radius: 15px;
     margin-bottom: 15px;
-
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.status{
+.status {
     border: none;
     padding: 10px 18px;
     border-radius: 12px;
     font-weight: bold;
 }
 
-.disponivel{
-    background: #dff7df;
-    color: #2d9b3d;
+.disponivel {
+    background: #769aba29;
+    color: #0757a6;
 }
 
-.indisponivel{
+.indisponivel {
     background: #ffe0e0;
     color: #d9534f;
 }
 
-
-
-.horarios{
+.horarios {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
     margin-bottom: 25px;
 }
 
-.horarios button{
+.horarios button {
     padding: 12px 20px;
     border: none;
     border-radius: 12px;
@@ -146,15 +169,13 @@ body{
     transition: .3s;
 }
 
-.horarios button:hover{
+.horarios button:hover {
     transform: scale(1.05);
     background: #2d9b3d;
 }
 
-
-
 .btn-agendar,
-.btn-transporte{
+.btn-transporte {
     display: block;
     width: 100%;
     padding: 18px;
@@ -168,106 +189,51 @@ body{
     box-sizing: border-box;
 }
 
-.btn-agendar{
-    background: #2d9b3d;
+.btn-agendar {
+    background: #1c568693;
     color: white;
     border: none;
 }
 
-.btn-agendar:hover{
-    background: #248032;
+.btn-agendar:hover {
+    background: #0757a6;
 }
 
-.btn-transporte{
+.btn-transporte {
     background: white;
-    color: #2d9b3d;
-    border: 2px solid #2d9b3d;
+    color: #c02e24;
+    border: 2px solid #000000;
 }
 
-.btn-transporte:hover{
-    background: #2d9b3d;
+.btn-transporte:hover {
+    background: #000000;
     color: white;
 }
-
-
-
-@media (max-width:768px){
-
-    .clinic-header{
-        padding: 30px 20px;
-    }
-
-    .clinic-header h1{
-        font-size: 30px;
-    }
-
-    .box{
-        width: 92%;
-        padding: 20px;
-    }
-
-    .preco-box{
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
-    }
-
-    .vet-card{
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-
-    .horarios{
-        justify-content: center;
-    }
-
-    .horarios button{
-        flex: 1 1 100px;
-    }
-}
-
 
 .card-transporte {
     width: 100%;
     box-sizing: border-box;
-
     display: flex;
     align-items: center;
-
     gap: 15px;
-
     padding: 15px 20px;
-
-    background: #f5faf2;
-
-    border: 1px solid #d6f5c7;
-
+    background: #6e91af1a;
+    border: 1px solid #0757a6;
     border-radius: 10px;
-
     margin-top: 10px;
 }
-
-
 
 .icone-transporte {
     width: 42px;
     height: 42px;
-
     min-width: 42px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background: transparent;
-
     color: #65b83f;
-
     font-size: 18px;
 }
-
-
 
 .texto-transporte {
     flex: 1;
@@ -275,18 +241,49 @@ body{
 
 .texto-transporte h3 {
     margin: 0 0 5px;
-
-    color: #356329;
-
+    color: #04478a;
     font-size: 15px;
 }
 
 .texto-transporte p {
     margin: 0;
-
     color: #666;
-
     font-size: 12px;
-
     line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+    .clinic-header {
+        min-height: 280px;
+        padding: 30px 20px;
+    }
+
+    .clinic-header h1 {
+        font-size: 30px;
+    }
+
+    .box {
+        width: 92%;
+        padding: 20px;
+    }
+
+    .preco-box {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .vet-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .horarios {
+        justify-content: center;
+    }
+
+    .horarios button {
+        flex: 1 1 100px;
+    }
 }

@@ -3,27 +3,21 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pet Health Barão</title>
+    <title>Pet Health Barão</title>
 
+    <link rel="stylesheet" href="../css/clinicas.css">
 
-<link rel="stylesheet" href="../css/clinicas.css">
-
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
-
 <body>
 
-
-<header class="clinic-header">
-
+<header class="clinic-header header-pethealth">
 
     <a href="../../home.html" class="voltar">
 
@@ -33,8 +27,6 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
     </a>
 
-
-
     <h1>
 
         <i class="fa-solid fa-hospital"></i>
@@ -43,306 +35,255 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 
     </h1>
 
-
 </header>
 
-
-
-
-
 <section class="box">
 
+    <h2>
 
-<h2>
+        <i class="fa-solid fa-circle-info"></i>
 
-    <i class="fa-solid fa-circle-info"></i>
+        Informações da Clínica
 
-    Informações da Clínica
+    </h2>
 
-</h2>
+    <p>
 
+        <i class="fa-solid fa-location-dot"></i>
 
+        Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas
 
-<p>
+    </p>
 
-    <i class="fa-solid fa-location-dot"></i>
+    <p>
 
-    Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas
+        <i class="fa-solid fa-phone"></i>
 
-</p>
+        (19) 3567-8901
 
+    </p>
 
+    <p>
 
-<p>
+        <i class="fa-regular fa-clock"></i>
 
-    <i class="fa-solid fa-phone"></i>
+        Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h
 
-    (19) 3567-8901
-
-</p>
-
-
-
-<p>
-
-    <i class="fa-regular fa-clock"></i>
-
-    Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h
-
-</p>
-
+    </p>
 
 </section>
 
-
-
-
-
-
-
 <section class="box">
 
+    <h2>
 
-<h2>
+        <i class="fa-solid fa-money-bill-wave"></i>
 
-    <i class="fa-solid fa-money-bill-wave"></i>
+        Consulta
 
-    Consulta
+    </h2>
 
-</h2>
+    <div class="preco-box">
 
+        <span>
+            Valor da Consulta
+        </span>
 
-
-<div class="preco-box">
-
-
-<span>
-Valor da Consulta
-</span>
-
-
-<strong>
-R$ 130,00
-</strong>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-    <i class="fa-solid fa-flask"></i>
-
-    Exames Disponíveis
-
-</h2>
-
-
-
-
-<div class="grid-exames">
-
-
-
-<div class="exame">
-Hemograma Completo - R$ 85,00
-</div>
-
-
-
-<div class="exame">
-Ultrassom Abdominal - R$ 160,00
-</div>
-
-
-
-<div class="exame">
-Endoscopia - R$ 350,00
-</div>
-
-
-
-<div class="exame">
-Raio-X - R$ 125,00
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-<i class="fa-solid fa-user-doctor"></i>
-
-Veterinários
-
-</h2>
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Marcos Pereira - Gastroenterologia
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dra. Juliana Martins - Clínica Geral
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Rafael Torres - Cirurgia
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-
-<a href="cadastro.html"
-class="btn-agendar"
-onclick="salvarClinica()">
-
-
-
-<i class="fa-solid fa-calendar-check"></i>
-
-
-Agendar Consulta
-
-
-
-</a>
-
-
-
-
-<div class="card-transporte" id="cardTransporte">
-
-    <div class="icone-transporte">
-        <i class="fa-solid fa-car"></i>
-    </div>
-
-    <div class="texto-transporte">
-
-        <h3>
-            Transporte para seu pet disponível
-        </h3>
-
-        <p>
-            Durante o agendamento, você poderá solicitar
-            o transporte do seu pet até a clínica.
-        </p>
+        <strong>
+            R$ 130,00
+        </strong>
 
     </div>
 
+</section>
 
+<section class="box">
+
+    <h2>
+
+        <i class="fa-solid fa-flask"></i>
+
+        Exames Disponíveis
+
+    </h2>
+
+    <div class="grid-exames">
+
+        <div class="exame">
+            Hemograma Completo - R$ 85,00
+        </div>
+
+        <div class="exame">
+            Ultrassom Abdominal - R$ 160,00
+        </div>
+
+        <div class="exame">
+            Endoscopia - R$ 350,00
+        </div>
+
+        <div class="exame">
+            Raio-X - R$ 125,00
+        </div>
+
+    </div>
 
 </section>
 
+<section class="box">
 
+    <h2>
 
+        <i class="fa-solid fa-user-doctor"></i>
 
+        Veterinários
 
+    </h2>
 
+    <div class="vet-card">
+
+        <span>
+            Dr. Marcos Pereira - Gastroenterologia
+        </span>
+
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dra. Juliana Martins - Clínica Geral
+        </span>
+
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dr. Rafael Torres - Cirurgia
+        </span>
+
+        <button class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+</section>
+
+<section class="box">
+
+    <a href="cadastro.html"
+        class="btn-agendar"
+        onclick="salvarClinica()">
+
+        <i class="fa-solid fa-calendar-check"></i>
+
+        Agendar Consulta
+
+    </a>
+
+    <div class="card-transporte" id="cardTransporte">
+
+        <div class="icone-transporte">
+            <i class="fa-solid fa-car"></i>
+        </div>
+
+        <div class="texto-transporte">
+
+            <h3>
+                Transporte para seu pet disponível
+            </h3>
+
+            <p>
+                Durante o agendamento, você poderá solicitar
+                o transporte do seu pet até a clínica.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+
+function salvarClinica() {
+
+    const clinicaDados = {
+
+        nome: "Pet Health Barão",
+
+        regiao: "Barão Geraldo",
+
+        endereco: "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
+
+        telefone: "(19) 3567-8901",
+
+        horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h"
+
+    };
+
+    const servicosClinica = [
+
+        {
+            nome: "Consulta Geral",
+            tipo: "Consulta",
+            veterinario: "Juliana Martins - Clínica Geral",
+            preco: "R$ 130"
+        },
+
+        {
+            nome: "Hemograma Completo",
+            tipo: "Exame",
+            veterinario: "Juliana Martins - Clínica Geral",
+            preco: "R$ 85"
+        },
+
+        {
+            nome: "Ultrassom Abdominal",
+            tipo: "Exame",
+            veterinario: "Marcos Pereira - Gastroenterologia",
+            preco: "R$ 160"
+        },
+
+        {
+            nome: "Endoscopia",
+            tipo: "Exame",
+            veterinario: "Marcos Pereira - Gastroenterologia",
+            preco: "R$ 350"
+        },
+
+        {
+            nome: "Raio-X",
+            tipo: "Exame",
+            veterinario: "Rafael Torres - Cirurgia",
+            preco: "R$ 125"
+        }
+
+    ];
+
+    localStorage.setItem(
+        "clinicaDados",
+        JSON.stringify(clinicaDados)
+    );
+
+    localStorage.setItem(
+        "servicosClinica",
+        JSON.stringify(servicosClinica)
+    );
+
+}
+
+</script>
 
 <script src="../js/clinicas.js"></script>
-
 
 </body>
 
