@@ -45,19 +45,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const tituloModalPet =
         document.getElementById("tituloModalPet");
 
-    const btnAgendar =
-        document.getElementById("btnAgendar");
-
     const mensagem =
         document.getElementById("mensagem");
 
-
     let tutor = null;
-
     let pets = [];
-
     let petEditando = null;
-
 
     try {
 
@@ -81,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
         tutor = null;
 
     }
-
 
     try {
 
@@ -112,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function verificarCadastro() {
 
         if (tutor && tutor.nome) {
@@ -131,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function mostrarMensagem(texto) {
 
         if (!mensagem) {
@@ -149,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
 
     }
-
 
     function atualizarDadosTutor() {
 
@@ -173,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function preencherFormularioTutor() {
 
         document.getElementById("nomeTutor").value =
@@ -196,7 +184,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function fecharFormularioTutor() {
 
         dadosTutor.classList.remove("hidden");
@@ -204,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
         formTutor.classList.add("hidden");
 
     }
-
 
     function mostrarPets() {
 
@@ -222,7 +208,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
 
         }
-
 
         pets.forEach((pet, index) => {
 
@@ -290,7 +275,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         });
 
-
         document
             .querySelectorAll(".btn-editar-pet")
             .forEach(botao => {
@@ -312,7 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
     }
-
 
     function abrirEdicaoPet(index) {
 
@@ -351,7 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function abrirNovoPet() {
 
         petEditando = null;
@@ -371,7 +353,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     function fecharModalPet() {
 
         modalPet.classList.remove("mostrar");
@@ -381,7 +362,6 @@ document.addEventListener("DOMContentLoaded", () => {
         petEditando = null;
 
     }
-
 
     if (btnInicio) {
 
@@ -397,7 +377,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     if (btnCadastrar) {
 
         btnCadastrar.addEventListener(
@@ -411,7 +390,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
 
     if (btnEditarTutor) {
 
@@ -430,7 +408,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     if (btnCancelarTutor) {
 
         btnCancelarTutor.addEventListener(
@@ -443,7 +420,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
 
     if (formTutor) {
 
@@ -493,12 +469,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 };
 
-
                 localStorage.setItem(
                     "tutor",
                     JSON.stringify(tutor)
                 );
-
 
                 atualizarDadosTutor();
 
@@ -515,7 +489,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     if (btnAdicionarPet) {
 
         btnAdicionarPet.addEventListener(
@@ -528,7 +501,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
 
     if (btnFecharModal) {
 
@@ -543,7 +515,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     if (btnCancelarPet) {
 
         btnCancelarPet.addEventListener(
@@ -557,7 +528,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
     if (formPet) {
 
         formPet.addEventListener(
@@ -565,7 +535,6 @@ document.addEventListener("DOMContentLoaded", () => {
             event => {
 
                 event.preventDefault();
-
 
                 const pet = {
 
@@ -605,7 +574,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 };
 
-
                 if (petEditando !== null) {
 
                     pets[petEditando] =
@@ -625,12 +593,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 }
 
-
                 localStorage.setItem(
                     "pets",
                     JSON.stringify(pets)
                 );
-
 
                 mostrarPets();
 
@@ -640,7 +606,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
 
     if (modalPet) {
 
@@ -658,45 +623,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
     }
-
-
-    if (btnAgendar) {
-
-        btnAgendar.addEventListener(
-            "click",
-            () => {
-
-                if (!tutor || !tutor.nome) {
-
-                    alert(
-                        "Você precisa realizar o cadastro antes de agendar uma consulta."
-                    );
-
-                    window.location.href =
-                        "cadastro.html";
-
-                    return;
-
-                }
-
-                if (!pets || pets.length === 0) {
-
-                    alert(
-                        "Cadastre pelo menos um pet antes de agendar uma consulta."
-                    );
-
-                    return;
-
-                }
-
-                window.location.href =
-                    "dataehorario.html";
-
-            }
-        );
-
-    }
-
 
     atualizarDadosTutor();
 
