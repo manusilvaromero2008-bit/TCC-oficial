@@ -9,11 +9,6 @@ body {
     background: #f4fff4;
 }
 
-<<<<<<< HEAD
-header{
-    background: linear-gradient(135deg, #430fd4, #4cc95a);
-    padding: 50px 20px;
-=======
 header {
     position: relative;
     height: 280px;
@@ -21,7 +16,6 @@ header {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
->>>>>>> 4a9df6a94659774dd165893cd546e4f2d334f02c
     color: white;
     overflow: hidden;
 }
@@ -94,13 +88,8 @@ header p {
 .campo input,
 .campo select {
     width: 100%;
-<<<<<<< HEAD
-    padding: 15px;
-    border: 2px solid #1d3bd1;
-=======
     padding: 16px;
     border: 2px solid #49b84f;
->>>>>>> 4a9df6a94659774dd165893cd546e4f2d334f02c
     border-radius: 12px;
     font-size: 16px;
     background: white;
