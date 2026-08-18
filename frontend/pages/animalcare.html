@@ -15,474 +15,320 @@
 
 </head>
 
-
 <body>
 
-
-<header class="clinic-header">
+<header class="clinic-header header-animalcare">
 
     <a href="../../home.html" class="voltar">
-
         <i class="fa-solid fa-arrow-left"></i>
         Voltar
-
     </a>
 
-
     <h1>
-
         <i class="fa-solid fa-hospital"></i>
-
         Clínica Animal Care
-
     </h1>
-
 
 </header>
 
 
-
-
 <section class="box">
 
     <h2>
-
         <i class="fa-solid fa-circle-info"></i>
-
         Informações da Clínica
-
     </h2>
 
-
-
     <p>
-
         <i class="fa-solid fa-location-dot"></i>
-
         Rua Coronel Quirino, 456 - Cambuí, Campinas
-
     </p>
 
-
-
     <p>
-
         <i class="fa-solid fa-phone"></i>
-
         (19) 3345-6789
-
     </p>
-
-
 
     <p>
-
         <i class="fa-regular fa-clock"></i>
-
         Seg-Sex: 9h às 19h | Sáb: 9h às 14h
-
     </p>
-
 
 </section>
 
 
-
-
-
 <section class="box">
 
-
     <h2>
-
         <i class="fa-solid fa-money-bill-wave"></i>
-
         Consulta
-
     </h2>
-
-
 
     <div class="preco-box">
 
-
         <span>
-
             Valor da Consulta
-
         </span>
 
-
         <strong>
-
             R$ 150,00
-
         </strong>
 
-
     </div>
-
 
 </section>
 
 
-
-
-
 <section class="box">
 
-
     <h2>
-
         <i class="fa-solid fa-flask"></i>
-
         Exames Disponíveis
-
     </h2>
-
-
 
     <div class="grid-exames">
 
-
         <div class="exame">
-
             Hemograma Completo - R$ 90,00
-
         </div>
 
-
-
         <div class="exame">
-
             Ecocardiograma - R$ 280,00
-
         </div>
 
-
-
         <div class="exame">
-
             Tomografia - R$ 450,00
-
         </div>
-
-
 
         <div class="exame">
-
             Raio-X - R$ 130,00
-
         </div>
-
 
     </div>
-
 
 </section>
 
 
-
-
-
 <section class="box">
-
 
     <h2>
-
         <i class="fa-solid fa-user-doctor"></i>
-
         Veterinários
-
     </h2>
 
-
-
-
     <div class="vet-card">
 
-
         <span>
-
             Dr. Carlos Mendes - Cardiologia
-
         </span>
 
-
-
-        <button class="status disponivel">
-
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
-
         </button>
-
 
     </div>
 
-
-
-
-
     <div class="vet-card">
 
-
         <span>
-
             Dra. Paula Oliveira - Clínica Geral
-
         </span>
 
-
-
-        <button class="status disponivel">
-
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
-
         </button>
 
-
     </div>
-
-
-
-
 
     <div class="vet-card">
 
-
         <span>
-
             Dr. Ricardo Alves - Ortopedia
-
         </span>
 
-
-
-        <button class="status disponivel">
-
+        <button
+            class="status disponivel"
+            type="button">
             Disponível
-
         </button>
 
-
     </div>
-
-
 
 </section>
 
 
-
-
-
-
-
 <section class="box">
 
-
-
-    <a href="cadastro.html"
-       class="btn-agendar"
-       onclick="salvarClinica()">
-
-
+    <a
+        href="dataehorario.html"
+        class="btn-agendar"
+        id="btnAgendar">
 
         <i class="fa-solid fa-calendar-check"></i>
-
         Agendar Consulta
-
-
 
     </a>
 
-
-
-
-
-    <div class="card-transporte" id="cardTransporte">
+    <div
+        class="card-transporte"
+        id="cardTransporte">
 
         <div class="icone-transporte">
+
             <i class="fa-solid fa-car"></i>
+
         </div>
-    
+
         <div class="texto-transporte">
-    
+
             <h3>
                 Transporte para seu pet disponível
             </h3>
-    
+
             <p>
                 Durante o agendamento, você poderá solicitar
                 o transporte do seu pet até a clínica.
             </p>
-    
+
         </div>
 
-
+    </div>
 
 </section>
 
 
-
-
-
-
-
-
 <script>
 
+document.addEventListener("DOMContentLoaded", () => {
 
-function salvarClinica(){
+    const clinica = {
 
-
-
-    const clinicaDados = {
-
+        id: 2,
 
         nome: "Clínica Animal Care",
 
-
         regiao: "Cambuí",
 
+        endereco: "Rua Coronel Quirino, 456 - Cambuí, Campinas",
 
-        endereco:
-        "Rua Coronel Quirino, 456 - Cambuí, Campinas",
+        telefone: "(19) 3345-6789",
 
+        horario: "Seg-Sex: 9h às 19h | Sáb: 9h às 14h",
 
-        telefone:
-        "(19) 3345-6789",
-
-
-        horario:
-        "Seg-Sex: 9h às 19h | Sáb: 9h às 14h"
-
+        consulta: "R$ 150"
 
     };
 
 
-
-
-
     const servicosClinica = [
 
-
-
         {
-
+            id: 1,
             nome: "Consulta Geral",
-
             tipo: "Consulta",
-
-            veterinario:
-            "Paula Oliveira - Clínica Geral",
-
-            preco:
-            "R$ 150"
-
+            veterinario: "Dra. Paula Oliveira - Clínica Geral",
+            preco: "R$ 150"
         },
 
-
-
         {
-
+            id: 2,
             nome: "Hemograma Completo",
-
             tipo: "Exame",
-
-            veterinario:
-            "Paula Oliveira - Clínica Geral",
-
-            preco:
-            "R$ 90"
-
+            veterinario: "Dra. Paula Oliveira - Clínica Geral",
+            preco: "R$ 90"
         },
 
-
-
         {
-
+            id: 3,
             nome: "Ecocardiograma",
-
             tipo: "Exame",
-
-            veterinario:
-            "Carlos Mendes - Cardiologia",
-
-            preco:
-            "R$ 280"
-
+            veterinario: "Dr. Carlos Mendes - Cardiologia",
+            preco: "R$ 280"
         },
 
-
-
         {
-
+            id: 4,
             nome: "Tomografia",
-
             tipo: "Exame",
-
-            veterinario:
-            "Carlos Mendes - Cardiologia",
-
-            preco:
-            "R$ 450"
-
+            veterinario: "Dr. Carlos Mendes - Cardiologia",
+            preco: "R$ 450"
         },
 
-
-
         {
-
+            id: 5,
             nome: "Raio-X",
-
             tipo: "Exame",
-
-            veterinario:
-            "Ricardo Alves - Ortopedia",
-
-            preco:
-            "R$ 130"
-
+            veterinario: "Dr. Ricardo Alves - Ortopedia",
+            preco: "R$ 130"
         }
-
 
     ];
 
 
-
-
-
+    localStorage.setItem(
+        "clinica",
+        clinica.nome
+    );
 
     localStorage.setItem(
+        "clinicaId",
+        clinica.id
+    );
 
+    localStorage.setItem(
         "clinicaDados",
-
-        JSON.stringify(clinicaDados)
-
+        JSON.stringify(clinica)
     );
-
-
-
-
 
     localStorage.setItem(
-
         "servicosClinica",
-
         JSON.stringify(servicosClinica)
-
     );
 
 
+    const btnAgendar =
+        document.getElementById("btnAgendar");
 
-}
 
+    if (btnAgendar) {
 
+        btnAgendar.addEventListener("click", () => {
+
+            localStorage.setItem(
+                "clinica",
+                clinica.nome
+            );
+
+            localStorage.setItem(
+                "clinicaId",
+                clinica.id
+            );
+
+            localStorage.setItem(
+                "clinicaDados",
+                JSON.stringify(clinica)
+            );
+
+            localStorage.setItem(
+                "servicosClinica",
+                JSON.stringify(servicosClinica)
+            );
+
+        });
+
+    }
+
+});
 
 </script>
 
 
 <script src="../js/clinicas.js"></script>
+
 </body>
 
 </html>

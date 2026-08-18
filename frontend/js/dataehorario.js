@@ -1,249 +1,229 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    
-
-    const clinicaDados = localStorage.getItem("clinicaDados");
-    const clinica = clinicaDados ? JSON.parse(clinicaDados) : null;
-
     const nomeClinica = document.getElementById("nomeClinica");
-
-    if (clinica && nomeClinica) {
-        nomeClinica.textContent = clinica.nome || "";
-    }
-
-
-    
+    const cardHorario = document.getElementById("cardHorario");
+    const btnContinuar = document.getElementById("btnContinuar");
 
     const botoesData = document.querySelectorAll(".datas button");
     const botoesHora = document.querySelectorAll(".horarios button");
 
-    const cardHorario = document.getElementById("cardHorario");
-    const btnContinuar = document.getElementById("btnContinuar");
-
-
-    
-
-    if (cardHorario) {
-        cardHorario.style.display = "none";
-    }
-
-    if (btnContinuar) {
-        btnContinuar.style.display = "none";
-    }
-
-
+    let clinica = null;
     let dataSelecionada = "";
     let horarioSelecionado = "";
 
+    try {
 
-    
+        const clinicaStorage =
+            localStorage.getItem("clinicaDados");
+
+        if (clinicaStorage) {
+            clinica = JSON.parse(clinicaStorage);
+        }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar os dados da clínica:",
+            erro
+        );
+
+    }
+
+    const tutorStorage =
+        localStorage.getItem("tutor");
+
+    const petsStorage =
+        localStorage.getItem("pets");
+
+    if (!tutorStorage || !petsStorage) {
+
+        alert(
+            "Você precisa realizar o cadastro antes de agendar uma consulta."
+        );
+
+        window.location.href = "cadastro.html";
+
+        return;
+    }
+
+    if (clinica && nomeClinica) {
+
+        nomeClinica.textContent =
+            clinica.nome || "";
+
+    }
+
+    if (cardHorario) {
+
+        cardHorario.style.display =
+            "none";
+
+    }
+
+    if (btnContinuar) {
+
+        btnContinuar.style.display =
+            "none";
+
+    }
 
     botoesData.forEach(botao => {
 
         botao.addEventListener("click", () => {
 
-            botoesData.forEach(b => {
-                b.classList.remove("selecionado");
+            botoesData.forEach(item => {
+
+                item.classList.remove(
+                    "selecionado"
+                );
+
             });
 
-            botao.classList.add("selecionado");
+            botao.classList.add(
+                "selecionado"
+            );
 
-            dataSelecionada = botao.textContent.trim();
+            dataSelecionada =
+                botao.textContent.trim();
 
             if (cardHorario) {
 
-                cardHorario.style.display = "block";
+                cardHorario.style.display =
+                    "block";
 
                 cardHorario.scrollIntoView({
-                    behavior: "smooth"
+                    behavior: "smooth",
+                    block: "start"
                 });
+
             }
 
         });
 
     });
-
-
-    
 
     botoesHora.forEach(botao => {
 
         botao.addEventListener("click", () => {
 
-            botoesHora.forEach(b => {
-                b.classList.remove("selecionado");
+            botoesHora.forEach(item => {
+
+                item.classList.remove(
+                    "selecionado"
+                );
+
             });
 
-            botao.classList.add("selecionado");
+            botao.classList.add(
+                "selecionado"
+            );
 
-            horarioSelecionado = botao.textContent.trim();
+            horarioSelecionado =
+                botao.textContent.trim();
 
             if (btnContinuar) {
-                btnContinuar.style.display = "block";
+
+                btnContinuar.style.display =
+                    "block";
+
             }
 
         });
 
     });
 
-
-    
-
     if (btnContinuar) {
 
-        btnContinuar.addEventListener("click", () => {
+        btnContinuar.addEventListener(
+            "click",
+            () => {
 
-            
-            if (!dataSelecionada) {
+                if (!dataSelecionada) {
 
-                alert("Selecione uma data.");
+                    alert(
+                        "Selecione uma data."
+                    );
 
-                return;
-            }
+                    return;
+                }
 
+                if (!horarioSelecionado) {
 
-            
-            if (!horarioSelecionado) {
+                    alert(
+                        "Selecione um horário."
+                    );
 
-                alert("Selecione um horário.");
+                    return;
+                }
 
-                return;
-            }
-
-
-            
-
-            const agendamentoSalvo =
-                localStorage.getItem("agendamento");
-
-            const agendamento =
-                agendamentoSalvo
-                    ? JSON.parse(agendamentoSalvo)
-                    : {};
-
-
-            
-
-            agendamento.data = dataSelecionada;
-            agendamento.horario = horarioSelecionado;
-
-
-            
-            
-
-            if (clinica) {
-
-                agendamento.clinica = clinica.nome || "";
-
-                agendamento.unidade = clinica.nome || "";
-
-                agendamento.clinicaDados = clinica;
-
-            }
-
-
-           
-
-            const servicoSelecionado =
-                localStorage.getItem("servicoSelecionado");
-
-            if (servicoSelecionado) {
-
-                agendamento.servico =
-                    servicoSelecionado;
-
-            }
-
-
-            
-
-            let petSelecionado =
-                localStorage.getItem("petSelecionado");
-
-            if (!petSelecionado) {
-
-                petSelecionado =
-                    localStorage.getItem("pet");
-
-            }
-
-            if (!petSelecionado) {
-
-                petSelecionado =
-                    localStorage.getItem("petDados");
-
-            }
-
-
-            
-            if (petSelecionado) {
+                let agendamento = {};
 
                 try {
 
-                    const petObjeto =
-                        JSON.parse(petSelecionado);
+                    const agendamentoStorage =
+                        localStorage.getItem(
+                            "agendamento"
+                        );
 
-                    if (typeof petObjeto === "object" && petObjeto !== null) {
+                    if (agendamentoStorage) {
 
-                        agendamento.pet =
-                            petObjeto.nome ||
-                            petObjeto.name ||
-                            petObjeto.pet ||
-                            "";
-
-                    } else {
-
-                        agendamento.pet =
-                            petObjeto;
+                        agendamento =
+                            JSON.parse(
+                                agendamentoStorage
+                            );
 
                     }
 
                 } catch (erro) {
 
-                    agendamento.pet =
-                        petSelecionado;
+                    console.error(
+                        "Erro ao carregar o agendamento:",
+                        erro
+                    );
+
+                    agendamento = {};
 
                 }
 
+                agendamento.data =
+                    dataSelecionada;
+
+                agendamento.horario =
+                    horarioSelecionado;
+
+                if (clinica) {
+
+                    agendamento.clinica =
+                        clinica.nome || "";
+
+                    agendamento.unidade =
+                        clinica.nome || "";
+
+                    agendamento.clinicaDados =
+                        clinica;
+
+                }
+
+                localStorage.setItem(
+                    "agendamento",
+                    JSON.stringify(agendamento)
+                );
+
+                localStorage.setItem(
+                    "dataAgendamento",
+                    dataSelecionada
+                );
+
+                localStorage.setItem(
+                    "horarioAgendamento",
+                    horarioSelecionado
+                );
+
+                window.location.href =
+                    "servicos.html";
+
             }
-
-
-           
-
-            localStorage.setItem(
-                "agendamento",
-                JSON.stringify(agendamento)
-            );
-
-
-            
-
-            localStorage.setItem(
-                "data",
-                dataSelecionada
-            );
-
-            localStorage.setItem(
-                "horario",
-                horarioSelecionado
-            );
-
-            localStorage.setItem(
-                "dataAgendamento",
-                dataSelecionada
-            );
-
-            localStorage.setItem(
-                "horarioAgendamento",
-                horarioSelecionado
-            );
-
-
-            
-
-            window.location.href = "servicos.html";
-
-        });
+        );
 
     }
 

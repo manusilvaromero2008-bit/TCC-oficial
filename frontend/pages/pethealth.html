@@ -3,346 +3,353 @@
 
 <head>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pet Health Barão</title>
+    <title>Pet Health Barão</title>
 
+    <link rel="stylesheet" href="../css/clinicas.css">
 
-<link rel="stylesheet" href="../css/clinicas.css">
-
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
 </head>
 
-
 <body>
 
-
-<header class="clinic-header">
-
+<header class="clinic-header header-pethealth">
 
     <a href="../../home.html" class="voltar">
-
         <i class="fa-solid fa-arrow-left"></i>
-
         Voltar
-
     </a>
 
-
-
     <h1>
-
         <i class="fa-solid fa-hospital"></i>
-
         Pet Health Barão
-
     </h1>
 
+    <a href="perfil.html" class="btn-perfil">
+        <i class="fa-solid fa-user"></i>
+        Meu Perfil
+    </a>
 
 </header>
 
-
-
-
-
 <section class="box">
 
+    <h2>
+        <i class="fa-solid fa-circle-info"></i>
+        Informações da Clínica
+    </h2>
 
-<h2>
+    <p>
+        <i class="fa-solid fa-location-dot"></i>
+        Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas
+    </p>
 
-    <i class="fa-solid fa-circle-info"></i>
+    <p>
+        <i class="fa-solid fa-phone"></i>
+        (19) 3567-8901
+    </p>
 
-    Informações da Clínica
-
-</h2>
-
-
-
-<p>
-
-    <i class="fa-solid fa-location-dot"></i>
-
-    Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas
-
-</p>
-
-
-
-<p>
-
-    <i class="fa-solid fa-phone"></i>
-
-    (19) 3567-8901
-
-</p>
-
-
-
-<p>
-
-    <i class="fa-regular fa-clock"></i>
-
-    Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h
-
-</p>
-
+    <p>
+        <i class="fa-regular fa-clock"></i>
+        Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h
+    </p>
 
 </section>
 
-
-
-
-
-
-
 <section class="box">
 
-
-<h2>
-
-    <i class="fa-solid fa-money-bill-wave"></i>
-
-    Consulta
-
-</h2>
-
-
-
-<div class="preco-box">
-
-
-<span>
-Valor da Consulta
-</span>
-
-
-<strong>
-R$ 130,00
-</strong>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-    <i class="fa-solid fa-flask"></i>
-
-    Exames Disponíveis
-
-</h2>
-
-
-
-
-<div class="grid-exames">
-
-
-
-<div class="exame">
-Hemograma Completo - R$ 85,00
-</div>
-
-
-
-<div class="exame">
-Ultrassom Abdominal - R$ 160,00
-</div>
-
-
-
-<div class="exame">
-Endoscopia - R$ 350,00
-</div>
-
-
-
-<div class="exame">
-Raio-X - R$ 125,00
-</div>
-
-
-
-</div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-<h2>
-
-<i class="fa-solid fa-user-doctor"></i>
-
-Veterinários
-
-</h2>
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Marcos Pereira - Gastroenterologia
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dra. Juliana Martins - Clínica Geral
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-
-
-
-<div class="vet-card">
-
-
-<span>
-
-Dr. Rafael Torres - Cirurgia
-
-</span>
-
-
-
-<button class="status disponivel">
-
-Disponível
-
-</button>
-
-
-</div>
-
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<section class="box">
-
-
-
-<a href="cadastro.html"
-class="btn-agendar"
-onclick="salvarClinica()">
-
-
-
-<i class="fa-solid fa-calendar-check"></i>
-
-
-Agendar Consulta
-
-
-
-</a>
-
-
-
-
-<div class="card-transporte" id="cardTransporte">
-
-    <div class="icone-transporte">
-        <i class="fa-solid fa-car"></i>
-    </div>
-
-    <div class="texto-transporte">
-
-        <h3>
-            Transporte para seu pet disponível
-        </h3>
-
-        <p>
-            Durante o agendamento, você poderá solicitar
-            o transporte do seu pet até a clínica.
-        </p>
+    <h2>
+        <i class="fa-solid fa-money-bill-wave"></i>
+        Consulta
+    </h2>
+
+    <div class="preco-box">
+
+        <span>
+            Valor da Consulta
+        </span>
+
+        <strong>
+            R$ 130,00
+        </strong>
 
     </div>
 
+</section>
 
+<section class="box">
+
+    <h2>
+        <i class="fa-solid fa-flask"></i>
+        Exames Disponíveis
+    </h2>
+
+    <div class="grid-exames">
+
+        <div class="exame">
+            Hemograma Completo - R$ 85,00
+        </div>
+
+        <div class="exame">
+            Ultrassom Abdominal - R$ 160,00
+        </div>
+
+        <div class="exame">
+            Endoscopia - R$ 350,00
+        </div>
+
+        <div class="exame">
+            Raio-X - R$ 125,00
+        </div>
+
+    </div>
 
 </section>
 
+<section class="box">
 
+    <h2>
+        <i class="fa-solid fa-user-doctor"></i>
+        Veterinários
+    </h2>
 
+    <div class="vet-card">
 
+        <span>
+            Dr. Marcos Pereira - Gastroenterologia
+        </span>
 
+        <button
+            type="button"
+            class="status disponivel">
+            Disponível
+        </button>
 
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dra. Juliana Martins - Clínica Geral
+        </span>
+
+        <button
+            type="button"
+            class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+    <div class="vet-card">
+
+        <span>
+            Dr. Rafael Torres - Cirurgia
+        </span>
+
+        <button
+            type="button"
+            class="status disponivel">
+            Disponível
+        </button>
+
+    </div>
+
+</section>
+
+<section class="box">
+
+    <a
+        href="#"
+        class="btn-agendar"
+        id="btnAgendar">
+
+        <i class="fa-solid fa-calendar-check"></i>
+        Agendar Consulta
+
+    </a>
+
+    <div class="card-transporte" id="cardTransporte">
+
+        <div class="icone-transporte">
+
+            <i class="fa-solid fa-car"></i>
+
+        </div>
+
+        <div class="texto-transporte">
+
+            <h3>
+                Transporte para seu pet disponível
+            </h3>
+
+            <p>
+                Durante o agendamento, você poderá solicitar
+                o transporte do seu pet até a clínica.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const clinicaDados = {
+
+        id: 4,
+
+        nome: "Pet Health Barão",
+
+        regiao: "Barão Geraldo",
+
+        endereco: "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
+
+        telefone: "(19) 3567-8901",
+
+        horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h",
+
+        consulta: "R$ 130"
+
+    };
+
+    const servicosClinica = [
+
+        {
+            id: 1,
+            nome: "Consulta Geral",
+            tipo: "Consulta",
+            veterinario: "Dra. Juliana Martins - Clínica Geral",
+            preco: "R$ 130"
+        },
+
+        {
+            id: 2,
+            nome: "Hemograma Completo",
+            tipo: "Exame",
+            veterinario: "Dra. Juliana Martins - Clínica Geral",
+            preco: "R$ 85"
+        },
+
+        {
+            id: 3,
+            nome: "Ultrassom Abdominal",
+            tipo: "Exame",
+            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
+            preco: "R$ 160"
+        },
+
+        {
+            id: 4,
+            nome: "Endoscopia",
+            tipo: "Exame",
+            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
+            preco: "R$ 350"
+        },
+
+        {
+            id: 5,
+            nome: "Raio-X",
+            tipo: "Exame",
+            veterinario: "Dr. Rafael Torres - Cirurgia",
+            preco: "R$ 125"
+        }
+
+    ];
+
+    localStorage.setItem(
+        "clinica",
+        clinicaDados.nome
+    );
+
+    localStorage.setItem(
+        "clinicaId",
+        clinicaDados.id
+    );
+
+    localStorage.setItem(
+        "clinicaDados",
+        JSON.stringify(clinicaDados)
+    );
+
+    localStorage.setItem(
+        "servicosClinica",
+        JSON.stringify(servicosClinica)
+    );
+
+    const btnAgendar =
+        document.getElementById("btnAgendar");
+
+    if (btnAgendar) {
+
+        btnAgendar.addEventListener("click", (event) => {
+
+            event.preventDefault();
+
+            const tutorSalvo =
+                localStorage.getItem("tutor");
+
+            const petsSalvos =
+                localStorage.getItem("pets");
+
+            let cadastroCompleto = false;
+
+            try {
+
+                const tutor =
+                    tutorSalvo
+                        ? JSON.parse(tutorSalvo)
+                        : null;
+
+                const pets =
+                    petsSalvos
+                        ? JSON.parse(petsSalvos)
+                        : [];
+
+                cadastroCompleto =
+                    tutor &&
+                    tutor.nome &&
+                    tutor.cpf &&
+                    tutor.telefone &&
+                    tutor.email &&
+                    tutor.endereco &&
+                    Array.isArray(pets) &&
+                    pets.length > 0;
+
+            } catch (erro) {
+
+                cadastroCompleto = false;
+
+            }
+
+            if (cadastroCompleto) {
+
+                window.location.href =
+                    "dataehorario.html";
+
+            } else {
+
+                window.location.href =
+                    "cadastro.html";
+
+            }
+
+        });
+
+    }
+
+});
+
+</script>
 
 <script src="../js/clinicas.js"></script>
-
 
 </body>
 

@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-   
-
     const nomeClinica =
         document.getElementById("nomeClinica");
 
@@ -47,198 +45,195 @@ document.addEventListener("DOMContentLoaded", () => {
     const cep =
         document.getElementById("cep");
 
-    const btnVoltar =
-        document.getElementById("btnVoltar");
-
-    const btnConfirmar =
-        document.getElementById("btnConfirmar");
-
     const btnContinuar =
         document.getElementById("btnContinuar");
 
 
-    
-
-    const clinicaSalva =
-        localStorage.getItem("clinicaDados");
-
     let clinicaDados = {};
+    let tutorDados = {};
+    let pets = [];
+    let petSelecionado = null;
+    let transporte = false;
 
-    if (clinicaSalva) {
 
-        try {
+    try {
 
+        const clinicaSalva =
+            localStorage.getItem("clinicaDados");
+
+        if (clinicaSalva) {
             clinicaDados =
                 JSON.parse(clinicaSalva);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar dados da clínica:",
-                erro
-            );
-
         }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar dados da clínica:",
+            erro
+        );
 
     }
 
 
-    
+    try {
 
-    const tutorSalvo =
-        localStorage.getItem("tutor");
+        const tutorSalvo =
+            localStorage.getItem("tutor");
 
-    let tutorDados = {};
-
-    if (tutorSalvo) {
-
-        try {
-
+        if (tutorSalvo) {
             tutorDados =
                 JSON.parse(tutorSalvo);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar dados do tutor:",
-                erro
-            );
-
         }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar dados do tutor:",
+            erro
+        );
 
     }
 
 
-   
+    try {
 
-    const petsSalvos =
-        localStorage.getItem("pets");
+        const petsSalvos =
+            localStorage.getItem("pets");
 
-    let pets = [];
-
-    if (petsSalvos) {
-
-        try {
-
+        if (petsSalvos) {
             pets =
                 JSON.parse(petsSalvos);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar pets:",
-                erro
-            );
-
         }
+
+        if (!Array.isArray(pets)) {
+            pets = [];
+        }
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao carregar pets:",
+            erro
+        );
+
+        pets = [];
 
     }
 
 
-   
+    const nomeDaClinica =
+        clinicaDados.nome ||
+        clinicaDados.unidade ||
+        "Clínica Veterinária";
+
 
     const servico =
-        localStorage.getItem("servico")
-        ||
-        localStorage.getItem("servicoSelecionado")
-        ||
+        localStorage.getItem("servicoSelecionado") ||
+        localStorage.getItem("servico") ||
         "Não informado";
 
 
     const preco =
-        localStorage.getItem("precoServico")
-        || "";
+        localStorage.getItem("precoServico") ||
+        "";
 
-
-   
 
     const veterinario =
-        localStorage.getItem("veterinario")
-        || "Não informado";
+        localStorage.getItem("veterinario") ||
+        "Não informado";
 
-
-   
 
     const data =
-        localStorage.getItem("dataAgendamento")
-        ||
-        localStorage.getItem("data")
-        ||
+        localStorage.getItem("dataAgendamento") ||
+        localStorage.getItem("data") ||
         "Não informado";
 
-
-    
 
     const horario =
-        localStorage.getItem("horarioAgendamento")
-        ||
-        localStorage.getItem("horario")
-        ||
+        localStorage.getItem("horarioAgendamento") ||
+        localStorage.getItem("horario") ||
         "Não informado";
 
 
-   
-
-    let petSelecionado = null;
-
-    const petSalvo =
-        localStorage.getItem("petSelecionado");
-
-    if (petSalvo) {
-
-        try {
-
-            petSelecionado =
-                JSON.parse(petSalvo);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar pet selecionado:",
-                erro
-            );
-
-        }
-
-    }
-
-
-    
-
-    let transporte =
-        localStorage.getItem("transporte")
-        === "true";
-
-
-   
-
-    const nomeDaClinica =
-        clinicaDados.nome
-        ||
-        clinicaDados.unidade
-        ||
-        "Clínica Veterinária";
+    localStorage.removeItem("petSelecionado");
+    localStorage.removeItem("transporte");
 
 
     if (nomeClinica) {
-
         nomeClinica.textContent =
             nomeDaClinica;
-
     }
 
 
     if (resumoClinica) {
-
         resumoClinica.textContent =
             nomeDaClinica;
+    }
+
+
+    if (resumoData) {
+        resumoData.textContent =
+            data;
+    }
+
+
+    if (resumoHorario) {
+        resumoHorario.textContent =
+            horario;
+    }
+
+
+    if (resumoServico) {
+
+        resumoServico.textContent =
+            preco
+                ? `${servico} - ${preco}`
+                : servico;
 
     }
 
 
-    
+    if (resumoVeterinario) {
+        resumoVeterinario.textContent =
+            veterinario;
+    }
+
+
+    if (resumoTutor) {
+        resumoTutor.textContent =
+            tutorDados.nome ||
+            "Não informado";
+    }
+
+
+    if (resumoTelefone) {
+        resumoTelefone.textContent =
+            tutorDados.telefone ||
+            "Não informado";
+    }
+
+
+    if (endereco) {
+        endereco.textContent =
+            tutorDados.endereco ||
+            "Endereço não informado";
+    }
+
+
+    if (cep) {
+
+        cep.textContent =
+            tutorDados.cep
+                ? "CEP: " + tutorDados.cep
+                : "CEP não informado";
+
+    }
+
 
     if (listaPets) {
+
+        listaPets.innerHTML = "";
 
         if (pets.length === 0) {
 
@@ -248,20 +243,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         } else {
 
-            pets.forEach((pet) => {
+            pets.forEach((pet, index) => {
 
                 const card =
                     document.createElement("div");
 
                 card.classList.add("pet-card");
 
+                card.dataset.index =
+                    index;
 
                 card.innerHTML = `
 
                     <div class="pet-icon">
-
                         <i class="fa-solid fa-paw"></i>
-
                     </div>
 
                     <div class="pet-info">
@@ -271,29 +266,15 @@ document.addEventListener("DOMContentLoaded", () => {
                         </h3>
 
                         <p>
-
                             ${pet.especie || ""}
-
-                            ${
-                                pet.raca
-                                    ? " • " + pet.raca
-                                    : ""
-                            }
-
-                            ${
-                                pet.idade
-                                    ? " • " + pet.idade
-                                    : ""
-                            }
-
+                            ${pet.raca ? " • " + pet.raca : ""}
+                            ${pet.idade ? " • " + pet.idade : ""}
                         </p>
 
                     </div>
 
                 `;
 
-
-                
 
                 card.addEventListener(
                     "click",
@@ -319,8 +300,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             pet;
 
 
-                        
-
                         localStorage.setItem(
                             "petSelecionado",
                             JSON.stringify(pet)
@@ -333,20 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
 
-                
-
-                if (
-                    petSelecionado &&
-                    petSelecionado.nome === pet.nome
-                ) {
-
-                    card.classList.add(
-                        "selecionado"
-                    );
-
-                }
-
-
                 listaPets.appendChild(card);
 
             });
@@ -356,14 +321,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    
-
     function atualizarResumoPet() {
 
         if (resumoPet) {
 
             resumoPet.textContent =
-
                 petSelecionado
                     ? petSelecionado.nome
                     : "Nenhum pet selecionado";
@@ -372,97 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    atualizarResumoPet();
-
-
-   
-
-    if (resumoData) {
-
-        resumoData.textContent =
-            data;
-
-    }
-
-
-    
-
-    if (resumoHorario) {
-
-        resumoHorario.textContent =
-            horario;
-
-    }
-
-
-    
-
-    if (resumoServico) {
-
-        resumoServico.textContent =
-
-            preco
-                ? `${servico} - ${preco}`
-                : servico;
-
-    }
-
-
-    
-
-    if (resumoVeterinario) {
-
-        resumoVeterinario.textContent =
-            veterinario;
-
-    }
-
-
-    
-
-    if (resumoTutor) {
-
-        resumoTutor.textContent =
-            tutorDados.nome
-            || "Não informado";
-
-    }
-
-
-   
-
-    if (resumoTelefone) {
-
-        resumoTelefone.textContent =
-            tutorDados.telefone
-            || "Não informado";
-
-    }
-
-
-    
-    if (endereco) {
-
-        endereco.textContent =
-            tutorDados.endereco
-            || "Endereço não informado";
-
-    }
-
-
-    if (cep) {
-
-        cep.textContent =
-
-            tutorDados.cep
-                ? "CEP: " + tutorDados.cep
-                : "CEP não informado";
-
-    }
-
-
-    
 
     function atualizarTransporte() {
 
@@ -475,7 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
             addressCard?.classList.add(
                 "show"
             );
-
 
             if (resumoTransporte) {
 
@@ -494,7 +364,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 "show"
             );
 
-
             if (resumoTransporte) {
 
                 resumoTransporte.textContent =
@@ -507,10 +376,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
+    atualizarResumoPet();
+
     atualizarTransporte();
 
-
-   
 
     if (transportOption) {
 
@@ -524,7 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 localStorage.setItem(
                     "transporte",
-                    transporte
+                    transporte.toString()
                 );
 
 
@@ -535,8 +404,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-
-    
 
     function criarAgendamentoFinal() {
 
@@ -554,40 +421,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const agendamentoFinal = {
 
             clinica:
-                clinicaDados.nome
-                ||
-                clinicaDados.unidade
-                ||
-                "Não informado",
+                nomeDaClinica,
 
+            clinicaDados:
+                clinicaDados,
 
             data:
                 data,
 
-
             horario:
                 horario,
-
 
             servico:
                 servico,
 
-
             preco:
                 preco,
-
 
             veterinario:
                 veterinario,
 
-
             pet:
                 petSelecionado,
 
-
             tutor:
                 tutorDados,
-
 
             transporte:
                 transporte
@@ -603,29 +461,18 @@ document.addEventListener("DOMContentLoaded", () => {
         );
 
 
+        localStorage.setItem(
+            "agendamento",
+            JSON.stringify(
+                agendamentoFinal
+            )
+        );
+
+
         return true;
 
     }
 
-
-    
-
-    if (btnVoltar) {
-
-        btnVoltar.addEventListener(
-            "click",
-            () => {
-
-                window.location.href =
-                    "servicos.html";
-
-            }
-        );
-
-    }
-
-
-    
 
     if (btnContinuar) {
 
@@ -633,40 +480,10 @@ document.addEventListener("DOMContentLoaded", () => {
             "click",
             () => {
 
-                if (
-                    criarAgendamentoFinal()
-                ) {
+                if (criarAgendamentoFinal()) {
 
                     window.location.href =
                         "final.html";
-
-                }
-
-            }
-        );
-
-    }
-
-
-    
-
-    if (btnConfirmar) {
-
-        btnConfirmar.addEventListener(
-            "click",
-            () => {
-
-                if (
-                    criarAgendamentoFinal()
-                ) {
-
-                    alert(
-                        "Agendamento confirmado com sucesso!"
-                    );
-
-
-                    window.location.href =
-                        "../../home.html";
 
                 }
 

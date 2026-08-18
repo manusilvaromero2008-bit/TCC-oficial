@@ -1,149 +1,95 @@
-<link rel="stylesheet" href="../css/servicos.css">
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar Consulta - Serviços</title>
 
+    <link rel="stylesheet" href="../css/servicos.css">
 
-<header>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
 
-    <h1>
-        <i class="fa-solid fa-paw"></i>
-        Agendar Consulta
-    </h1>
+<body>
 
-    <p id="nomeClinica"></p>
+    <header>
 
-</header>
+        <h1>
+            <i class="fa-solid fa-paw"></i>
+            Agendar Consulta
+        </h1>
 
+        <p id="nomeClinica"></p>
 
+    </header>
 
+    <div class="etapas">
 
-
-<div class="etapas">
-
-    <div class="etapa concluida">
-        <div class="numero">
-            <i class="fa-solid fa-check"></i>
+        <div class="etapa concluida">
+            <div class="numero">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span>Data e Hora</span>
         </div>
 
-        <span>Data e Hora</span>
-    </div>
+        <div class="linha ativa"></div>
 
-
-    <div class="linha ativa"></div>
-
-
-    <div class="etapa ativa">
-
-        <div class="numero">
-            2
+        <div class="etapa ativa">
+            <div class="numero">2</div>
+            <span>Serviço</span>
         </div>
 
-        <span>Serviço</span>
+        <div class="linha"></div>
 
-    </div>
-
-
-    <div class="linha"></div>
-
-
-    <div class="etapa">
-
-        <div class="numero">
-            3
+        <div class="etapa">
+            <div class="numero">3</div>
+            <span>Pet e Transporte</span>
         </div>
-
-        <span>Pet e Transporte</span>
 
     </div>
 
-</div>
+    <section class="card">
 
+        <h2>
+            <i class="fa-solid fa-stethoscope"></i>
+            Consultas Disponíveis
+        </h2>
 
+        <div id="listaConsultas"></div>
 
+    </section>
 
+    <section class="card">
 
+        <h2>
+            <i class="fa-solid fa-flask"></i>
+            Exames Disponíveis
+        </h2>
 
-<section class="card">
+        <div id="listaExames"></div>
 
+    </section>
 
-    <h2>
+    <div class="botoes">
 
-        <i class="fa-solid fa-stethoscope"></i>
+        <a href="dataehorario.html" class="btn-voltar">
+            Voltar
+        </a>
 
-        Consultas Disponíveis
+        <button
+            type="button"
+            id="btnContinuar"
+            class="btn-continuar"
+            disabled>
+            Continuar
+        </button>
 
-    </h2>
+    </div>
 
+    <script src="../js/servicos.js"></script>
 
+</body>
 
-   
-
-    <div id="listaConsultas"></div>
-
-
-</section>
-
-
-
-
-
-
-
-
-<section class="card">
-
-
-    <h2>
-
-        <i class="fa-solid fa-flask"></i>
-
-        Exames Disponíveis
-
-    </h2>
-
-
-
-   
-
-    <div id="listaExames"></div>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<div class="botoes">
-
-
-    <a href="dataehorario.html" class="btn-voltar">
-
-        Voltar
-
-    </a>
-
-
-
-    <button 
-        id="btnContinuar" 
-        class="btn-continuar"
-        disabled>
-
-        Continuar
-
-    </button>
-
-
-</div>
-
-
-
-
-
-<script src="../js/servicos.js"></script>
+</html>

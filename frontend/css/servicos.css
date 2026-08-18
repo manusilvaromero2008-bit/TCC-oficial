@@ -8,14 +8,14 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #eefaf1;
-    color: #124734;
+    background: #e0effa65;
+    color: #e8610d;
 }
 
 
 
 header {
-    background: #19a547;
+    background: #0756a6cc;
     color: white;
     padding: 35px 8%;
 }
@@ -60,8 +60,8 @@ header p {
     width: 52px;
     height: 52px;
     border-radius: 50%;
-    background: #d6f5df;
-    color: #145a32;
+    background: #4d82ab4b;
+    color: #053e76;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -70,25 +70,25 @@ header p {
 
 .etapa.ativa .numero,
 .etapa.concluida .numero {
-    background: #19a547;
+    background: #0757a6;
     color: white;
 }
 
 .etapa span {
     font-size: 17px;
     font-weight: 600;
-    color: #0d5134;
+    color: #0757a6;
 }
 
 .linha {
     width: 220px;
     height: 4px;
-    background: #d4f2dc;
+    background: #95d6f73e;
     border-radius: 20px;
 }
 
 .linha.ativa {
-    background: #19a547;
+    background: #051ccb8b;
 }
 
 
@@ -99,20 +99,20 @@ header p {
     background: white;
     border-radius: 22px;
     padding: 30px;
-    box-shadow: 0 5px 18px rgba(0,0,0,.12);
+    box-shadow: 0 5px 18px rgba(175, 39, 39, 0.12);
 }
 
 .card h2 {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: #0d5134;
+    color: #0757a6;
     font-size: 34px;
     margin-bottom: 30px;
 }
 
 .card h2 i {
-    color: #19a547;
+    color: #0757a6;
 }
 
 
@@ -123,7 +123,7 @@ header p {
 
 .servico {
     width: 100%;
-    border: 2px solid #c8f1d3;
+    border: 2px solid #0756a65c;
     background: white;
     border-radius: 20px;
     padding: 22px;
@@ -135,24 +135,24 @@ header p {
 
 .servico:hover {
     transform: translateY(-3px);
-    border-color: #19a547;
-    box-shadow: 0 8px 20px rgba(25,165,71,.18);
+    border-color: #0757a6;
+    box-shadow: 0 8px 20px rgba(2, 87, 255, 0.18);
 }
 
 .servico.selecionado {
-    border: 3px solid #19a547;
-    background: #f2fff5;
+    border: 3px solid #0757a6;
+    background: #eff8ff;
 }
 
 .icone {
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: #d9f5df;
+    background: #eff8ff;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #19a547;
+    color: #0757a6;
     font-size: 34px;
     margin-right: 20px;
 }
@@ -164,22 +164,22 @@ header p {
 
 .info h3 {
     font-size: 22px;
-    color: #0d5134;
+    color: #0757a6;
     margin-bottom: 6px;
 }
 
 .info p {
     font-size: 18px;
-    color: #24563d;
+    color: #0757a6;
 }
 
 .info p i {
-    color: #19a547;
+    color: #013e7b;
     margin-right: 6px;
 }
 
 .preco {
-    color: #12a240;
+    color: #023b75;
     font-size: 28px;
     font-weight: bold;
 }
@@ -206,27 +206,27 @@ header p {
 }
 
 .btn-voltar {
-    background: #d8f8df;
-    color: #0d5134;
+    background: #0756a649;
+    color: #ffffff;
 }
 
 .btn-voltar:hover {
-    background: #bfeecd;
+    background: #0757a6;
 }
 
 .btn-continuar {
-    background: #19a547;
+    background: #0756a6c5;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .btn-continuar:hover:not(:disabled) {
-    background: #12843a;
+    background: #003161;
 }
 
 .btn-continuar:disabled {
-    background: #9dd6af;
+    background: #0757a6;
     cursor: not-allowed;
 }
 
