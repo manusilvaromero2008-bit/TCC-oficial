@@ -77,6 +77,61 @@
 
             <div id="areaPerfil" class="area-perfil hidden">
 
+                <section class="card perfil-resumo">
+
+                    <div class="perfil-foto-area">
+
+                        <div class="perfil-foto-container">
+
+                            <img
+                                id="fotoPerfil"
+                                src="../img/perfil-padrao.png"
+                                alt="Foto de perfil">
+
+                            <label
+                                for="inputFotoPerfil"
+                                class="btn-alterar-foto"
+                                title="Alterar foto">
+
+                                <i class="fa-solid fa-camera"></i>
+
+                            </label>
+
+                        </div>
+
+                        <input
+                            type="file"
+                            id="inputFotoPerfil"
+                            accept="image/*"
+                            hidden>
+
+                        <div class="perfil-info">
+
+                            <h2 id="nomePerfilFoto">
+                                Usuário
+                            </h2>
+
+                            <p>
+                                <i class="fa-solid fa-circle-check"></i>
+                                Tutor cadastrado
+                            </p>
+
+                            <button
+                                type="button"
+                                id="btnRemoverFoto"
+                                class="btn-remover-foto">
+
+                                <i class="fa-solid fa-trash"></i>
+                                Remover foto
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
                 <section class="card">
 
                     <div class="card-titulo">
@@ -101,63 +156,33 @@
                     <div id="dadosTutor" class="dados">
 
                         <div class="campo-perfil">
-
                             <strong>Nome</strong>
-
-                            <span id="perfilNome">
-                                Não informado
-                            </span>
-
+                            <span id="perfilNome">Não informado</span>
                         </div>
 
                         <div class="campo-perfil">
-
                             <strong>CPF</strong>
-
-                            <span id="perfilCpf">
-                                Não informado
-                            </span>
-
+                            <span id="perfilCpf">Não informado</span>
                         </div>
 
                         <div class="campo-perfil">
-
                             <strong>Telefone</strong>
-
-                            <span id="perfilTelefone">
-                                Não informado
-                            </span>
-
+                            <span id="perfilTelefone">Não informado</span>
                         </div>
 
                         <div class="campo-perfil">
-
                             <strong>E-mail</strong>
-
-                            <span id="perfilEmail">
-                                Não informado
-                            </span>
-
+                            <span id="perfilEmail">Não informado</span>
                         </div>
 
                         <div class="campo-perfil">
-
                             <strong>Endereço</strong>
-
-                            <span id="perfilEndereco">
-                                Não informado
-                            </span>
-
+                            <span id="perfilEndereco">Não informado</span>
                         </div>
 
                         <div class="campo-perfil">
-
                             <strong>CEP</strong>
-
-                            <span id="perfilCep">
-                                Não informado
-                            </span>
-
+                            <span id="perfilCep">Não informado</span>
                         </div>
 
                     </div>
@@ -346,25 +371,11 @@
                         id="especiePet"
                         required>
 
-                        <option value="Cão">
-                            Cão
-                        </option>
-
-                        <option value="Gato">
-                            Gato
-                        </option>
-
-                        <option value="Ave">
-                            Ave
-                        </option>
-
-                        <option value="Roedor">
-                            Roedor
-                        </option>
-
-                        <option value="Outro">
-                            Outro
-                        </option>
+                        <option value="Cão">Cão</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Ave">Ave</option>
+                        <option value="Roedor">Roedor</option>
+                        <option value="Outro">Outro</option>
 
                     </select>
 
@@ -407,13 +418,8 @@
                         id="sexoPet"
                         required>
 
-                        <option value="Macho">
-                            Macho
-                        </option>
-
-                        <option value="Fêmea">
-                            Fêmea
-                        </option>
+                        <option value="Macho">Macho</option>
+                        <option value="Fêmea">Fêmea</option>
 
                     </select>
 
@@ -449,7 +455,6 @@
                         class="btn-salvar">
 
                         <i class="fa-solid fa-check"></i>
-
                         Salvar pet
 
                     </button>

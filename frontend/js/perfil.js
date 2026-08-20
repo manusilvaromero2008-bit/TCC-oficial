@@ -1,56 +1,44 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const btnInicio =
-        document.getElementById("btnInicio");
+    const btnInicio = document.getElementById("btnInicio");
+    const btnCadastrar = document.getElementById("btnCadastrar");
+    const areaCadastro = document.getElementById("areaCadastro");
+    const areaPerfil = document.getElementById("areaPerfil");
 
-    const btnCadastrar =
-        document.getElementById("btnCadastrar");
+    const btnEditarTutor = document.getElementById("btnEditarTutor");
+    const btnCancelarTutor = document.getElementById("btnCancelarTutor");
+    const formTutor = document.getElementById("formTutor");
+    const dadosTutor = document.getElementById("dadosTutor");
 
-    const areaCadastro =
-        document.getElementById("areaCadastro");
+    const btnAdicionarPet = document.getElementById("btnAdicionarPet");
+    const listaPets = document.getElementById("listaPets");
 
-    const areaPerfil =
-        document.getElementById("areaPerfil");
+    const modalPet = document.getElementById("modalPet");
+    const btnFecharModal = document.getElementById("btnFecharModal");
+    const btnCancelarPet = document.getElementById("btnCancelarPet");
+    const formPet = document.getElementById("formPet");
+    const tituloModalPet = document.getElementById("tituloModalPet");
 
-    const btnEditarTutor =
-        document.getElementById("btnEditarTutor");
+    const mensagem = document.getElementById("mensagem");
 
-    const btnCancelarTutor =
-        document.getElementById("btnCancelarTutor");
+    const inputFotoPerfil =
+        document.getElementById("inputFotoPerfil");
 
-    const formTutor =
-        document.getElementById("formTutor");
+    const fotoPerfil =
+        document.getElementById("fotoPerfil");
 
-    const dadosTutor =
-        document.getElementById("dadosTutor");
+    const nomePerfilFoto =
+        document.getElementById("nomePerfilFoto");
 
-    const btnAdicionarPet =
-        document.getElementById("btnAdicionarPet");
-
-    const listaPets =
-        document.getElementById("listaPets");
-
-    const modalPet =
-        document.getElementById("modalPet");
-
-    const btnFecharModal =
-        document.getElementById("btnFecharModal");
-
-    const btnCancelarPet =
-        document.getElementById("btnCancelarPet");
-
-    const formPet =
-        document.getElementById("formPet");
-
-    const tituloModalPet =
-        document.getElementById("tituloModalPet");
-
-    const mensagem =
-        document.getElementById("mensagem");
+    const btnRemoverFoto =
+        document.getElementById("btnRemoverFoto");
 
     let tutor = null;
     let pets = [];
     let petEditando = null;
+
+    const fotoPadrao =
+        "../img/perfil-padrao.png";
 
     try {
 
@@ -58,10 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.getItem("tutor");
 
         if (tutorSalvo) {
-
-            tutor =
-                JSON.parse(tutorSalvo);
-
+            tutor = JSON.parse(tutorSalvo);
         }
 
     } catch (erro) {
@@ -81,16 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.getItem("pets");
 
         if (petsSalvos) {
-
-            pets =
-                JSON.parse(petsSalvos);
-
+            pets = JSON.parse(petsSalvos);
         }
 
         if (!Array.isArray(pets)) {
-
             pets = [];
-
         }
 
     } catch (erro) {
@@ -106,16 +86,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function verificarCadastro() {
 
-        if (tutor && tutor.nome) {
+        const possuiCadastro =
+            tutor &&
+            typeof tutor === "object" &&
+            tutor.nome &&
+            tutor.nome.trim() !== "";
+
+        if (possuiCadastro) {
+
+            areaCadastro.style.display = "none";
+            areaPerfil.style.display = "block";
 
             areaCadastro.classList.add("hidden");
-
             areaPerfil.classList.remove("hidden");
 
         } else {
 
-            areaCadastro.classList.remove("hidden");
+            areaCadastro.style.display = "flex";
+            areaPerfil.style.display = "none";
 
+            areaCadastro.classList.remove("hidden");
             areaPerfil.classList.add("hidden");
 
         }
@@ -129,13 +119,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         mensagem.textContent = texto;
-
         mensagem.classList.add("mostrar");
 
         setTimeout(() => {
-
             mensagem.classList.remove("mostrar");
-
         }, 3000);
 
     }
@@ -159,6 +146,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("perfilCep").textContent =
             tutor?.cep || "Não informado";
+
+        nomePerfilFoto.textContent =
+            tutor?.nome || "Usuário";
+
+    }
+
+    function carregarFotoPerfil() {
+
+        const fotoSalva =
+            localStorage.getItem("fotoPerfil");
+
+        if (fotoSalva) {
+            fotoPerfil.src = fotoSalva;
+        } else {
+            fotoPerfil.src = fotoPadrao;
+        }
 
     }
 
@@ -187,7 +190,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function fecharFormularioTutor() {
 
         dadosTutor.classList.remove("hidden");
-
         formTutor.classList.add("hidden");
 
     }
@@ -218,11 +220,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 "pet-card";
 
             card.innerHTML = `
-
                 <div class="pet-icone">
-
                     <i class="fa-solid fa-paw"></i>
-
                 </div>
 
                 <div class="pet-dados">
@@ -264,11 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     data-index="${index}">
 
                     <i class="fa-solid fa-pen"></i>
-
                     Editar
 
                 </button>
-
             `;
 
             listaPets.appendChild(card);
@@ -284,9 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     () => {
 
                         const index =
-                            Number(
-                                botao.dataset.index
-                            );
+                            Number(botao.dataset.index);
 
                         abrirEdicaoPet(index);
 
@@ -299,15 +294,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function abrirEdicaoPet(index) {
 
-        const pet =
-            pets[index];
+        const pet = pets[index];
 
         if (!pet) {
             return;
         }
 
-        petEditando =
-            index;
+        petEditando = index;
 
         tituloModalPet.textContent =
             "Editar Pet";
@@ -400,7 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 preencherFormularioTutor();
 
                 dadosTutor.classList.add("hidden");
-
                 formTutor.classList.remove("hidden");
 
             }
@@ -475,13 +467,85 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
                 atualizarDadosTutor();
-
                 verificarCadastro();
-
                 fecharFormularioTutor();
 
                 mostrarMensagem(
                     "Dados do tutor atualizados com sucesso!"
+                );
+
+            }
+        );
+
+    }
+
+    if (inputFotoPerfil) {
+
+        inputFotoPerfil.addEventListener(
+            "change",
+            event => {
+
+                const arquivo =
+                    event.target.files[0];
+
+                if (!arquivo) {
+                    return;
+                }
+
+                if (!arquivo.type.startsWith("image/")) {
+
+                    mostrarMensagem(
+                        "Selecione uma imagem válida."
+                    );
+
+                    return;
+
+                }
+
+                const leitor =
+                    new FileReader();
+
+                leitor.onload = function () {
+
+                    const imagem =
+                        leitor.result;
+
+                    fotoPerfil.src =
+                        imagem;
+
+                    localStorage.setItem(
+                        "fotoPerfil",
+                        imagem
+                    );
+
+                    mostrarMensagem(
+                        "Foto de perfil atualizada com sucesso!"
+                    );
+
+                };
+
+                leitor.readAsDataURL(arquivo);
+
+            }
+        );
+
+    }
+
+    if (btnRemoverFoto) {
+
+        btnRemoverFoto.addEventListener(
+            "click",
+            () => {
+
+                localStorage.removeItem(
+                    "fotoPerfil"
+                );
+
+                fotoPerfil.src =
+                    fotoPadrao;
+
+                mostrarMensagem(
+                    "Foto de perfil removida."
                 );
 
             }
@@ -599,7 +663,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
                 mostrarPets();
-
                 fecharModalPet();
 
             }
@@ -614,9 +677,7 @@ document.addEventListener("DOMContentLoaded", () => {
             event => {
 
                 if (event.target === modalPet) {
-
                     fecharModalPet();
-
                 }
 
             }
@@ -625,9 +686,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     atualizarDadosTutor();
-
+    carregarFotoPerfil();
     mostrarPets();
-
     verificarCadastro();
 
 });

@@ -65,7 +65,7 @@ main {
 .perfil-container {
     max-width: 1000px;
     margin: 40px auto;
-    padding: 0 20px 40px;
+    padding: 0 20px 50px;
 }
 
 .titulo-pagina {
@@ -78,6 +78,7 @@ main {
 .icone-perfil {
     width: 65px;
     height: 65px;
+    min-width: 65px;
     border-radius: 50%;
     background: #0757a6;
     color: white;
@@ -85,6 +86,7 @@ main {
     align-items: center;
     justify-content: center;
     font-size: 28px;
+    box-shadow: 0 5px 15px rgba(7, 87, 166, 0.2);
 }
 
 .titulo-pagina h1 {
@@ -104,6 +106,14 @@ main {
     padding: 30px;
     margin-bottom: 25px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.hidden {
+    display: none !important;
+}
+
+.area-perfil.hidden {
+    display: none !important;
 }
 
 .cadastro-inicial {
@@ -167,6 +177,104 @@ main {
 .btn-cadastrar:hover {
     background: #04407c;
     transform: translateY(-2px);
+}
+
+.perfil-resumo {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #d5e8f7;
+    background: linear-gradient(135deg, #ffffff 0%, #f5faff 100%);
+}
+
+.perfil-foto-area {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    padding: 30px 35px;
+    position: relative;
+}
+
+.perfil-foto-container {
+    width: 125px;
+    height: 125px;
+    min-width: 125px;
+    position: relative;
+}
+
+.perfil-foto-container img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+    box-shadow: 0 5px 18px rgba(7, 87, 166, 0.18);
+    background: #e0effa;
+}
+
+.btn-alterar-foto {
+    position: absolute;
+    right: 0;
+    bottom: 2px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #0757a6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid white;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-alterar-foto:hover {
+    background: #04407c;
+    transform: scale(1.08);
+}
+
+.perfil-info {
+    flex: 1;
+}
+
+.perfil-info h2 {
+    color: #04407c;
+    font-size: 28px;
+    margin-bottom: 8px;
+    word-break: break-word;
+}
+
+.perfil-info p {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #0757a6;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+.perfil-info p i {
+    font-size: 16px;
+}
+
+.btn-remover-foto {
+    border: none;
+    background: transparent;
+    color: #777;
+    padding: 5px 0;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s;
+}
+
+.btn-remover-foto:hover {
+    color: #c0392b;
 }
 
 .card-titulo {
@@ -236,13 +344,21 @@ main {
     border: 1px solid #d5e8f7;
     border-radius: 12px;
     padding: 16px;
+    transition: 0.2s;
+}
+
+.campo-perfil:hover {
+    border-color: #9fc5e4;
+    background: #f0f8ff;
 }
 
 .campo-perfil strong {
     display: block;
     color: #0757a6;
-    font-size: 14px;
+    font-size: 13px;
     margin-bottom: 7px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .campo-perfil span {
@@ -257,9 +373,8 @@ main {
     gap: 18px;
 }
 
-.formulario.hidden,
-.area-perfil.hidden {
-    display: none;
+.formulario.hidden {
+    display: none !important;
 }
 
 .campo {
@@ -525,6 +640,7 @@ main {
     .icone-perfil {
         width: 55px;
         height: 55px;
+        min-width: 55px;
         font-size: 24px;
     }
 
@@ -538,6 +654,30 @@ main {
 
     .card {
         padding: 22px;
+    }
+
+    .perfil-foto-area {
+        padding: 25px 22px;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .perfil-info {
+        width: 100%;
+    }
+
+    .perfil-info h2 {
+        font-size: 24px;
+    }
+
+    .perfil-info p {
+        justify-content: center;
+    }
+
+    .perfil-foto-container {
+        width: 115px;
+        height: 115px;
+        min-width: 115px;
     }
 
     .cadastro-inicial {
@@ -610,6 +750,11 @@ main {
 
 @media (max-width: 480px) {
 
+    .perfil-container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
     .titulo-pagina {
         flex-direction: column;
         align-items: center;
@@ -636,5 +781,29 @@ main {
 
     .cadastro-texto p {
         font-size: 14px;
+    }
+
+    .perfil-foto-container {
+        width: 105px;
+        height: 105px;
+        min-width: 105px;
+    }
+
+    .perfil-info h2 {
+        font-size: 22px;
+    }
+
+    .btn-alterar-foto {
+        width: 38px;
+        height: 38px;
+    }
+
+    .card {
+        padding: 20px 16px;
+        border-radius: 16px;
+    }
+
+    .pet-card {
+        padding: 16px;
     }
 }
