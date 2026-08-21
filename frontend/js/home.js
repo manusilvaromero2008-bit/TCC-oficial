@@ -1,86 +1,104 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
     const pesquisa = document.getElementById("pesquisa");
     const regiao = document.getElementById("regiao");
-    const cards = document.querySelectorAll(".card-link");
+    const listaClinicas = document.getElementById("listaClinicas");
 
-    const clinicas = {
-        "petvida": {
-            id: 1,
-            nome: "Pet Vida Veterinária",
-            regiao: "Centro",
-            endereco: "Av. Francisco Glicério, 1200",
-            telefone: "(19) 3234-5678",
-            horario: "Seg-Sex: 8h às 18h | Sáb: 8h às 12h",
-            consulta: "R$ 120"
-        },
+    let clinicas = [];
 
-        "animalcare": {
-            id: 2,
-            nome: "Clínica Animal Care",
-            regiao: "Cambuí",
-            endereco: "Rua Coronel Quirino, 456",
-            telefone: "(19) 3345-6788",
-            horario: "Seg-Sex: 9h às 19h | Sáb: 9h às 14h",
-            consulta: "R$ 150"
-        },
+    try {
 
-        "vetcare": {
-            id: 3,
-            nome: "VetCare Taquaral",
-            regiao: "Taquaral",
-            endereco: "Av. Heitor Penteado, 890",
-            telefone: "(19) 3456-7809",
-            horario: "Atendimento 24 horas",
-            consulta: "R$ 100"
-        },
+        const resposta = await fetch("http://localhost:3000/api/clinicas");
 
-        "pethealth": {
-            id: 4,
-            nome: "Pet Health Barão",
-            regiao: "Barão Geraldo",
-            endereco: "Av. Albino J. B. de Oliveira, 1511",
-            telefone: "(19) 3567-8910",
-            horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h",
-            consulta: "R$ 130"
+        if (!resposta.ok) {
+            throw new Error("Erro ao buscar clínicas.");
         }
-    };
 
+        clinicas = await resposta.json();
 
-    cards.forEach(cardLink => {
+        renderizarClinicas(clinicas);
 
-        cardLink.addEventListener("click", () => {
+    } catch (erro) {
 
-            const card = cardLink.querySelector(".card");
+        console.error(erro);
 
-            const clinicaId = card.dataset.clinica;
+        listaClinicas.innerHTML = `
+            <p class="mensagem-erro">
+                Não foi possível carregar as clínicas.
+            </p>
+        `;
 
-            const clinicaSelecionada = clinicas[clinicaId];
+    }
 
-            if (!clinicaSelecionada) {
-                console.error("Clínica não encontrada.");
-                return;
-            }
+    function renderizarClinicas(lista) {
 
-            localStorage.setItem(
-                "clinica",
-                clinicaSelecionada.nome
-            );
+        listaClinicas.innerHTML = "";
 
-            localStorage.setItem(
-                "clinicaId",
-                clinicaSelecionada.id
-            );
+        lista.forEach(clinica => {
 
-            localStorage.setItem(
-                "clinicaDados",
-                JSON.stringify(clinicaSelecionada)
-            );
+            const cardLink = document.createElement("a");
+
+            cardLink.className = "card-link";
+            cardLink.href = `./frontend/pages/clinica.html?id=${clinica.id}`;
+
+            const card = document.createElement("div");
+
+            card.className = "card";
+            card.dataset.regiao = clinica.regiao;
+            card.dataset.clinica = clinica.id;
+
+            const classeClinica =
+                clinica.id === 1 ? "petvida" :
+                clinica.id === 2 ? "animalcare" :
+                clinica.id === 3 ? "vetcare" :
+                "pethealth";
+
+            const precoConsulta =
+                clinica.id === 1 ? "R$ 120" :
+                clinica.id === 2 ? "R$ 150" :
+                clinica.id === 3 ? "R$ 100" :
+                "R$ 130";
+
+            card.innerHTML = `
+                <div class="topo-card ${classeClinica}">
+                    <h2>${clinica.nome}</h2>
+                    <p>
+                        <i class="fa-solid fa-location-dot"></i>
+                        ${clinica.regiao}
+                    </p>
+                </div>
+
+                <div class="conteudo">
+
+                    <p>
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        ${clinica.endereco}
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-phone"></i>
+                        ${clinica.telefone || "Não informado"}
+                    </p>
+
+                    <p>
+                        <i class="fa-regular fa-clock"></i>
+                        ${clinica.horario_atendimento}
+                    </p>
+
+                    <div class="info-extra">
+                        <span>Consulta</span>
+                        <strong>${precoConsulta}</strong>
+                    </div>
+
+                </div>
+            `;
+
+            cardLink.appendChild(card);
+            listaClinicas.appendChild(cardLink);
 
         });
 
-    });
-
+    }
 
     function filtrar() {
 
@@ -90,6 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const filtroRegiao = regiao.value
             .toLowerCase();
+
+        const cards = document.querySelectorAll(".card-link");
 
         cards.forEach(cardLink => {
 
@@ -118,7 +138,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
     }
-
 
     pesquisa.addEventListener("input", filtrar);
 

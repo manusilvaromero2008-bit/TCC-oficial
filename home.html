@@ -30,159 +30,54 @@
 </header>
 
 <section class="filtros">
+
     <div class="campo">
+
         <label>Buscar clínicas</label>
+
         <input
             type="text"
             id="pesquisa"
             placeholder="Digite o nome da clínica..."
         >
+
     </div>
 
     <div class="campo">
+
         <label>Selecione sua região</label>
+
         <select id="regiao">
-            <option value="todas">Todas as regiões</option>
-            <option value="Centro">Centro</option>
-            <option value="Cambuí">Cambuí</option>
-            <option value="Taquaral">Taquaral</option>
-            <option value="Barão Geraldo">Barão Geraldo</option>
+
+            <option value="todas">
+                Todas as regiões
+            </option>
+
+            <option value="Centro">
+                Centro
+            </option>
+
+            <option value="Cambuí">
+                Cambuí
+            </option>
+
+            <option value="Taquaral">
+                Taquaral
+            </option>
+
+            <option value="Barão Geraldo">
+                Barão Geraldo
+            </option>
+
         </select>
+
     </div>
-</section>
-
-<section class="clinicas" id="listaClinicas">
-
-    <a href="./frontend/pages/petvida.html" class="card-link">
-        <div class="card" data-regiao="Centro" data-clinica="petvida">
-            <div class="topo-card petvida">
-                <h2>Pet Vida Veterinária</h2>
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Centro
-                </p>
-            </div>
-
-            <div class="conteudo">
-                <p>
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    Av. Francisco Glicério, 1200
-                </p>
-                <p>
-                    <i class="fa-solid fa-phone"></i>
-                    (19) 3234-5678
-                </p>
-                <p>
-                    <i class="fa-regular fa-clock"></i>
-                    Seg-Sex: 8h às 18h | Sáb: 8h às 12h
-                </p>
-
-                <div class="info-extra">
-                    <span>Consulta</span>
-                    <strong>R$ 120</strong>
-                </div>
-            </div>
-        </div>
-    </a>
-
-    <a href="./frontend/pages/animalcare.html" class="card-link">
-        <div class="card" data-regiao="Cambuí" data-clinica="HVNC">
-            <div class="topo-card animalcare">
-                <h2>Hospital Veterinário</h2>
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Cambuí
-            </div>
-
-            <div class="conteudo">
-                <p>
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    Av. Dr.Jesuíno Marcondes Machado, 1077
-                </p>
-                <p>
-                    <i class="fa-solid fa-phone"></i>
-                    (19) 3520-3577
-                </p>
-                <p>
-                    <i class="fa-regular fa-clock"></i>
-                    Atendimento 24 horas
-                </p>
-
-                <div class="info-extra">
-                    <span>Consulta</span>
-                    <strong>R$ 150</strong>
-                </div>
-            </div>
-        </div>
-    </a>
-
-    <a href="./frontend/pages/vetcare.html" class="card-link">
-        <div class="card" data-regiao="Taquaral" data-clinica="+PET">
-            <div class="topo-card vetcare">
-                <h2>+Pet</h2>
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Taquaral
-                </p>
-            </div>
-
-            <div class="conteudo">
-                <p>
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    Av.Dr.Heitor Penteado, 890
-                </p>
-                <p>
-                    <i class="fa-solid fa-phone"></i>
-                    0800 062 3036
-                </p>
-                <p>
-                    <i class="fa-regular fa-clock"></i>
-                    Atendimento 24 horas
-                </p>
-
-                <div class="info-extra">
-                    <span>Consulta</span>
-                    <strong>R$ 100</strong>
-                </div>
-            </div>
-        </div>
-    </a>
-
-    <a href="./frontend/pages/pethealth.html" class="card-link">
-        <div class="card" data-regiao="Barão Geraldo" data-clinica="Animal & Cia">
-            <div class="topo-card pethealth">
-                <h2>S.O.S Animal & Cia</h2>
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Barão Geraldo
-                </p>
-            </div>
-
-            <div class="conteudo">
-                <p>
-                    <i class="fa-solid fa-map-location-dot"></i>
-                    Av. Brigadeiro Rafael Tobias de Aguiar,1098
-                </p>
-                <p>
-                    <i class="fa-solid fa-phone"></i>
-                    (19) 3241-7246
-                </p>
-                <p>
-                    <i class="fa-regular fa-clock"></i>
-                    Seg-Sex: 8h às 18h | Sáb-Dom: 8h às 14h
-                </p>
-
-                <div class="info-extra">
-                    <span>Consulta</span>
-                    <strong>R$ 130</strong>
-                </div>
-            </div>
-        </div>
-    </a>
 
 </section>
 
-<script src="frontend/js/home.js"></script>
+<section class="clinicas" id="listaClinicas"></section>
+
+<script src="./frontend/js/home.js"></script>
 
 </body>
 
