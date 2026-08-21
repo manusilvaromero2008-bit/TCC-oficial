@@ -1,13 +1,32 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const pesquisa = document.getElementById("pesquisa");
     const regiao = document.getElementById("regiao");
     const listaClinicas = document.getElementById("listaClinicas");
 
     let clinicas = [];
 
-    try {
+    const paginasClinicas = {
+        1: "petvida.html",
+        2: "animalcare.html",
+        3: "vetcare.html",
+        4: "pethealth.html"
+    };
 
+    const precosClinicas = {
+        1: "R$ 120",
+        2: "R$ 150",
+        3: "R$ 100",
+        4: "R$ 130"
+    };
+
+    const classesClinicas = {
+        1: "petvida",
+        2: "animalcare",
+        3: "vetcare",
+        4: "pethealth"
+    };
+
+    try {
         const resposta = await fetch("http://localhost:3000/api/clinicas");
 
         if (!resposta.ok) {
@@ -19,7 +38,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderizarClinicas(clinicas);
 
     } catch (erro) {
-
         console.error(erro);
 
         listaClinicas.innerHTML = `
@@ -28,40 +46,40 @@ document.addEventListener("DOMContentLoaded", async () => {
             </p>
         `;
 
+        return;
     }
 
     function renderizarClinicas(lista) {
-
         listaClinicas.innerHTML = "";
 
         lista.forEach(clinica => {
-
             const cardLink = document.createElement("a");
 
             cardLink.className = "card-link";
-            cardLink.href = `./frontend/pages/clinica.html?id=${clinica.id}`;
+
+            const pagina = paginasClinicas[clinica.id];
+
+            if (pagina) {
+                cardLink.href = `./frontend/pages/${pagina}?id=${clinica.id}`;
+            }
 
             const card = document.createElement("div");
 
             card.className = "card";
+
             card.dataset.regiao = clinica.regiao;
             card.dataset.clinica = clinica.id;
 
             const classeClinica =
-                clinica.id === 1 ? "petvida" :
-                clinica.id === 2 ? "animalcare" :
-                clinica.id === 3 ? "vetcare" :
-                "pethealth";
+                classesClinicas[clinica.id] || "";
 
             const precoConsulta =
-                clinica.id === 1 ? "R$ 120" :
-                clinica.id === 2 ? "R$ 150" :
-                clinica.id === 3 ? "R$ 100" :
-                "R$ 130";
+                precosClinicas[clinica.id] || "Consultar";
 
             card.innerHTML = `
                 <div class="topo-card ${classeClinica}">
                     <h2>${clinica.nome}</h2>
+
                     <p>
                         <i class="fa-solid fa-location-dot"></i>
                         ${clinica.regiao}
@@ -95,13 +113,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             cardLink.appendChild(card);
             listaClinicas.appendChild(cardLink);
-
         });
-
     }
 
     function filtrar() {
-
         const texto = pesquisa.value
             .toLowerCase()
             .trim();
@@ -112,7 +127,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const cards = document.querySelectorAll(".card-link");
 
         cards.forEach(cardLink => {
-
             const card = cardLink.querySelector(".card");
 
             const nome = card
@@ -134,13 +148,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 nomeCorreto && regiaoCorreta
                     ? "block"
                     : "none";
-
         });
-
     }
 
     pesquisa.addEventListener("input", filtrar);
-
     regiao.addEventListener("change", filtrar);
-
 });

@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -12,7 +11,6 @@
 
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
 </head>
 
 <body>
@@ -24,9 +22,9 @@
         Voltar
     </a>
 
-    <h1>
+    <h1 id="nomeClinica">
         <i class="fa-solid fa-hospital"></i>
-        S.O.S Animal & Cia
+        Carregando...
     </h1>
 
     <a href="perfil.html" class="btn-perfil">
@@ -43,19 +41,19 @@
         Informações da Clínica
     </h2>
 
-    <p>
+    <p id="enderecoClinica">
         <i class="fa-solid fa-location-dot"></i>
-        Av. Brigadeiro Rafael Tobias Aguiar, 1098 - Barão Geraldo, Campinas
+        Carregando...
     </p>
 
-    <p>
+    <p id="telefoneClinica">
         <i class="fa-solid fa-phone"></i>
-        (19) 3241-7246
+        Carregando...
     </p>
 
-    <p>
+    <p id="horarioClinica">
         <i class="fa-regular fa-clock"></i>
-        Seg-Sex: 8h às 18h | Sáb-Dom: 8h às 14h
+        Carregando...
     </p>
 
 </section>
@@ -73,8 +71,8 @@
             Valor da Consulta
         </span>
 
-        <strong>
-            R$ 130,00
+        <strong id="precoConsulta">
+            Carregando...
         </strong>
 
     </div>
@@ -88,23 +86,11 @@
         Exames Disponíveis
     </h2>
 
-    <div class="grid-exames">
+    <div class="grid-exames" id="listaServicos">
 
-        <div class="exame">
-            Hemograma Completo - R$ 85,00
-        </div>
-
-        <div class="exame">
-            Ultrassom Abdominal - R$ 160,00
-        </div>
-
-        <div class="exame">
-            Endoscopia - R$ 350,00
-        </div>
-
-        <div class="exame">
-            Raio-X - R$ 125,00
-        </div>
+        <p>
+            Carregando serviços...
+        </p>
 
     </div>
 
@@ -117,45 +103,11 @@
         Veterinários
     </h2>
 
-    <div class="vet-card">
+    <div id="listaVeterinarios">
 
-        <span>
-            Dr. Marcos Pereira - Gastroenterologia
-        </span>
-
-        <button
-            type="button"
-            class="status disponivel">
-            Disponível
-        </button>
-
-    </div>
-
-    <div class="vet-card">
-
-        <span>
-            Dra. Juliana Martins - Clínica Geral
-        </span>
-
-        <button
-            type="button"
-            class="status disponivel">
-            Disponível
-        </button>
-
-    </div>
-
-    <div class="vet-card">
-
-        <span>
-            Dr. Rafael Torres - Cirurgia
-        </span>
-
-        <button
-            type="button"
-            class="status disponivel">
-            Disponível
-        </button>
+        <p>
+            Carregando veterinários...
+        </p>
 
     </div>
 
@@ -200,150 +152,251 @@
 
 <script>
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    const clinicaDados = {
+    const clinicaId = 4;
 
-        id: 4,
+    const nomeClinica = document.getElementById("nomeClinica");
+    const enderecoClinica = document.getElementById("enderecoClinica");
+    const telefoneClinica = document.getElementById("telefoneClinica");
+    const horarioClinica = document.getElementById("horarioClinica");
+    const precoConsulta = document.getElementById("precoConsulta");
+    const listaServicos = document.getElementById("listaServicos");
+    const listaVeterinarios = document.getElementById("listaVeterinarios");
+    const btnAgendar = document.getElementById("btnAgendar");
 
-        nome: "Pet Health Barão",
+    try {
 
-        regiao: "Barão Geraldo",
+        const respostaClinica = await fetch(
+            `http://localhost:3000/api/clinicas/${clinicaId}`
+        );
 
-        endereco: "Av. Albino J. B. de Oliveira, 1500 - Barão Geraldo, Campinas",
-
-        telefone: "(19) 3567-8901",
-
-        horario: "Seg-Sex: 8h às 20h | Sáb-Dom: 8h às 16h",
-
-        consulta: "R$ 130"
-
-    };
-
-    const servicosClinica = [
-
-        {
-            id: 1,
-            nome: "Consulta Geral",
-            tipo: "Consulta",
-            veterinario: "Dra. Juliana Martins - Clínica Geral",
-            preco: "R$ 130"
-        },
-
-        {
-            id: 2,
-            nome: "Hemograma Completo",
-            tipo: "Exame",
-            veterinario: "Dra. Juliana Martins - Clínica Geral",
-            preco: "R$ 85"
-        },
-
-        {
-            id: 3,
-            nome: "Ultrassom Abdominal",
-            tipo: "Exame",
-            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
-            preco: "R$ 160"
-        },
-
-        {
-            id: 4,
-            nome: "Endoscopia",
-            tipo: "Exame",
-            veterinario: "Dr. Marcos Pereira - Gastroenterologia",
-            preco: "R$ 350"
-        },
-
-        {
-            id: 5,
-            nome: "Raio-X",
-            tipo: "Exame",
-            veterinario: "Dr. Rafael Torres - Cirurgia",
-            preco: "R$ 125"
+        if (!respostaClinica.ok) {
+            throw new Error("Não foi possível buscar a clínica.");
         }
 
-    ];
+        const clinica = await respostaClinica.json();
 
-    localStorage.setItem(
-        "clinica",
-        clinicaDados.nome
-    );
+        nomeClinica.innerHTML = `
+            <i class="fa-solid fa-hospital"></i>
+            ${clinica.nome}
+        `;
 
-    localStorage.setItem(
-        "clinicaId",
-        clinicaDados.id
-    );
+        enderecoClinica.innerHTML = `
+            <i class="fa-solid fa-location-dot"></i>
+            ${clinica.endereco} - ${clinica.regiao}, Campinas
+        `;
 
-    localStorage.setItem(
-        "clinicaDados",
-        JSON.stringify(clinicaDados)
-    );
+        telefoneClinica.innerHTML = `
+            <i class="fa-solid fa-phone"></i>
+            ${clinica.telefone || "Não informado"}
+        `;
 
-    localStorage.setItem(
-        "servicosClinica",
-        JSON.stringify(servicosClinica)
-    );
+        horarioClinica.innerHTML = `
+            <i class="fa-regular fa-clock"></i>
+            ${clinica.horario_atendimento}
+        `;
 
-    const btnAgendar =
-        document.getElementById("btnAgendar");
+        localStorage.setItem(
+            "clinica",
+            clinica.nome
+        );
 
-    if (btnAgendar) {
+        localStorage.setItem(
+            "clinicaId",
+            clinica.id
+        );
 
-        btnAgendar.addEventListener("click", (event) => {
+        localStorage.setItem(
+            "clinicaDados",
+            JSON.stringify(clinica)
+        );
 
-            event.preventDefault();
+        const respostaServicos = await fetch(
+            `http://localhost:3000/api/clinicas/${clinicaId}/servicos`
+        );
 
-            const tutorSalvo =
-                localStorage.getItem("tutor");
+        if (respostaServicos.ok) {
 
-            const petsSalvos =
-                localStorage.getItem("pets");
+            const servicos = await respostaServicos.json();
 
-            let cadastroCompleto = false;
+            const consulta = servicos.find(
+                servico => servico.tipo === "Consulta"
+            );
 
-            try {
+            if (consulta) {
 
-                const tutor =
-                    tutorSalvo
-                        ? JSON.parse(tutorSalvo)
-                        : null;
-
-                const pets =
-                    petsSalvos
-                        ? JSON.parse(petsSalvos)
-                        : [];
-
-                cadastroCompleto =
-                    tutor &&
-                    tutor.nome &&
-                    tutor.cpf &&
-                    tutor.telefone &&
-                    tutor.email &&
-                    tutor.endereco &&
-                    Array.isArray(pets) &&
-                    pets.length > 0;
-
-            } catch (erro) {
-
-                cadastroCompleto = false;
-
-            }
-
-            if (cadastroCompleto) {
-
-                window.location.href =
-                    "dataehorario.html";
+                precoConsulta.textContent =
+                    `R$ ${Number(consulta.preco).toFixed(2).replace(".", ",")}`;
 
             } else {
 
-                window.location.href =
-                    "cadastro.html";
+                precoConsulta.textContent =
+                    "Consultar";
 
             }
 
-        });
+            const exames = servicos.filter(
+                servico => servico.tipo === "Exame"
+            );
+
+            listaServicos.innerHTML = "";
+
+            if (exames.length === 0) {
+
+                listaServicos.innerHTML = `
+                    <p>
+                        Nenhum exame disponível.
+                    </p>
+                `;
+
+            } else {
+
+                exames.forEach(servico => {
+
+                    const exame = document.createElement("div");
+
+                    exame.className = "exame";
+
+                    exame.textContent =
+                        `${servico.nome} - R$ ${Number(servico.preco).toFixed(2).replace(".", ",")}`;
+
+                    listaServicos.appendChild(exame);
+
+                });
+
+            }
+
+            localStorage.setItem(
+                "servicosClinica",
+                JSON.stringify(servicos)
+            );
+        }
+
+        const respostaVeterinarios = await fetch(
+            `http://localhost:3000/api/clinicas/${clinicaId}/veterinarios`
+        );
+
+        if (respostaVeterinarios.ok) {
+
+            const veterinarios =
+                await respostaVeterinarios.json();
+
+            listaVeterinarios.innerHTML = "";
+
+            if (veterinarios.length === 0) {
+
+                listaVeterinarios.innerHTML = `
+                    <p>
+                        Nenhum veterinário cadastrado.
+                    </p>
+                `;
+
+            } else {
+
+                veterinarios.forEach(veterinario => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className = "vet-card";
+
+                    const nome =
+                        document.createElement("span");
+
+                    nome.textContent =
+                        `${veterinario.nome} - ${veterinario.especialidade || "Clínica Geral"}`;
+
+                    const status =
+                        document.createElement("button");
+
+                    status.type = "button";
+
+                    status.className =
+                        veterinario.disponivel
+                            ? "status disponivel"
+                            : "status";
+
+                    status.textContent =
+                        veterinario.disponivel
+                            ? "Disponível"
+                            : "Indisponível";
+
+                    card.appendChild(nome);
+                    card.appendChild(status);
+
+                    listaVeterinarios.appendChild(card);
+
+                });
+
+            }
+
+        }
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        nomeClinica.innerHTML = `
+            <i class="fa-solid fa-hospital"></i>
+            Erro ao carregar clínica
+        `;
 
     }
+
+    btnAgendar.addEventListener("click", event => {
+
+        event.preventDefault();
+
+        const tutorSalvo =
+            localStorage.getItem("tutor");
+
+        const petsSalvos =
+            localStorage.getItem("pets");
+
+        let cadastroCompleto = false;
+
+        try {
+
+            const tutor =
+                tutorSalvo
+                    ? JSON.parse(tutorSalvo)
+                    : null;
+
+            const pets =
+                petsSalvos
+                    ? JSON.parse(petsSalvos)
+                    : [];
+
+            cadastroCompleto =
+                tutor &&
+                tutor.nome &&
+                tutor.cpf &&
+                tutor.telefone &&
+                tutor.email &&
+                tutor.endereco &&
+                Array.isArray(pets) &&
+                pets.length > 0;
+
+        } catch (erro) {
+
+            cadastroCompleto = false;
+
+        }
+
+        if (cadastroCompleto) {
+
+            window.location.href =
+                "dataehorario.html";
+
+        } else {
+
+            window.location.href =
+                "cadastro.html";
+
+        }
+
+    });
 
 });
 
