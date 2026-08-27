@@ -1,17 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
 
-    const clinicaDados = JSON.parse(
-        localStorage.getItem("clinicaDados")
-    ) || {};
+document.addEventListener("DOMContentLoaded", async () => {
 
-    const elementoClinica =
-        document.getElementById("nomeClinica");
-
-    if (elementoClinica) {
-        elementoClinica.textContent =
-            clinicaDados.nome || "Clínica Veterinária";
-    }
-
+    const API_URL = "http://localhost:3000/api";
 
     const listaConsultas =
         document.getElementById("listaConsultas");
@@ -22,148 +12,259 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnContinuar =
         document.getElementById("btnContinuar");
 
+    const nomeClinica =
+        document.getElementById("nomeClinica");
 
-    let servicoSelecionado = null;
+    const parametros =
+        new URLSearchParams(window.location.search);
 
+    const clinicaId =
+        parametros.get("clinica_id") ||
+        sessionStorage.getItem("clinica_id") ||
+        localStorage.getItem("clinicaId");
 
-    const servicosSalvos =
-        localStorage.getItem("servicosClinica");
+    if (!clinicaId) {
 
-    let servicos = [];
-
-    if (servicosSalvos) {
-
-        try {
-
-            servicos = JSON.parse(servicosSalvos);
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar os serviços:",
-                erro
-            );
-
-            servicos = [];
-
+        if (nomeClinica) {
+            nomeClinica.textContent =
+                "Clínica não identificada";
         }
-
-    }
-
-
-    if (btnContinuar) {
-        btnContinuar.disabled = true;
-    }
-
-
-    if (servicos.length === 0) {
 
         if (listaConsultas) {
             listaConsultas.innerHTML =
-                "<p>Nenhuma consulta disponível nesta clínica.</p>";
+                "<p>Não foi possível identificar a clínica.</p>";
         }
 
         if (listaExames) {
             listaExames.innerHTML =
-                "<p>Nenhum exame disponível nesta clínica.</p>";
+                "<p>Não foi possível identificar a clínica.</p>";
         }
 
         return;
     }
 
+    let servicoSelecionado = null;
 
-    servicos.forEach(servico => {
+    try {
 
-        const card =
-            document.createElement("div");
-
-        card.className = "servico-card";
-
-
-        const icone =
-            servico.tipo === "Consulta"
-                ? "fa-stethoscope"
-                : "fa-vial";
-
-
-        card.innerHTML = `
-
-            <button type="button" class="servico">
-
-                <div class="icone">
-                    <i class="fa-solid ${icone}"></i>
-                </div>
-
-                <div class="info">
-
-                    <h3>
-                        ${servico.nome}
-                    </h3>
-
-                    <p>
-                        <i class="fa-solid fa-user-doctor"></i>
-                        ${servico.veterinario}
-                    </p>
-
-                </div>
-
-                <span class="preco">
-                    ${servico.preco}
-                </span>
-
-            </button>
-
-        `;
-
-
-        const botao =
-            card.querySelector(".servico");
-
-
-        botao.addEventListener("click", () => {
-
-            document
-                .querySelectorAll(".servico")
-                .forEach(item => {
-
-                    item.classList.remove(
-                        "selecionado"
-                    );
-
-                });
-
-
-            botao.classList.add(
-                "selecionado"
+        const respostaClinica =
+            await fetch(
+                `${API_URL}/clinicas/${clinicaId}`
             );
 
+        if (!respostaClinica.ok) {
+            throw new Error(
+                "Não foi possível carregar os dados da clínica."
+            );
+        }
 
-            servicoSelecionado = servico;
+        const clinica =
+            await respostaClinica.json();
 
+        if (nomeClinica) {
+            nomeClinica.textContent =
+                clinica.nome || "Clínica Veterinária";
+        }
 
-            if (btnContinuar) {
-                btnContinuar.disabled = false;
+        const respostaServicos =
+            await fetch(
+                `${API_URL}/clinicas/${clinicaId}/servicos`
+            );
+
+        if (!respostaServicos.ok) {
+            throw new Error(
+                "Não foi possível carregar os serviços."
+            );
+        }
+
+        const servicos =
+            await respostaServicos.json();
+
+        if (!Array.isArray(servicos) || servicos.length === 0) {
+
+            if (listaConsultas) {
+                listaConsultas.innerHTML =
+                    "<p>Nenhuma consulta disponível nesta clínica.</p>";
+            }
+
+            if (listaExames) {
+                listaExames.innerHTML =
+                    "<p>Nenhum exame disponível nesta clínica.</p>";
+            }
+
+            return;
+        }
+
+        if (listaConsultas) {
+            listaConsultas.innerHTML = "";
+        }
+
+        if (listaExames) {
+            listaExames.innerHTML = "";
+        }
+
+        let encontrouConsulta = false;
+        let encontrouExame = false;
+
+        servicos.forEach(servico => {
+
+            const card =
+                document.createElement("div");
+
+            card.className = "servico-card";
+
+            const botao =
+                document.createElement("button");
+
+            botao.type = "button";
+            botao.className = "servico";
+
+            const icone =
+                servico.tipo === "Consulta"
+                    ? "fa-stethoscope"
+                    : "fa-vial";
+
+            const divIcone =
+                document.createElement("div");
+
+            divIcone.className = "icone";
+
+            const i =
+                document.createElement("i");
+
+            i.className =
+                `fa-solid ${icone}`;
+
+            divIcone.appendChild(i);
+
+            const divInfo =
+                document.createElement("div");
+
+            divInfo.className = "info";
+
+            const h3 =
+                document.createElement("h3");
+
+            h3.textContent =
+                servico.nome || "Serviço";
+
+            const p =
+                document.createElement("p");
+
+            const iVeterinario =
+                document.createElement("i");
+
+            iVeterinario.className =
+                "fa-solid fa-user-doctor";
+
+            p.appendChild(iVeterinario);
+
+            p.appendChild(
+                document.createTextNode(
+                    ` ${servico.veterinario || "Veterinário não informado"}`
+                )
+            );
+
+            divInfo.appendChild(h3);
+            divInfo.appendChild(p);
+
+            const spanPreco =
+                document.createElement("span");
+
+            spanPreco.className = "preco";
+
+            const preco =
+                Number(servico.preco);
+
+            if (!isNaN(preco)) {
+
+                spanPreco.textContent =
+                    `R$ ${preco.toFixed(2).replace(".", ",")}`;
+
+            } else {
+
+                spanPreco.textContent =
+                    servico.preco || "Consultar";
+
+            }
+
+            botao.appendChild(divIcone);
+            botao.appendChild(divInfo);
+            botao.appendChild(spanPreco);
+
+            card.appendChild(botao);
+
+            botao.addEventListener("click", () => {
+
+                document
+                    .querySelectorAll(".servico")
+                    .forEach(item => {
+                        item.classList.remove("selecionado");
+                    });
+
+                botao.classList.add("selecionado");
+
+                servicoSelecionado = servico;
+
+                if (btnContinuar) {
+                    btnContinuar.disabled = false;
+                }
+            });
+
+            if (servico.tipo === "Consulta") {
+
+                encontrouConsulta = true;
+
+                if (listaConsultas) {
+                    listaConsultas.appendChild(card);
+                }
+
+            } else {
+
+                encontrouExame = true;
+
+                if (listaExames) {
+                    listaExames.appendChild(card);
+                }
+
             }
 
         });
 
+        if (!encontrouConsulta && listaConsultas) {
 
-        if (servico.tipo === "Consulta") {
-
-            if (listaConsultas) {
-                listaConsultas.appendChild(card);
-            }
-
-        } else {
-
-            if (listaExames) {
-                listaExames.appendChild(card);
-            }
+            listaConsultas.innerHTML =
+                "<p>Nenhuma consulta disponível nesta clínica.</p>";
 
         }
 
-    });
+        if (!encontrouExame && listaExames) {
 
+            listaExames.innerHTML =
+                "<p>Nenhum exame disponível nesta clínica.</p>";
+
+        }
+
+    } catch (erro) {
+
+        console.error(erro);
+
+        if (listaConsultas) {
+            listaConsultas.innerHTML =
+                "<p>Erro ao carregar as consultas.</p>";
+        }
+
+        if (listaExames) {
+            listaExames.innerHTML =
+                "<p>Erro ao carregar os exames.</p>";
+        }
+
+        if (nomeClinica) {
+            nomeClinica.textContent =
+                "Erro ao carregar clínica";
+        }
+
+    }
 
     if (btnContinuar) {
 
@@ -178,42 +279,62 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            sessionStorage.setItem(
+                "servico_id",
+                servicoSelecionado.id
+            );
 
-            localStorage.setItem(
-                "servico",
+            sessionStorage.setItem(
+                "servico_nome",
                 servicoSelecionado.nome
             );
 
-
-            localStorage.setItem(
-                "precoServico",
+            sessionStorage.setItem(
+                "servico_preco",
                 servicoSelecionado.preco
             );
 
-
-            localStorage.setItem(
-                "veterinario",
-                servicoSelecionado.veterinario
-            );
-
-
-            localStorage.setItem(
-                "tipoServico",
+            sessionStorage.setItem(
+                "servico_tipo",
                 servicoSelecionado.tipo
             );
 
-
-            localStorage.setItem(
-                "servicoId",
-                servicoSelecionado.id || ""
+            sessionStorage.setItem(
+                "veterinario_id",
+                servicoSelecionado.veterinario_id || ""
             );
 
+            sessionStorage.setItem(
+                "veterinario",
+                servicoSelecionado.veterinario || ""
+            );
 
-            window.location.href =
-                "petetransporte.html";
+            const parametros =
+                new URLSearchParams(window.location.search);
+
+            const clinicaId =
+                parametros.get("clinica_id") ||
+                sessionStorage.getItem("clinica_id") ||
+                localStorage.getItem("clinicaId");
+
+            const tutorId =
+                parametros.get("tutor_id") ||
+                sessionStorage.getItem("tutor_id") ||
+                localStorage.getItem("tutorId");
+
+            let url =
+                `petetransporte.html?clinica_id=${encodeURIComponent(clinicaId)}`;
+
+            if (tutorId) {
+                url +=
+                    `&tutor_id=${encodeURIComponent(tutorId)}`;
+            }
+
+            window.location.href = url;
 
         });
 
     }
 
 });
+

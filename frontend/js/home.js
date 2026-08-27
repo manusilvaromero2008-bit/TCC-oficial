@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
+    const API_URL = "http://localhost:3000/api";
+
     const pesquisa = document.getElementById("pesquisa");
     const regiao = document.getElementById("regiao");
     const listaClinicas = document.getElementById("listaClinicas");
@@ -12,101 +15,144 @@ document.addEventListener("DOMContentLoaded", async () => {
         4: "pethealth.html"
     };
 
-    const precosClinicas = {
-        1: "R$ 120",
-        2: "R$ 150",
-        3: "R$ 100",
-        4: "R$ 130"
-    };
+    async function carregarClinicas() {
+        try {
 
-    const classesClinicas = {
-        1: "petvida",
-        2: "animalcare",
-        3: "vetcare",
-        4: "pethealth"
-    };
+            listaClinicas.innerHTML = `
+                <p class="mensagem-carregando">
+                    Carregando clínicas...
+                </p>
+            `;
 
-    try {
-        const resposta = await fetch("http://localhost:3000/api/clinicas");
+            const resposta = await fetch(`${API_URL}/clinicas`);
 
-        if (!resposta.ok) {
-            throw new Error("Erro ao buscar clínicas.");
+            if (!resposta.ok) {
+                throw new Error(`Erro HTTP: ${resposta.status}`);
+            }
+
+            const dados = await resposta.json();
+
+            console.log("CLÍNICAS RECEBIDAS:", dados);
+
+            if (!Array.isArray(dados)) {
+                throw new Error("A API não retornou uma lista de clínicas.");
+            }
+
+            clinicas = dados;
+
+            renderizarClinicas(clinicas);
+
+        } catch (erro) {
+
+            console.error("Erro ao carregar clínicas:", erro);
+
+            listaClinicas.innerHTML = `
+                <p class="mensagem-erro">
+                    Não foi possível carregar as clínicas.
+                    <br>
+                    Verifique se o servidor está rodando.
+                </p>
+            `;
         }
-
-        clinicas = await resposta.json();
-
-        renderizarClinicas(clinicas);
-
-    } catch (erro) {
-        console.error(erro);
-
-        listaClinicas.innerHTML = `
-            <p class="mensagem-erro">
-                Não foi possível carregar as clínicas.
-            </p>
-        `;
-
-        return;
     }
 
     function renderizarClinicas(lista) {
+
         listaClinicas.innerHTML = "";
 
+        if (lista.length === 0) {
+
+            listaClinicas.innerHTML = `
+                <p class="mensagem-erro">
+                    Nenhuma clínica encontrada.
+                </p>
+            `;
+
+            return;
+        }
+
         lista.forEach(clinica => {
+
             const cardLink = document.createElement("a");
 
             cardLink.className = "card-link";
 
-            const pagina = paginasClinicas[clinica.id];
+            const pagina = paginasClinicas[Number(clinica.id)];
 
             if (pagina) {
-                cardLink.href = `./frontend/pages/${pagina}?id=${clinica.id}`;
+                cardLink.href =
+                    `./frontend/pages/${pagina}?id=${clinica.id}`;
+            } else {
+                cardLink.href =
+                    `./frontend/pages/clinica.html?id=${clinica.id}`;
             }
 
             const card = document.createElement("div");
 
             card.className = "card";
 
-            card.dataset.regiao = clinica.regiao;
+            card.dataset.regiao = clinica.regiao || "";
             card.dataset.clinica = clinica.id;
 
-            const classeClinica =
-                classesClinicas[clinica.id] || "";
+            let classeClinica = "";
 
-            const precoConsulta =
-                precosClinicas[clinica.id] || "Consultar";
+            switch (Number(clinica.id)) {
+
+                case 1:
+                    classeClinica = "petvida";
+                    break;
+
+                case 2:
+                    classeClinica = "animalcare";
+                    break;
+
+                case 3:
+                    classeClinica = "vetcare";
+                    break;
+
+                case 4:
+                    classeClinica = "pethealth";
+                    break;
+            }
 
             card.innerHTML = `
                 <div class="topo-card ${classeClinica}">
-                    <h2>${clinica.nome}</h2>
+
+                    <h2>
+                        ${escaparHTML(clinica.nome)}
+                    </h2>
 
                     <p>
                         <i class="fa-solid fa-location-dot"></i>
-                        ${clinica.regiao}
+                        ${escaparHTML(
+                            clinica.regiao || "Região não informada"
+                        )}
                     </p>
+
                 </div>
 
                 <div class="conteudo">
 
                     <p>
                         <i class="fa-solid fa-map-location-dot"></i>
-                        ${clinica.endereco}
+                        ${escaparHTML(
+                            clinica.endereco || "Endereço não informado"
+                        )}
                     </p>
 
                     <p>
                         <i class="fa-solid fa-phone"></i>
-                        ${clinica.telefone || "Não informado"}
+                        ${escaparHTML(
+                            clinica.telefone || "Não informado"
+                        )}
                     </p>
 
                     <p>
                         <i class="fa-regular fa-clock"></i>
-                        ${clinica.horario_atendimento}
+                        ${escaparHTML(
+                            clinica.horario_atendimento || "Não informado"
+                        )}
                     </p>
-
-                    <div class="info-extra">
-                        <span>Consulta</span>
-                        <strong>${precoConsulta}</strong>
-                    </div>
 
                 </div>
             `;
@@ -116,41 +162,109 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
     }
 
-    function filtrar() {
-        const texto = pesquisa.value
-            .toLowerCase()
-            .trim();
+    function escaparHTML(valor) {
 
-        const filtroRegiao = regiao.value
-            .toLowerCase();
+        if (valor === null || valor === undefined) {
+            return "";
+        }
 
-        const cards = document.querySelectorAll(".card-link");
+        const elemento = document.createElement("div");
+
+        elemento.textContent = String(valor);
+
+        return elemento.innerHTML;
+    }
+
+    function filtrarClinicas() {
+
+        const texto = pesquisa
+            ? pesquisa.value.toLowerCase().trim()
+            : "";
+
+        const filtroRegiao = regiao
+            ? regiao.value.toLowerCase().trim()
+            : "todas";
+
+        const cards =
+            document.querySelectorAll(".card-link");
+
+        let quantidadeVisivel = 0;
 
         cards.forEach(cardLink => {
-            const card = cardLink.querySelector(".card");
 
-            const nome = card
-                .querySelector("h2")
-                .textContent
-                .toLowerCase();
+            const card =
+                cardLink.querySelector(".card");
 
-            const regiaoCard = card
-                .dataset.regiao
-                .toLowerCase();
+            if (!card) {
+                return;
+            }
 
-            const nomeCorreto = nome.includes(texto);
+            const titulo =
+                card.querySelector("h2");
+
+            const nome =
+                titulo
+                    ? titulo.textContent.toLowerCase().trim()
+                    : "";
+
+            const regiaoCard =
+                (card.dataset.regiao || "")
+                    .toLowerCase()
+                    .trim();
+
+            const nomeCorreto =
+                nome.includes(texto);
 
             const regiaoCorreta =
                 filtroRegiao === "todas" ||
                 regiaoCard === filtroRegiao;
 
+            const deveMostrar =
+                nomeCorreto && regiaoCorreta;
+
             cardLink.style.display =
-                nomeCorreto && regiaoCorreta
-                    ? "block"
-                    : "none";
+                deveMostrar ? "" : "none";
+
+            if (deveMostrar) {
+                quantidadeVisivel++;
+            }
         });
+
+        let mensagem =
+            document.getElementById("mensagemFiltro");
+
+        if (quantidadeVisivel === 0) {
+
+            if (!mensagem) {
+
+                mensagem = document.createElement("p");
+
+                mensagem.id = "mensagemFiltro";
+
+                mensagem.className = "mensagem-erro";
+
+                listaClinicas.appendChild(mensagem);
+            }
+
+            mensagem.textContent =
+                "Nenhuma clínica encontrada.";
+
+        } else {
+
+            if (mensagem) {
+                mensagem.remove();
+            }
+        }
     }
 
-    pesquisa.addEventListener("input", filtrar);
-    regiao.addEventListener("change", filtrar);
+    if (pesquisa) {
+        pesquisa.addEventListener("input", filtrarClinicas);
+    }
+
+    if (regiao) {
+        regiao.addEventListener("change", filtrarClinicas);
+    }
+
+    await carregarClinicas();
+
 });

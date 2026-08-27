@@ -1,130 +1,94 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    const API_URL = "http://localhost:3000/api";
+
     const container = document.getElementById("pets");
     const btnAdicionar = document.getElementById("adicionarPet");
     const btnProsseguir = document.getElementById("btnProsseguir");
+    const formCadastro = document.getElementById("formCadastro");
 
-    if (!container || !btnAdicionar || !btnProsseguir) {
-        console.error("Elementos do cadastro não foram encontrados.");
+    if (
+        !container ||
+        !btnAdicionar ||
+        !btnProsseguir ||
+        !formCadastro
+    ) {
+        console.error(
+            "Elementos do cadastro não foram encontrados."
+        );
+
         return;
     }
 
+
+    /*
+    ============================================================
+    ID DO TUTOR
+    ============================================================
+    */
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    let tutorId =
+        parametros.get("tutor_id");
+
+
+    /*
+    ============================================================
+    CONTADOR DOS PETS
+    ============================================================
+    */
+
     let contador = 1;
 
-    let tutorSalvo = null;
-    let petsSalvos = [];
 
+    /*
+    ============================================================
+    ESCAPAR HTML
+    ============================================================
+    */
 
-    try {
+    function escaparHTML(valor) {
 
-        const tutorStorage =
-            localStorage.getItem("tutor");
-
-        if (tutorStorage) {
-            tutorSalvo = JSON.parse(tutorStorage);
+        if (
+            valor === null ||
+            valor === undefined
+        ) {
+            return "";
         }
 
-    } catch (erro) {
-
-        console.error(
-            "Erro ao ler os dados do tutor:",
-            erro
-        );
-
-        localStorage.removeItem("tutor");
-
-        tutorSalvo = null;
+        return String(valor)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 
 
-    try {
+    /*
+    ============================================================
+    CRIAR CARD DE PET
+    ============================================================
+    */
 
-        const petsStorage =
-            localStorage.getItem("pets");
-
-        if (petsStorage) {
-            petsSalvos = JSON.parse(petsStorage);
-        }
-
-        if (!Array.isArray(petsSalvos)) {
-            petsSalvos = [];
-        }
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao ler os pets:",
-            erro
-        );
-
-        localStorage.removeItem("pets");
-
-        petsSalvos = [];
-    }
-
-
-    if (tutorSalvo) {
-
-        const nomeTutor =
-            document.getElementById("nomeTutor");
-
-        const cpfTutor =
-            document.getElementById("cpfTutor");
-
-        const telefoneTutor =
-            document.getElementById("telefoneTutor");
-
-        const emailTutor =
-            document.getElementById("emailTutor");
-
-        const enderecoTutor =
-            document.getElementById("enderecoTutor");
-
-        const cep =
-            document.getElementById("cep");
-
-
-        if (nomeTutor) {
-            nomeTutor.value =
-                tutorSalvo.nome || "";
-        }
-
-        if (cpfTutor) {
-            cpfTutor.value =
-                tutorSalvo.cpf || "";
-        }
-
-        if (telefoneTutor) {
-            telefoneTutor.value =
-                tutorSalvo.telefone || "";
-        }
-
-        if (emailTutor) {
-            emailTutor.value =
-                tutorSalvo.email || "";
-        }
-
-        if (enderecoTutor) {
-            enderecoTutor.value =
-                tutorSalvo.endereco || "";
-        }
-
-        if (cep) {
-            cep.value =
-                tutorSalvo.cep || "";
-        }
-    }
-
-
-    function criarPet(pet = {}, numero = 1) {
+    function criarPet(
+        pet = {},
+        numero = 1
+    ) {
 
         const novoPet =
             document.createElement("div");
 
         novoPet.className = "pet";
 
-        novoPet.innerHTML = `
+        novoPet.dataset.petId =
+            pet.id || "";
 
+        novoPet.innerHTML = `
             <h3>
                 <i class="fa-solid fa-paw"></i>
                 Pet ${numero}
@@ -142,7 +106,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         type="text"
                         class="nomePet"
                         placeholder="Nome do pet"
-                        value="${pet.nome || ""}"
+                        value="${escaparHTML(
+                            pet.nome || ""
+                        )}"
                         required
                     >
 
@@ -195,7 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         type="text"
                         class="racaPet"
                         placeholder="Raça"
-                        value="${pet.raca || ""}"
+                        value="${escaparHTML(
+                            pet.raca || ""
+                        )}"
                         required
                     >
 
@@ -212,7 +180,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         type="text"
                         class="idadePet"
                         placeholder="Ex: 2 anos"
-                        value="${pet.idade || ""}"
+                        value="${escaparHTML(
+                            pet.idade || ""
+                        )}"
                         required
                     >
 
@@ -253,7 +223,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         type="text"
                         class="pesoPet"
                         placeholder="Ex: 5 kg"
-                        value="${pet.peso || ""}"
+                        value="${escaparHTML(
+                            pet.peso || ""
+                        )}"
                         required
                     >
 
@@ -262,9 +234,10 @@ document.addEventListener("DOMContentLoaded", () => {
             </div>
         `;
 
-
         const especie =
-            novoPet.querySelector(".especiePet");
+            novoPet.querySelector(
+                ".especiePet"
+            );
 
         if (pet.especie) {
             especie.value =
@@ -273,7 +246,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
         const sexo =
-            novoPet.querySelector(".sexoPet");
+            novoPet.querySelector(
+                ".sexoPet"
+            );
 
         if (pet.sexo) {
             sexo.value =
@@ -281,33 +256,170 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
 
-        container.appendChild(novoPet);
+        container.appendChild(
+            novoPet
+        );
     }
 
 
-    if (petsSalvos.length > 0) {
+    /*
+    ============================================================
+    CARREGAR TUTOR
+    ============================================================
+    */
 
-        const primeiroPet =
-            container.querySelector(".pet");
+    async function carregarTutor() {
 
-        if (primeiroPet) {
-            primeiroPet.remove();
+        if (!tutorId) {
+            return;
         }
 
+        try {
 
-        petsSalvos.forEach((pet, index) => {
+            const resposta =
+                await fetch(
+                    `${API_URL}/tutores/${tutorId}`
+                );
 
-            criarPet(
-                pet,
-                index + 1
+            const resultado =
+                await resposta.json();
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    resultado.mensagem ||
+                    "Não foi possível carregar o tutor."
+                );
+            }
+
+
+            document.getElementById(
+                "nomeTutor"
+            ).value =
+                resultado.nome || "";
+
+
+            document.getElementById(
+                "cpfTutor"
+            ).value =
+                resultado.cpf || "";
+
+
+            document.getElementById(
+                "telefoneTutor"
+            ).value =
+                resultado.telefone || "";
+
+
+            document.getElementById(
+                "emailTutor"
+            ).value =
+                resultado.email || "";
+
+
+            document.getElementById(
+                "enderecoTutor"
+            ).value =
+                resultado.endereco || "";
+
+
+            document.getElementById(
+                "cep"
+            ).value =
+                resultado.cep || "";
+
+
+            await carregarPets();
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar tutor:",
+                erro
             );
 
-            contador =
-                index + 1;
-        });
-
+            alert(
+                erro.message ||
+                "Não foi possível carregar os dados."
+            );
+        }
     }
 
+
+    /*
+    ============================================================
+    CARREGAR PETS
+    ============================================================
+    */
+
+    async function carregarPets() {
+
+        if (!tutorId) {
+            return;
+        }
+
+        try {
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/tutores/${tutorId}/pets`
+                );
+
+            const pets =
+                await resposta.json();
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    pets.mensagem ||
+                    "Não foi possível carregar os pets."
+                );
+            }
+
+
+            if (
+                !Array.isArray(pets) ||
+                pets.length === 0
+            ) {
+                return;
+            }
+
+
+            container.innerHTML = "";
+
+            pets.forEach(
+                (pet, index) => {
+
+                    criarPet(
+                        pet,
+                        index + 1
+                    );
+
+                    contador =
+                        index + 1;
+                }
+            );
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar pets:",
+                erro
+            );
+
+            alert(
+                erro.message ||
+                "Não foi possível carregar os pets."
+            );
+        }
+    }
+
+
+    /*
+    ============================================================
+    ADICIONAR PET
+    ============================================================
+    */
 
     btnAdicionar.addEventListener(
         "click",
@@ -324,215 +436,509 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
 
+    /*
+    ============================================================
+    SALVAR CADASTRO
+    ============================================================
+    */
+
     btnProsseguir.addEventListener(
         "click",
-        () => {
+        async () => {
 
-            const nomeTutor =
-                document
-                    .getElementById("nomeTutor")
-                    ?.value
-                    .trim() || "";
+            if (!formCadastro.checkValidity()) {
 
-            const cpfTutor =
-                document
-                    .getElementById("cpfTutor")
-                    ?.value
-                    .trim() || "";
-
-            const telefoneTutor =
-                document
-                    .getElementById("telefoneTutor")
-                    ?.value
-                    .trim() || "";
-
-            const emailTutor =
-                document
-                    .getElementById("emailTutor")
-                    ?.value
-                    .trim() || "";
-
-            const enderecoTutor =
-                document
-                    .getElementById("enderecoTutor")
-                    ?.value
-                    .trim() || "";
-
-            const cep =
-                document
-                    .getElementById("cep")
-                    ?.value
-                    .trim() || "";
-
-
-            if (
-                nomeTutor === "" ||
-                cpfTutor === "" ||
-                telefoneTutor === "" ||
-                emailTutor === "" ||
-                enderecoTutor === ""
-            ) {
-
-                alert(
-                    "Preencha todos os dados obrigatórios do tutor."
-                );
+                formCadastro.reportValidity();
 
                 return;
             }
 
 
+            /*
+            ----------------------------------------------------
+            DADOS DO TUTOR
+            ----------------------------------------------------
+            */
+
+            const dadosTutor = {
+
+                nome:
+                    document.getElementById(
+                        "nomeTutor"
+                    ).value.trim(),
+
+                cpf:
+                    document.getElementById(
+                        "cpfTutor"
+                    ).value.trim(),
+
+                telefone:
+                    document.getElementById(
+                        "telefoneTutor"
+                    ).value.trim(),
+
+                email:
+                    document.getElementById(
+                        "emailTutor"
+                    ).value.trim(),
+
+                endereco:
+                    document.getElementById(
+                        "enderecoTutor"
+                    ).value.trim(),
+
+                cep:
+                    document.getElementById(
+                        "cep"
+                    ).value.trim()
+            };
+
+
+            /*
+            ----------------------------------------------------
+            DADOS DOS PETS
+            ----------------------------------------------------
+            */
+
+            const cardsPets =
+                container.querySelectorAll(
+                    ".pet"
+                );
+
             const pets = [];
 
-            const todosPets =
-                container.querySelectorAll(".pet");
+
+            cardsPets.forEach(
+                card => {
+
+                    const petId =
+                        card.dataset.petId ||
+                        null;
+
+                    const nome =
+                        card.querySelector(
+                            ".nomePet"
+                        ).value.trim();
+
+                    const especie =
+                        card.querySelector(
+                            ".especiePet"
+                        ).value;
+
+                    const raca =
+                        card.querySelector(
+                            ".racaPet"
+                        ).value.trim();
+
+                    const idade =
+                        card.querySelector(
+                            ".idadePet"
+                        ).value.trim();
+
+                    const sexo =
+                        card.querySelector(
+                            ".sexoPet"
+                        ).value;
+
+                    const peso =
+                        card.querySelector(
+                            ".pesoPet"
+                        ).value.trim();
 
 
-            todosPets.forEach(card => {
+                    pets.push({
 
-                const nome =
-                    card
-                        .querySelector(".nomePet")
-                        ?.value
-                        .trim() || "";
+                        id: petId,
 
-                const especie =
-                    card
-                        .querySelector(".especiePet")
-                        ?.value || "";
+                        nome,
 
-                const raca =
-                    card
-                        .querySelector(".racaPet")
-                        ?.value
-                        .trim() || "";
+                        especie,
 
-                const idade =
-                    card
-                        .querySelector(".idadePet")
-                        ?.value
-                        .trim() || "";
+                        raca,
 
-                const sexo =
-                    card
-                        .querySelector(".sexoPet")
-                        ?.value || "";
+                        idade,
 
-                const peso =
-                    card
-                        .querySelector(".pesoPet")
-                        ?.value
-                        .trim() || "";
+                        sexo,
 
-
-                if (
-                    nome === "" ||
-                    especie === "" ||
-                    raca === "" ||
-                    idade === "" ||
-                    sexo === "" ||
-                    peso === ""
-                ) {
-                    return;
+                        peso
+                    });
                 }
-
-
-                pets.push({
-
-                    nome: nome,
-
-                    especie: especie,
-
-                    raca: raca,
-
-                    idade: idade,
-
-                    sexo: sexo,
-
-                    peso: peso
-
-                });
-
-            });
+            );
 
 
             if (pets.length === 0) {
 
                 alert(
-                    "Cadastre pelo menos um pet com todos os dados obrigatórios."
+                    "Cadastre pelo menos um pet."
                 );
 
                 return;
             }
 
 
-            const quantidadePets =
-                todosPets.length;
+            const petIncompleto =
+                pets.some(
+                    pet =>
+                        !pet.nome ||
+                        !pet.especie ||
+                        !pet.raca ||
+                        !pet.idade ||
+                        !pet.sexo ||
+                        !pet.peso
+                );
 
 
-            if (pets.length !== quantidadePets) {
+            if (petIncompleto) {
 
                 alert(
-                    "Preencha todos os campos obrigatórios dos pets cadastrados."
+                    "Preencha todos os campos obrigatórios dos pets."
                 );
 
                 return;
             }
 
 
-            const tutor = {
+            /*
+            ----------------------------------------------------
+            BOTÃO SALVANDO
+            ----------------------------------------------------
+            */
 
-                nome: nomeTutor,
+            btnProsseguir.disabled =
+                true;
 
-                cpf: cpfTutor,
+            const textoOriginal =
+                btnProsseguir.innerHTML;
 
-                telefone: telefoneTutor,
-
-                email: emailTutor,
-
-                endereco: enderecoTutor,
-
-                cep: cep
-
-            };
+            btnProsseguir.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Salvando...
+            `;
 
 
             try {
 
-                localStorage.setItem(
-                    "tutor",
-                    JSON.stringify(tutor)
-                );
+                /*
+                =================================================
+                TUTOR EXISTENTE
+                =================================================
+                */
+
+                if (tutorId) {
+
+                    const respostaTutor =
+                        await fetch(
+                            `${API_URL}/tutores/${tutorId}`,
+                            {
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        dadosTutor
+                                    )
+                            }
+                        );
 
 
-                localStorage.setItem(
-                    "pets",
-                    JSON.stringify(pets)
-                );
+                    const resultadoTutor =
+                        await respostaTutor.json();
 
+
+                    if (!respostaTutor.ok) {
+
+                        throw new Error(
+                            resultadoTutor.mensagem ||
+                            "Erro ao atualizar tutor."
+                        );
+                    }
+
+
+                    /*
+                    ------------------------------------------------
+                    ATUALIZAR OU CADASTRAR PETS
+                    ------------------------------------------------
+                    */
+
+                    for (const pet of pets) {
+
+                        if (pet.id) {
+
+                            await atualizarPet(
+                                tutorId,
+                                pet
+                            );
+
+                        } else {
+
+                            await cadastrarPet(
+                                tutorId,
+                                pet
+                            );
+                        }
+                    }
+
+                }
+
+
+                /*
+                =================================================
+                NOVO TUTOR
+                =================================================
+                */
+
+                else {
+
+                    const respostaTutor =
+                        await fetch(
+                            `${API_URL}/tutores`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        dadosTutor
+                                    )
+                            }
+                        );
+
+
+                    const resultadoTutor =
+                        await respostaTutor.json();
+
+
+                    if (!respostaTutor.ok) {
+
+                        throw new Error(
+                            resultadoTutor.mensagem ||
+                            "Erro ao cadastrar tutor."
+                        );
+                    }
+
+
+                    tutorId =
+                        resultadoTutor.id;
+
+
+                    if (!tutorId) {
+
+                        throw new Error(
+                            "O servidor não retornou o ID do tutor."
+                        );
+                    }
+
+
+                    /*
+                    ------------------------------------------------
+                    CADASTRAR PETS
+                    ------------------------------------------------
+                    */
+
+                    for (const pet of pets) {
+
+                        await cadastrarPet(
+                            tutorId,
+                            pet
+                        );
+                    }
+                }
+
+
+                /*
+                =================================================
+                FINALIZADO
+                =================================================
+                */
 
                 alert(
                     "Cadastro salvo com sucesso!"
                 );
 
 
+                /*
+                IMPORTANTE:
+                O ID fica na URL, não no localStorage.
+                */
+
                 window.location.href =
-                    "perfil.html";
+                    `perfil.html?tutor_id=${encodeURIComponent(
+                        tutorId
+                    )}`;
 
 
             } catch (erro) {
 
                 console.error(
-                    "Erro ao salvar os dados:",
+                    "Erro ao salvar cadastro:",
                     erro
                 );
 
                 alert(
-                    "Não foi possível salvar os dados. Tente novamente."
+                    erro.message ||
+                    "Não foi possível salvar o cadastro."
                 );
 
-            }
+            } finally {
 
+                btnProsseguir.disabled =
+                    false;
+
+                btnProsseguir.innerHTML =
+                    textoOriginal;
+            }
         }
     );
+
+
+    /*
+    ============================================================
+    CADASTRAR PET
+    ============================================================
+    */
+
+    async function cadastrarPet(
+        idTutor,
+        pet
+    ) {
+
+        const resposta =
+            await fetch(
+                `${API_URL}/pets`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            tutor_id:
+                                Number(idTutor),
+
+                            nome:
+                                pet.nome,
+
+                            especie:
+                                pet.especie,
+
+                            raca:
+                                pet.raca,
+
+                            idade:
+                                pet.idade,
+
+                            sexo:
+                                pet.sexo,
+
+                            peso:
+                                pet.peso
+                        })
+                }
+            );
+
+
+        const resultado =
+            await resposta.json();
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                resultado.mensagem ||
+                `Erro ao cadastrar o pet ${pet.nome}.`
+            );
+        }
+
+
+        return resultado;
+    }
+
+
+    /*
+    ============================================================
+    ATUALIZAR PET
+    ============================================================
+    */
+
+    async function atualizarPet(
+        idTutor,
+        pet
+    ) {
+
+        const resposta =
+            await fetch(
+                `${API_URL}/pets/${pet.id}`,
+                {
+                    method: "PUT",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            tutor_id:
+                                Number(idTutor),
+
+                            nome:
+                                pet.nome,
+
+                            especie:
+                                pet.especie,
+
+                            raca:
+                                pet.raca,
+
+                            idade:
+                                pet.idade,
+
+                            sexo:
+                                pet.sexo,
+
+                            peso:
+                                pet.peso
+                        })
+                }
+            );
+
+
+        const resultado =
+            await resposta.json();
+
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                resultado.mensagem ||
+                `Erro ao atualizar o pet ${pet.nome}.`
+            );
+        }
+
+
+        return resultado;
+    }
+
+
+    /*
+    ============================================================
+    CARREGAR DADOS AUTOMATICAMENTE
+    ============================================================
+    */
+
+    carregarTutor();
 
 });

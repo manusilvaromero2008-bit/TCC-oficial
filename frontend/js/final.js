@@ -1,361 +1,289 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    const btnInicio =
-        document.getElementById("btnInicio");
 
-    const btnOutroPet =
-        document.getElementById("btnOutroPet");
+const API_URL = "http://localhost:3000/api";
 
-    let agendamento = null;
+const btnInicio =
+    document.getElementById("btnInicio");
 
-    const dadosFinal =
-        localStorage.getItem("agendamentoFinal");
+const btnOutroPet =
+    document.getElementById("btnOutroPet");
 
-    if (dadosFinal) {
+const elementoClinica =
+    document.getElementById("unidade");
 
-        try {
+const elementoPet =
+    document.getElementById("pet");
 
-            agendamento =
-                JSON.parse(dadosFinal);
+const elementoServico =
+    document.getElementById("servico");
 
-        } catch (erro) {
+const elementoData =
+    document.getElementById("data");
 
-            console.error(
-                "Erro ao ler agendamentoFinal:",
-                erro
-            );
+const elementoHorario =
+    document.getElementById("horario");
 
-        }
+const elementoTransporte =
+    document.getElementById("transporte");
 
+const parametros =
+    new URLSearchParams(window.location.search);
+
+const agendamentoId =
+    parametros.get("agendamento_id");
+
+const tutorId =
+    parametros.get("tutor_id");
+
+if (!agendamentoId || !tutorId) {
+
+    if (elementoClinica) {
+        elementoClinica.textContent =
+            "Agendamento não encontrado";
     }
 
-    if (!agendamento) {
+    if (elementoPet) {
+        elementoPet.textContent =
+            "Agendamento não encontrado";
+    }
 
-        const dadosAgendamento =
-            localStorage.getItem("agendamento");
+    if (elementoServico) {
+        elementoServico.textContent =
+            "Agendamento não encontrado";
+    }
 
-        if (dadosAgendamento) {
+    if (elementoData) {
+        elementoData.textContent =
+            "Agendamento não encontrado";
+    }
+
+    if (elementoHorario) {
+        elementoHorario.textContent =
+            "Agendamento não encontrado";
+    }
+
+    if (elementoTransporte) {
+        elementoTransporte.textContent =
+            "Não informado";
+    }
+
+    return;
+}
+
+function formatarData(data) {
+
+    if (!data) {
+        return "Data não informada";
+    }
+
+    const partes =
+        String(data).split("T")[0].split("-");
+
+    if (partes.length !== 3) {
+        return data;
+    }
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+function formatarHorario(horario) {
+
+    if (!horario) {
+        return "Horário não informado";
+    }
+
+    return String(horario).substring(0, 5);
+}
+
+async function carregarAgendamento() {
+
+    try {
+
+        const resposta = await fetch(
+            `${API_URL}/tutores/${tutorId}/agendamentos`
+        );
+
+        const agendamentos =
+            await resposta.json();
+
+        if (!resposta.ok) {
+
+            throw new Error(
+                agendamentos.mensagem ||
+                "Não foi possível carregar o agendamento."
+            );
+        }
+
+        const agendamento =
+            agendamentos.find(
+                item =>
+                    Number(item.id) ===
+                    Number(agendamentoId)
+            );
+
+        if (!agendamento) {
+
+            throw new Error(
+                "Agendamento não encontrado."
+            );
+        }
+
+        if (elementoClinica) {
+
+            elementoClinica.textContent =
+                agendamento.clinica ||
+                "Clínica não informada";
+        }
+
+        if (elementoPet) {
+
+            elementoPet.textContent =
+                agendamento.pet ||
+                "Pet não informado";
+        }
+
+        if (elementoServico) {
+
+            let textoServico =
+                agendamento.servico ||
+                "Serviço não informado";
+
+            elementoServico.textContent =
+                textoServico;
+        }
+
+        if (elementoData) {
+
+            elementoData.textContent =
+                formatarData(
+                    agendamento.data_agendamento
+                );
+        }
+
+        if (elementoHorario) {
+
+            elementoHorario.textContent =
+                formatarHorario(
+                    agendamento.horario
+                );
+        }
+
+        if (elementoTransporte) {
 
             try {
 
-                agendamento =
-                    JSON.parse(dadosAgendamento);
+                const respostaTransportes =
+                    await fetch(
+                        `${API_URL}/tutores/${tutorId}/agendamentos`
+                    );
+
+                if (respostaTransportes.ok) {
+
+                    const dados =
+                        await respostaTransportes.json();
+
+                    const agendamentoAtual =
+                        dados.find(
+                            item =>
+                                Number(item.id) ===
+                                Number(agendamentoId)
+                        );
+
+                    if (
+                        agendamentoAtual &&
+                        agendamentoAtual.observacoes &&
+                        String(
+                            agendamentoAtual.observacoes
+                        ).toLowerCase().includes("transporte")
+                    ) {
+
+                        elementoTransporte.textContent =
+                            "Solicitado";
+
+                    } else {
+
+                        elementoTransporte.textContent =
+                            "Não solicitado";
+                    }
+                } else {
+
+                    elementoTransporte.textContent =
+                        "Não informado";
+                }
 
             } catch (erro) {
 
                 console.error(
-                    "Erro ao ler agendamento:",
+                    "Erro ao verificar transporte:",
                     erro
                 );
 
+                elementoTransporte.textContent =
+                    "Não informado";
             }
-
-        }
-
-    }
-
-    if (!agendamento) {
-
-        console.error(
-            "Nenhum agendamento encontrado."
-        );
-
-        return;
-
-    }
-
-    const tutorSalvo =
-        localStorage.getItem("tutor");
-
-    if (tutorSalvo) {
-
-        try {
-
-            const tutor =
-                JSON.parse(tutorSalvo);
-
-            if (!agendamento.tutor) {
-
-                agendamento.tutor =
-                    tutor;
-
-            }
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar dados do tutor:",
-                erro
-            );
-
-        }
-
-    }
-
-    const elementoClinica =
-        document.getElementById("unidade");
-
-    if (elementoClinica) {
-
-        elementoClinica.textContent =
-            agendamento.clinica ||
-            agendamento.unidade ||
-            "Clínica não informada";
-
-    }
-
-    const elementoPet =
-        document.getElementById("pet");
-
-    if (elementoPet) {
-
-        let nomePet = "";
-
-        if (
-            agendamento.pet &&
-            typeof agendamento.pet === "object"
-        ) {
-
-            nomePet =
-                agendamento.pet.nome ||
-                "";
-
-        } else {
-
-            nomePet =
-                agendamento.pet ||
-                "";
-
-        }
-
-        elementoPet.textContent =
-            nomePet ||
-            "Pet não informado";
-
-    }
-
-    const elementoServico =
-        document.getElementById("servico");
-
-    if (elementoServico) {
-
-        let textoServico =
-            agendamento.servico ||
-            "Serviço não informado";
-
-        if (agendamento.preco) {
-
-            textoServico +=
-                " - " +
-                agendamento.preco;
-
-        }
-
-        elementoServico.textContent =
-            textoServico;
-
-    }
-
-    const elementoData =
-        document.getElementById("data");
-
-    if (elementoData) {
-
-        elementoData.textContent =
-            agendamento.data ||
-            "Data não informada";
-
-    }
-
-    const elementoHorario =
-        document.getElementById("horario");
-
-    if (elementoHorario) {
-
-        elementoHorario.textContent =
-            agendamento.horario ||
-            "Horário não informado";
-
-    }
-
-    const elementoTransporte =
-        document.getElementById("transporte");
-
-    if (elementoTransporte) {
-
-        if (
-            agendamento.transporte === true ||
-            agendamento.transporte === "true" ||
-            agendamento.transporte === "Sim" ||
-            agendamento.transporte === "sim"
-        ) {
-
-            elementoTransporte.textContent =
-                "Solicitado";
-
-        } else {
-
-            elementoTransporte.textContent =
-                "Não solicitado";
-
-        }
-
-    }
-
-    let agendamentos = [];
-
-    try {
-
-        const agendamentosSalvos =
-            localStorage.getItem("agendamentos");
-
-        if (agendamentosSalvos) {
-
-            agendamentos =
-                JSON.parse(
-                    agendamentosSalvos
-                );
-
-        }
-
-        if (!Array.isArray(agendamentos)) {
-
-            agendamentos = [];
-
         }
 
     } catch (erro) {
 
         console.error(
-            "Erro ao carregar agendamentos:",
+            "Erro ao carregar agendamento:",
             erro
         );
 
-        agendamentos = [];
+        if (elementoClinica) {
+            elementoClinica.textContent =
+                "Não foi possível carregar";
+        }
 
+        if (elementoPet) {
+            elementoPet.textContent =
+                "Não foi possível carregar";
+        }
+
+        if (elementoServico) {
+            elementoServico.textContent =
+                "Não foi possível carregar";
+        }
+
+        if (elementoData) {
+            elementoData.textContent =
+                "Não foi possível carregar";
+        }
+
+        if (elementoHorario) {
+            elementoHorario.textContent =
+                "Não foi possível carregar";
+        }
+
+        if (elementoTransporte) {
+            elementoTransporte.textContent =
+                "Não informado";
+        }
     }
+}
 
-    const petNome =
-        agendamento.pet &&
-        typeof agendamento.pet === "object"
-            ? agendamento.pet.nome
-            : agendamento.pet;
+if (btnInicio) {
 
-    const agendamentoExiste =
-        agendamentos.some(item => {
+    btnInicio.addEventListener("click", () => {
 
-            const itemPet =
-                item.pet &&
-                typeof item.pet === "object"
-                    ? item.pet.nome
-                    : item.pet;
+        window.location.href =
+            "../../home.html";
 
-            return (
-                item.data === agendamento.data &&
-                item.horario === agendamento.horario &&
-                itemPet === petNome &&
-                item.clinica === agendamento.clinica
-            );
+    });
+}
 
-        });
+if (btnOutroPet) {
 
-    if (!agendamentoExiste) {
+    btnOutroPet.addEventListener("click", () => {
 
-        agendamentos.push(
-            agendamento
-        );
+        window.location.href =
+            `dataehorario.html?tutor_id=${tutorId}`;
 
-        localStorage.setItem(
-            "agendamentos",
-            JSON.stringify(
-                agendamentos
-            )
-        );
+    });
+}
 
-    }
+await carregarAgendamento();
 
-    if (btnInicio) {
-
-        btnInicio.addEventListener(
-            "click",
-            () => {
-
-                window.location.href =
-                    "../../home.html";
-
-            }
-        );
-
-    }
-
-    if (btnOutroPet) {
-
-        btnOutroPet.addEventListener(
-            "click",
-            () => {
-
-                localStorage.removeItem(
-                    "agendamento"
-                );
-
-                localStorage.removeItem(
-                    "agendamentoFinal"
-                );
-
-                localStorage.removeItem(
-                    "petSelecionado"
-                );
-
-                localStorage.removeItem(
-                    "transporte"
-                );
-
-                localStorage.removeItem(
-                    "data"
-                );
-
-                localStorage.removeItem(
-                    "horario"
-                );
-
-                localStorage.removeItem(
-                    "dataAgendamento"
-                );
-
-                localStorage.removeItem(
-                    "horarioAgendamento"
-                );
-
-                localStorage.removeItem(
-                    "servico"
-                );
-
-                localStorage.removeItem(
-                    "servicoSelecionado"
-                );
-
-                localStorage.removeItem(
-                    "precoServico"
-                );
-
-                localStorage.removeItem(
-                    "veterinario"
-                );
-
-                localStorage.removeItem(
-                    "tipoServico"
-                );
-
-                localStorage.removeItem(
-                    "servicoId"
-                );
-
-                window.location.href =
-                    "dataehorario.html";
-
-            }
-        );
-
-    }
 
 });

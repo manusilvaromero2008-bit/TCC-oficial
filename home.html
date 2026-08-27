@@ -1,15 +1,28 @@
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
     <title>Agenda Pet</title>
 
-    <link rel="stylesheet" href="./frontend/css/home.css">
+    <link
+        rel="stylesheet"
+        href="./frontend/css/home.css"
+    >
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
+
 </head>
 
 <body>
@@ -20,9 +33,15 @@
 
     <div class="container-header">
 
-        <a href="./frontend/pages/perfil.html" class="btn-perfil">
+        <a
+            href="./frontend/pages/perfil.html"
+            class="btn-perfil"
+        >
+
             <i class="fa-solid fa-user"></i>
+
             Meu Perfil
+
         </a>
 
     </div>
@@ -33,7 +52,9 @@
 
     <div class="campo">
 
-        <label>Buscar clínicas</label>
+        <label for="pesquisa">
+            Buscar clínicas
+        </label>
 
         <input
             type="text"
@@ -45,7 +66,9 @@
 
     <div class="campo">
 
-        <label>Selecione sua região</label>
+        <label for="regiao">
+            Selecione sua região
+        </label>
 
         <select id="regiao">
 
@@ -75,10 +98,20 @@
 
 </section>
 
-<section class="clinicas" id="listaClinicas"></section>
+<section
+    class="clinicas"
+    id="listaClinicas"
+>
 
-<script src="./frontend/js/home.js"></script>
+    <p class="mensagem-carregando">
+        Carregando clínicas...
+    </p>
+
+</section>
+
+<script src="./frontend/js/home.js?v=2"></script>
 
 </body>
 
 </html>
+

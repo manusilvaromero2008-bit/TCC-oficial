@@ -1,19 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>S.O.S Animal & Cia</title>
-
     <link rel="stylesheet" href="../css/clinicas.css">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
-<body>
+<body data-clinica-id="4">
+
 
 <header class="clinic-header header-pethealth">
 
@@ -87,11 +85,7 @@
     </h2>
 
     <div class="grid-exames" id="listaServicos">
-
-        <p>
-            Carregando serviços...
-        </p>
-
+        <p>Carregando serviços...</p>
     </div>
 
 </section>
@@ -104,33 +98,22 @@
     </h2>
 
     <div id="listaVeterinarios">
-
-        <p>
-            Carregando veterinários...
-        </p>
-
+        <p>Carregando veterinários...</p>
     </div>
 
 </section>
 
 <section class="box">
 
-    <a
-        href="#"
-        class="btn-agendar"
-        id="btnAgendar">
-
+    <a href="#" class="btn-agendar" id="btnAgendar">
         <i class="fa-solid fa-calendar-check"></i>
         Agendar Consulta
-
     </a>
 
     <div class="card-transporte" id="cardTransporte">
 
         <div class="icone-transporte">
-
             <i class="fa-solid fa-car"></i>
-
         </div>
 
         <div class="texto-transporte">
@@ -150,259 +133,8 @@
 
 </section>
 
-<script>
-
-document.addEventListener("DOMContentLoaded", async () => {
-
-    const clinicaId = 4;
-
-    const nomeClinica = document.getElementById("nomeClinica");
-    const enderecoClinica = document.getElementById("enderecoClinica");
-    const telefoneClinica = document.getElementById("telefoneClinica");
-    const horarioClinica = document.getElementById("horarioClinica");
-    const precoConsulta = document.getElementById("precoConsulta");
-    const listaServicos = document.getElementById("listaServicos");
-    const listaVeterinarios = document.getElementById("listaVeterinarios");
-    const btnAgendar = document.getElementById("btnAgendar");
-
-    try {
-
-        const respostaClinica = await fetch(
-            `http://localhost:3000/api/clinicas/${clinicaId}`
-        );
-
-        if (!respostaClinica.ok) {
-            throw new Error("Não foi possível buscar a clínica.");
-        }
-
-        const clinica = await respostaClinica.json();
-
-        nomeClinica.innerHTML = `
-            <i class="fa-solid fa-hospital"></i>
-            ${clinica.nome}
-        `;
-
-        enderecoClinica.innerHTML = `
-            <i class="fa-solid fa-location-dot"></i>
-            ${clinica.endereco} - ${clinica.regiao}, Campinas
-        `;
-
-        telefoneClinica.innerHTML = `
-            <i class="fa-solid fa-phone"></i>
-            ${clinica.telefone || "Não informado"}
-        `;
-
-        horarioClinica.innerHTML = `
-            <i class="fa-regular fa-clock"></i>
-            ${clinica.horario_atendimento}
-        `;
-
-        localStorage.setItem(
-            "clinica",
-            clinica.nome
-        );
-
-        localStorage.setItem(
-            "clinicaId",
-            clinica.id
-        );
-
-        localStorage.setItem(
-            "clinicaDados",
-            JSON.stringify(clinica)
-        );
-
-        const respostaServicos = await fetch(
-            `http://localhost:3000/api/clinicas/${clinicaId}/servicos`
-        );
-
-        if (respostaServicos.ok) {
-
-            const servicos = await respostaServicos.json();
-
-            const consulta = servicos.find(
-                servico => servico.tipo === "Consulta"
-            );
-
-            if (consulta) {
-
-                precoConsulta.textContent =
-                    `R$ ${Number(consulta.preco).toFixed(2).replace(".", ",")}`;
-
-            } else {
-
-                precoConsulta.textContent =
-                    "Consultar";
-
-            }
-
-            const exames = servicos.filter(
-                servico => servico.tipo === "Exame"
-            );
-
-            listaServicos.innerHTML = "";
-
-            if (exames.length === 0) {
-
-                listaServicos.innerHTML = `
-                    <p>
-                        Nenhum exame disponível.
-                    </p>
-                `;
-
-            } else {
-
-                exames.forEach(servico => {
-
-                    const exame = document.createElement("div");
-
-                    exame.className = "exame";
-
-                    exame.textContent =
-                        `${servico.nome} - R$ ${Number(servico.preco).toFixed(2).replace(".", ",")}`;
-
-                    listaServicos.appendChild(exame);
-
-                });
-
-            }
-
-            localStorage.setItem(
-                "servicosClinica",
-                JSON.stringify(servicos)
-            );
-        }
-
-        const respostaVeterinarios = await fetch(
-            `http://localhost:3000/api/clinicas/${clinicaId}/veterinarios`
-        );
-
-        if (respostaVeterinarios.ok) {
-
-            const veterinarios =
-                await respostaVeterinarios.json();
-
-            listaVeterinarios.innerHTML = "";
-
-            if (veterinarios.length === 0) {
-
-                listaVeterinarios.innerHTML = `
-                    <p>
-                        Nenhum veterinário cadastrado.
-                    </p>
-                `;
-
-            } else {
-
-                veterinarios.forEach(veterinario => {
-
-                    const card =
-                        document.createElement("div");
-
-                    card.className = "vet-card";
-
-                    const nome =
-                        document.createElement("span");
-
-                    nome.textContent =
-                        `${veterinario.nome} - ${veterinario.especialidade || "Clínica Geral"}`;
-
-                    const status =
-                        document.createElement("button");
-
-                    status.type = "button";
-
-                    status.className =
-                        veterinario.disponivel
-                            ? "status disponivel"
-                            : "status";
-
-                    status.textContent =
-                        veterinario.disponivel
-                            ? "Disponível"
-                            : "Indisponível";
-
-                    card.appendChild(nome);
-                    card.appendChild(status);
-
-                    listaVeterinarios.appendChild(card);
-
-                });
-
-            }
-
-        }
-
-    } catch (erro) {
-
-        console.error(erro);
-
-        nomeClinica.innerHTML = `
-            <i class="fa-solid fa-hospital"></i>
-            Erro ao carregar clínica
-        `;
-
-    }
-
-    btnAgendar.addEventListener("click", event => {
-
-        event.preventDefault();
-
-        const tutorSalvo =
-            localStorage.getItem("tutor");
-
-        const petsSalvos =
-            localStorage.getItem("pets");
-
-        let cadastroCompleto = false;
-
-        try {
-
-            const tutor =
-                tutorSalvo
-                    ? JSON.parse(tutorSalvo)
-                    : null;
-
-            const pets =
-                petsSalvos
-                    ? JSON.parse(petsSalvos)
-                    : [];
-
-            cadastroCompleto =
-                tutor &&
-                tutor.nome &&
-                tutor.cpf &&
-                tutor.telefone &&
-                tutor.email &&
-                tutor.endereco &&
-                Array.isArray(pets) &&
-                pets.length > 0;
-
-        } catch (erro) {
-
-            cadastroCompleto = false;
-
-        }
-
-        if (cadastroCompleto) {
-
-            window.location.href =
-                "dataehorario.html";
-
-        } else {
-
-            window.location.href =
-                "cadastro.html";
-
-        }
-
-    });
-
-});
-
-</script>
-
 <script src="../js/clinicas.js"></script>
+
 
 </body>
 
