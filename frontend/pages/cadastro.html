@@ -33,7 +33,6 @@
 
 </header>
 
-
 <main class="container">
 
     <form id="formCadastro">
@@ -48,7 +47,6 @@
             <div class="grid">
 
                 <div class="campo">
-
                     <label for="nomeTutor">
                         Nome Completo *
                     </label>
@@ -57,14 +55,10 @@
                         type="text"
                         id="nomeTutor"
                         placeholder="Digite seu nome"
-                        required
-                    >
-
+                        required>
                 </div>
 
-
                 <div class="campo">
-
                     <label for="cpfTutor">
                         CPF *
                     </label>
@@ -73,14 +67,10 @@
                         type="text"
                         id="cpfTutor"
                         placeholder="000.000.000-00"
-                        required
-                    >
-
+                        required>
                 </div>
 
-
                 <div class="campo">
-
                     <label for="telefoneTutor">
                         Telefone *
                     </label>
@@ -89,14 +79,10 @@
                         type="tel"
                         id="telefoneTutor"
                         placeholder="(19) 99999-9999"
-                        required
-                    >
-
+                        required>
                 </div>
 
-
                 <div class="campo">
-
                     <label for="emailTutor">
                         E-mail *
                     </label>
@@ -105,14 +91,10 @@
                         type="email"
                         id="emailTutor"
                         placeholder="email@email.com"
-                        required
-                    >
-
+                        required>
                 </div>
 
-
                 <div class="campo">
-
                     <label for="enderecoTutor">
                         Endereço *
                     </label>
@@ -121,14 +103,10 @@
                         type="text"
                         id="enderecoTutor"
                         placeholder="Rua, número e bairro"
-                        required
-                    >
-
+                        required>
                 </div>
 
-
                 <div class="campo">
-
                     <label for="cep">
                         CEP
                     </label>
@@ -136,15 +114,12 @@
                     <input
                         type="text"
                         id="cep"
-                        placeholder="Digite o CEP"
-                    >
-
+                        placeholder="Digite o CEP">
                 </div>
 
             </div>
 
         </section>
-
 
         <section class="box">
 
@@ -165,7 +140,6 @@
                     <div class="grid">
 
                         <div class="campo">
-
                             <label>
                                 Nome *
                             </label>
@@ -174,50 +148,24 @@
                                 type="text"
                                 class="nomePet"
                                 placeholder="Nome do pet"
-                                required
-                            >
-
+                                required>
                         </div>
 
-
                         <div class="campo">
-
                             <label>
                                 Espécie *
                             </label>
 
-                            <select
-                                class="especiePet"
-                                required
-                            >
-
-                                <option value="Cão">
-                                    Cão
-                                </option>
-
-                                <option value="Gato">
-                                    Gato
-                                </option>
-
-                                <option value="Ave">
-                                    Ave
-                                </option>
-
-                                <option value="Roedor">
-                                    Roedor
-                                </option>
-
-                                <option value="Outro">
-                                    Outro
-                                </option>
-
+                            <select class="especiePet" required>
+                                <option value="Cão">Cão</option>
+                                <option value="Gato">Gato</option>
+                                <option value="Ave">Ave</option>
+                                <option value="Roedor">Roedor</option>
+                                <option value="Outro">Outro</option>
                             </select>
-
                         </div>
 
-
                         <div class="campo">
-
                             <label>
                                 Raça *
                             </label>
@@ -226,14 +174,10 @@
                                 type="text"
                                 class="racaPet"
                                 placeholder="Raça"
-                                required
-                            >
-
+                                required>
                         </div>
 
-
                         <div class="campo">
-
                             <label>
                                 Idade *
                             </label>
@@ -242,38 +186,21 @@
                                 type="text"
                                 class="idadePet"
                                 placeholder="Ex: 2 anos"
-                                required
-                            >
-
+                                required>
                         </div>
 
-
                         <div class="campo">
-
                             <label>
                                 Sexo *
                             </label>
 
-                            <select
-                                class="sexoPet"
-                                required
-                            >
-
-                                <option value="Macho">
-                                    Macho
-                                </option>
-
-                                <option value="Fêmea">
-                                    Fêmea
-                                </option>
-
+                            <select class="sexoPet" required>
+                                <option value="Macho">Macho</option>
+                                <option value="Fêmea">Fêmea</option>
                             </select>
-
                         </div>
 
-
                         <div class="campo">
-
                             <label>
                                 Peso *
                             </label>
@@ -282,9 +209,7 @@
                                 type="text"
                                 class="pesoPet"
                                 placeholder="Ex: 5 kg"
-                                required
-                            >
-
+                                required>
                         </div>
 
                     </div>
@@ -293,38 +218,31 @@
 
             </div>
 
-
             <button
                 type="button"
                 id="adicionarPet"
-                class="btn-add"
-            >
+                class="btn-add">
 
                 <i class="fa-solid fa-plus"></i>
-
                 Adicionar outro pet
 
             </button>
 
         </section>
 
-
         <button
-            type="button"
-            id="btnProsseguir"
-            class="btn-confirmar"
-        >
+    type="submit"
+    id="btnProsseguir"
+    class="btn-confirmar">
 
-            <i class="fa-solid fa-check"></i>
+    <i class="fa-solid fa-check"></i>
+    Salvar cadastro
 
-            Salvar cadastro
-
-        </button>
+</button>
 
     </form>
 
 </main>
-
 
 <script src="../js/cadastro.js"></script>
 

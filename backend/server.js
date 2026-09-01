@@ -9,23 +9,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
-// =====================================================
-// ROTA INICIAL
-// =====================================================
-
 app.get("/", (req, res) => {
     res.json({
         mensagem: "Backend do Agenda Pet funcionando!"
     });
 });
 
-
-// =====================================================
-// TUTORES
-// =====================================================
-
-// LISTAR TODOS OS TUTORES
 app.get("/api/tutores", async (req, res) => {
     try {
         const [tutores] = await conexao.query(`
@@ -53,8 +42,6 @@ app.get("/api/tutores", async (req, res) => {
     }
 });
 
-
-// BUSCAR TUTOR PELO ID
 app.get("/api/tutores/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -90,8 +77,6 @@ app.get("/api/tutores/:id", async (req, res) => {
     }
 });
 
-
-// CADASTRAR TUTOR
 app.post("/api/tutores", async (req, res) => {
     try {
         const {
@@ -100,8 +85,7 @@ app.post("/api/tutores", async (req, res) => {
             telefone,
             email,
             endereco,
-            cep,
-            senha
+            cep
         } = req.body;
 
         if (!nome || !telefone || !email) {
@@ -118,18 +102,16 @@ app.post("/api/tutores", async (req, res) => {
                 telefone,
                 email,
                 endereco,
-                cep,
-                senha
+                cep
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?)
         `, [
             nome,
             cpf || null,
             telefone,
             email,
             endereco || null,
-            cep || null,
-            senha || null
+            cep || null
         ]);
 
         res.status(201).json({
@@ -147,13 +129,12 @@ app.post("/api/tutores", async (req, res) => {
         }
 
         res.status(500).json({
-            mensagem: "Erro ao cadastrar tutor."
+            mensagem: "Erro ao cadastrar tutor.",
+            erro: erro.message
         });
     }
 });
 
-
-// ATUALIZAR TUTOR
 app.put("/api/tutores/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -219,17 +200,12 @@ app.put("/api/tutores/:id", async (req, res) => {
         }
 
         res.status(500).json({
-            mensagem: "Erro ao atualizar os dados do tutor."
+            mensagem: "Erro ao atualizar os dados do tutor.",
+            erro: erro.message
         });
     }
 });
 
-
-// =====================================================
-// PETS
-// =====================================================
-
-// BUSCAR PETS DE UM TUTOR
 app.get("/api/tutores/:id/pets", async (req, res) => {
     try {
         const { id } = req.params;
@@ -261,8 +237,6 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
     }
 });
 
-
-// CADASTRAR PET
 app.post("/api/pets", async (req, res) => {
     try {
         const {
@@ -275,14 +249,12 @@ app.post("/api/pets", async (req, res) => {
             observacoes
         } = req.body;
 
-        // Verificação dos campos obrigatórios
         if (!tutor_id || !nome || !especie) {
             return res.status(400).json({
                 mensagem: "Tutor, nome e espécie são obrigatórios."
             });
         }
 
-        // Verifica se o tutor existe
         const [tutor] = await conexao.query(
             "SELECT id FROM tutores WHERE id = ?",
             [tutor_id]
@@ -294,7 +266,6 @@ app.post("/api/pets", async (req, res) => {
             });
         }
 
-        // Cadastra o pet
         const [resultado] = await conexao.query(`
             INSERT INTO pets
             (
@@ -332,8 +303,6 @@ app.post("/api/pets", async (req, res) => {
     }
 });
 
-
-// ATUALIZAR PET
 app.put("/api/pets/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -354,7 +323,6 @@ app.put("/api/pets/:id", async (req, res) => {
             });
         }
 
-        // Verifica se o pet existe
         const [petExistente] = await conexao.query(`
             SELECT
                 id,
@@ -369,7 +337,6 @@ app.put("/api/pets/:id", async (req, res) => {
             });
         }
 
-        // Verifica se o pet pertence ao tutor
         if (
             Number(petExistente[0].tutor_id) !==
             Number(tutor_id)
@@ -416,12 +383,6 @@ app.put("/api/pets/:id", async (req, res) => {
     }
 });
 
-
-// =====================================================
-// CLÍNICAS
-// =====================================================
-
-// LISTAR CLÍNICAS
 app.get("/api/clinicas", async (req, res) => {
     try {
         const [clinicas] = await conexao.query(`
@@ -450,8 +411,6 @@ app.get("/api/clinicas", async (req, res) => {
     }
 });
 
-
-// BUSCAR CLÍNICA PELO ID
 app.get("/api/clinicas/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -488,11 +447,6 @@ app.get("/api/clinicas/:id", async (req, res) => {
     }
 });
 
-
-// =====================================================
-// VETERINÁRIOS
-// =====================================================
-
 app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
     try {
         const { id } = req.params;
@@ -520,11 +474,6 @@ app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
         });
     }
 });
-
-
-// =====================================================
-// SERVIÇOS
-// =====================================================
 
 app.get("/api/clinicas/:id/servicos", async (req, res) => {
     try {
@@ -562,17 +511,12 @@ app.get("/api/clinicas/:id/servicos", async (req, res) => {
     }
 });
 
-
-// =====================================================
-// AGENDAMENTOS
-// =====================================================
-
-// CRIAR AGENDAMENTO
 app.post("/api/agendamentos", async (req, res) => {
     let conexaoAgendamento;
 
     try {
-        conexaoAgendamento = await conexao.getConnection();
+        conexaoAgendamento =
+            await conexao.getConnection();
 
         const {
             tutor_id,
@@ -585,7 +529,6 @@ app.post("/api/agendamentos", async (req, res) => {
             observacoes
         } = req.body;
 
-        // Campos obrigatórios
         if (
             !tutor_id ||
             !pet_id ||
@@ -599,11 +542,11 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        // Verifica tutor
-        const [tutor] = await conexaoAgendamento.query(
-            "SELECT id FROM tutores WHERE id = ?",
-            [tutor_id]
-        );
+        const [tutor] =
+            await conexaoAgendamento.query(
+                "SELECT id FROM tutores WHERE id = ?",
+                [tutor_id]
+            );
 
         if (tutor.length === 0) {
             return res.status(404).json({
@@ -611,16 +554,16 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        // Verifica pet
-        const [pet] = await conexaoAgendamento.query(`
-            SELECT id
-            FROM pets
-            WHERE id = ?
-            AND tutor_id = ?
-        `, [
-            pet_id,
-            tutor_id
-        ]);
+        const [pet] =
+            await conexaoAgendamento.query(`
+                SELECT id
+                FROM pets
+                WHERE id = ?
+                AND tutor_id = ?
+            `, [
+                pet_id,
+                tutor_id
+            ]);
 
         if (pet.length === 0) {
             return res.status(400).json({
@@ -628,12 +571,12 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        // Verifica clínica
-        const [clinica] = await conexaoAgendamento.query(`
-            SELECT id
-            FROM clinicas
-            WHERE id = ?
-        `, [clinica_id]);
+        const [clinica] =
+            await conexaoAgendamento.query(`
+                SELECT id
+                FROM clinicas
+                WHERE id = ?
+            `, [clinica_id]);
 
         if (clinica.length === 0) {
             return res.status(400).json({
@@ -641,20 +584,20 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        // Verifica serviço
-        const [servicos] = await conexaoAgendamento.query(`
-            SELECT
-                id,
-                clinica_id,
-                veterinario_id
-            FROM servicos
-            WHERE id = ?
-            AND clinica_id = ?
-            AND ativo = TRUE
-        `, [
-            servico_id,
-            clinica_id
-        ]);
+        const [servicos] =
+            await conexaoAgendamento.query(`
+                SELECT
+                    id,
+                    clinica_id,
+                    veterinario_id
+                FROM servicos
+                WHERE id = ?
+                AND clinica_id = ?
+                AND ativo = TRUE
+            `, [
+                servico_id,
+                clinica_id
+            ]);
 
         if (servicos.length === 0) {
             return res.status(400).json({
@@ -662,14 +605,13 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        // Define veterinário
         const veterinarioFinal =
             veterinario_id ||
             servicos[0].veterinario_id ||
             null;
 
-        // Se houver veterinário, verifica se ele existe
         if (veterinarioFinal) {
+
             const [veterinarios] =
                 await conexaoAgendamento.query(`
                     SELECT id
@@ -684,12 +626,12 @@ app.post("/api/agendamentos", async (req, res) => {
 
             if (veterinarios.length === 0) {
                 return res.status(400).json({
-                    mensagem: "Veterinário inválido ou indisponível."
+                    mensagem:
+                        "Veterinário inválido ou indisponível."
                 });
             }
         }
 
-        // Verifica conflito de horário
         const [conflito] =
             await conexaoAgendamento.query(`
                 SELECT id
@@ -706,11 +648,11 @@ app.post("/api/agendamentos", async (req, res) => {
 
         if (conflito.length > 0) {
             return res.status(409).json({
-                mensagem: "Este horário já está ocupado."
+                mensagem:
+                    "Este horário já está ocupado."
             });
         }
 
-        // Cria agendamento
         const [resultado] =
             await conexaoAgendamento.query(`
                 INSERT INTO agendamentos
@@ -737,55 +679,127 @@ app.post("/api/agendamentos", async (req, res) => {
             ]);
 
         res.status(201).json({
-            mensagem: "Agendamento realizado com sucesso.",
+            mensagem:
+                "Agendamento realizado com sucesso.",
             id: resultado.insertId
         });
 
     } catch (erro) {
-        console.error("Erro ao realizar agendamento:", erro);
+
+        console.error(
+            "Erro ao realizar agendamento:",
+            erro
+        );
 
         res.status(500).json({
-            mensagem: "Erro ao realizar agendamento.",
+            mensagem:
+                "Erro ao realizar agendamento.",
             erro: erro.message
         });
 
     } finally {
+
         if (conexaoAgendamento) {
             conexaoAgendamento.release();
         }
     }
 });
 
-
-// =====================================================
-// AGENDAMENTOS DO TUTOR
-// =====================================================
-
 app.get("/api/tutores/:id/agendamentos", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [agendamentos] =
+            await conexao.query(`
+                SELECT
+                    a.id,
+                    a.data_agendamento,
+                    a.horario,
+                    a.status,
+                    a.observacoes,
+
+                    c.id AS clinica_id,
+                    c.nome AS clinica,
+                    c.endereco,
+
+                    p.id AS pet_id,
+                    p.nome AS pet,
+
+                    s.id AS servico_id,
+                    s.nome AS servico,
+                    s.tipo AS tipo_servico,
+
+                    v.id AS veterinario_id,
+                    v.nome AS veterinario
+
+                FROM agendamentos a
+
+                INNER JOIN clinicas c
+                    ON a.clinica_id = c.id
+
+                INNER JOIN pets p
+                    ON a.pet_id = p.id
+
+                INNER JOIN servicos s
+                    ON a.servico_id = s.id
+
+                LEFT JOIN veterinarios v
+                    ON a.veterinario_id = v.id
+
+                WHERE a.tutor_id = ?
+
+                ORDER BY
+                    a.data_agendamento DESC,
+                    a.horario DESC
+            `, [id]);
+
+        res.json(agendamentos);
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao buscar agendamentos:",
+            erro
+        );
+
+        res.status(500).json({
+            mensagem:
+                "Erro ao buscar agendamentos."
+        });
+    }
+});
+
+app.get("/api/agendamentos/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
         const [agendamentos] = await conexao.query(`
             SELECT
                 a.id,
+                a.tutor_id,
+                a.pet_id,
+                a.clinica_id,
+                a.veterinario_id,
+                a.servico_id,
                 a.data_agendamento,
                 a.horario,
                 a.status,
                 a.observacoes,
 
-                c.id AS clinica_id,
                 c.nome AS clinica,
-                c.endereco,
+                c.endereco AS endereco_clinica,
 
-                p.id AS pet_id,
                 p.nome AS pet,
+                p.especie,
+                p.raca,
 
-                s.id AS servico_id,
                 s.nome AS servico,
                 s.tipo AS tipo_servico,
+                s.preco,
+                s.duracao_minutos,
 
-                v.id AS veterinario_id,
-                v.nome AS veterinario
+                v.nome AS veterinario,
+                v.especialidade
 
             FROM agendamentos a
 
@@ -801,117 +815,90 @@ app.get("/api/tutores/:id/agendamentos", async (req, res) => {
             LEFT JOIN veterinarios v
                 ON a.veterinario_id = v.id
 
-            WHERE a.tutor_id = ?
-
-            ORDER BY
-                a.data_agendamento DESC,
-                a.horario DESC
+            WHERE a.id = ?
         `, [id]);
 
-        res.json(agendamentos);
-
-    } catch (erro) {
-        console.error("Erro ao buscar agendamentos:", erro);
-
-        res.status(500).json({
-            mensagem: "Erro ao buscar agendamentos."
-        });
-    }
-});
-
-
-// =====================================================
-// TRANSPORTES
-// =====================================================
-
-app.post("/api/transportes", async (req, res) => {
-    try {
-        const {
-            agendamento_id,
-            endereco_coleta,
-            data_coleta,
-            horario_coleta,
-            observacoes
-        } = req.body;
-
-        if (
-            !agendamento_id ||
-            !endereco_coleta ||
-            !data_coleta ||
-            !horario_coleta
-        ) {
-            return res.status(400).json({
-                mensagem:
-                    "Preencha todos os campos obrigatórios do transporte."
-            });
-        }
-
-        // Verifica se o agendamento existe
-        const [agendamento] = await conexao.query(`
-            SELECT id
-            FROM agendamentos
-            WHERE id = ?
-        `, [agendamento_id]);
-
-        if (agendamento.length === 0) {
+        if (agendamentos.length === 0) {
             return res.status(404).json({
                 mensagem: "Agendamento não encontrado."
             });
         }
 
-        // Cadastra transporte
-        const [resultado] = await conexao.query(`
-            INSERT INTO transportes
-            (
-                agendamento_id,
-                endereco_coleta,
-                data_coleta,
-                horario_coleta,
-                observacoes
-            )
-            VALUES (?, ?, ?, ?, ?)
-        `, [
-            agendamento_id,
-            endereco_coleta,
-            data_coleta,
-            horario_coleta,
-            observacoes || null
-        ]);
-
-        res.status(201).json({
-            mensagem: "Transporte solicitado com sucesso.",
-            id: resultado.insertId
-        });
+        res.json(agendamentos[0]);
 
     } catch (erro) {
-        console.error("Erro ao solicitar transporte:", erro);
+        console.error(
+            "Erro ao buscar agendamento:",
+            erro
+        );
 
         res.status(500).json({
-            mensagem: "Erro ao solicitar transporte.",
-            erro: erro.message
+            mensagem: "Erro ao buscar agendamento."
         });
     }
 });
 
 
-// =====================================================
-// INICIAR SERVIDOR
-// =====================================================
+app.delete("/api/agendamentos/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
 
-const PORT = process.env.PORT || 3000;
+        const [resultado] = await conexao.query(`
+            UPDATE agendamentos
+            SET status = 'Cancelado'
+            WHERE id = ?
+        `, [id]);
 
-app.listen(PORT, async () => {
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: "Agendamento não encontrado."
+            });
+        }
 
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+        res.json({
+            mensagem: "Agendamento cancelado com sucesso."
+        });
 
+    } catch (erro) {
+        console.error(
+            "Erro ao cancelar agendamento:",
+            erro
+        );
+
+        res.status(500).json({
+            mensagem: "Erro ao cancelar agendamento."
+        });
+    }
+});
+
+
+app.get("/api/status", async (req, res) => {
     try {
         await conexao.query("SELECT 1");
 
-        console.log("Banco de dados conectado com sucesso!");
+        res.json({
+            status: "ok",
+            banco: "conectado"
+        });
 
     } catch (erro) {
+        console.error(
+            "Erro na conexão com o banco:",
+            erro
+        );
 
-        console.error("Erro ao conectar ao banco de dados:");
-        console.error(erro.message);
+        res.status(500).json({
+            status: "erro",
+            banco: "desconectado"
+        });
     }
+});
+
+
+const PORTA = process.env.PORT || 3000;
+
+app.listen(PORTA, () => {
+    console.log(
+        `Servidor do Agenda Pet rodando em http://localhost:${PORTA}`
+    );
 });
