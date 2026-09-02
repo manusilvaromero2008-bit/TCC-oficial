@@ -1,11 +1,10 @@
 const db = require("../config/database");
 
-const Servico = {
+const Veterinario = {
     listar: (callback) => {
         const sql = `
             SELECT *
-            FROM servicos
-            WHERE ativo = TRUE
+            FROM veterinarios
             ORDER BY nome
         `;
 
@@ -15,7 +14,7 @@ const Servico = {
     buscarPorId: (id, callback) => {
         const sql = `
             SELECT *
-            FROM servicos
+            FROM veterinarios
             WHERE id = ?
         `;
 
@@ -24,20 +23,15 @@ const Servico = {
 
     buscarPorClinica: (clinicaId, callback) => {
         const sql = `
-            SELECT
-                s.*,
-                v.nome AS veterinario_nome,
-                v.especialidade
-            FROM servicos s
-            LEFT JOIN veterinarios v
-                ON s.veterinario_id = v.id
-            WHERE s.clinica_id = ?
-            AND s.ativo = TRUE
-            ORDER BY s.nome
+            SELECT *
+            FROM veterinarios
+            WHERE clinica_id = ?
+            AND disponivel = TRUE
+            ORDER BY nome
         `;
 
         db.query(sql, [clinicaId], callback);
     }
 };
 
-module.exports = Servico;
+module.exports = Veterinario;
