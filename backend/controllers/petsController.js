@@ -37,19 +37,43 @@ const buscarPet = (req, res) => {
 };
 
 const criarPet = (req, res) => {
-    const { nome, especie, raca, idade, usuario_id } = req.body;
+
+    const {
+        tutor_id,
+        nome,
+        especie,
+        raca,
+        idade,
+        sexo,
+        peso
+    } = req.body;
 
     const sql = `
         INSERT INTO pets
-        (nome, especie, raca, idade, usuario_id)
-        VALUES (?, ?, ?, ?, ?)
+        (tutor_id, nome, especie, raca, idade, sexo, peso)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     conexao.query(
         sql,
-        [nome, especie, raca, idade, usuario_id],
+        [
+            tutor_id,
+            nome,
+            especie,
+            raca,
+            idade,
+            sexo,
+            peso
+        ],
         (erro, resultado) => {
+
             if (erro) {
+
+                console.error(
+                    "Erro ao cadastrar pet:",
+                    erro
+                );
+
                 return res.status(500).json({
                     erro: "Erro ao cadastrar pet"
                 });

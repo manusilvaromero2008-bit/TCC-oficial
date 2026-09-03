@@ -50,6 +50,8 @@ const criarUsuario = (req, res) => {
         [nome, email, senha, telefone],
         (erro, resultado) => {
             if (erro) {
+                console.error("Erro ao cadastrar usuário:", erro);
+
                 return res.status(500).json({
                     erro: "Erro ao cadastrar usuário"
                 });
@@ -81,9 +83,42 @@ const excluirUsuario = (req, res) => {
     });
 };
 
+const listarPetsDoTutor = (req, res) => {
+
+    const { id } = req.params;
+
+    const sql = `
+        SELECT *
+        FROM pets
+        WHERE tutor_id = ?
+    `;
+
+    conexao.query(
+        sql,
+        [id],
+        (erro, resultados) => {
+
+            if (erro) {
+
+                console.error(
+                    "Erro ao buscar pets do tutor:",
+                    erro
+                );
+
+                return res.status(500).json({
+                    erro: "Erro ao buscar pets do tutor"
+                });
+            }
+
+            res.json(resultados);
+        }
+    );
+};
+
 module.exports = {
     listarUsuarios,
     buscarUsuario,
     criarUsuario,
-    excluirUsuario
+    excluirUsuario,
+    listarPetsDoTutor
 };
