@@ -217,7 +217,9 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
                 nome,
                 especie,
                 raca,
+                idade,
                 sexo,
+                peso,
                 data_nascimento,
                 observacoes,
                 created_at
@@ -244,7 +246,9 @@ app.post("/api/pets", async (req, res) => {
             nome,
             especie,
             raca,
+            idade,
             sexo,
+            peso,
             data_nascimento,
             observacoes
         } = req.body;
@@ -273,17 +277,21 @@ app.post("/api/pets", async (req, res) => {
                 nome,
                 especie,
                 raca,
+                idade,
                 sexo,
+                peso,
                 data_nascimento,
                 observacoes
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
             tutor_id,
             nome,
             especie,
             raca || null,
+            idade || null,
             sexo || null,
+            peso || null,
             data_nascimento || null,
             observacoes || null
         ]);
@@ -312,7 +320,9 @@ app.put("/api/pets/:id", async (req, res) => {
             nome,
             especie,
             raca,
+            idade,
             sexo,
+            peso,
             data_nascimento,
             observacoes
         } = req.body;
@@ -352,7 +362,9 @@ app.put("/api/pets/:id", async (req, res) => {
                 nome = ?,
                 especie = ?,
                 raca = ?,
+                idade = ?,
                 sexo = ?,
+                peso = ?,
                 data_nascimento = ?,
                 observacoes = ?
             WHERE id = ?
@@ -361,7 +373,9 @@ app.put("/api/pets/:id", async (req, res) => {
             nome,
             especie,
             raca || null,
+            idade || null,
             sexo || null,
+            peso || null,
             data_nascimento || null,
             observacoes || null,
             id,
@@ -611,7 +625,6 @@ app.post("/api/agendamentos", async (req, res) => {
             null;
 
         if (veterinarioFinal) {
-
             const [veterinarios] =
                 await conexaoAgendamento.query(`
                     SELECT id
@@ -685,7 +698,6 @@ app.post("/api/agendamentos", async (req, res) => {
         });
 
     } catch (erro) {
-
         console.error(
             "Erro ao realizar agendamento:",
             erro
@@ -698,7 +710,6 @@ app.post("/api/agendamentos", async (req, res) => {
         });
 
     } finally {
-
         if (conexaoAgendamento) {
             conexaoAgendamento.release();
         }
@@ -756,7 +767,6 @@ app.get("/api/tutores/:id/agendamentos", async (req, res) => {
         res.json(agendamentos);
 
     } catch (erro) {
-
         console.error(
             "Erro ao buscar agendamentos:",
             erro
@@ -838,7 +848,6 @@ app.get("/api/agendamentos/:id", async (req, res) => {
     }
 });
 
-
 app.delete("/api/agendamentos/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -871,7 +880,6 @@ app.delete("/api/agendamentos/:id", async (req, res) => {
     }
 });
 
-
 app.get("/api/status", async (req, res) => {
     try {
         await conexao.query("SELECT 1");
@@ -893,7 +901,6 @@ app.get("/api/status", async (req, res) => {
         });
     }
 });
-
 
 const PORTA = process.env.PORT || 3000;
 

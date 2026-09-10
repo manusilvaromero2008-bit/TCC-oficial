@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-
     const API_URL = "http://localhost:3000/api";
 
     const btnInicio = document.getElementById("btnInicio");
@@ -29,14 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nomePerfilFoto = document.getElementById("nomePerfilFoto");
     const btnRemoverFoto = document.getElementById("btnRemoverFoto");
 
-
-    // =====================================================
-    // RECUPERAR ID DO TUTOR
-    // =====================================================
-
-    const parametros = new URLSearchParams(
-        window.location.search
-    );
+    const parametros = new URLSearchParams(window.location.search);
 
     let tutorId = parametros.get("tutor_id");
 
@@ -63,27 +55,18 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
     let tutor = null;
     let pets = [];
     let petEditando = null;
 
-    const fotoPadrao =
-        "../img/perfil-padrao.png";
-
-
-    // =====================================================
-    // MENSAGENS
-    // =====================================================
+    const fotoPadrao = "../img/perfil-padrao.png";
 
     function mostrarMensagem(texto) {
-
         if (!mensagem) {
             return;
         }
 
         mensagem.textContent = texto;
-
         mensagem.classList.add("mostrar");
 
         setTimeout(() => {
@@ -91,15 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 3000);
     }
 
-
     function mostrarErro(texto) {
-
         if (!mensagem) {
             return;
         }
 
         mensagem.textContent = texto;
-
         mensagem.classList.add("mostrar");
 
         setTimeout(() => {
@@ -107,82 +87,44 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 4000);
     }
 
-
-    // =====================================================
-    // ÁREAS DA PÁGINA
-    // =====================================================
-
     function mostrarAreaCadastro() {
-
         if (areaCadastro) {
-
             areaCadastro.style.display = "flex";
-
-            areaCadastro.classList.remove(
-                "hidden"
-            );
+            areaCadastro.classList.remove("hidden");
         }
 
         if (areaPerfil) {
-
             areaPerfil.style.display = "none";
-
-            areaPerfil.classList.add(
-                "hidden"
-            );
+            areaPerfil.classList.add("hidden");
         }
     }
-
 
     function mostrarAreaPerfil() {
-
         if (areaCadastro) {
-
             areaCadastro.style.display = "none";
-
-            areaCadastro.classList.add(
-                "hidden"
-            );
+            areaCadastro.classList.add("hidden");
         }
 
         if (areaPerfil) {
-
             areaPerfil.style.display = "block";
-
-            areaPerfil.classList.remove(
-                "hidden"
-            );
+            areaPerfil.classList.remove("hidden");
         }
     }
 
-
-    // =====================================================
-    // VERIFICAR ID
-    // =====================================================
-
     function verificarTutorId() {
-
         if (
             !tutorId ||
             Number.isNaN(Number(tutorId)) ||
             Number(tutorId) <= 0
         ) {
-
             mostrarAreaCadastro();
-
             return false;
         }
 
         return true;
     }
 
-
-    // =====================================================
-    // ESCAPAR HTML
-    // =====================================================
-
     function escaparHTML(valor) {
-
         if (
             valor === null ||
             valor === undefined
@@ -198,95 +140,19 @@ document.addEventListener("DOMContentLoaded", () => {
             .replace(/'/g, "&#039;");
     }
 
-// =====================================================
-    // INFORMAÇÕES DO PET
-    // =====================================================
-
-    function extrairInformacoesPet(pet) {
-
-        let idade = pet.idade || "";
-        let peso = pet.peso || "";
-
-        if (pet.observacoes) {
-
-            const observacoes =
-                String(pet.observacoes);
-
-            const idadeEncontrada =
-                observacoes.match(
-                    /Idade:\s*([^|]+)/i
-                );
-
-            const pesoEncontrado =
-                observacoes.match(
-                    /Peso:\s*([^|]+)/i
-                );
-
-            if (idadeEncontrada && !idade) {
-
-                idade =
-                    idadeEncontrada[1].trim();
-            }
-
-            if (pesoEncontrado && !peso) {
-
-                peso =
-                    pesoEncontrado[1].trim();
-            }
-        }
-
-        return {
-            idade,
-            peso
-        };
-    }
-
-
-    function criarObservacoesPet(
-        idade,
-        peso
-    ) {
-
-        const partes = [];
-
-        if (idade) {
-            partes.push(
-                `Idade: ${idade}`
-            );
-        }
-
-        if (peso) {
-            partes.push(
-                `Peso: ${peso}`
-            );
-        }
-
-        return partes.join(" | ");
-    }
-
-
-    // =====================================================
-    // CARREGAR TUTOR
-    // =====================================================
-
     async function carregarTutor() {
-
         if (!verificarTutorId()) {
             return;
         }
 
         try {
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}`
+            );
 
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}`
-                );
-
-            const dados =
-                await resposta.json();
+            const dados = await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
                     dados.mensagem ||
                     "Não foi possível carregar o tutor."
@@ -296,9 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
             tutor = dados;
 
             atualizarDadosTutor();
-
             preencherFormularioTutor();
-
             mostrarAreaPerfil();
 
             await carregarPets();
@@ -306,7 +170,6 @@ document.addEventListener("DOMContentLoaded", () => {
             carregarFotoPerfil();
 
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar tutor:",
                 erro
@@ -323,49 +186,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-
-    // =====================================================
-    // CARREGAR PETS
-    // =====================================================
-
     async function carregarPets() {
-
         if (!tutorId) {
-
             pets = [];
-
             mostrarPets();
-
             return;
         }
 
         try {
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}/pets`
+            );
 
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}/pets`
-                );
-
-            const dados =
-                await resposta.json();
+            const dados = await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
                     dados.mensagem ||
                     "Não foi possível carregar os pets."
                 );
             }
 
-            pets =
-                Array.isArray(dados)
-                    ? dados
-                    : [];
+            pets = Array.isArray(dados)
+                ? dados
+                : [];
 
             mostrarPets();
 
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar pets:",
                 erro
@@ -374,220 +222,149 @@ document.addEventListener("DOMContentLoaded", () => {
             pets = [];
 
             if (listaPets) {
-
                 listaPets.innerHTML = `
                     <div class="sem-pets">
-
                         <i class="fa-solid fa-triangle-exclamation"></i>
-
                         <p>
                             Não foi possível carregar seus pets.
                         </p>
-
                     </div>
                 `;
             }
         }
     }
 
-
-    // =====================================================
-    // ATUALIZAR DADOS DO TUTOR
-    // =====================================================
-
     function atualizarDadosTutor() {
-
         if (!tutor) {
             return;
         }
 
         const perfilNome =
-            document.getElementById(
-                "perfilNome"
-            );
+            document.getElementById("perfilNome");
 
         const perfilCpf =
-            document.getElementById(
-                "perfilCpf"
-            );
+            document.getElementById("perfilCpf");
 
         const perfilTelefone =
-            document.getElementById(
-                "perfilTelefone"
-            );
+            document.getElementById("perfilTelefone");
 
         const perfilEmail =
-            document.getElementById(
-                "perfilEmail"
-            );
+            document.getElementById("perfilEmail");
 
         const perfilEndereco =
-            document.getElementById(
-                "perfilEndereco"
-            );
+            document.getElementById("perfilEndereco");
 
         const perfilCep =
-            document.getElementById(
-                "perfilCep"
-            );
-
+            document.getElementById("perfilCep");
 
         if (perfilNome) {
-
             perfilNome.textContent =
                 tutor.nome ||
                 "Não informado";
         }
 
         if (perfilCpf) {
-
             perfilCpf.textContent =
                 tutor.cpf ||
                 "Não informado";
         }
 
         if (perfilTelefone) {
-
             perfilTelefone.textContent =
                 tutor.telefone ||
                 "Não informado";
         }
 
         if (perfilEmail) {
-
             perfilEmail.textContent =
                 tutor.email ||
                 "Não informado";
         }
 
         if (perfilEndereco) {
-
             perfilEndereco.textContent =
                 tutor.endereco ||
                 "Não informado";
         }
 
         if (perfilCep) {
-
             perfilCep.textContent =
                 tutor.cep ||
                 "Não informado";
         }
 
         if (nomePerfilFoto) {
-
             nomePerfilFoto.textContent =
                 tutor.nome ||
                 "Usuário";
         }
     }
 
-
-    // =====================================================
-    // PREENCHER FORMULÁRIO DO TUTOR
-    // =====================================================
-
     function preencherFormularioTutor() {
-
         if (!tutor) {
             return;
         }
 
         const nomeTutor =
-            document.getElementById(
-                "nomeTutor"
-            );
+            document.getElementById("nomeTutor");
 
         const cpfTutor =
-            document.getElementById(
-                "cpfTutor"
-            );
+            document.getElementById("cpfTutor");
 
         const telefoneTutor =
-            document.getElementById(
-                "telefoneTutor"
-            );
+            document.getElementById("telefoneTutor");
 
         const emailTutor =
-            document.getElementById(
-                "emailTutor"
-            );
+            document.getElementById("emailTutor");
 
         const enderecoTutor =
-            document.getElementById(
-                "enderecoTutor"
-            );
+            document.getElementById("enderecoTutor");
 
         const cepTutor =
-            document.getElementById(
-                "cepTutor"
-            );
-
+            document.getElementById("cepTutor");
 
         if (nomeTutor) {
-
             nomeTutor.value =
                 tutor.nome || "";
         }
 
         if (cpfTutor) {
-
             cpfTutor.value =
                 tutor.cpf || "";
         }
 
         if (telefoneTutor) {
-
             telefoneTutor.value =
                 tutor.telefone || "";
         }
 
         if (emailTutor) {
-
             emailTutor.value =
                 tutor.email || "";
         }
 
         if (enderecoTutor) {
-
             enderecoTutor.value =
                 tutor.endereco || "";
         }
 
         if (cepTutor) {
-
             cepTutor.value =
                 tutor.cep || "";
         }
     }
 
-
-    // =====================================================
-    // FECHAR EDIÇÃO DO TUTOR
-    // =====================================================
-
     function fecharFormularioTutor() {
-
         if (dadosTutor) {
-
-            dadosTutor.classList.remove(
-                "hidden"
-            );
+            dadosTutor.classList.remove("hidden");
         }
 
         if (formTutor) {
-
-            formTutor.classList.add(
-                "hidden"
-            );
+            formTutor.classList.add("hidden");
         }
     }
-// =====================================================
-    // MOSTRAR PETS
-    // =====================================================
 
     function mostrarPets() {
-
         if (!listaPets) {
             return;
         }
@@ -595,44 +372,30 @@ document.addEventListener("DOMContentLoaded", () => {
         listaPets.innerHTML = "";
 
         if (pets.length === 0) {
-
             listaPets.innerHTML = `
                 <div class="sem-pets">
-
                     <i class="fa-solid fa-paw"></i>
-
                     <p>
                         Você ainda não possui pets cadastrados.
                     </p>
-
                 </div>
             `;
 
             return;
         }
 
-
         pets.forEach(pet => {
-
-            const informacoes =
-                extrairInformacoesPet(pet);
-
             const card =
                 document.createElement("div");
 
             card.className = "pet-card";
 
-
             card.innerHTML = `
-
                 <div class="pet-icone">
-
                     <i class="fa-solid fa-paw"></i>
-
                 </div>
 
                 <div class="pet-dados">
-
                     <h3>
                         ${escaparHTML(
                             pet.nome ||
@@ -659,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>
                         <strong>Idade:</strong>
                         ${escaparHTML(
-                            informacoes.idade ||
+                            pet.idade ||
                             "Não informada"
                         )}
                     </p>
@@ -675,11 +438,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     <p>
                         <strong>Peso:</strong>
                         ${escaparHTML(
-                            informacoes.peso ||
+                            pet.peso ||
                             "Não informado"
                         )}
                     </p>
-
                 </div>
 
                 <button
@@ -693,38 +455,25 @@ document.addEventListener("DOMContentLoaded", () => {
                 </button>
             `;
 
-
             const botaoEditar =
                 card.querySelector(
                     ".btn-editar-pet"
                 );
 
-
             if (botaoEditar) {
-
                 botaoEditar.addEventListener(
                     "click",
                     () => {
-
                         abrirEdicaoPet(pet);
-
                     }
                 );
             }
 
-
             listaPets.appendChild(card);
-
         });
     }
 
-
-    // =====================================================
-    // EDITAR PET
-    // =====================================================
-
     function abrirEdicaoPet(pet) {
-
         if (
             !pet ||
             !modalPet ||
@@ -735,65 +484,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
         petEditando = pet;
 
-        const informacoes =
-            extrairInformacoesPet(pet);
-
-
         if (tituloModalPet) {
-
             tituloModalPet.textContent =
                 "Editar Pet";
         }
 
+        const nomePet =
+            document.getElementById("nomePet");
 
-        document.getElementById(
-            "nomePet"
-        ).value =
-            pet.nome || "";
+        const especiePet =
+            document.getElementById("especiePet");
 
+        const racaPet =
+            document.getElementById("racaPet");
 
-        document.getElementById(
-            "especiePet"
-        ).value =
-            pet.especie || "Cão";
+        const idadePet =
+            document.getElementById("idadePet");
 
+        const sexoPet =
+            document.getElementById("sexoPet");
 
-        document.getElementById(
-            "racaPet"
-        ).value =
-            pet.raca || "";
+        const pesoPet =
+            document.getElementById("pesoPet");
 
+        if (nomePet) {
+            nomePet.value =
+                pet.nome || "";
+        }
 
-        document.getElementById(
-            "idadePet"
-        ).value =
-            informacoes.idade || "";
+        if (especiePet) {
+            especiePet.value =
+                pet.especie || "Cão";
+        }
 
+        if (racaPet) {
+            racaPet.value =
+                pet.raca || "";
+        }
 
-        document.getElementById(
-            "sexoPet"
-        ).value =
-            pet.sexo || "Macho";
+        if (idadePet) {
+            idadePet.value =
+                pet.idade || "";
+        }
 
+        if (sexoPet) {
+            sexoPet.value =
+                pet.sexo || "Macho";
+        }
 
-        document.getElementById(
-            "pesoPet"
-        ).value =
-            informacoes.peso || "";
+        if (pesoPet) {
+            pesoPet.value =
+                pet.peso || "";
+        }
 
-
-        modalPet.classList.add(
-            "mostrar"
-        );
+        modalPet.classList.add("mostrar");
     }
 
-
-    // =====================================================
-    // ADICIONAR NOVO PET
-    // =====================================================
-
     function abrirNovoPet() {
-
         if (
             !modalPet ||
             !formPet
@@ -803,155 +550,98 @@ document.addEventListener("DOMContentLoaded", () => {
 
         petEditando = null;
 
-
         if (tituloModalPet) {
-
             tituloModalPet.textContent =
                 "Adicionar Pet";
         }
 
-
         formPet.reset();
 
+        const especiePet =
+            document.getElementById("especiePet");
 
-        document.getElementById(
-            "especiePet"
-        ).value = "Cão";
+        const sexoPet =
+            document.getElementById("sexoPet");
 
+        if (especiePet) {
+            especiePet.value = "Cão";
+        }
 
-        document.getElementById(
-            "sexoPet"
-        ).value = "Macho";
+        if (sexoPet) {
+            sexoPet.value = "Macho";
+        }
 
-
-        modalPet.classList.add(
-            "mostrar"
-        );
+        modalPet.classList.add("mostrar");
     }
 
-
-    // =====================================================
-    // FECHAR MODAL
-    // =====================================================
-
     function fecharModalPet() {
-
         if (!modalPet) {
             return;
         }
 
-        modalPet.classList.remove(
-            "mostrar"
-        );
-
+        modalPet.classList.remove("mostrar");
 
         if (formPet) {
-
             formPet.reset();
         }
-
 
         petEditando = null;
     }
 
-
-    // =====================================================
-    // BOTÃO INÍCIO
-    // =====================================================
-
     if (btnInicio) {
-
         btnInicio.addEventListener(
             "click",
             () => {
-
                 window.location.href =
                     "../../home.html";
             }
         );
     }
 
-
-    // =====================================================
-    // BOTÃO CADASTRAR
-    // =====================================================
-
     if (btnCadastrar) {
-
         btnCadastrar.addEventListener(
             "click",
             () => {
-
                 const url = tutorId
                     ? `cadastro.html?tutor_id=${encodeURIComponent(tutorId)}`
                     : "cadastro.html";
 
-
-                window.location.href =
-                    url;
+                window.location.href = url;
             }
         );
     }
 
-
-    // =====================================================
-    // EDITAR DADOS DO TUTOR
-    // =====================================================
-
     if (btnEditarTutor) {
-
         btnEditarTutor.addEventListener(
             "click",
             () => {
-
                 preencherFormularioTutor();
 
-
                 if (dadosTutor) {
-
-                    dadosTutor.classList.add(
-                        "hidden"
-                    );
+                    dadosTutor.classList.add("hidden");
                 }
 
-
                 if (formTutor) {
-
-                    formTutor.classList.remove(
-                        "hidden"
-                    );
+                    formTutor.classList.remove("hidden");
                 }
             }
         );
     }
 
-
-    // =====================================================
-    // CANCELAR EDIÇÃO DO TUTOR
-    // =====================================================
-
     if (btnCancelarTutor) {
-
         btnCancelarTutor.addEventListener(
             "click",
             fecharFormularioTutor
         );
     }
-// =====================================================
-    // SALVAR ALTERAÇÕES DO TUTOR
-    // =====================================================
 
     if (formTutor) {
-
         formTutor.addEventListener(
             "submit",
             async event => {
-
                 event.preventDefault();
 
-
                 if (!tutorId) {
-
                     mostrarErro(
                         "Tutor não identificado."
                     );
@@ -959,58 +649,55 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
+                const nomeTutor =
+                    document.getElementById("nomeTutor");
+
+                const cpfTutor =
+                    document.getElementById("cpfTutor");
+
+                const telefoneTutor =
+                    document.getElementById("telefoneTutor");
+
+                const emailTutor =
+                    document.getElementById("emailTutor");
+
+                const enderecoTutor =
+                    document.getElementById("enderecoTutor");
+
+                const cepTutor =
+                    document.getElementById("cepTutor");
 
                 const dadosAtualizados = {
-
                     nome:
-                        document
-                            .getElementById(
-                                "nomeTutor"
-                            )
-                            .value
-                            .trim(),
+                        nomeTutor
+                            ? nomeTutor.value.trim()
+                            : "",
 
                     cpf:
-                        document
-                            .getElementById(
-                                "cpfTutor"
-                            )
-                            .value
-                            .trim(),
+                        cpfTutor
+                            ? cpfTutor.value.trim()
+                            : "",
 
                     telefone:
-                        document
-                            .getElementById(
-                                "telefoneTutor"
-                            )
-                            .value
-                            .trim(),
+                        telefoneTutor
+                            ? telefoneTutor.value.trim()
+                            : "",
 
                     email:
-                        document
-                            .getElementById(
-                                "emailTutor"
-                            )
-                            .value
-                            .trim(),
+                        emailTutor
+                            ? emailTutor.value.trim()
+                            : "",
 
                     endereco:
-                        document
-                            .getElementById(
-                                "enderecoTutor"
-                            )
-                            .value
-                            .trim(),
+                        enderecoTutor
+                            ? enderecoTutor.value.trim()
+                            : "",
 
                     cep:
-                        document
-                            .getElementById(
-                                "cepTutor"
-                            )
-                            .value
-                            .trim()
+                        cepTutor
+                            ? cepTutor.value.trim()
+                            : ""
                 };
-
 
                 if (
                     !dadosAtualizados.nome ||
@@ -1019,7 +706,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     !dadosAtualizados.email ||
                     !dadosAtualizados.endereco
                 ) {
-
                     mostrarErro(
                         "Preencha todos os campos obrigatórios."
                     );
@@ -1027,9 +713,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-
                 try {
-
                     const resposta =
                         await fetch(
                             `${API_URL}/tutores/${tutorId}`,
@@ -1048,45 +732,34 @@ document.addEventListener("DOMContentLoaded", () => {
                             }
                         );
 
-
                     const dados =
                         await resposta.json();
 
-
                     if (!resposta.ok) {
-
                         throw new Error(
                             dados.mensagem ||
                             "Erro ao atualizar os dados."
                         );
                     }
 
-
                     tutor = {
                         ...tutor,
                         ...dadosAtualizados
                     };
 
-
                     atualizarDadosTutor();
-
                     preencherFormularioTutor();
-
                     fecharFormularioTutor();
-
 
                     mostrarMensagem(
                         "Dados do tutor atualizados com sucesso!"
                     );
 
-
                 } catch (erro) {
-
                     console.error(
                         "Erro ao atualizar tutor:",
                         erro
                     );
-
 
                     mostrarErro(
                         erro.message ||
@@ -1097,87 +770,49 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
-    // =====================================================
-    // ADICIONAR PET
-    // =====================================================
-
     if (btnAdicionarPet) {
-
         btnAdicionarPet.addEventListener(
             "click",
             () => {
-
                 abrirNovoPet();
-
             }
         );
     }
-
-
-    // =====================================================
-    // FECHAR MODAL DO PET
-    // =====================================================
 
     if (btnFecharModal) {
-
         btnFecharModal.addEventListener(
             "click",
-            () => {
-
-                fecharModalPet();
-
-            }
+            fecharModalPet
         );
     }
-
 
     if (btnCancelarPet) {
-
         btnCancelarPet.addEventListener(
             "click",
-            () => {
-
-                fecharModalPet();
-
-            }
+            fecharModalPet
         );
     }
 
-
     if (modalPet) {
-
         modalPet.addEventListener(
             "click",
             event => {
-
                 if (
                     event.target === modalPet
                 ) {
-
                     fecharModalPet();
-
                 }
             }
         );
     }
 
-
-    // =====================================================
-    // SALVAR / EDITAR PET
-    // =====================================================
-
     if (formPet) {
-
         formPet.addEventListener(
             "submit",
             async event => {
-
                 event.preventDefault();
 
-
                 if (!tutorId) {
-
                     mostrarErro(
                         "Tutor não identificado."
                     );
@@ -1185,58 +820,53 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
+                const nomePet =
+                    document.getElementById("nomePet");
+
+                const especiePet =
+                    document.getElementById("especiePet");
+
+                const racaPet =
+                    document.getElementById("racaPet");
+
+                const idadePet =
+                    document.getElementById("idadePet");
+
+                const sexoPet =
+                    document.getElementById("sexoPet");
+
+                const pesoPet =
+                    document.getElementById("pesoPet");
 
                 const nome =
-                    document
-                        .getElementById(
-                            "nomePet"
-                        )
-                        .value
-                        .trim();
-
+                    nomePet
+                        ? nomePet.value.trim()
+                        : "";
 
                 const especie =
-                    document
-                        .getElementById(
-                            "especiePet"
-                        )
-                        .value;
-
+                    especiePet
+                        ? especiePet.value
+                        : "";
 
                 const raca =
-                    document
-                        .getElementById(
-                            "racaPet"
-                        )
-                        .value
-                        .trim();
-
+                    racaPet
+                        ? racaPet.value.trim()
+                        : "";
 
                 const idade =
-                    document
-                        .getElementById(
-                            "idadePet"
-                        )
-                        .value
-                        .trim();
-
+                    idadePet
+                        ? idadePet.value.trim()
+                        : "";
 
                 const sexo =
-                    document
-                        .getElementById(
-                            "sexoPet"
-                        )
-                        .value;
-
+                    sexoPet
+                        ? sexoPet.value
+                        : "";
 
                 const peso =
-                    document
-                        .getElementById(
-                            "pesoPet"
-                        )
-                        .value
-                        .trim();
-
+                    pesoPet
+                        ? pesoPet.value.trim()
+                        : "";
 
                 if (
                     !nome ||
@@ -1246,7 +876,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     !sexo ||
                     !peso
                 ) {
-
                     mostrarErro(
                         "Preencha todos os campos do pet."
                     );
@@ -1254,34 +883,21 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-
                 const dadosPet = {
-
                     tutor_id: Number(tutorId),
-                
-                    nome: nome,
-                
-                    especie: especie,
-                
-                    raca: raca,
-                
-                    idade: idade,
-                
-                    sexo: sexo,
-                
-                    peso: peso
+                    nome,
+                    especie,
+                    raca,
+                    idade,
+                    sexo,
+                    peso
                 };
 
-
                 try {
-
-                    // =========================================
-                    // EDITAR PET EXISTENTE
-                    // =========================================
+                    let resposta;
 
                     if (petEditando) {
-
-                        const resposta =
+                        resposta =
                             await fetch(
                                 `${API_URL}/pets/${petEditando.id}`,
                                 {
@@ -1298,33 +914,8 @@ document.addEventListener("DOMContentLoaded", () => {
                                         )
                                 }
                             );
-
-
-                        const dados =
-                            await resposta.json();
-
-
-                        if (!resposta.ok) {
-
-                            throw new Error(
-                                dados.mensagem ||
-                                "Não foi possível atualizar o pet."
-                            );
-                        }
-
-
-                        mostrarMensagem(
-                            "Pet atualizado com sucesso!"
-                        );
-
-
-                    // =========================================
-                    // CADASTRAR NOVO PET
-                    // =========================================
-
                     } else {
-
-                        const resposta =
+                        resposta =
                             await fetch(
                                 `${API_URL}/pets`,
                                 {
@@ -1341,39 +932,33 @@ document.addEventListener("DOMContentLoaded", () => {
                                         )
                                 }
                             );
-
-
-                        const dados =
-                            await resposta.json();
-
-
-                        if (!resposta.ok) {
-
-                            throw new Error(
-                                dados.mensagem ||
-                                "Não foi possível cadastrar o pet."
-                            );
-                        }
-
-
-                        mostrarMensagem(
-                            "Pet cadastrado com sucesso!"
-                        );
                     }
 
+                    const dados =
+                        await resposta.json();
+
+                    if (!resposta.ok) {
+                        throw new Error(
+                            dados.mensagem ||
+                            "Não foi possível salvar o pet."
+                        );
+                    }
 
                     await carregarPets();
 
                     fecharModalPet();
 
+                    mostrarMensagem(
+                        petEditando
+                            ? "Pet atualizado com sucesso!"
+                            : "Pet cadastrado com sucesso!"
+                    );
 
                 } catch (erro) {
-
                     console.error(
                         "Erro ao salvar pet:",
                         erro
                     );
-
 
                     mostrarErro(
                         erro.message ||
@@ -1384,13 +969,7 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
-    // =====================================================
-    // FOTO DE PERFIL
-    // =====================================================
-
     function carregarFotoPerfil() {
-
         if (!fotoPerfil || !tutorId) {
             return;
         }
@@ -1401,22 +980,16 @@ document.addEventListener("DOMContentLoaded", () => {
             );
 
         if (fotoSalva) {
-
             fotoPerfil.src = fotoSalva;
-
         } else {
-
             fotoPerfil.src = fotoPadrao;
         }
     }
 
-
     if (inputFotoPerfil) {
-
         inputFotoPerfil.addEventListener(
             "change",
             event => {
-
                 const arquivo =
                     event.target.files[0];
 
@@ -1424,25 +997,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
 
-
                 const leitor =
                     new FileReader();
 
-
                 leitor.onload = () => {
-
                     const imagem =
                         leitor.result;
 
-                    fotoPerfil.src = imagem;
-
+                    if (fotoPerfil) {
+                        fotoPerfil.src =
+                            imagem;
+                    }
 
                     localStorage.setItem(
                         `fotoPerfil_${tutorId}`,
                         imagem
                     );
                 };
-
 
                 leitor.readAsDataURL(
                     arquivo
@@ -1451,35 +1022,27 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
     if (btnRemoverFoto) {
-
         btnRemoverFoto.addEventListener(
             "click",
             () => {
-
                 if (!tutorId) {
                     return;
                 }
-
 
                 localStorage.removeItem(
                     `fotoPerfil_${tutorId}`
                 );
 
-
                 if (fotoPerfil) {
-
                     fotoPerfil.src =
                         fotoPadrao;
                 }
 
-
                 if (inputFotoPerfil) {
-
-                    inputFotoPerfil.value = "";
+                    inputFotoPerfil.value =
+                        "";
                 }
-
 
                 mostrarMensagem(
                     "Foto removida com sucesso!"
@@ -1488,11 +1051,5 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
-
-    // =====================================================
-    // INICIAR PÁGINA
-    // =====================================================
-
     carregarTutor();
-
 });
