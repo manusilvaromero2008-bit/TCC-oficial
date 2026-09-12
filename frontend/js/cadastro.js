@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
     const API_URL = "http://localhost:3000/api";
 
     const container = document.getElementById("pets");
@@ -14,10 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const parametros = new URLSearchParams(window.location.search);
 
     let tutorId = parametros.get("tutor_id");
-
-    if (!tutorId) {
-        tutorId = localStorage.getItem("tutor_id");
-    }
 
     if (tutorId) {
         tutorId = Number(tutorId);
@@ -39,9 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function criarPet(pet = {}, numero = 1) {
+
         const novoPet = document.createElement("div");
 
         novoPet.className = "pet";
+
         novoPet.dataset.petId = pet.id || "";
 
         novoPet.innerHTML = `
@@ -51,10 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
             </h3>
 
             <div class="grid">
+
                 <div class="campo">
-                    <label>
-                        Nome *
-                    </label>
+                    <label>Nome *</label>
 
                     <input
                         type="text"
@@ -65,9 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="campo">
-                    <label>
-                        Espécie *
-                    </label>
+                    <label>Espécie *</label>
 
                     <select
                         class="especiePet"
@@ -83,9 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="campo">
-                    <label>
-                        Raça *
-                    </label>
+                    <label>Raça *</label>
 
                     <input
                         type="text"
@@ -96,9 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="campo">
-                    <label>
-                        Idade *
-                    </label>
+                    <label>Idade *</label>
 
                     <input
                         type="text"
@@ -109,9 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="campo">
-                    <label>
-                        Sexo *
-                    </label>
+                    <label>Sexo *</label>
 
                     <select
                         class="sexoPet"
@@ -124,9 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
 
                 <div class="campo">
-                    <label>
-                        Peso *
-                    </label>
+                    <label>Peso *</label>
 
                     <input
                         type="text"
@@ -135,18 +123,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         value="${escaparHTML(pet.peso || "")}"
                         required>
                 </div>
+
             </div>
         `;
 
-        const especie =
-            novoPet.querySelector(".especiePet");
+        const especie = novoPet.querySelector(".especiePet");
 
         if (pet.especie) {
             especie.value = pet.especie;
         }
 
-        const sexo =
-            novoPet.querySelector(".sexoPet");
+        const sexo = novoPet.querySelector(".sexoPet");
 
         if (pet.sexo) {
             sexo.value = pet.sexo;
@@ -156,16 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function carregarTutor() {
-        if (!tutorId) {
-            if (container.children.length === 0) {
-                contador = 1;
-                criarPet({}, contador);
-            }
 
+        if (!tutorId) {
             return;
         }
 
         try {
+
             const resposta = await fetch(
                 `${API_URL}/tutores/${tutorId}`
             );
@@ -179,57 +163,33 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
             }
 
-            const nomeTutor =
-                document.getElementById("nomeTutor");
+            document.getElementById("nomeTutor").value =
+                resultado.nome || "";
 
-            const cpfTutor =
-                document.getElementById("cpfTutor");
+            document.getElementById("cpfTutor").value =
+                resultado.cpf || "";
 
-            const telefoneTutor =
-                document.getElementById("telefoneTutor");
+            document.getElementById("telefoneTutor").value =
+                resultado.telefone || "";
 
-            const emailTutor =
-                document.getElementById("emailTutor");
+            document.getElementById("emailTutor").value =
+                resultado.email || "";
 
-            const enderecoTutor =
-                document.getElementById("enderecoTutor");
+            document.getElementById("enderecoTutor").value =
+                resultado.endereco || "";
 
-            const cepTutor =
+            const campoCep =
                 document.getElementById("cep");
 
-            if (nomeTutor) {
-                nomeTutor.value =
-                    resultado.nome || "";
-            }
-
-            if (cpfTutor) {
-                cpfTutor.value =
-                    resultado.cpf || "";
-            }
-
-            if (telefoneTutor) {
-                telefoneTutor.value =
-                    resultado.telefone || "";
-            }
-
-            if (emailTutor) {
-                emailTutor.value =
-                    resultado.email || "";
-            }
-
-            if (enderecoTutor) {
-                enderecoTutor.value =
-                    resultado.endereco || "";
-            }
-
-            if (cepTutor) {
-                cepTutor.value =
+            if (campoCep) {
+                campoCep.value =
                     resultado.cep || "";
             }
 
             await carregarPets();
 
         } catch (erro) {
+
             console.error(
                 "Erro ao carregar tutor:",
                 erro
@@ -237,17 +197,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
             alert(
                 erro.message ||
-                "Não foi possível carregar os dados."
+                "Não foi possível carregar os dados do tutor."
             );
         }
     }
 
     async function carregarPets() {
+
         if (!tutorId) {
             return;
         }
 
         try {
+
             const resposta = await fetch(
                 `${API_URL}/tutores/${tutorId}/pets`
             );
@@ -265,11 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 !Array.isArray(resultado) ||
                 resultado.length === 0
             ) {
-                if (container.children.length === 0) {
-                    contador = 1;
-                    criarPet({}, contador);
-                }
-
                 return;
             }
 
@@ -278,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
             contador = 0;
 
             resultado.forEach((pet, index) => {
+
                 criarPet(
                     pet,
                     index + 1
@@ -287,6 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         } catch (erro) {
+
             console.error(
                 "Erro ao carregar pets:",
                 erro
@@ -302,6 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnAdicionar.addEventListener(
         "click",
         () => {
+
             contador++;
 
             criarPet(
@@ -314,6 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
     formCadastro.addEventListener(
         "submit",
         async event => {
+
             event.preventDefault();
 
             if (!formCadastro.checkValidity()) {
@@ -322,41 +283,35 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const dadosTutor = {
-                nome:
-                    document
-                        .getElementById("nomeTutor")
-                        .value
-                        .trim(),
+                nome: document
+                    .getElementById("nomeTutor")
+                    .value
+                    .trim(),
 
-                cpf:
-                    document
-                        .getElementById("cpfTutor")
-                        .value
-                        .trim(),
+                cpf: document
+                    .getElementById("cpfTutor")
+                    .value
+                    .trim(),
 
-                telefone:
-                    document
-                        .getElementById("telefoneTutor")
-                        .value
-                        .trim(),
+                telefone: document
+                    .getElementById("telefoneTutor")
+                    .value
+                    .trim(),
 
-                email:
-                    document
-                        .getElementById("emailTutor")
-                        .value
-                        .trim(),
+                email: document
+                    .getElementById("emailTutor")
+                    .value
+                    .trim(),
 
-                endereco:
-                    document
-                        .getElementById("enderecoTutor")
-                        .value
-                        .trim(),
+                endereco: document
+                    .getElementById("enderecoTutor")
+                    .value
+                    .trim(),
 
-                cep:
-                    document
-                        .getElementById("cep")
-                        .value
-                        .trim()
+                cep: document
+                    .getElementById("cep")
+                    .value
+                    .trim()
             };
 
             const cardsPets =
@@ -365,6 +320,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const pets = [];
 
             cardsPets.forEach(card => {
+
                 const petId =
                     card.dataset.petId || null;
 
@@ -414,6 +370,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
             if (pets.length === 0) {
+
                 alert(
                     "Cadastre pelo menos um pet."
                 );
@@ -432,6 +389,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
             if (petIncompleto) {
+
                 alert(
                     "Preencha todos os campos obrigatórios dos pets."
                 );
@@ -450,7 +408,9 @@ document.addEventListener("DOMContentLoaded", () => {
             `;
 
             try {
+
                 if (tutorId) {
+
                     const respostaTutor =
                         await fetch(
                             `${API_URL}/tutores/${tutorId}`,
@@ -473,6 +433,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         await respostaTutor.json();
 
                     if (!respostaTutor.ok) {
+
                         throw new Error(
                             resultadoTutor.mensagem ||
                             "Erro ao atualizar tutor."
@@ -480,12 +441,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                     for (const pet of pets) {
+
                         if (pet.id) {
+
                             await atualizarPet(
                                 tutorId,
                                 pet
                             );
+
                         } else {
+
                             await cadastrarPet(
                                 tutorId,
                                 pet
@@ -494,6 +459,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
 
                 } else {
+
                     const respostaTutor =
                         await fetch(
                             `${API_URL}/tutores`,
@@ -516,32 +482,29 @@ document.addEventListener("DOMContentLoaded", () => {
                         await respostaTutor.json();
 
                     if (!respostaTutor.ok) {
+
                         throw new Error(
                             resultadoTutor.mensagem ||
+                            resultadoTutor.erro ||
                             "Erro ao cadastrar tutor."
                         );
                     }
 
                     tutorId =
-                        resultadoTutor.id ||
-                        resultadoTutor.tutor_id ||
-                        resultadoTutor.tutorId ||
-                        resultadoTutor.insertId;
+                        resultadoTutor.id;
 
                     if (!tutorId) {
+
                         throw new Error(
-                            "O tutor foi salvo, mas o servidor não retornou o ID."
+                            "O tutor foi cadastrado, mas o servidor não retornou o ID."
                         );
                     }
 
-                    tutorId = Number(tutorId);
-
-                    localStorage.setItem(
-                        "tutor_id",
-                        tutorId
-                    );
+                    tutorId =
+                        Number(tutorId);
 
                     for (const pet of pets) {
+
                         await cadastrarPet(
                             tutorId,
                             pet
@@ -554,6 +517,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     tutorId
                 );
 
+                sessionStorage.setItem(
+                    "tutor_id",
+                    tutorId
+                );
+
                 alert(
                     "Cadastro salvo com sucesso!"
                 );
@@ -562,6 +530,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     `perfil.html?tutor_id=${tutorId}`;
 
             } catch (erro) {
+
                 console.error(
                     "Erro ao salvar cadastro:",
                     erro
@@ -573,6 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
 
             } finally {
+
                 btnProsseguir.disabled = false;
 
                 btnProsseguir.innerHTML =
@@ -582,6 +552,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     async function cadastrarPet(idTutor, pet) {
+
         const resposta =
             await fetch(
                 `${API_URL}/pets`,
@@ -593,29 +564,31 @@ document.addEventListener("DOMContentLoaded", () => {
                             "application/json"
                     },
 
-                    body:
-                        JSON.stringify({
-                            tutor_id:
-                                Number(idTutor),
+                    body: JSON.stringify({
+                        tutor_id:
+                            Number(idTutor),
 
-                            nome:
-                                pet.nome,
+                        nome:
+                            pet.nome,
 
-                            especie:
-                                pet.especie,
+                        especie:
+                            pet.especie,
 
-                            raca:
-                                pet.raca,
+                        raca:
+                            pet.raca,
 
-                            idade:
-                                pet.idade,
+                        idade:
+                            pet.idade,
 
-                            sexo:
-                                pet.sexo,
+                        sexo:
+                            pet.sexo,
 
-                            peso:
-                                pet.peso
-                        })
+                        peso:
+                            pet.peso,
+
+                        observacoes:
+                            null
+                    })
                 }
             );
 
@@ -623,8 +596,10 @@ document.addEventListener("DOMContentLoaded", () => {
             await resposta.json();
 
         if (!resposta.ok) {
+
             throw new Error(
                 resultado.mensagem ||
+                resultado.erro ||
                 "Erro ao cadastrar o pet."
             );
         }
@@ -633,6 +608,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     async function atualizarPet(idTutor, pet) {
+
         const resposta =
             await fetch(
                 `${API_URL}/pets/${pet.id}`,
@@ -644,29 +620,31 @@ document.addEventListener("DOMContentLoaded", () => {
                             "application/json"
                     },
 
-                    body:
-                        JSON.stringify({
-                            tutor_id:
-                                Number(idTutor),
+                    body: JSON.stringify({
+                        tutor_id:
+                            Number(idTutor),
 
-                            nome:
-                                pet.nome,
+                        nome:
+                            pet.nome,
 
-                            especie:
-                                pet.especie,
+                        especie:
+                            pet.especie,
 
-                            raca:
-                                pet.raca,
+                        raca:
+                            pet.raca,
 
-                            idade:
-                                pet.idade,
+                        idade:
+                            pet.idade,
 
-                            sexo:
-                                pet.sexo,
+                        sexo:
+                            pet.sexo,
 
-                            peso:
-                                pet.peso
-                        })
+                        peso:
+                            pet.peso,
+
+                        observacoes:
+                            null
+                    })
                 }
             );
 
@@ -674,8 +652,10 @@ document.addEventListener("DOMContentLoaded", () => {
             await resposta.json();
 
         if (!resposta.ok) {
+
             throw new Error(
                 resultado.mensagem ||
+                resultado.erro ||
                 "Erro ao atualizar o pet."
             );
         }
@@ -683,5 +663,15 @@ document.addEventListener("DOMContentLoaded", () => {
         return resultado;
     }
 
-    carregarTutor();
+    if (tutorId) {
+        carregarTutor();
+    } else {
+
+        contador = 1;
+
+        criarPet(
+            {},
+            contador
+        );
+    }
 });

@@ -2,823 +2,466 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const API_URL = "http://localhost:3000/api";
 
-    const nomeClinica =
-        document.getElementById("nomeClinica");
+    const nomeClinica = document.getElementById("nomeClinica");
+    const listaPets = document.getElementById("listaPets");
 
-    const listaPets =
-        document.getElementById("listaPets");
+    const resumoClinica = document.getElementById("resumoClinica");
+    const resumoData = document.getElementById("resumoData");
+    const resumoHorario = document.getElementById("resumoHorario");
+    const resumoServico = document.getElementById("resumoServico");
+    const resumoVeterinario = document.getElementById("resumoVeterinario");
+    const resumoPet = document.getElementById("resumoPet");
+    const resumoTutor = document.getElementById("resumoTutor");
+    const resumoTelefone = document.getElementById("resumoTelefone");
+    const resumoTransporte = document.getElementById("resumoTransporte");
 
-    const resumoClinica =
-        document.getElementById("resumoClinica");
+    const transportOption = document.getElementById("transportOption");
+    const addressCard = document.getElementById("addressCard");
+    const endereco = document.getElementById("endereco");
+    const cep = document.getElementById("cep");
+    const btnContinuar = document.getElementById("btnContinuar");
 
-    const resumoData =
-        document.getElementById("resumoData");
-
-    const resumoHorario =
-        document.getElementById("resumoHorario");
-
-    const resumoServico =
-        document.getElementById("resumoServico");
-
-    const resumoVeterinario =
-        document.getElementById("resumoVeterinario");
-
-    const resumoPet =
-        document.getElementById("resumoPet");
-
-    const resumoTutor =
-        document.getElementById("resumoTutor");
-
-    const resumoTelefone =
-        document.getElementById("resumoTelefone");
-
-    const resumoTransporte =
-        document.getElementById("resumoTransporte");
-
-    const transportOption =
-        document.getElementById("transportOption");
-
-    const addressCard =
-        document.getElementById("addressCard");
-
-    const endereco =
-        document.getElementById("endereco");
-
-    const cep =
-        document.getElementById("cep");
-
-    const btnContinuar =
-        document.getElementById("btnContinuar");
-
-
-    // =========================================================
-    // VARIÁVEIS
-    // =========================================================
-
-    let clinicaDados = {};
-    let tutorDados = {};
-    let pets = [];
-    let petSelecionado = null;
-    let transporte = false;
-
-
-    // =========================================================
-    // PEGAR DADOS DA URL
-    // =========================================================
-
-    const params =
-        new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.search);
 
     const clinicaId =
-        params.get("clinica_id");
+        params.get("clinica_id") ||
+        sessionStorage.getItem("clinica_id");
 
     const tutorId =
-        params.get("tutor_id");
+        params.get("tutor_id") ||
+        sessionStorage.getItem("tutor_id");
 
+    const data =
+        params.get("data") ||
+        sessionStorage.getItem("data");
 
-    // =========================================================
-    // VALIDAR IDs
-    // =========================================================
+    const dataVisual =
+        params.get("data_visual") ||
+        sessionStorage.getItem("data_visual");
 
-    if (!clinicaId) {
+    const horario =
+        params.get("horario") ||
+        sessionStorage.getItem("horario");
 
-        alert(
-            "Clínica não identificada."
-        );
+    const servicoId =
+        params.get("servico_id") ||
+        sessionStorage.getItem("servico_id");
 
-        console.error(
-            "clinica_id não foi informado na URL."
-        );
+    let petSelecionado = null;
+    let transporte = false;
+    let servicoSelecionado = null;
 
+    if (!clinicaId || !tutorId || !data || !horario || !servicoId) {
+        alert("Não foi possível carregar todos os dados do agendamento.");
         return;
     }
 
-    if (!tutorId) {
+    function formatarData(dataRecebida) {
+        if (!dataRecebida) {
+            return "Não informado";
+        }
 
-        alert(
-            "Tutor não identificado."
-        );
+        const partes = dataRecebida.split("-");
 
-        console.error(
-            "tutor_id não foi informado na URL."
-        );
+        if (partes.length !== 3) {
+            return dataRecebida;
+        }
 
-        return;
+        const ano = Number(partes[0]);
+        const mes = Number(partes[1]);
+        const dia = Number(partes[2]);
+
+        const dataObj = new Date(ano, mes - 1, dia);
+
+        if (isNaN(dataObj.getTime())) {
+            return dataRecebida;
+        }
+
+        return dataObj.toLocaleDateString("pt-BR", {
+            weekday: "long",
+            day: "2-digit",
+            month: "long"
+        });
     }
-
-
-    // =========================================================
-    // CARREGAR CLÍNICA DO BANCO
-    // =========================================================
 
     async function carregarClinica() {
-
         try {
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/clinicas/${clinicaId}`
-                );
+            const resposta = await fetch(
+                `${API_URL}/clinicas/${clinicaId}`
+            );
 
             if (!resposta.ok) {
-
-                throw new Error(
-                    "Não foi possível carregar a clínica."
-                );
+                throw new Error("Erro ao carregar clínica.");
             }
 
-            clinicaDados =
-                await resposta.json();
+            const clinica = await resposta.json();
 
-            const nomeDaClinica =
-                clinicaDados.nome ||
-                "Clínica Veterinária";
+            const nome = clinica.nome || "Clínica Veterinária";
 
             if (nomeClinica) {
-
-                nomeClinica.textContent =
-                    nomeDaClinica;
+                nomeClinica.textContent = nome;
             }
 
             if (resumoClinica) {
-
-                resumoClinica.textContent =
-                    nomeDaClinica;
+                resumoClinica.textContent = nome;
             }
 
         } catch (erro) {
-
-            console.error(
-                "Erro ao carregar clínica:",
-                erro
-            );
+            console.error("Erro ao carregar clínica:", erro);
 
             if (nomeClinica) {
+                nomeClinica.textContent = "Clínica Veterinária";
+            }
 
-                nomeClinica.textContent =
-                    "Clínica Veterinária";
+            if (resumoClinica) {
+                resumoClinica.textContent = "Não informado";
             }
         }
     }
 
-
-    // =========================================================
-    // CARREGAR TUTOR DO BANCO
-    // =========================================================
-
     async function carregarTutor() {
-
         try {
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}`
-                );
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}`
+            );
 
             if (!resposta.ok) {
-
-                throw new Error(
-                    "Não foi possível carregar o tutor."
-                );
+                throw new Error("Erro ao carregar tutor.");
             }
 
-            tutorDados =
-                await resposta.json();
+            const tutor = await resposta.json();
 
             if (resumoTutor) {
-
                 resumoTutor.textContent =
-                    tutorDados.nome ||
-                    "Não informado";
+                    tutor.nome || "Não informado";
             }
 
             if (resumoTelefone) {
-
                 resumoTelefone.textContent =
-                    tutorDados.telefone ||
-                    "Não informado";
+                    tutor.telefone || "Não informado";
             }
 
             if (endereco) {
-
                 endereco.textContent =
-                    tutorDados.endereco ||
-                    "Endereço não informado";
+                    tutor.endereco || "Endereço não informado";
             }
 
             if (cep) {
-
                 cep.textContent =
-                    tutorDados.cep
-                        ? "CEP: " + tutorDados.cep
+                    tutor.cep
+                        ? `CEP: ${tutor.cep}`
                         : "CEP não informado";
             }
 
         } catch (erro) {
-
-            console.error(
-                "Erro ao carregar tutor:",
-                erro
-            );
+            console.error("Erro ao carregar tutor:", erro);
 
             if (resumoTutor) {
-
-                resumoTutor.textContent =
-                    "Não informado";
+                resumoTutor.textContent = "Não informado";
             }
 
             if (resumoTelefone) {
-
-                resumoTelefone.textContent =
-                    "Não informado";
+                resumoTelefone.textContent = "Não informado";
             }
 
             if (endereco) {
-
-                endereco.textContent =
-                    "Endereço não informado";
+                endereco.textContent = "Endereço não informado";
             }
 
             if (cep) {
-
-                cep.textContent =
-                    "CEP não informado";
+                cep.textContent = "CEP não informado";
             }
         }
     }
-
-
-    // =========================================================
-    // CARREGAR PETS DO BANCO
-    // =========================================================
 
     async function carregarPets() {
-
         try {
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}/pets`
-                );
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}/pets`
+            );
 
             if (!resposta.ok) {
-
-                throw new Error(
-                    "Não foi possível carregar os pets."
-                );
+                throw new Error("Erro ao carregar pets.");
             }
 
-            pets =
-                await resposta.json();
+            const dados = await resposta.json();
 
-            if (!Array.isArray(pets)) {
+            const pets = Array.isArray(dados) ? dados : [];
 
-                pets = [];
+            listaPets.innerHTML = "";
+
+            if (pets.length === 0) {
+                listaPets.innerHTML =
+                    "<p>Nenhum pet cadastrado.</p>";
+                return;
             }
 
-            mostrarPets();
+            pets.forEach(pet => {
 
-        } catch (erro) {
+                const card = document.createElement("div");
 
-            console.error(
-                "Erro ao carregar pets:",
-                erro
-            );
+                card.className = "pet-card";
+                card.dataset.id = pet.id;
 
-            pets = [];
+                card.innerHTML = `
+                    <div class="pet-icon">
+                        <i class="fa-solid fa-paw"></i>
+                    </div>
 
-            if (listaPets) {
+                    <div class="pet-info">
+                        <h3>${pet.nome || "Pet sem nome"}</h3>
 
-                listaPets.innerHTML = `
-                    <p>
-                        Não foi possível carregar os pets.
-                    </p>
+                        <p>
+                            ${pet.especie || ""}
+                            ${pet.raca ? ` • ${pet.raca}` : ""}
+                        </p>
+                    </div>
                 `;
-            }
-        }
-    }
 
-
-    // =========================================================
-    // MOSTRAR PETS
-    // =========================================================
-
-    function mostrarPets() {
-
-        if (!listaPets) {
-            return;
-        }
-
-        listaPets.innerHTML = "";
-
-        if (pets.length === 0) {
-
-            listaPets.innerHTML = `
-                <p>
-                    Nenhum pet cadastrado.
-                </p>
-            `;
-
-            return;
-        }
-
-
-        pets.forEach((pet) => {
-
-            const card =
-                document.createElement("div");
-
-            card.classList.add(
-                "pet-card"
-            );
-
-            card.dataset.id =
-                pet.id;
-
-
-            card.innerHTML = `
-
-                <div class="pet-icon">
-
-                    <i class="fa-solid fa-paw"></i>
-
-                </div>
-
-                <div class="pet-info">
-
-                    <h3>
-                        ${pet.nome || "Pet sem nome"}
-                    </h3>
-
-                    <p>
-
-                        ${pet.especie || ""}
-
-                        ${pet.raca
-                            ? " • " + pet.raca
-                            : ""
-                        }
-
-                    </p>
-
-                </div>
-
-            `;
-
-
-            // =================================================
-            // SELECIONAR PET
-            // =================================================
-
-            card.addEventListener(
-                "click",
-                () => {
+                card.addEventListener("click", () => {
 
                     document
                         .querySelectorAll(".pet-card")
-                        .forEach((item) => {
-
-                            item.classList.remove(
-                                "selecionado"
-                            );
-
+                        .forEach(item => {
+                            item.classList.remove("selecionado");
                         });
 
+                    card.classList.add("selecionado");
 
-                    card.classList.add(
-                        "selecionado"
-                    );
+                    petSelecionado = pet;
 
+                    if (resumoPet) {
+                        resumoPet.textContent =
+                            pet.nome || "Não informado";
+                    }
+                });
 
-                    petSelecionado =
-                        pet;
+                listaPets.appendChild(card);
+            });
 
+        } catch (erro) {
+            console.error("Erro ao carregar pets:", erro);
 
-                    atualizarResumoPet();
+            listaPets.innerHTML =
+                "<p>Não foi possível carregar os pets.</p>";
+        }
+    }
 
-                }
+    async function carregarServico() {
+        try {
+            const resposta = await fetch(
+                `${API_URL}/clinicas/${clinicaId}/servicos`
             );
 
+            if (!resposta.ok) {
+                throw new Error("Erro ao carregar serviços.");
+            }
 
-            listaPets.appendChild(card);
+            const servicos = await resposta.json();
 
-        });
+            servicoSelecionado = servicos.find(
+                servico =>
+                    Number(servico.id) === Number(servicoId)
+            );
 
-    }
+            if (!servicoSelecionado) {
+                throw new Error("Serviço selecionado não encontrado.");
+            }
 
+            if (resumoServico) {
 
-    // =========================================================
-    // RESUMO DO PET
-    // =========================================================
+                const preco =
+                    servicoSelecionado.preco !== null &&
+                    servicoSelecionado.preco !== undefined &&
+                    servicoSelecionado.preco !== ""
+                        ? ` - R$ ${Number(
+                            servicoSelecionado.preco
+                        ).toFixed(2).replace(".", ",")}`
+                        : "";
 
-    function atualizarResumoPet() {
+                resumoServico.textContent =
+                    `${servicoSelecionado.nome || "Serviço"}${preco}`;
+            }
 
-        if (!resumoPet) {
-            return;
+            if (resumoVeterinario) {
+                resumoVeterinario.textContent =
+                    servicoSelecionado.veterinario_nome ||
+                    "Não informado";
+            }
+
+            sessionStorage.setItem(
+                "servico_id",
+                servicoSelecionado.id
+            );
+
+            sessionStorage.setItem(
+                "servico_nome",
+                servicoSelecionado.nome || ""
+            );
+
+            sessionStorage.setItem(
+                "servico_preco",
+                servicoSelecionado.preco || ""
+            );
+
+            sessionStorage.setItem(
+                "servico_tipo",
+                servicoSelecionado.tipo || ""
+            );
+
+            sessionStorage.setItem(
+                "veterinario_id",
+                servicoSelecionado.veterinario_id || ""
+            );
+
+            sessionStorage.setItem(
+                "veterinario",
+                servicoSelecionado.veterinario_nome || ""
+            );
+
+        } catch (erro) {
+            console.error("Erro ao carregar serviço:", erro);
+
+            if (resumoServico) {
+                resumoServico.textContent = "Não informado";
+            }
+
+            if (resumoVeterinario) {
+                resumoVeterinario.textContent = "Não informado";
+            }
         }
-
-        resumoPet.textContent =
-            petSelecionado
-                ? petSelecionado.nome
-                : "Nenhum pet selecionado";
     }
-
-
-    // =========================================================
-    // TRANSPORTE
-    // =========================================================
 
     function atualizarTransporte() {
 
         if (transporte) {
 
-            transportOption?.classList.add(
-                "selected"
-            );
-
-            addressCard?.classList.add(
-                "show"
-            );
+            transportOption.classList.add("selected");
+            addressCard.classList.add("show");
 
             if (resumoTransporte) {
-
-                resumoTransporte.textContent =
-                    "Solicitado";
+                resumoTransporte.textContent = "Solicitado";
             }
 
         } else {
 
-            transportOption?.classList.remove(
-                "selected"
-            );
-
-            addressCard?.classList.remove(
-                "show"
-            );
+            transportOption.classList.remove("selected");
+            addressCard.classList.remove("show");
 
             if (resumoTransporte) {
-
-                resumoTransporte.textContent =
-                    "Não solicitado";
+                resumoTransporte.textContent = "Não solicitado";
             }
         }
     }
 
+    if (resumoData) {
+        resumoData.textContent =
+            dataVisual || formatarData(data);
+    }
 
-    // =========================================================
-    // CARREGAR DADOS DA DATA E SERVIÇO
-    // =========================================================
-    //
-    // Esses dados devem vir da URL.
-    //
-    // Exemplo:
-    //
-    // petetransporte.html?
-    // clinica_id=2&
-    // tutor_id=1&
-    // data=2026-08-30&
-    // horario=14:00&
-    // servico_id=1
-    //
-    // =========================================================
+    if (resumoHorario) {
+        resumoHorario.textContent = horario;
+    }
 
-    const data =
-        params.get("data") ||
-        params.get("dataAgendamento") ||
-        "Não informado";
+    transportOption.addEventListener("click", () => {
 
-    const horario =
-        params.get("horario") ||
-        params.get("horarioAgendamento") ||
-        "Não informado";
+        transporte = !transporte;
 
-    const servicoId =
-        params.get("servico_id");
+        atualizarTransporte();
+    });
 
+    btnContinuar.addEventListener("click", async () => {
 
-    let servicoDados = null;
-
-
-    // =========================================================
-    // CARREGAR SERVIÇO DO BANCO
-    // =========================================================
-
-    async function carregarServico() {
-
-        if (!servicoId) {
-
-            if (resumoServico) {
-
-                resumoServico.textContent =
-                    "Não informado";
-            }
-
-            if (resumoVeterinario) {
-
-                resumoVeterinario.textContent =
-                    "Não informado";
-            }
-
+        if (!petSelecionado) {
+            alert("Selecione um pet antes de continuar.");
             return;
         }
 
-
-        try {
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/servicos/${servicoId}`
-                );
-
-
-            if (!resposta.ok) {
-
-                throw new Error(
-                    "Não foi possível carregar o serviço."
-                );
-            }
-
-
-            servicoDados =
-                await resposta.json();
-
-
-            if (resumoServico) {
-
-                const preco =
-                    servicoDados.preco
-                        ? ` - R$ ${servicoDados.preco}`
-                        : "";
-
-                resumoServico.textContent =
-                    `${servicoDados.nome}${preco}`;
-            }
-
-
-            if (resumoVeterinario) {
-
-                resumoVeterinario.textContent =
-                    servicoDados.veterinario ||
-                    "Não informado";
-            }
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao carregar serviço:",
-                erro
-            );
-
-            if (resumoServico) {
-
-                resumoServico.textContent =
-                    "Não informado";
-            }
-
-            if (resumoVeterinario) {
-
-                resumoVeterinario.textContent =
-                    "Não informado";
-            }
+        if (!servicoSelecionado) {
+            alert("Não foi possível identificar o serviço selecionado.");
+            return;
         }
-    }
-
-
-    // =========================================================
-    // RESUMO DATA E HORÁRIO
-    // =========================================================
-
-    if (resumoData) {
-
-        resumoData.textContent =
-            data;
-    }
-
-
-    if (resumoHorario) {
-
-        resumoHorario.textContent =
-            horario;
-    }
-
-
-    // =========================================================
-    // INICIALIZAR TRANSPORTE
-    // =========================================================
-
-    atualizarTransporte();
-
-
-    if (transportOption) {
-
-        transportOption.addEventListener(
-            "click",
-            () => {
-
-                transporte =
-                    !transporte;
-
-                atualizarTransporte();
-
-            }
-        );
-    }
-
-
-    // =========================================================
-    // SALVAR AGENDAMENTO NO BANCO
-    // =========================================================
-
-    async function criarAgendamentoFinal() {
-
-        if (!petSelecionado) {
-
-            alert(
-                "Selecione um pet antes de continuar."
-            );
-
-            return false;
-        }
-
-
-        if (!servicoId) {
-
-            alert(
-                "Serviço não identificado."
-            );
-
-            return false;
-        }
-
-
-        if (!data || data === "Não informado") {
-
-            alert(
-                "Data do agendamento não identificada."
-            );
-
-            return false;
-        }
-
-
-        if (!horario || horario === "Não informado") {
-
-            alert(
-                "Horário do agendamento não identificado."
-            );
-
-            return false;
-        }
-
 
         try {
 
             btnContinuar.disabled = true;
 
-            btnContinuar.innerHTML =
-                `Salvando...
-                 <i class="fa-solid fa-spinner fa-spin"></i>`;
-
+            btnContinuar.innerHTML = `
+                Salvando...
+                <i class="fa-solid fa-spinner fa-spin"></i>
+            `;
 
             const dadosAgendamento = {
-
-                tutor_id:
-                    Number(tutorId),
-
-                pet_id:
-                    Number(petSelecionado.id),
-
-                clinica_id:
-                    Number(clinicaId),
-
-                servico_id:
-                    Number(servicoId),
-
-                data:
-                    data,
-
-                horario:
-                    horario,
-
-                transporte:
-                    transporte
-
+                tutor_id: Number(tutorId),
+                pet_id: Number(petSelecionado.id),
+                clinica_id: Number(clinicaId),
+                servico_id: Number(servicoSelecionado.id),
+                veterinario_id:
+                    servicoSelecionado.veterinario_id
+                        ? Number(servicoSelecionado.veterinario_id)
+                        : null,
+                data_agendamento: data,
+                horario: horario,
+                observacoes: transporte
+                    ? "Transporte solicitado"
+                    : null
             };
 
+            const resposta = await fetch(
+                `${API_URL}/agendamentos`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(dadosAgendamento)
+                }
+            );
 
-            const resposta =
-                await fetch(
-                    `${API_URL}/agendamentos`,
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/json"
-                        },
-
-                        body:
-                            JSON.stringify(
-                                dadosAgendamento
-                            )
-                    }
-                );
-
-
-            const resultado =
-                await resposta.json();
-
+            const resultado = await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
+                    resultado.mensagem ||
                     resultado.erro ||
-                    resultado.message ||
-                    "Erro ao criar agendamento."
+                    "Não foi possível realizar o agendamento."
                 );
             }
 
-
-            console.log(
-                "Agendamento criado:",
-                resultado
-            );
-
-
-            // Guarda somente o ID retornado pela API
-            // para a página final consultar o banco.
-
             if (resultado.id) {
-
                 sessionStorage.setItem(
                     "agendamentoId",
                     resultado.id
                 );
             }
 
-
-            window.location.href =
-                "final.html";
-
-
-            return true;
-
+            window.location.href = "final.html";
 
         } catch (erro) {
 
             console.error(
-                "Erro ao criar agendamento:",
+                "Erro ao realizar agendamento:",
                 erro
             );
 
-
             alert(
-                "Não foi possível realizar o agendamento.\n\n" +
-                erro.message
+                erro.message ||
+                "Não foi possível realizar o agendamento."
             );
 
+            btnContinuar.disabled = false;
 
-            btnContinuar.disabled =
-                false;
-
-            btnContinuar.innerHTML =
-                `Continuar
-                 <i class="fa-solid fa-arrow-right"></i>`;
-
-
-            return false;
+            btnContinuar.innerHTML = `
+                Continuar
+                <i class="fa-solid fa-arrow-right"></i>
+            `;
         }
-    }
+    });
 
-
-    // =========================================================
-    // BOTÃO CONTINUAR
-    // =========================================================
-
-    if (btnContinuar) {
-
-        btnContinuar.addEventListener(
-            "click",
-            async () => {
-
-                await criarAgendamentoFinal();
-
-            }
-        );
-    }
-
-
-    // =========================================================
-    // CARREGAR TUDO
-    // =========================================================
+    atualizarTransporte();
 
     await carregarClinica();
-
     await carregarTutor();
-
     await carregarPets();
-
     await carregarServico();
-
 });
