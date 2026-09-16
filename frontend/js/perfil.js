@@ -3,26 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const btnInicio = document.getElementById("btnInicio");
     const btnCadastrar = document.getElementById("btnCadastrar");
-
     const areaCadastro = document.getElementById("areaCadastro");
     const areaPerfil = document.getElementById("areaPerfil");
-
     const btnEditarTutor = document.getElementById("btnEditarTutor");
     const btnCancelarTutor = document.getElementById("btnCancelarTutor");
     const formTutor = document.getElementById("formTutor");
     const dadosTutor = document.getElementById("dadosTutor");
-
     const btnAdicionarPet = document.getElementById("btnAdicionarPet");
     const listaPets = document.getElementById("listaPets");
-
     const modalPet = document.getElementById("modalPet");
     const btnFecharModal = document.getElementById("btnFecharModal");
     const btnCancelarPet = document.getElementById("btnCancelarPet");
     const formPet = document.getElementById("formPet");
     const tituloModalPet = document.getElementById("tituloModalPet");
-
     const mensagem = document.getElementById("mensagem");
-
     const inputFotoPerfil = document.getElementById("inputFotoPerfil");
     const fotoPerfil = document.getElementById("fotoPerfil");
     const nomePerfilFoto = document.getElementById("nomePerfilFoto");
@@ -49,10 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
         !Number.isNaN(tutorId) &&
         tutorId > 0
     ) {
-        localStorage.setItem(
-            "tutor_id",
-            tutorId
-        );
+        localStorage.setItem("tutor_id", tutorId);
     }
 
     let tutor = null;
@@ -140,6 +131,198 @@ document.addEventListener("DOMContentLoaded", () => {
             .replace(/'/g, "&#039;");
     }
 
+    function formatarCPF(valor) {
+        const numeros = String(valor || "")
+            .replace(/\D/g, "")
+            .slice(0, 11);
+
+        if (numeros.length <= 3) {
+            return numeros;
+        }
+
+        if (numeros.length <= 6) {
+            return `${numeros.slice(0, 3)}.${numeros.slice(3)}`;
+        }
+
+        if (numeros.length <= 9) {
+            return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6)}`;
+        }
+
+        return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6, 9)}-${numeros.slice(9, 11)}`;
+    }
+
+    function formatarTelefone(valor) {
+        const numeros = String(valor || "")
+            .replace(/\D/g, "")
+            .slice(0, 11);
+
+        if (numeros.length <= 2) {
+            return numeros;
+        }
+
+        if (numeros.length <= 6) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+        }
+
+        if (numeros.length <= 10) {
+            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
+        }
+
+        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7, 11)}`;
+    }
+
+    function formatarCEP(valor) {
+        const numeros = String(valor || "")
+            .replace(/\D/g, "")
+            .slice(0, 8);
+
+        if (numeros.length <= 5) {
+            return numeros;
+        }
+
+        return `${numeros.slice(0, 5)}-${numeros.slice(5)}`;
+    }
+
+    function validarCPF(valor) {
+        const cpf = String(valor || "")
+            .replace(/\D/g, "");
+
+        if (cpf.length !== 11) {
+            return false;
+        }
+
+        if (/^(\d)\1{10}$/.test(cpf)) {
+            return false;
+        }
+
+        let soma = 0;
+
+        for (let i = 0; i < 9; i++) {
+            soma += Number(cpf[i]) * (10 - i);
+        }
+
+        let resto = (soma * 10) % 11;
+
+        if (resto === 10) {
+            resto = 0;
+        }
+
+        if (resto !== Number(cpf[9])) {
+            return false;
+        }
+
+        soma = 0;
+
+        for (let i = 0; i < 10; i++) {
+            soma += Number(cpf[i]) * (11 - i);
+        }
+
+        resto = (soma * 10) % 11;
+
+        if (resto === 10) {
+            resto = 0;
+        }
+
+        return resto === Number(cpf[10]);
+    }
+
+    function validarTelefone(valor) {
+        const telefone = String(valor || "")
+            .replace(/\D/g, "");
+
+        return (
+            telefone.length === 10 ||
+            telefone.length === 11
+        );
+    }
+
+    function validarEmail(valor) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+            String(valor || "").trim()
+        );
+    }
+
+    async function validarCEP(valor) {
+        const cep = String(valor || "")
+            .replace(/\D/g, "");
+
+        if (!cep) {
+            return true;
+        }
+
+        if (cep.length !== 8) {
+            return false;
+        }
+
+        try {
+            const resposta = await fetch(
+                `https://viacep.com.br/ws/${cep}/json/`
+            );
+
+            if (!resposta.ok) {
+                return false;
+            }
+
+            const dados = await resposta.json();
+
+            if (dados.erro) {
+                return false;
+            }
+
+            return true;
+        } catch (erro) {
+            console.error(
+                "Erro ao consultar CEP:",
+                erro
+            );
+
+            return false;
+        }
+    }
+
+    function configurarFormatacaoCampos() {
+        const cpfTutor =
+            document.getElementById("cpfTutor");
+
+        const telefoneTutor =
+            document.getElementById("telefoneTutor");
+
+        const cepTutor =
+            document.getElementById("cepTutor");
+
+        if (cpfTutor) {
+            cpfTutor.addEventListener(
+                "input",
+                () => {
+                    cpfTutor.value =
+                        formatarCPF(cpfTutor.value);
+                }
+            );
+        }
+
+        if (telefoneTutor) {
+            telefoneTutor.addEventListener(
+                "input",
+                () => {
+                    telefoneTutor.value =
+                        formatarTelefone(
+                            telefoneTutor.value
+                        );
+                }
+            );
+        }
+
+        if (cepTutor) {
+            cepTutor.addEventListener(
+                "input",
+                () => {
+                    cepTutor.value =
+                        formatarCEP(cepTutor.value);
+                }
+            );
+        }
+    }
+
     async function carregarTutor() {
         if (!verificarTutorId()) {
             return;
@@ -163,12 +346,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
             atualizarDadosTutor();
             preencherFormularioTutor();
+
             mostrarAreaPerfil();
 
             await carregarPets();
 
             carregarFotoPerfil();
-
         } catch (erro) {
             console.error(
                 "Erro ao carregar tutor:",
@@ -212,7 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 : [];
 
             mostrarPets();
-
         } catch (erro) {
             console.error(
                 "Erro ao carregar pets:",
@@ -330,12 +512,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cpfTutor) {
             cpfTutor.value =
-                tutor.cpf || "";
+                formatarCPF(tutor.cpf || "");
         }
 
         if (telefoneTutor) {
             telefoneTutor.value =
-                tutor.telefone || "";
+                formatarTelefone(
+                    tutor.telefone || ""
+                );
         }
 
         if (emailTutor) {
@@ -350,7 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (cepTutor) {
             cepTutor.value =
-                tutor.cep || "";
+                formatarCEP(tutor.cep || "");
         }
     }
 
@@ -449,7 +633,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     class="btn-editar-pet">
 
                     <i class="fa-solid fa-pen"></i>
-
                     Editar
 
                 </button>
@@ -645,7 +828,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     mostrarErro(
                         "Tutor não identificado."
                     );
-
                     return;
                 }
 
@@ -667,51 +849,90 @@ document.addEventListener("DOMContentLoaded", () => {
                 const cepTutor =
                     document.getElementById("cepTutor");
 
-                const dadosAtualizados = {
-                    nome:
-                        nomeTutor
-                            ? nomeTutor.value.trim()
-                            : "",
+                const nome =
+                    nomeTutor
+                        ? nomeTutor.value.trim()
+                        : "";
 
-                    cpf:
-                        cpfTutor
-                            ? cpfTutor.value.trim()
-                            : "",
+                const cpf =
+                    cpfTutor
+                        ? cpfTutor.value.trim()
+                        : "";
 
-                    telefone:
-                        telefoneTutor
-                            ? telefoneTutor.value.trim()
-                            : "",
+                const telefone =
+                    telefoneTutor
+                        ? telefoneTutor.value.trim()
+                        : "";
 
-                    email:
-                        emailTutor
-                            ? emailTutor.value.trim()
-                            : "",
+                const email =
+                    emailTutor
+                        ? emailTutor.value.trim()
+                        : "";
 
-                    endereco:
-                        enderecoTutor
-                            ? enderecoTutor.value.trim()
-                            : "",
+                const endereco =
+                    enderecoTutor
+                        ? enderecoTutor.value.trim()
+                        : "";
 
-                    cep:
-                        cepTutor
-                            ? cepTutor.value.trim()
-                            : ""
-                };
+                const cep =
+                    cepTutor
+                        ? cepTutor.value.trim()
+                        : "";
 
                 if (
-                    !dadosAtualizados.nome ||
-                    !dadosAtualizados.cpf ||
-                    !dadosAtualizados.telefone ||
-                    !dadosAtualizados.email ||
-                    !dadosAtualizados.endereco
+                    !nome ||
+                    !cpf ||
+                    !telefone ||
+                    !email ||
+                    !endereco
                 ) {
                     mostrarErro(
                         "Preencha todos os campos obrigatórios."
                     );
-
                     return;
                 }
+
+                if (!validarCPF(cpf)) {
+                    mostrarErro(
+                        "Digite um CPF válido."
+                    );
+                    return;
+                }
+
+                if (!validarTelefone(telefone)) {
+                    mostrarErro(
+                        "Digite um telefone válido."
+                    );
+                    return;
+                }
+
+                if (!validarEmail(email)) {
+                    mostrarErro(
+                        "Digite um e-mail válido."
+                    );
+                    return;
+                }
+
+                if (cep) {
+                    const cepValido =
+                        await validarCEP(cep);
+
+                    if (!cepValido) {
+                        mostrarErro(
+                            "O CEP informado não foi encontrado."
+                        );
+                        return;
+                    }
+                }
+
+                const dadosAtualizados = {
+                    nome,
+                    cpf,
+                    telefone,
+                    email,
+                    endereco,
+                    cep
+                };
 
                 try {
                     const resposta =
@@ -719,12 +940,10 @@ document.addEventListener("DOMContentLoaded", () => {
                             `${API_URL}/tutores/${tutorId}`,
                             {
                                 method: "PUT",
-
                                 headers: {
                                     "Content-Type":
                                         "application/json"
                                 },
-
                                 body:
                                     JSON.stringify(
                                         dadosAtualizados
@@ -754,7 +973,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     mostrarMensagem(
                         "Dados do tutor atualizados com sucesso!"
                     );
-
                 } catch (erro) {
                     console.error(
                         "Erro ao atualizar tutor:",
@@ -816,7 +1034,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     mostrarErro(
                         "Tutor não identificado."
                     );
-
                     return;
                 }
 
@@ -879,7 +1096,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     mostrarErro(
                         "Preencha todos os campos do pet."
                     );
+                    return;
+                }
 
+                const pesoNumerico =
+                    Number(
+                        peso
+                            .replace(",", ".")
+                            .replace(/[^\d.]/g, "")
+                    );
+
+                if (
+                    Number.isNaN(pesoNumerico) ||
+                    pesoNumerico <= 0
+                ) {
+                    mostrarErro(
+                        "Digite um peso válido para o pet."
+                    );
                     return;
                 }
 
@@ -902,12 +1135,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 `${API_URL}/pets/${petEditando.id}`,
                                 {
                                     method: "PUT",
-
                                     headers: {
                                         "Content-Type":
                                             "application/json"
                                     },
-
                                     body:
                                         JSON.stringify(
                                             dadosPet
@@ -920,12 +1151,10 @@ document.addEventListener("DOMContentLoaded", () => {
                                 `${API_URL}/pets`,
                                 {
                                     method: "POST",
-
                                     headers: {
                                         "Content-Type":
                                             "application/json"
                                     },
-
                                     body:
                                         JSON.stringify(
                                             dadosPet
@@ -953,7 +1182,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             ? "Pet atualizado com sucesso!"
                             : "Pet cadastrado com sucesso!"
                     );
-
                 } catch (erro) {
                     console.error(
                         "Erro ao salvar pet:",
@@ -1051,5 +1279,6 @@ document.addEventListener("DOMContentLoaded", () => {
         );
     }
 
+    configurarFormatacaoCampos();
     carregarTutor();
 });
