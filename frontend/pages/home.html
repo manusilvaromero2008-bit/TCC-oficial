@@ -15,7 +15,7 @@
 
     <link
         rel="stylesheet"
-        href="./frontend/css/home.css"
+        href="../css/home.css"
     >
 
     <link
@@ -33,16 +33,19 @@
 
     <div class="container-header">
 
-        <a
-            href="./frontend/pages/perfil.html"
-            class="btn-perfil"
-        >
+        <div class="botoes-header">
 
-            <i class="fa-solid fa-user"></i>
-
-            Meu Perfil
-
+        <a href="../pages/animais.html" class="btn-perdidos">
+        <i class="fa-solid fa-paw"></i>
+        S.O.S ANIMAIS
         </a>
+
+        <a href="../pages/perfil.html" class="btn-perfil">
+        <i class="fa-solid fa-user"></i>
+        Meu Perfil
+    </a>
+
+</div>
 
     </div>
 
@@ -117,8 +120,8 @@
 
 </section>
 
-<script src="./frontend/js/home.js?v=2"></script>
-<script src="./frontend/js/maps.js"></script>
+<script src="../js/home.js"></script>
+<script src="../js/maps.js"></script>
 <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHi8rNqtgX0wOwly6iuvU1B1zVxjxaWXQ&callback=initMap"
     async

@@ -80,10 +80,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             const pagina = paginasClinicas[Number(clinica.id)];
 
             if (pagina) {
-                cardLink.href = `./frontend/pages/${pagina}?id=${clinica.id}`;
-            } else {
-                cardLink.href = `./frontend/pages/clinica.html?id=${clinica.id}`;
-            }
+    cardLink.href = `./${pagina}?id=${clinica.id}`;
+} else {
+    cardLink.href = `./clinica.html?id=${clinica.id}`;
+}
 
             const card = document.createElement("div");
 
