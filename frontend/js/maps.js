@@ -19,3 +19,17 @@ function initMap() {
         title: "Clínicas veterinárias"
     });
 }
+
+
+/* Função para abrir a rota no Google Maps */
+
+function abrirRota() {
+
+    const destino = "-22.9099,-47.0626";
+
+    const url =
+        "https://www.google.com/maps/dir/?api=1&destination="
+        + destino;
+
+    window.open(url, "_blank");
+}
