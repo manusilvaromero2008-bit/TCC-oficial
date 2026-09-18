@@ -13,23 +13,21 @@ function initMap() {
         }
     );
 
-    new google.maps.Marker({
+    const marcador = new google.maps.Marker({
         position: localizacao,
         map: mapa,
-        title: "Clínicas veterinárias"
+        title: "Clínica Veterinária"
     });
-}
 
+    // Ao clicar no marcador, abre a rota no Google Maps
+    marcador.addListener("click", function () {
 
-/* Função para abrir a rota no Google Maps */
+        const destino = `${localizacao.lat},${localizacao.lng}`;
 
-function abrirRota() {
+        const url =
+            "https://www.google.com/maps/dir/?api=1&destination="
+            + destino;
 
-    const destino = "-22.9099,-47.0626";
-
-    const url =
-        "https://www.google.com/maps/dir/?api=1&destination="
-        + destino;
-
-    window.open(url, "_blank");
+        window.open(url, "_blank");
+    });
 }
