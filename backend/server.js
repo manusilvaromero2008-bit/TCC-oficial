@@ -6,7 +6,8 @@ const conexao = require("./config/database");
 const app = express();
 
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 app.get("/", (req, res) => {
     res.json({
@@ -72,13 +73,11 @@ function formatarCPF(valor) {
 
 function validarEmail(valor) {
     const email = String(valor || "").trim();
-
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function validarTelefone(valor) {
     const telefone = String(valor || "").replace(/\D/g, "");
-
     return telefone.length === 10 || telefone.length === 11;
 }
 
@@ -108,7 +107,6 @@ function validarNome(valor) {
 
 function validarEndereco(valor) {
     const endereco = String(valor || "").trim();
-
     return endereco.length >= 3 && endereco.length <= 255;
 }
 
@@ -307,7 +305,9 @@ app.post("/api/tutores", async (req, res) => {
         const resultadoCEP = await validarCEP(cep);
 
         if (!resultadoCEP.valido) {
-            return res.status(resultadoCEP.indisponivel ? 503 : 400).json({
+            return res.status(
+                resultadoCEP.indisponivel ? 503 : 400
+            ).json({
                 mensagem: resultadoCEP.mensagem
             });
         }
@@ -425,7 +425,9 @@ app.put("/api/tutores/:id", async (req, res) => {
         const resultadoCEP = await validarCEP(cep);
 
         if (!resultadoCEP.valido) {
-            return res.status(resultadoCEP.indisponivel ? 503 : 400).json({
+            return res.status(
+                resultadoCEP.indisponivel ? 503 : 400
+            ).json({
                 mensagem: resultadoCEP.mensagem
             });
         }
@@ -1214,6 +1216,164 @@ app.delete("/api/agendamentos/:id", async (req, res) => {
 
         res.status(500).json({
             mensagem: "Erro ao cancelar agendamento."
+        });
+    }
+});
+
+app.get("/api/animais", async (req, res) => {
+    try {
+        const [animais] = await conexao.query(`
+            SELECT
+                id,
+                tutor_id,
+                nome,
+                especie,
+                raca,
+                cor,
+                DATE_FORMAT(data_perdido, '%Y-%m-%d') AS data_perdido,
+                bairro,
+                local_perdido,
+                descricao,
+                contato,
+                foto,
+                status,
+                created_at
+            FROM animais_perdidos
+            ORDER BY id DESC
+        `);
+
+        res.json(animais);
+    } catch (erro) {
+        console.error("Erro ao buscar animais:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao buscar animais.",
+            erro: erro.message
+        });
+    }
+});
+
+app.post("/api/animais", async (req, res) => {
+    try {
+        const {
+            tutor_id,
+            nome,
+            especie,
+            raca,
+            cor,
+            data,
+            bairro,
+            local,
+            descricao,
+            contato,
+            foto,
+            status
+        } = req.body;
+
+        if (
+            !nome ||
+            !especie ||
+            !data ||
+            !bairro ||
+            !local ||
+            !contato
+        ) {
+            return res.status(400).json({
+                mensagem: "Preencha todos os campos obrigatórios."
+            });
+        }
+
+        const especiesPermitidas = [
+            "cachorro",
+            "gato",
+            "ave",
+            "roedor",
+            "outro"
+        ];
+
+        if (!especiesPermitidas.includes(
+            String(especie).trim().toLowerCase()
+        )) {
+            return res.status(400).json({
+                mensagem: "Selecione uma espécie válida."
+            });
+        }
+
+        const statusFinal =
+            status === "encontrado"
+                ? "encontrado"
+                : "perdido";
+
+        const [resultado] = await conexao.query(`
+            INSERT INTO animais_perdidos
+            (
+                tutor_id,
+                nome,
+                especie,
+                raca,
+                cor,
+                data_perdido,
+                bairro,
+                local_perdido,
+                descricao,
+                contato,
+                foto,
+                status
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+            tutor_id || null,
+            String(nome).trim(),
+            String(especie).trim().toLowerCase(),
+            raca ? String(raca).trim() : null,
+            cor ? String(cor).trim() : null,
+            data,
+            String(bairro).trim(),
+            String(local).trim(),
+            descricao ? String(descricao).trim() : null,
+            String(contato).trim(),
+            foto || null,
+            statusFinal
+        ]);
+
+        res.status(201).json({
+            mensagem: "Animal cadastrado com sucesso.",
+            id: resultado.insertId
+        });
+    } catch (erro) {
+        console.error("Erro ao cadastrar animal:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao cadastrar animal.",
+            erro: erro.message
+        });
+    }
+});
+
+app.delete("/api/animais/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const [resultado] = await conexao.query(`
+            DELETE FROM animais_perdidos
+            WHERE id = ?
+        `, [id]);
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: "Animal não encontrado."
+            });
+        }
+
+        res.json({
+            mensagem: "Anúncio removido com sucesso."
+        });
+    } catch (erro) {
+        console.error("Erro ao remover animal:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao remover anúncio.",
+            erro: erro.message
         });
     }
 });

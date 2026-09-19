@@ -77,7 +77,7 @@ body {
 .hero {
     max-width: 1200px;
     margin: 30px auto;
-    padding: 40px;
+    padding: 35px;
     background: white;
     border-radius: 20px;
     display: flex;
@@ -105,7 +105,7 @@ body {
 
 .hero h2 {
     color: #04407c;
-    font-size: 42px;
+    font-size: 40px;
     margin-bottom: 15px;
 }
 
@@ -115,36 +115,36 @@ body {
 
 .hero p {
     color: #555;
-    font-size: 18px;
-    line-height: 1.6;
+    font-size: 17px;
+    line-height: 1.5;
 }
 
 .hero-icon {
-    width: 120px;
-    height: 120px;
+    width: 105px;
+    height: 105px;
     border-radius: 50%;
     background: #e0effa;
     color: #0757a6;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 55px;
+    font-size: 48px;
     flex-shrink: 0;
 }
 
 .filtros-container {
     max-width: 1200px;
-    margin: 0 auto 30px;
-    padding: 25px;
+    margin: 0 auto 25px;
+    padding: 22px;
     background: white;
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
 
 .pesquisa {
     position: relative;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 17px;
 }
 
 .pesquisa i {
@@ -153,16 +153,16 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: #0757a6;
-    font-size: 18px;
+    font-size: 17px;
 }
 
 .pesquisa input {
     width: 100%;
-    padding: 16px 16px 16px 48px;
+    padding: 14px 16px 14px 46px;
     border: 2px solid #0757a6;
-    border-radius: 12px;
+    border-radius: 11px;
     outline: none;
-    font-size: 16px;
+    font-size: 15px;
     background: white;
 }
 
@@ -173,19 +173,19 @@ body {
 
 .filtros {
     display: flex;
-    gap: 10px;
+    gap: 9px;
     flex-wrap: wrap;
-    margin-bottom: 15px;
+    margin-bottom: 13px;
 }
 
 .filtro {
     border: 2px solid #0757a6;
     background: white;
     color: #0757a6;
-    padding: 10px 18px;
-    border-radius: 12px;
+    padding: 9px 15px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     transition: 0.3s;
 }
@@ -205,22 +205,22 @@ body {
 
 .filtro-especie select {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     border: 2px solid #0757a6;
-    border-radius: 12px;
+    border-radius: 10px;
     background: white;
     color: #333;
-    font-size: 16px;
+    font-size: 15px;
     outline: none;
 }
 
 .cadastrar-area {
     max-width: 1200px;
-    margin: 0 auto 30px;
-    padding: 25px 30px;
+    margin: 0 auto 25px;
+    padding: 22px 28px;
     background: #0757a6;
     color: white;
-    border-radius: 20px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -229,12 +229,12 @@ body {
 }
 
 .cadastrar-area h3 {
-    font-size: 22px;
-    margin-bottom: 8px;
+    font-size: 21px;
+    margin-bottom: 6px;
 }
 
 .cadastrar-area p {
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.95;
 }
 
@@ -243,12 +243,12 @@ body {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 13px 20px;
+    padding: 12px 18px;
     border: none;
-    border-radius: 12px;
+    border-radius: 11px;
     background: white;
     color: #0757a6;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -270,53 +270,58 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
     gap: 20px;
 }
 
 .titulo-lista h2 {
     color: #04407c;
-    font-size: 28px;
-    margin-bottom: 6px;
+    font-size: 27px;
+    margin-bottom: 5px;
 }
 
 .titulo-lista p {
     color: #666;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 #contadorAnimais {
-    padding: 9px 15px;
+    padding: 8px 14px;
     background: #e0effa;
     color: #0757a6;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     white-space: nowrap;
 }
 
 .lista-animais {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+    align-items: start;
 }
 
 .card-animal {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto;
     background: white;
-    border-radius: 20px;
+    border-radius: 14px;
     overflow: hidden;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: 0.3s;
 }
 
 .card-animal:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
 }
 
 .foto-card {
     position: relative;
-    height: 260px;
+    width: 100%;
+    height: 170px;
     background: #e0effa;
     overflow: hidden;
 }
@@ -330,17 +335,17 @@ body {
 
 .status {
     position: absolute;
-    top: 15px;
-    left: 15px;
-    padding: 8px 12px;
-    border-radius: 20px;
+    top: 10px;
+    left: 10px;
+    padding: 6px 9px;
+    border-radius: 18px;
     color: white;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 6px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    gap: 4px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .status.perdido {
@@ -352,62 +357,63 @@ body {
 }
 
 .info-card {
-    padding: 22px;
+    padding: 14px;
 }
 
 .info-card h3 {
     color: #04407c;
-    font-size: 24px;
-    margin-bottom: 5px;
+    font-size: 19px;
+    margin-bottom: 3px;
 }
 
 .tipo-animal {
     color: #0757a6;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
 }
 
 .detalhes {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: 18px;
+    gap: 5px;
+    margin-top: 10px;
 }
 
 .detalhe {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
+    gap: 7px;
     color: #555;
-    font-size: 15px;
-    line-height: 1.4;
+    font-size: 13px;
+    line-height: 1.3;
 }
 
 .detalhe i {
     color: #0757a6;
-    width: 18px;
+    width: 16px;
+    min-width: 16px;
     text-align: center;
-    margin-top: 2px;
+    margin-top: 1px;
 }
 
 .descricao {
-    margin-top: 18px;
-    padding-top: 15px;
+    margin-top: 10px;
+    padding-top: 10px;
     border-top: 1px solid #e5e5e5;
     color: #555;
-    font-size: 15px;
-    line-height: 1.5;
+    font-size: 13px;
+    line-height: 1.35;
 }
 
 .btn-contato {
     width: 100%;
-    margin-top: 20px;
-    padding: 13px;
+    margin-top: 12px;
+    padding: 9px;
     border: none;
-    border-radius: 12px;
+    border-radius: 9px;
     background: #0757a6;
     color: white;
-    font-size: 15px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -420,13 +426,13 @@ body {
 
 .btn-remover {
     width: 100%;
-    margin-top: 10px;
-    padding: 11px;
+    margin-top: 6px;
+    padding: 8px;
     border: 2px solid #0757a6;
-    border-radius: 12px;
+    border-radius: 9px;
     background: white;
     color: #0757a6;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -438,28 +444,28 @@ body {
 
 .nenhum-animal {
     display: none;
-    padding: 50px 20px;
+    padding: 45px 20px;
     text-align: center;
     background: white;
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 }
 
 .nenhum-animal > i {
-    font-size: 50px;
+    font-size: 45px;
     color: #0757a6;
-    margin-bottom: 15px;
+    margin-bottom: 14px;
 }
 
 .nenhum-animal h3 {
     color: #04407c;
-    font-size: 22px;
-    margin-bottom: 8px;
+    font-size: 21px;
+    margin-bottom: 7px;
 }
 
 .nenhum-animal p {
     color: #666;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .modal {
@@ -480,26 +486,26 @@ body {
 .modal-conteudo {
     position: relative;
     width: 100%;
-    max-width: 700px;
+    max-width: 650px;
     max-height: 90vh;
     overflow-y: auto;
     background: white;
-    border-radius: 20px;
-    padding: 30px;
+    border-radius: 18px;
+    padding: 28px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.20);
 }
 
 .fechar {
     position: absolute;
-    top: 15px;
-    right: 15px;
-    width: 40px;
-    height: 40px;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
     border: none;
     border-radius: 50%;
     background: #e0effa;
     color: #0757a6;
-    font-size: 20px;
+    font-size: 19px;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -512,14 +518,14 @@ body {
 .modal-titulo {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
+    gap: 13px;
+    margin-bottom: 22px;
     padding-right: 45px;
 }
 
 .icone-modal {
-    width: 55px;
-    height: 55px;
+    width: 52px;
+    height: 52px;
     flex-shrink: 0;
     border-radius: 50%;
     background: #e0effa;
@@ -527,29 +533,29 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 25px;
+    font-size: 23px;
 }
 
 .modal-titulo h2 {
     color: #04407c;
-    font-size: 25px;
-    margin-bottom: 5px;
+    font-size: 24px;
+    margin-bottom: 4px;
 }
 
 .modal-titulo p {
     color: #666;
-    font-size: 14px;
+    font-size: 13px;
 }
 
 .campo {
-    margin-bottom: 18px;
+    margin-bottom: 16px;
 }
 
 .campo label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     color: #04407c;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -557,12 +563,12 @@ body {
 .campo select,
 .campo textarea {
     width: 100%;
-    padding: 13px;
+    padding: 12px;
     border: 2px solid #d5e7f5;
-    border-radius: 10px;
+    border-radius: 9px;
     outline: none;
     font-family: Arial, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     background: white;
     transition: 0.3s;
 }
@@ -581,13 +587,13 @@ body {
 .linha {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 18px;
+    gap: 16px;
 }
 
 .status-opcoes {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
 .status-option {
@@ -602,12 +608,12 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 13px;
+    gap: 7px;
+    padding: 12px;
     border: 2px solid #d5e7f5;
-    border-radius: 10px;
+    border-radius: 9px;
     color: #0757a6;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
     transition: 0.3s;
 }
@@ -624,27 +630,27 @@ body {
 
 .upload-area {
     position: relative;
-    min-height: 130px;
-    padding: 25px;
+    min-height: 120px;
+    padding: 22px;
     border: 2px dashed #0757a6;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #f5faff;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 7px;
     text-align: center;
     cursor: pointer;
     color: #0757a6;
 }
 
 .upload-area i {
-    font-size: 30px;
+    font-size: 28px;
 }
 
 .upload-area span {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: bold;
 }
 
@@ -660,22 +666,22 @@ body {
 .preview-foto {
     display: none;
     width: 100%;
-    max-height: 250px;
+    max-height: 220px;
     object-fit: cover;
-    margin-top: 15px;
-    border-radius: 12px;
+    margin-top: 12px;
+    border-radius: 10px;
     border: 2px solid #0757a6;
 }
 
 .btn-enviar {
     width: 100%;
-    padding: 14px;
-    margin-top: 5px;
+    padding: 13px;
+    margin-top: 4px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     background: #0756a6e0;
     color: white;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -687,21 +693,26 @@ body {
 }
 
 footer {
-    margin-top: 30px;
-    padding: 25px;
+    margin-top: 25px;
+    padding: 23px;
     background: #04407c;
     color: white;
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
+}
+
+@media (max-width: 1000px) {
+    .lista-animais {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
-
     .header {
         min-height: auto;
         padding: 20px;
         flex-direction: column;
-        gap: 20px;
+        gap: 18px;
         align-items: stretch;
     }
 
@@ -717,20 +728,20 @@ footer {
         font-size: 14px;
     }
 
-    .btn-voltar {
+    .btn-inicio {
         width: 100%;
     }
 
     .hero {
         margin: 20px 15px;
-        padding: 30px 20px;
+        padding: 28px 20px;
         flex-direction: column;
         text-align: center;
-        gap: 25px;
+        gap: 22px;
     }
 
     .hero h2 {
-        font-size: 34px;
+        font-size: 33px;
     }
 
     .hero p {
@@ -744,16 +755,16 @@ footer {
     }
 
     .filtros-container {
-        margin: 0 15px 25px;
-        padding: 20px;
+        margin: 0 15px 22px;
+        padding: 19px;
     }
 
     .cadastrar-area {
-        margin: 0 15px 25px;
+        margin: 0 15px 22px;
         flex-direction: column;
         align-items: stretch;
         text-align: center;
-        padding: 25px 20px;
+        padding: 22px 18px;
     }
 
     .btn-cadastrar {
@@ -767,6 +778,10 @@ footer {
 
     .lista-animais {
         grid-template-columns: 1fr;
+    }
+
+    .card-animal {
+        max-width: 350px;
     }
 
     .linha {
@@ -783,12 +798,11 @@ footer {
     }
 
     .modal-conteudo {
-        padding: 25px 20px;
+        padding: 24px 19px;
     }
 }
 
 @media (max-width: 500px) {
-
     .logo-area {
         gap: 10px;
     }
@@ -804,7 +818,7 @@ footer {
     }
 
     .hero h2 {
-        font-size: 29px;
+        font-size: 28px;
     }
 
     .hero-icon {
@@ -822,14 +836,18 @@ footer {
     }
 
     .foto-card {
-        height: 230px;
+        height: 160px;
+    }
+
+    .card-animal {
+        max-width: 320px;
     }
 
     .info-card {
-        padding: 18px;
+        padding: 13px;
     }
 
     .info-card h3 {
-        font-size: 21px;
+        font-size: 18px;
     }
 }

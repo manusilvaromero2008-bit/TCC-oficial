@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const API_URL = "http://localhost:3000/api";
 
     const nomeClinica = document.getElementById("nomeClinica");
@@ -29,6 +28,126 @@ document.addEventListener("DOMContentLoaded", async () => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+    }
+
+    function limparTutorSalvo() {
+        sessionStorage.removeItem("tutor_id");
+        localStorage.removeItem("tutor_id");
+    }
+
+    function obterTutorId() {
+        const sessionTutorId = sessionStorage.getItem("tutor_id");
+
+        if (sessionTutorId) {
+            return sessionTutorId;
+        }
+
+        const localTutorId = localStorage.getItem("tutor_id");
+
+        if (localTutorId) {
+            return localTutorId;
+        }
+
+        return null;
+    }
+
+    function mostrarMensagemCadastro() {
+        const modalExistente = document.getElementById("modalCadastroObrigatorio");
+
+        if (modalExistente) {
+            return;
+        }
+
+        const fundo = document.createElement("div");
+
+        fundo.id = "modalCadastroObrigatorio";
+
+        fundo.innerHTML = `
+            <div class="modal-cadastro-conteudo">
+                <button class="fechar-modal-cadastro" id="fecharModalCadastro" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <div class="icone-cadastro">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+
+                <h2>Você ainda não possui um cadastro</h2>
+
+                <p>
+                    Para agendar uma consulta, primeiro é necessário
+                    realizar seu cadastro no Agenda Pet.
+                </p>
+
+                <div class="acoes-cadastro">
+                    <a href="perfil.html" class="btn-ir-perfil">
+                        <i class="fa-solid fa-user"></i>
+                        Ir para meu perfil
+                    </a>
+
+                    <button class="btn-agora-nao" id="btnAgoraNao" type="button">
+                        Agora não
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(fundo);
+
+        const fechar = () => {
+            fundo.remove();
+        };
+
+        const btnFechar = document.getElementById("fecharModalCadastro");
+        const btnAgoraNao = document.getElementById("btnAgoraNao");
+
+        if (btnFechar) {
+            btnFechar.addEventListener("click", fechar);
+        }
+
+        if (btnAgoraNao) {
+            btnAgoraNao.addEventListener("click", fechar);
+        }
+
+        fundo.addEventListener("click", event => {
+            if (event.target === fundo) {
+                fechar();
+            }
+        });
+    }
+
+    async function verificarCadastro() {
+        const tutorId = obterTutorId();
+
+        if (!tutorId) {
+            return null;
+        }
+
+        try {
+            const resposta = await fetch(
+                `${API_URL}/tutores/${encodeURIComponent(tutorId)}`
+            );
+
+            if (!resposta.ok) {
+                limparTutorSalvo();
+                return null;
+            }
+
+            const dados = await resposta.json();
+
+            const tutor = dados.tutor || dados;
+
+            if (!tutor || !tutor.id) {
+                limparTutorSalvo();
+                return null;
+            }
+
+            return tutor;
+        } catch (erro) {
+            console.error("Erro ao verificar cadastro:", erro);
+            limparTutorSalvo();
+            return null;
+        }
     }
 
     async function carregarClinica() {
@@ -78,7 +197,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     ${escaparHTML(horario)}
                 `;
             }
-
         } catch (erro) {
             console.error("Erro ao carregar clínica:", erro);
 
@@ -148,10 +266,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const tipo = String(servico.tipo || "").toLowerCase();
                 const nome = String(servico.nome || "").toLowerCase();
 
-                return (
-                    tipo.includes("consulta") ||
-                    nome.includes("consulta")
-                );
+                return tipo.includes("consulta") || nome.includes("consulta");
             });
 
             if (precoConsulta) {
@@ -180,13 +295,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const preco =
                     servico.preco !== null &&
                     servico.preco !== undefined
-                        ? Number(servico.preco).toLocaleString(
-                            "pt-BR",
-                            {
-                                style: "currency",
-                                currency: "BRL"
-                            }
-                        )
+                        ? Number(servico.preco).toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL"
+                        })
                         : "";
 
                 card.innerHTML = `
@@ -221,7 +333,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 listaServicos.appendChild(card);
             });
-
         } catch (erro) {
             console.error("Erro ao carregar serviços:", erro);
 
@@ -256,10 +367,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             listaVeterinarios.innerHTML = "";
 
-            if (
-                !Array.isArray(veterinarios) ||
-                veterinarios.length === 0
-            ) {
+            if (!Array.isArray(veterinarios) || veterinarios.length === 0) {
                 listaVeterinarios.innerHTML = `
                     <p>Nenhum veterinário disponível.</p>
                 `;
@@ -283,9 +391,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     <div class="vet-info">
                         <h3>
-                            ${escaparHTML(
-                                veterinario.nome || "Veterinário"
-                            )}
+                            ${escaparHTML(veterinario.nome || "Veterinário")}
                         </h3>
 
                         ${
@@ -293,9 +399,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 ? `
                                     <p>
                                         <i class="fa-solid fa-stethoscope"></i>
-                                        ${escaparHTML(
-                                            veterinario.especialidade
-                                        )}
+                                        ${escaparHTML(veterinario.especialidade)}
                                     </p>
                                 `
                                 : ""
@@ -306,9 +410,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 ? `
                                     <p>
                                         <i class="fa-solid fa-phone"></i>
-                                        ${escaparHTML(
-                                            veterinario.telefone
-                                        )}
+                                        ${escaparHTML(veterinario.telefone)}
                                     </p>
                                 `
                                 : ""
@@ -319,37 +421,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 ? `
                                     <p>
                                         <i class="fa-solid fa-envelope"></i>
-                                        ${escaparHTML(
-                                            veterinario.email
-                                        )}
+                                        ${escaparHTML(veterinario.email)}
                                     </p>
                                 `
                                 : ""
                         }
 
                         <span class="status ${
-                            disponivel
-                                ? "disponivel"
-                                : "indisponivel"
+                            disponivel ? "disponivel" : "indisponivel"
                         }">
                             <i class="fa-solid fa-circle"></i>
-                            ${
-                                disponivel
-                                    ? "Disponível"
-                                    : "Indisponível"
-                            }
+                            ${disponivel ? "Disponível" : "Indisponível"}
                         </span>
                     </div>
                 `;
 
                 listaVeterinarios.appendChild(card);
             });
-
         } catch (erro) {
-            console.error(
-                "Erro ao carregar veterinários:",
-                erro
-            );
+            console.error("Erro ao carregar veterinários:", erro);
 
             listaVeterinarios.innerHTML = `
                 <p>Não foi possível carregar os veterinários.</p>
@@ -361,95 +451,30 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnAgendar.addEventListener("click", async event => {
             event.preventDefault();
 
-            try {
-                const resposta = await fetch(
-                    `${API_URL}/tutores`
-                );
+            btnAgendar.style.pointerEvents = "none";
 
-                const tutores = await resposta.json();
+            const tutor = await verificarCadastro();
 
-                if (!resposta.ok) {
-                    throw new Error(
-                        tutores.mensagem ||
-                        "Não foi possível verificar o cadastro."
-                    );
-                }
+            btnAgendar.style.pointerEvents = "";
 
-                if (
-                    !Array.isArray(tutores) ||
-                    tutores.length === 0
-                ) {
-                    window.location.href = "cadastro.html";
-                    return;
-                }
-
-                const tutorId = tutores[0].id;
-
-                if (!tutorId) {
-                    window.location.href = "cadastro.html";
-                    return;
-                }
-
-                const respostaPets = await fetch(
-                    `${API_URL}/tutores/${tutorId}/pets`
-                );
-
-                const pets = await respostaPets.json();
-
-                if (!respostaPets.ok) {
-                    throw new Error(
-                        pets.mensagem ||
-                        "Não foi possível verificar os pets."
-                    );
-                }
-
-                if (
-                    !Array.isArray(pets) ||
-                    pets.length === 0
-                ) {
-                    window.location.href =
-                        `cadastro.html?tutor_id=${encodeURIComponent(tutorId)}`;
-                    return;
-                }
-
-                const parametros =
-                    new URLSearchParams();
-
-                parametros.set(
-                    "clinica_id",
-                    clinicaId
-                );
-
-                parametros.set(
-                    "tutor_id",
-                    tutorId
-                );
-
-                sessionStorage.setItem(
-                    "clinica_id",
-                    String(clinicaId)
-                );
-
-                sessionStorage.setItem(
-                    "tutor_id",
-                    String(tutorId)
-                );
-
-                window.location.href =
-                    `dataehorario.html?${parametros.toString()}`;
-
-            } catch (erro) {
-                console.error(
-                    "Erro ao verificar cadastro:",
-                    erro
-                );
-
-                alert(
-                    erro.message ||
-                    "Não foi possível verificar seu cadastro."
-                );
+            if (!tutor) {
+                mostrarMensagemCadastro();
+                return;
             }
+
+            sessionStorage.setItem("clinica_id", String(clinicaId));
+            sessionStorage.setItem("tutor_id", String(tutor.id));
+
+            const parametros = new URLSearchParams();
+
+            parametros.set("clinica_id", String(clinicaId));
+            parametros.set("tutor_id", String(tutor.id));
+
+            window.location.href =
+                `dataehorario.html?${parametros.toString()}`;
         });
+    } else {
+        console.error("Botão Agendar Consulta não encontrado.");
     }
 
     await carregarClinica();
