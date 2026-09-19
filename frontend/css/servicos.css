@@ -208,10 +208,15 @@ header p {
 .btn-voltar {
     background: #0756a649;
     color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .btn-voltar:hover {
     background: #0757a6;
+    transform: translateY(-2px);
 }
 
 .btn-continuar {
@@ -219,6 +224,10 @@ header p {
     color: white;
     border: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .btn-continuar:hover:not(:disabled) {

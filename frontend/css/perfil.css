@@ -54,6 +54,23 @@ header {
     text-decoration: none;
 }
 
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #0757a6;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 22px;
+    transition: 0.3s;
+}
+
+.btn-voltar:hover {
+    color: #04407c;
+    transform: translateX(-4px);
+}
+
 .btn-inicio:hover {
     background: #0757a6;
     color: white;

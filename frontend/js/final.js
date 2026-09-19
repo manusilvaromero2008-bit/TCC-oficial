@@ -20,10 +20,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const tutorId =
         parametros.get("tutor_id") ||
-        sessionStorage.getItem("tutor_id");
+        sessionStorage.getItem("tutor_id") ||
+        localStorage.getItem("tutor_id");
 
-    const transporte =
-        sessionStorage.getItem("transporte");
+    const clinicaId =
+        parametros.get("clinica_id") ||
+        sessionStorage.getItem("clinica_id") ||
+        sessionStorage.getItem("clinicaId") ||
+        localStorage.getItem("clinica_id") ||
+        localStorage.getItem("clinicaId");
+
+    const transporte = sessionStorage.getItem("transporte");
 
     function formatarData(data) {
         if (!data) {
@@ -93,14 +100,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function carregarAgendamento() {
-
         if (!agendamentoId) {
             mostrarErro();
             return;
         }
 
         try {
-
             const resposta = await fetch(
                 `${API_URL}/agendamentos/${agendamentoId}`
             );
@@ -148,26 +153,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             if (elementoTransporte) {
-
                 if (
                     transporte === "true" ||
                     (
                         agendamento.observacoes &&
-                        String(
-                            agendamento.observacoes
-                        ).toLowerCase().includes("transporte")
+                        String(agendamento.observacoes)
+                            .toLowerCase()
+                            .includes("transporte")
                     )
                 ) {
-                    elementoTransporte.textContent =
-                        "Solicitado";
+                    elementoTransporte.textContent = "Solicitado";
                 } else {
-                    elementoTransporte.textContent =
-                        "Não solicitado";
+                    elementoTransporte.textContent = "Não solicitado";
                 }
             }
 
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar agendamento:",
                 erro
@@ -179,20 +180,60 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (btnInicio) {
         btnInicio.addEventListener("click", () => {
-            window.location.href = "../../home.html";
+            window.location.href = "../pages/home.html";
         });
     }
 
     if (btnOutroPet) {
         btnOutroPet.addEventListener("click", () => {
 
-            if (tutorId) {
-                window.location.href =
-                    `dataehorario.html?tutor_id=${encodeURIComponent(tutorId)}`;
-            } else {
-                window.location.href =
-                    "dataehorario.html";
+            if (!tutorId) {
+                alert(
+                    "Não foi possível identificar o tutor. Verifique se o cadastro está salvo."
+                );
+                return;
             }
+
+            if (!clinicaId) {
+                alert(
+                    "Não foi possível identificar a clínica. Volte para a escolha da clínica e tente novamente."
+                );
+                return;
+            }
+
+            sessionStorage.setItem(
+                "tutor_id",
+                String(tutorId)
+            );
+
+            sessionStorage.setItem(
+                "clinica_id",
+                String(clinicaId)
+            );
+
+            sessionStorage.setItem(
+                "clinicaId",
+                String(clinicaId)
+            );
+
+            sessionStorage.removeItem("agendamentoId");
+            sessionStorage.removeItem("pet_id");
+            sessionStorage.removeItem("petId");
+            sessionStorage.removeItem("data");
+            sessionStorage.removeItem("data_visual");
+            sessionStorage.removeItem("horario");
+            sessionStorage.removeItem("servico_id");
+            sessionStorage.removeItem("servico_nome");
+            sessionStorage.removeItem("servico_preco");
+            sessionStorage.removeItem("servico_tipo");
+            sessionStorage.removeItem("veterinario_id");
+            sessionStorage.removeItem("veterinario");
+            sessionStorage.removeItem("transporte");
+
+            const destino =
+                `../pages/dataehorario.html?tutor_id=${encodeURIComponent(tutorId)}&clinica_id=${encodeURIComponent(clinicaId)}`;
+
+            window.location.href = destino;
         });
     }
 

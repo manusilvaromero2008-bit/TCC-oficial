@@ -2,127 +2,67 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Perdidos & Encontrados | Agenda Pet</title>
 
-    <!-- =========================
-         FONT AWESOME
-    ========================== -->
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    >
-
-
-    <!-- =========================
-         CSS
-    ========================== -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
     <link rel="stylesheet" href="../css/animais.css">
-
 </head>
 
-
 <body>
-
-
-    <!-- =========================
-         HEADER
-    ========================== -->
 
     <header class="header">
 
         <div class="logo-area">
 
             <div class="logo">
-
                 <i class="fa-solid fa-paw"></i>
-
             </div>
 
-
             <div>
-
                 <h1>Agenda Pet</h1>
-
                 <span>Perdidos & Encontrados</span>
-
             </div>
 
         </div>
 
-
-        <!-- BOTÃO VOLTAR PARA HOME -->
-
-        <a href="../pages/home.html" class="btn-voltar">
-
-            <i class="fa-solid fa-house"></i>
-
-            Início
-
-        </a>
+        <a href="home.html" class="btn-inicio">
+    <i class="fa-solid fa-house"></i>
+    Início
+</a>
 
     </header>
-
-
-
-    <!-- =========================
-         HERO
-    ========================== -->
 
     <section class="hero">
 
         <div class="hero-text">
 
             <span class="tag">
-
                 <i class="fa-solid fa-heart"></i>
-
                 Ajude um pet
-
             </span>
 
-
             <h2>
-
                 Perdidos & <span>Encontrados</span>
-
             </h2>
 
-
             <p>
-
                 Encontre animais perdidos ou ajude a reunir um pet
                 encontrado com sua família.
-
             </p>
 
         </div>
 
-
         <div class="hero-icon">
-
             <i class="fa-solid fa-paw"></i>
-
         </div>
 
     </section>
 
-
-
-    <!-- =========================
-         FILTROS
-    ========================== -->
-
     <section class="filtros-container">
-
-
-        <!-- PESQUISA -->
 
         <div class="pesquisa">
 
@@ -136,62 +76,32 @@
 
         </div>
 
-
-
-        <!-- FILTROS DE STATUS -->
-
         <div class="filtros">
-
-
-            <!-- TODOS -->
 
             <button
                 type="button"
                 class="filtro ativo"
-                data-status="todos"
-            >
-
+                data-status="todos">
                 Todos
-
             </button>
-
-
-
-            <!-- PERDIDOS -->
 
             <button
                 type="button"
                 class="filtro"
-                data-status="perdido"
-            >
-
+                data-status="perdido">
                 <i class="fa-solid fa-circle-exclamation"></i>
-
                 Perdidos
-
             </button>
-
-
-
-            <!-- ENCONTRADOS -->
 
             <button
                 type="button"
                 class="filtro"
-                data-status="encontrado"
-            >
-
+                data-status="encontrado">
                 <i class="fa-solid fa-heart"></i>
-
                 Encontrados
-
             </button>
 
         </div>
-
-
-
-        <!-- FILTRO DE ESPÉCIE -->
 
         <div class="filtro-especie">
 
@@ -202,15 +112,15 @@
                 </option>
 
                 <option value="cachorro">
-                    🐶 Cachorros
+                    Cachorros
                 </option>
 
                 <option value="gato">
-                    🐱 Gatos
+                    Gatos
                 </option>
 
                 <option value="outro">
-                    🐾 Outros
+                    Outros
                 </option>
 
             </select>
@@ -218,12 +128,6 @@
         </div>
 
     </section>
-
-
-
-    <!-- =========================
-         ÁREA DE CADASTRO
-    ========================== -->
 
     <section class="cadastrar-area">
 
@@ -233,38 +137,25 @@
                 Seu pet está perdido ou você encontrou um animal?
             </h3>
 
-
             <p>
                 Cadastre as informações para ajudar a encontrá-lo.
             </p>
 
         </div>
 
-
         <button
             type="button"
             id="btnAbrirFormulario"
-            class="btn-cadastrar"
-        >
+            class="btn-cadastrar">
 
             <i class="fa-solid fa-plus"></i>
-
             Cadastrar animal
 
         </button>
 
     </section>
 
-
-
-    <!-- =========================
-         LISTA DE ANIMAIS
-    ========================== -->
-
     <main class="animais-container">
-
-
-        <!-- TÍTULO -->
 
         <div class="titulo-lista">
 
@@ -274,13 +165,11 @@
                     Animais cadastrados
                 </h2>
 
-
                 <p>
                     Confira os pets que precisam de ajuda.
                 </p>
 
             </div>
-
 
             <span id="contadorAnimais">
                 0 animais
@@ -288,31 +177,20 @@
 
         </div>
 
-
-
-        <!-- LISTA GERADA PELO JAVASCRIPT -->
-
         <div
             id="listaAnimais"
-            class="lista-animais"
-        ></div>
-
-
-
-        <!-- NENHUM ANIMAL -->
+            class="lista-animais">
+        </div>
 
         <div
             id="nenhumAnimal"
-            class="nenhum-animal"
-        >
+            class="nenhum-animal">
 
             <i class="fa-solid fa-paw"></i>
-
 
             <h3>
                 Nenhum animal encontrado
             </h3>
-
 
             <p>
                 Tente mudar os filtros ou cadastrar um novo animal.
@@ -322,52 +200,33 @@
 
     </main>
 
-
-
-    <!-- =========================
-         MODAL DE CADASTRO
-    ========================== -->
-
     <div
         id="modalCadastro"
-        class="modal"
-    >
+        class="modal">
 
         <div class="modal-conteudo">
-
-
-            <!-- FECHAR MODAL -->
 
             <button
                 type="button"
                 id="fecharModal"
                 class="fechar"
-                aria-label="Fechar"
-            >
+                aria-label="Fechar">
 
                 <i class="fa-solid fa-xmark"></i>
 
             </button>
 
-
-
-            <!-- TÍTULO DO MODAL -->
-
             <div class="modal-titulo">
 
                 <div class="icone-modal">
-
                     <i class="fa-solid fa-paw"></i>
-
                 </div>
-
 
                 <div>
 
                     <h2>
                         Cadastrar animal
                     </h2>
-
 
                     <p>
                         Preencha as informações abaixo.
@@ -377,16 +236,7 @@
 
             </div>
 
-
-
-            <!-- =========================
-                 FORMULÁRIO
-            ========================== -->
-
             <form id="formAnimal">
-
-
-                <!-- FOTO -->
 
                 <div class="campo foto-campo">
 
@@ -394,37 +244,27 @@
                         Foto do animal
                     </label>
 
-
                     <div class="upload-area">
 
                         <i class="fa-solid fa-camera"></i>
-
 
                         <span>
                             Clique para adicionar uma foto
                         </span>
 
-
                         <input
                             type="file"
                             id="fotoAnimal"
-                            accept="image/*"
-                        >
+                            accept="image/*">
 
                     </div>
-
 
                     <img
                         id="previewFoto"
                         class="preview-foto"
-                        alt="Prévia da foto"
-                    >
+                        alt="Prévia da foto">
 
                 </div>
-
-
-
-                <!-- STATUS -->
 
                 <div class="campo">
 
@@ -432,11 +272,7 @@
                         Situação do animal *
                     </label>
 
-
                     <div class="status-opcoes">
-
-
-                        <!-- PERDIDO -->
 
                         <label class="status-option perdido">
 
@@ -444,39 +280,25 @@
                                 type="radio"
                                 name="status"
                                 value="perdido"
-                                checked
-                            >
-
+                                checked>
 
                             <span>
-
                                 <i class="fa-solid fa-circle-exclamation"></i>
-
                                 Animal perdido
-
                             </span>
 
                         </label>
-
-
-
-                        <!-- ENCONTRADO -->
 
                         <label class="status-option encontrado">
 
                             <input
                                 type="radio"
                                 name="status"
-                                value="encontrado"
-                            >
-
+                                value="encontrado">
 
                             <span>
-
                                 <i class="fa-solid fa-heart"></i>
-
                                 Animal encontrado
-
                             </span>
 
                         </label>
@@ -485,16 +307,7 @@
 
                 </div>
 
-
-
-                <!-- =========================
-                     NOME / ESPÉCIE
-                ========================== -->
-
                 <div class="linha">
-
-
-                    <!-- NOME -->
 
                     <div class="campo">
 
@@ -502,18 +315,12 @@
                             Nome
                         </label>
 
-
                         <input
                             type="text"
                             id="nomeAnimal"
-                            placeholder="Ex.: Thor"
-                        >
+                            placeholder="Ex.: Thor">
 
                     </div>
-
-
-
-                    <!-- ESPÉCIE -->
 
                     <div class="campo">
 
@@ -521,26 +328,21 @@
                             Espécie *
                         </label>
 
-
                         <select
                             id="especieAnimal"
-                            required
-                        >
+                            required>
 
                             <option value="">
                                 Selecione
                             </option>
 
-
                             <option value="cachorro">
                                 Cachorro
                             </option>
 
-
                             <option value="gato">
                                 Gato
                             </option>
-
 
                             <option value="outro">
                                 Outro
@@ -552,16 +354,7 @@
 
                 </div>
 
-
-
-                <!-- =========================
-                     RAÇA / COR
-                ========================== -->
-
                 <div class="linha">
-
-
-                    <!-- RAÇA -->
 
                     <div class="campo">
 
@@ -569,18 +362,12 @@
                             Raça
                         </label>
 
-
                         <input
                             type="text"
                             id="racaAnimal"
-                            placeholder="Ex.: Golden Retriever"
-                        >
+                            placeholder="Ex.: Golden Retriever">
 
                     </div>
-
-
-
-                    <!-- COR -->
 
                     <div class="campo">
 
@@ -588,27 +375,16 @@
                             Cor
                         </label>
 
-
                         <input
                             type="text"
                             id="corAnimal"
-                            placeholder="Ex.: Caramelo"
-                        >
+                            placeholder="Ex.: Caramelo">
 
                     </div>
 
                 </div>
 
-
-
-                <!-- =========================
-                     DATA / BAIRRO
-                ========================== -->
-
                 <div class="linha">
-
-
-                    <!-- DATA -->
 
                     <div class="campo">
 
@@ -616,18 +392,12 @@
                             Data *
                         </label>
 
-
                         <input
                             type="date"
                             id="dataAnimal"
-                            required
-                        >
+                            required>
 
                     </div>
-
-
-
-                    <!-- BAIRRO -->
 
                     <div class="campo">
 
@@ -635,102 +405,62 @@
                             Bairro *
                         </label>
 
-
                         <input
                             type="text"
                             id="bairroAnimal"
                             placeholder="Ex.: Taquaral"
-                            required
-                        >
+                            required>
 
                     </div>
 
                 </div>
 
-
-
-                <!-- =========================
-                     LOCAL
-                ========================== -->
-
                 <div class="campo">
 
                     <label for="localAnimal">
-
                         Local onde foi perdido/encontrado *
-
                     </label>
-
 
                     <input
                         type="text"
                         id="localAnimal"
                         placeholder="Ex.: Próximo à praça..."
-                        required
-                    >
+                        required>
 
                 </div>
-
-
-
-                <!-- =========================
-                     DESCRIÇÃO
-                ========================== -->
 
                 <div class="campo">
 
                     <label for="descricaoAnimal">
-
                         Características / informações
-
                     </label>
-
 
                     <textarea
                         id="descricaoAnimal"
                         rows="4"
-                        placeholder="Descreva características importantes do animal..."
-                    ></textarea>
+                        placeholder="Descreva características importantes do animal..."></textarea>
 
                 </div>
-
-
-
-                <!-- =========================
-                     CONTATO
-                ========================== -->
 
                 <div class="campo">
 
                     <label for="contatoAnimal">
-
                         Telefone para contato *
-
                     </label>
-
 
                     <input
                         type="tel"
                         id="contatoAnimal"
                         placeholder="(19) 99999-9999"
-                        required
-                    >
+                        required>
 
                 </div>
 
-
-
-                <!-- =========================
-                     BOTÃO PUBLICAR
-                ========================== -->
-
                 <button
                     type="submit"
-                    class="btn-enviar"
-                >
+                    class="btn-enviar">
 
                     <i class="fa-solid fa-paw"></i>
-
                     Publicar anúncio
 
                 </button>
@@ -741,12 +471,6 @@
 
     </div>
 
-
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
     <footer>
 
         <p>
@@ -754,12 +478,6 @@
         </p>
 
     </footer>
-
-
-
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
 
     <script src="../js/animais.js"></script>
 

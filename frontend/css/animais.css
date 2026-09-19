@@ -1,17 +1,8 @@
-/* ========================================
-   RESET
-======================================== */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
-
-/* ========================================
-   BODY
-======================================== */
 
 body {
     font-family: Arial, sans-serif;
@@ -19,29 +10,17 @@ body {
     color: #333;
 }
 
-
-/* ========================================
-   HEADER
-======================================== */
-
 .header {
     position: relative;
     min-height: 150px;
     padding: 25px 5%;
     background: #0757a6;
     color: white;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
 }
-
-
-/* ========================================
-   LOGO
-======================================== */
 
 .logo-area {
     display: flex;
@@ -49,25 +28,18 @@ body {
     gap: 15px;
 }
 
-
 .logo {
     width: 65px;
     height: 65px;
-
     border-radius: 50%;
-
     background: white;
     color: #0757a6;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 32px;
-
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
-
 
 .logo-area h1 {
     font-size: 32px;
@@ -75,1270 +47,745 @@ body {
     letter-spacing: 1px;
 }
 
-
 .logo-area span {
     font-size: 17px;
     font-weight: 500;
 }
 
-
-/* ========================================
-   BOTÃO INÍCIO
-======================================== */
-
-.btn-voltar {
+.btn-inicio {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     padding: 12px 18px;
-
     background: white;
     color: #0757a6;
-
     border-radius: 12px;
-
     text-decoration: none;
-
     font-size: 16px;
     font-weight: bold;
-
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-
     transition: 0.3s;
 }
 
-
-.btn-voltar:hover {
+.btn-inicio:hover {
     transform: translateY(-2px);
-
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.20);
-
     background: #f5faff;
 }
 
-
-/* ========================================
-   HERO
-======================================== */
-
 .hero {
     max-width: 1200px;
-
     margin: 30px auto;
-
     padding: 40px;
-
     background: white;
-
     border-radius: 20px;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
-
 
 .hero-text {
     max-width: 750px;
 }
 
-
 .tag {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-
     margin-bottom: 15px;
-
     padding: 8px 14px;
-
     background: #e0effa;
     color: #0757a6;
-
     border-radius: 20px;
-
     font-size: 14px;
     font-weight: bold;
 }
 
-
 .hero h2 {
     color: #04407c;
-
     font-size: 42px;
-
     margin-bottom: 15px;
 }
-
 
 .hero h2 span {
     color: #0757a6;
 }
 
-
 .hero p {
     color: #555;
-
     font-size: 18px;
-
     line-height: 1.6;
 }
-
 
 .hero-icon {
     width: 120px;
     height: 120px;
-
     border-radius: 50%;
-
     background: #e0effa;
-
     color: #0757a6;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 55px;
-
     flex-shrink: 0;
 }
 
-
-/* ========================================
-   FILTROS
-======================================== */
-
 .filtros-container {
     max-width: 1200px;
-
     margin: 0 auto 30px;
-
     padding: 25px;
-
     background: white;
-
     border-radius: 20px;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 }
 
-
 .pesquisa {
     position: relative;
-
     width: 100%;
-
     margin-bottom: 20px;
 }
 
-
 .pesquisa i {
     position: absolute;
-
     left: 16px;
     top: 50%;
-
     transform: translateY(-50%);
-
     color: #0757a6;
-
     font-size: 18px;
 }
 
-
 .pesquisa input {
     width: 100%;
-
     padding: 16px 16px 16px 48px;
-
     border: 2px solid #0757a6;
-
     border-radius: 12px;
-
     outline: none;
-
     font-size: 16px;
-
     background: white;
 }
-
 
 .pesquisa input:focus {
     border-color: #04407c;
-
     box-shadow: 0 0 0 3px rgba(7, 87, 166, 0.10);
 }
 
-
-/* ========================================
-   FILTROS DE STATUS
-======================================== */
-
 .filtros {
     display: flex;
-
     gap: 10px;
-
     flex-wrap: wrap;
-
     margin-bottom: 15px;
 }
 
-
 .filtro {
     border: 2px solid #0757a6;
-
     background: white;
-
     color: #0757a6;
-
     padding: 10px 18px;
-
     border-radius: 12px;
-
     cursor: pointer;
-
     font-size: 15px;
-
     font-weight: bold;
-
     transition: 0.3s;
 }
-
 
 .filtro:hover {
     background: #e0effa;
 }
 
-
 .filtro.ativo {
     background: #0757a6;
-
     color: white;
 }
-
 
 .filtro i {
     margin-right: 5px;
 }
 
-
-/* ========================================
-   FILTRO DE ESPÉCIE
-======================================== */
-
 .filtro-especie select {
     width: 100%;
-
     padding: 14px;
-
     border: 2px solid #0757a6;
-
     border-radius: 12px;
-
     background: white;
-
     color: #333;
-
     font-size: 16px;
-
     outline: none;
 }
 
-
-/* ========================================
-   ÁREA CADASTRAR
-======================================== */
-
 .cadastrar-area {
     max-width: 1200px;
-
     margin: 0 auto 30px;
-
     padding: 25px 30px;
-
     background: #0757a6;
-
     color: white;
-
     border-radius: 20px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     gap: 20px;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
 }
 
-
 .cadastrar-area h3 {
     font-size: 22px;
-
     margin-bottom: 8px;
 }
 
-
 .cadastrar-area p {
     font-size: 16px;
-
     opacity: 0.95;
 }
 
-
 .btn-cadastrar {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     padding: 13px 20px;
-
     border: none;
-
     border-radius: 12px;
-
     background: white;
-
     color: #0757a6;
-
     font-size: 16px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
-
     white-space: nowrap;
 }
-
 
 .btn-cadastrar:hover {
     transform: translateY(-2px);
-
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.18);
 }
 
-
-/* ========================================
-   CONTAINER DOS ANIMAIS
-======================================== */
-
 .animais-container {
     max-width: 1200px;
-
     margin: 0 auto;
-
     padding: 0 20px 40px;
 }
 
-
 .titulo-lista {
     display: flex;
-
     align-items: center;
-
     justify-content: space-between;
-
     margin-bottom: 25px;
-
     gap: 20px;
 }
 
-
 .titulo-lista h2 {
     color: #04407c;
-
     font-size: 28px;
-
     margin-bottom: 6px;
 }
 
-
 .titulo-lista p {
     color: #666;
-
     font-size: 16px;
 }
 
-
 #contadorAnimais {
     padding: 9px 15px;
-
     background: #e0effa;
-
     color: #0757a6;
-
     border-radius: 20px;
-
     font-size: 14px;
-
     font-weight: bold;
-
     white-space: nowrap;
 }
 
-
-/* ========================================
-   LISTA DE ANIMAIS
-======================================== */
-
 .lista-animais {
     display: grid;
-
-    grid-template-columns:
-        repeat(auto-fit, minmax(300px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
 }
 
-
-/* ========================================
-   CARD DO ANIMAL
-======================================== */
-
 .card-animal {
     background: white;
-
     border-radius: 20px;
-
     overflow: hidden;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-
     transition: 0.3s;
 }
 
-
 .card-animal:hover {
     transform: translateY(-5px);
-
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
 }
 
-
-/* ========================================
-   FOTO DO ANIMAL
-======================================== */
-
 .foto-card {
     position: relative;
-
     height: 260px;
-
     background: #e0effa;
-
     overflow: hidden;
 }
 
-
 .foto-card img {
     width: 100%;
-
     height: 100%;
-
     object-fit: cover;
-
     display: block;
 }
 
-
-/* ========================================
-   STATUS
-======================================== */
-
 .status {
     position: absolute;
-
     top: 15px;
-
     left: 15px;
-
     padding: 8px 12px;
-
     border-radius: 20px;
-
     color: white;
-
     font-size: 13px;
-
     font-weight: bold;
-
     display: flex;
-
     align-items: center;
-
     gap: 6px;
-
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 }
-
 
 .status.perdido {
     background: #0757a6;
 }
 
-
 .status.encontrado {
     background: #04407c;
 }
-
-
-/* ========================================
-   INFORMAÇÕES DO CARD
-======================================== */
 
 .info-card {
     padding: 22px;
 }
 
-
 .info-card h3 {
     color: #04407c;
-
     font-size: 24px;
-
     margin-bottom: 5px;
 }
 
-
 .tipo-animal {
     color: #0757a6;
-
     font-size: 15px;
-
     font-weight: bold;
 }
-
 
 .detalhes {
     display: flex;
-
     flex-direction: column;
-
     gap: 10px;
-
     margin-top: 18px;
 }
-
 
 .detalhe {
     display: flex;
-
     align-items: flex-start;
-
     gap: 10px;
-
     color: #555;
-
     font-size: 15px;
-
     line-height: 1.4;
 }
 
-
 .detalhe i {
     color: #0757a6;
-
     width: 18px;
-
     text-align: center;
-
     margin-top: 2px;
 }
 
-
 .descricao {
     margin-top: 18px;
-
     padding-top: 15px;
-
     border-top: 1px solid #e5e5e5;
-
     color: #555;
-
     font-size: 15px;
-
     line-height: 1.5;
 }
 
-
-/* ========================================
-   BOTÃO CONTATO
-======================================== */
-
 .btn-contato {
     width: 100%;
-
     margin-top: 20px;
-
     padding: 13px;
-
     border: none;
-
     border-radius: 12px;
-
     background: #0757a6;
-
     color: white;
-
     font-size: 15px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
-
 
 .btn-contato:hover {
     background: #04407c;
-
     transform: translateY(-2px);
 }
 
-
-/* ========================================
-   BOTÃO REMOVER
-======================================== */
-
 .btn-remover {
     width: 100%;
-
     margin-top: 10px;
-
     padding: 11px;
-
     border: 2px solid #0757a6;
-
     border-radius: 12px;
-
     background: white;
-
     color: #0757a6;
-
     font-size: 14px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
-
 
 .btn-remover:hover {
     background: #e0effa;
 }
 
-
-/* ========================================
-   NENHUM ANIMAL
-======================================== */
-
 .nenhum-animal {
     display: none;
-
     padding: 50px 20px;
-
     text-align: center;
-
     background: white;
-
     border-radius: 20px;
-
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
 }
 
-
 .nenhum-animal > i {
     font-size: 50px;
-
     color: #0757a6;
-
     margin-bottom: 15px;
 }
 
-
 .nenhum-animal h3 {
     color: #04407c;
-
     font-size: 22px;
-
     margin-bottom: 8px;
 }
 
-
 .nenhum-animal p {
     color: #666;
-
     font-size: 15px;
 }
 
-
-/* ========================================
-   MODAL
-======================================== */
-
 .modal {
     position: fixed;
-
     inset: 0;
-
     z-index: 1000;
-
     background: rgba(4, 64, 124, 0.45);
-
     display: none;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 20px;
 }
-
 
 .modal.abrir {
     display: flex;
 }
 
-
 .modal-conteudo {
     position: relative;
-
     width: 100%;
-
     max-width: 700px;
-
     max-height: 90vh;
-
     overflow-y: auto;
-
     background: white;
-
     border-radius: 20px;
-
     padding: 30px;
-
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.20);
 }
 
-
-/* ========================================
-   FECHAR MODAL
-======================================== */
-
 .fechar {
     position: absolute;
-
     top: 15px;
-
     right: 15px;
-
     width: 40px;
-
     height: 40px;
-
     border: none;
-
     border-radius: 50%;
-
     background: #e0effa;
-
     color: #0757a6;
-
     font-size: 20px;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
-
 .fechar:hover {
     background: #0757a6;
-
     color: white;
 }
 
-
-/* ========================================
-   TÍTULO MODAL
-======================================== */
-
 .modal-titulo {
     display: flex;
-
     align-items: center;
-
     gap: 15px;
-
     margin-bottom: 25px;
-
     padding-right: 45px;
 }
 
-
 .icone-modal {
     width: 55px;
-
     height: 55px;
-
     flex-shrink: 0;
-
     border-radius: 50%;
-
     background: #e0effa;
-
     color: #0757a6;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     font-size: 25px;
 }
-
 
 .modal-titulo h2 {
     color: #04407c;
-
     font-size: 25px;
-
     margin-bottom: 5px;
 }
 
-
 .modal-titulo p {
     color: #666;
-
     font-size: 14px;
 }
-
-
-/* ========================================
-   FORMULÁRIO
-======================================== */
 
 .campo {
     margin-bottom: 18px;
 }
 
-
 .campo label {
     display: block;
-
     margin-bottom: 8px;
-
     color: #04407c;
-
     font-size: 15px;
-
     font-weight: bold;
 }
-
 
 .campo input,
 .campo select,
 .campo textarea {
     width: 100%;
-
     padding: 13px;
-
     border: 2px solid #d5e7f5;
-
     border-radius: 10px;
-
     outline: none;
-
     font-family: Arial, sans-serif;
-
     font-size: 15px;
-
     background: white;
-
     transition: 0.3s;
 }
-
 
 .campo input:focus,
 .campo select:focus,
 .campo textarea:focus {
     border-color: #0757a6;
-
     box-shadow: 0 0 0 3px rgba(7, 87, 166, 0.10);
 }
-
 
 .campo textarea {
     resize: vertical;
 }
 
-
-/* ========================================
-   LINHA DO FORMULÁRIO
-======================================== */
-
 .linha {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
     gap: 18px;
 }
 
-
-/* ========================================
-   STATUS DO FORMULÁRIO
-======================================== */
-
 .status-opcoes {
     display: grid;
-
     grid-template-columns: 1fr 1fr;
-
     gap: 12px;
 }
-
 
 .status-option {
     cursor: pointer;
 }
 
-
 .status-option input {
     display: none;
 }
 
-
 .status-option span {
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     padding: 13px;
-
     border: 2px solid #d5e7f5;
-
     border-radius: 10px;
-
     color: #0757a6;
-
     font-size: 14px;
-
     font-weight: bold;
-
     transition: 0.3s;
 }
-
 
 .status-option span:hover {
     background: #e0effa;
 }
 
-
 .status-option input:checked + span {
     background: #0757a6;
-
     border-color: #0757a6;
-
     color: white;
 }
 
-
-/* ========================================
-   UPLOAD DA FOTO
-======================================== */
-
 .upload-area {
     position: relative;
-
     min-height: 130px;
-
     padding: 25px;
-
     border: 2px dashed #0757a6;
-
     border-radius: 12px;
-
     background: #f5faff;
-
     display: flex;
-
     flex-direction: column;
-
     align-items: center;
-
     justify-content: center;
-
     gap: 8px;
-
     text-align: center;
-
     cursor: pointer;
-
     color: #0757a6;
 }
-
 
 .upload-area i {
     font-size: 30px;
 }
 
-
 .upload-area span {
     font-size: 14px;
-
     font-weight: bold;
 }
-
 
 .upload-area input {
     position: absolute;
-
     inset: 0;
-
     width: 100%;
-
     height: 100%;
-
     opacity: 0;
-
     cursor: pointer;
 }
-
-
-/* ========================================
-   PREVIEW FOTO
-======================================== */
 
 .preview-foto {
     display: none;
-
     width: 100%;
-
     max-height: 250px;
-
     object-fit: cover;
-
     margin-top: 15px;
-
     border-radius: 12px;
-
     border: 2px solid #0757a6;
 }
 
-
-/* ========================================
-   BOTÃO ENVIAR
-======================================== */
-
 .btn-enviar {
     width: 100%;
-
     padding: 14px;
-
     margin-top: 5px;
-
     border: none;
-
     border-radius: 12px;
-
     background: #0756a6e0;
-
     color: white;
-
     font-size: 16px;
-
     font-weight: bold;
-
     cursor: pointer;
-
     transition: 0.3s;
 }
 
-
 .btn-enviar:hover {
     background: #04407c;
-
     transform: translateY(-2px);
 }
 
-
-/* ========================================
-   FOOTER
-======================================== */
-
 footer {
     margin-top: 30px;
-
     padding: 25px;
-
     background: #04407c;
-
     color: white;
-
     text-align: center;
-
     font-size: 14px;
 }
-
-
-/* ========================================
-   RESPONSIVO
-======================================== */
 
 @media (max-width: 768px) {
 
     .header {
         min-height: auto;
-
         padding: 20px;
-
         flex-direction: column;
-
         gap: 20px;
-
         align-items: stretch;
     }
-
 
     .logo-area {
         justify-content: center;
     }
 
-
     .logo-area h1 {
         font-size: 27px;
     }
-
 
     .logo-area span {
         font-size: 14px;
     }
 
-
     .btn-voltar {
         width: 100%;
     }
 
-
     .hero {
         margin: 20px 15px;
-
         padding: 30px 20px;
-
         flex-direction: column;
-
         text-align: center;
-
         gap: 25px;
     }
-
 
     .hero h2 {
         font-size: 34px;
     }
 
-
     .hero p {
         font-size: 16px;
     }
 
-
     .hero-icon {
         width: 90px;
-
         height: 90px;
-
         font-size: 40px;
     }
 
-
     .filtros-container {
         margin: 0 15px 25px;
-
         padding: 20px;
     }
 
-
     .cadastrar-area {
         margin: 0 15px 25px;
-
         flex-direction: column;
-
         align-items: stretch;
-
         text-align: center;
-
         padding: 25px 20px;
     }
-
 
     .btn-cadastrar {
         width: 100%;
     }
 
-
     .titulo-lista {
         align-items: flex-start;
-
         flex-direction: column;
     }
-
 
     .lista-animais {
         grid-template-columns: 1fr;
     }
 
-
     .linha {
         grid-template-columns: 1fr;
-
         gap: 0;
     }
-
 
     .status-opcoes {
         grid-template-columns: 1fr;
     }
 
-
     .modal {
         padding: 10px;
     }
 
-
     .modal-conteudo {
         padding: 25px 20px;
     }
-
 }
-
-
-/* ========================================
-   CELULAR PEQUENO
-======================================== */
 
 @media (max-width: 500px) {
 
@@ -1346,57 +793,43 @@ footer {
         gap: 10px;
     }
 
-
     .logo {
         width: 52px;
-
         height: 52px;
-
         font-size: 25px;
     }
-
 
     .logo-area h1 {
         font-size: 23px;
     }
 
-
     .hero h2 {
         font-size: 29px;
     }
 
-
     .hero-icon {
         width: 75px;
-
         height: 75px;
-
         font-size: 32px;
     }
-
 
     .filtros {
         flex-direction: column;
     }
 
-
     .filtro {
         width: 100%;
     }
-
 
     .foto-card {
         height: 230px;
     }
 
-
     .info-card {
         padding: 18px;
     }
 
-
     .info-card h3 {
         font-size: 21px;
     }
-
 }
