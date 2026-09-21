@@ -16,10 +16,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
 
-    // =========================
-    // CARREGAR CLÍNICAS
-    // =========================
-
     async function carregarClinicas() {
 
         try {
@@ -33,28 +29,34 @@ document.addEventListener("DOMContentLoaded", async () => {
             const resposta = await fetch(`${API_URL}/clinicas`);
 
             if (!resposta.ok) {
-                throw new Error(`Erro HTTP: ${resposta.status}`);
+                throw new Error(
+                    `Erro HTTP: ${resposta.status}`
+                );
             }
 
             const dados = await resposta.json();
 
-            console.log("CLÍNICAS RECEBIDAS:", dados);
+            console.log(
+                "CLÍNICAS RECEBIDAS:",
+                dados
+            );
 
             if (!Array.isArray(dados)) {
-                throw new Error("A API não retornou uma lista de clínicas.");
+                throw new Error(
+                    "A API não retornou uma lista de clínicas."
+                );
             }
 
             clinicas = dados;
 
             renderizarClinicas(clinicas);
 
-            if (window.google) {
-                marcarClinicasNoMapa();
-            }
-
         } catch (erro) {
 
-            console.error("Erro ao carregar clínicas:", erro);
+            console.error(
+                "Erro ao carregar clínicas:",
+                erro
+            );
 
             listaClinicas.innerHTML = `
                 <p class="mensagem-erro">
@@ -66,10 +68,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
-    // =========================
-    // MOSTRAR CLÍNICAS
-    // =========================
 
     function renderizarClinicas(lista) {
 
@@ -88,11 +86,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         lista.forEach(clinica => {
 
-            const cardLink = document.createElement("a");
+            const cardLink =
+                document.createElement("a");
 
-            cardLink.className = "card-link";
+            cardLink.className =
+                "card-link";
 
-            const pagina = paginasClinicas[Number(clinica.id)];
+            const pagina =
+                paginasClinicas[
+                    Number(clinica.id)
+                ];
 
             if (pagina) {
 
@@ -106,9 +109,11 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
 
-            const card = document.createElement("div");
+            const card =
+                document.createElement("div");
 
-            card.className = "card";
+            card.className =
+                "card";
 
             card.dataset.regiao =
                 clinica.regiao || "";
@@ -196,10 +201,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // =========================
-    // PROTEGER HTML
-    // =========================
-
     function escaparHTML(valor) {
 
         if (
@@ -218,10 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return elemento.innerHTML;
     }
 
-
-    // =========================
-    // FILTRO
-    // =========================
 
     function filtrarClinicas() {
 
@@ -254,7 +251,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             const card =
                 cardLink.querySelector(".card");
 
-            if (!card) return;
+            if (!card) {
+                return;
+            }
 
 
             const titulo =
@@ -270,7 +269,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             const regiaoCard =
-                (card.dataset.regiao || "")
+                (
+                    card.dataset.regiao ||
+                    ""
+                )
                     .toLowerCase()
                     .trim();
 
@@ -338,183 +340,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 
-    // =========================
-    // MAPA + 4 PINOS
-    // =========================
-
-    function marcarClinicasNoMapa() {
-
-        const mapaElemento =
-            document.getElementById("map");
-
-        if (
-            !mapaElemento ||
-            !window.google
-        ) {
-            return;
-        }
-
-
-        const mapa =
-            new google.maps.Map(
-                mapaElemento,
-                {
-                    center: {
-                        lat: -22.9056,
-                        lng: -47.0608
-                    },
-
-                    zoom: 12
-                }
-            );
-
-
-        const limites =
-            new google.maps.LatLngBounds();
-
-
-        // COORDENADAS DAS 4 CLÍNICAS
-
-        const coordenadas = {
-
-            1: {
-                lat: -22.9056,
-                lng: -47.0608
-            },
-
-            2: {
-                lat: -22.8943,
-                lng: -47.0517
-            },
-
-            3: {
-                lat: -22.9128,
-                lng: -47.0489
-            },
-
-            4: {
-                lat: -22.8905,
-                lng: -47.0625
-            }
-        };
-
-
-        clinicas.forEach(clinica => {
-
-            const posicao =
-                coordenadas[
-                    Number(clinica.id)
-                ];
-
-
-            if (!posicao) return;
-
-
-            // =========================
-            // CRIAR PIN
-            // =========================
-
-            const marker =
-                new google.maps.Marker({
-
-                    position: posicao,
-
-                    map: mapa,
-
-                    title: clinica.nome
-                });
-
-
-            // =========================
-            // CLICOU NO PIN
-            // USA LOCALIZAÇÃO ATUAL
-            // =========================
-
-            marker.addListener(
-                "click",
-                () => {
-
-                    if (!navigator.geolocation) {
-
-                        alert(
-                            "Seu navegador não permite acessar sua localização."
-                        );
-
-                        return;
-                    }
-
-
-                    // Pede a localização atual
-
-                    navigator.geolocation.getCurrentPosition(
-
-                        (posicaoAtual) => {
-
-                            const origem =
-                                `${posicaoAtual.coords.latitude},${posicaoAtual.coords.longitude}`;
-
-
-                            const destino =
-                                `${posicao.lat},${posicao.lng}`;
-
-
-                            // Cria a rota
-
-                            const url =
-                                "https://www.google.com/maps/dir/?api=1"
-                                + "&origin="
-                                + encodeURIComponent(origem)
-                                + "&destination="
-                                + encodeURIComponent(destino)
-                                + "&travelmode=driving";
-
-
-                            // Abre o Google Maps
-
-                            window.open(
-                                url,
-                                "_blank"
-                            );
-
-                        },
-
-
-                        () => {
-
-                            alert(
-                                "Não foi possível acessar sua localização. " +
-                                "Permita o acesso à localização e tente novamente."
-                            );
-
-                        }
-
-                    );
-
-                }
-            );
-
-
-            limites.extend(posicao);
-
-        });
-
-
-        // Ajusta o mapa para mostrar
-        // os 4 pins
-
-        if (clinicas.length > 0) {
-
-            mapa.fitBounds(limites);
-
-        }
-
-    }
-
-
-    // =========================
-    // EVENTOS DOS FILTROS
-    // =========================
-
     if (pesquisa) {
 
         pesquisa.addEventListener(
@@ -534,10 +359,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
-
-    // =========================
-    // INICIAR
-    // =========================
 
     await carregarClinicas();
 
