@@ -15,6 +15,32 @@ const previewFoto = document.getElementById("previewFoto");
 let animais = [];
 let filtroStatusAtual = "todos";
 
+function obterTutorId() {
+    const parametros = new URLSearchParams(window.location.search);
+
+    const tutorUrl = parametros.get("tutor_id");
+
+    const tutorSession =
+        sessionStorage.getItem("tutor_id");
+
+    const tutorLocal =
+        localStorage.getItem("tutor_id");
+
+    const tutorId = tutorUrl || tutorSession || tutorLocal;
+
+    if (!tutorId) {
+        return null;
+    }
+
+    const numero = Number(tutorId);
+
+    if (!Number.isInteger(numero) || numero <= 0) {
+        return null;
+    }
+
+    return numero;
+}
+
 async function carregarAnimais() {
     try {
         const resposta = await fetch(`${API_URL}/animais`);
@@ -49,6 +75,7 @@ function renderizarAnimais() {
     const especie = filtroEspecie.value;
 
     const filtrados = animais.filter(animal => {
+
         const correspondeStatus =
             filtroStatusAtual === "todos" ||
             animal.status === filtroStatusAtual;
@@ -80,9 +107,7 @@ function renderizarAnimais() {
 
     contadorAnimais.textContent =
         `${filtrados.length} ${
-            filtrados.length === 1
-                ? "animal"
-                : "animais"
+            filtrados.length === 1 ? "animal" : "animais"
         }`;
 
     if (filtrados.length === 0) {
@@ -100,6 +125,7 @@ function renderizarAnimais() {
     nenhumAnimal.style.display = "none";
 
     filtrados.forEach(animal => {
+
         const card = document.createElement("article");
 
         card.className = "card-animal";
@@ -130,24 +156,17 @@ function renderizarAnimais() {
 
         card.innerHTML = `
             <div class="foto-card">
-
-                <img
-                    src="${foto}"
-                    alt="Foto de ${nomeExibido}"
-                >
+                <img src="${foto}" alt="Foto de ${nomeExibido}">
 
                 <span class="status ${animal.status}">
                     <i class="fa-solid ${iconeStatus}"></i>
                     ${statusTexto}
                 </span>
-
             </div>
 
             <div class="info-card">
 
-                <h3>
-                    ${nomeExibido}
-                </h3>
+                <h3>${nomeExibido}</h3>
 
                 <span class="tipo-animal">
                     ${especieTexto}
@@ -158,17 +177,23 @@ function renderizarAnimais() {
 
                     <div class="detalhe">
                         <i class="fa-solid fa-location-dot"></i>
-                        <span>${animal.bairro || "Bairro não informado"}</span>
+                        <span>
+                            ${animal.bairro || "Bairro não informado"}
+                        </span>
                     </div>
 
                     <div class="detalhe">
                         <i class="fa-solid fa-calendar"></i>
-                        <span>${formatarData(animal.data_perdido)}</span>
+                        <span>
+                            ${formatarData(animal.data_perdido)}
+                        </span>
                     </div>
 
                     <div class="detalhe">
                         <i class="fa-solid fa-map-pin"></i>
-                        <span>${animal.local_perdido || "Local não informado"}</span>
+                        <span>
+                            ${animal.local_perdido || "Local não informado"}
+                        </span>
                     </div>
 
                     ${
@@ -196,7 +221,7 @@ function renderizarAnimais() {
 
                 <button
                     class="btn-contato"
-                    onclick="entrarEmContato('${animal.contato}')"
+                    onclick="entrarEmContato('${animal.contato || ""}')"
                 >
                     <i class="fa-solid fa-phone"></i>
                     Entrar em contato
@@ -222,8 +247,11 @@ function formatarData(data) {
         return "Data não informada";
     }
 
-    const dataString = String(data).split("T")[0];
-    const partes = dataString.split("-");
+    const dataString =
+        String(data).split("T")[0];
+
+    const partes =
+        dataString.split("-");
 
     if (partes.length !== 3) {
         return "Data não informada";
@@ -232,13 +260,10 @@ function formatarData(data) {
     return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
-btnAbrirFormulario.addEventListener(
-    "click",
-    () => {
-        modal.classList.add("abrir");
-        document.body.style.overflow = "hidden";
-    }
-);
+btnAbrirFormulario.addEventListener("click", () => {
+    modal.classList.add("abrir");
+    document.body.style.overflow = "hidden";
+});
 
 function fecharFormulario() {
     modal.classList.remove("abrir");
@@ -250,179 +275,234 @@ fecharModal.addEventListener(
     fecharFormulario
 );
 
-modal.addEventListener(
-    "click",
-    event => {
-        if (event.target === modal) {
-            fecharFormulario();
-        }
+modal.addEventListener("click", event => {
+    if (event.target === modal) {
+        fecharFormulario();
     }
-);
+});
 
-fotoAnimal.addEventListener(
-    "change",
-    function () {
-        const arquivo = this.files[0];
+fotoAnimal.addEventListener("change", function () {
 
-        if (!arquivo) {
-            previewFoto.src = "";
-            previewFoto.style.display = "none";
-            return;
-        }
+    const arquivo = this.files[0];
 
-        const leitor = new FileReader();
-
-        leitor.onload = event => {
-            previewFoto.src = event.target.result;
-            previewFoto.style.display = "block";
-        };
-
-        leitor.readAsDataURL(arquivo);
+    if (!arquivo) {
+        previewFoto.src = "";
+        previewFoto.style.display = "none";
+        return;
     }
-);
 
-formAnimal.addEventListener(
-    "submit",
-    async event => {
-        event.preventDefault();
+    const leitor = new FileReader();
 
-        const statusSelecionado =
-            document.querySelector(
-                'input[name="status"]:checked'
-            );
+    leitor.onload = event => {
+        previewFoto.src = event.target.result;
+        previewFoto.style.display = "block";
+    };
 
-        if (!statusSelecionado) {
-            alert("Selecione a situação do animal.");
-            return;
-        }
+    leitor.readAsDataURL(arquivo);
+});
 
-        const nome =
-            document.getElementById("nomeAnimal").value.trim();
+formAnimal.addEventListener("submit", async event => {
 
-        const especie =
-            document.getElementById("especieAnimal").value;
+    event.preventDefault();
 
-        const raca =
-            document.getElementById("racaAnimal").value.trim();
+    const tutorId = obterTutorId();
 
-        const cor =
-            document.getElementById("corAnimal").value.trim();
+    if (!tutorId) {
+        alert(
+            "Não foi possível identificar o tutor. Faça o cadastro ou entre novamente no seu perfil."
+        );
+        return;
+    }
 
-        const data =
-            document.getElementById("dataAnimal").value;
+    const statusSelecionado =
+        document.querySelector(
+            'input[name="status"]:checked'
+        );
 
-        const bairro =
-            document.getElementById("bairroAnimal").value.trim();
+    if (!statusSelecionado) {
+        alert("Selecione a situação do animal.");
+        return;
+    }
 
-        const local =
-            document.getElementById("localAnimal").value.trim();
+    const nome =
+        document
+            .getElementById("nomeAnimal")
+            .value
+            .trim();
 
-        const descricao =
-            document.getElementById("descricaoAnimal").value.trim();
+    const especie =
+        document
+            .getElementById("especieAnimal")
+            .value;
 
-        const contato =
-            document.getElementById("contatoAnimal").value.trim();
+    const raca =
+        document
+            .getElementById("racaAnimal")
+            .value
+            .trim();
 
-        if (!especie || !data || !bairro || !local || !contato) {
-            alert("Preencha todos os campos obrigatórios.");
-            return;
-        }
+    const cor =
+        document
+            .getElementById("corAnimal")
+            .value
+            .trim();
 
-        let foto = null;
+    const data =
+        document
+            .getElementById("dataAnimal")
+            .value;
 
-        if (previewFoto.src && previewFoto.style.display !== "none") {
-            foto = previewFoto.src;
-        }
+    const bairro =
+        document
+            .getElementById("bairroAnimal")
+            .value
+            .trim();
 
-        const novoAnimal = {
-            nome,
-            especie,
-            raca,
-            cor,
-            data,
-            bairro,
-            local,
-            descricao,
-            contato,
-            foto,
-            status: statusSelecionado.value
-        };
+    const local =
+        document
+            .getElementById("localAnimal")
+            .value
+            .trim();
 
-        try {
-            const resposta = await fetch(
-                `${API_URL}/animais`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(novoAnimal)
-                }
-            );
+    const descricao =
+        document
+            .getElementById("descricaoAnimal")
+            .value
+            .trim();
 
-            const dados = await resposta.json();
+    const contato =
+        document
+            .getElementById("contatoAnimal")
+            .value
+            .trim();
 
-            if (!resposta.ok) {
-                throw new Error(
-                    dados.mensagem ||
-                    "Não foi possível cadastrar o animal."
-                );
+    if (
+        !especie ||
+        !data ||
+        !bairro ||
+        !local ||
+        !contato
+    ) {
+        alert(
+            "Preencha todos os campos obrigatórios."
+        );
+        return;
+    }
+
+    let foto = null;
+
+    if (
+        previewFoto.src &&
+        previewFoto.style.display !== "none"
+    ) {
+        foto = previewFoto.src;
+    }
+
+    const novoAnimal = {
+        tutor_id: tutorId,
+        nome,
+        especie,
+        raca,
+        cor,
+        data,
+        bairro,
+        local,
+        descricao,
+        contato,
+        foto,
+        status: statusSelecionado.value
+    };
+
+    console.log(
+        "Animal enviado:",
+        novoAnimal
+    );
+
+    try {
+
+        const resposta = await fetch(
+            `${API_URL}/animais`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(novoAnimal)
             }
+        );
 
-            alert("Animal cadastrado com sucesso! 🐾");
+        const dados = await resposta.json();
 
-            formAnimal.reset();
-
-            previewFoto.src = "";
-            previewFoto.style.display = "none";
-
-            fecharFormulario();
-
-            filtroStatusAtual = "todos";
-
-            document
-                .querySelectorAll(".filtro")
-                .forEach(botao => {
-                    botao.classList.remove("ativo");
-                });
-
-            document
-                .querySelector('[data-status="todos"]')
-                .classList.add("ativo");
-
-            await carregarAnimais();
-
-        } catch (erro) {
-            console.error("Erro ao cadastrar animal:", erro);
-
-            alert(
-                erro.message ||
+        if (!resposta.ok) {
+            throw new Error(
+                dados.mensagem ||
                 "Não foi possível cadastrar o animal."
             );
         }
+
+        alert(
+            "Animal cadastrado com sucesso! 🐾"
+        );
+
+        formAnimal.reset();
+
+        previewFoto.src = "";
+        previewFoto.style.display = "none";
+
+        fecharFormulario();
+
+        filtroStatusAtual = "todos";
+
+        document
+            .querySelectorAll(".filtro")
+            .forEach(botao => {
+                botao.classList.remove("ativo");
+            });
+
+        const filtroTodos =
+            document.querySelector(
+                '[data-status="todos"]'
+            );
+
+        if (filtroTodos) {
+            filtroTodos.classList.add("ativo");
+        }
+
+        await carregarAnimais();
+
+    } catch (erro) {
+
+        console.error(
+            "Erro ao cadastrar animal:",
+            erro
+        );
+
+        alert(
+            erro.message ||
+            "Não foi possível cadastrar o animal."
+        );
     }
-);
+});
 
 document
     .querySelectorAll(".filtro")
     .forEach(botao => {
-        botao.addEventListener(
-            "click",
-            () => {
-                document
-                    .querySelectorAll(".filtro")
-                    .forEach(item => {
-                        item.classList.remove("ativo");
-                    });
 
-                botao.classList.add("ativo");
+        botao.addEventListener("click", () => {
 
-                filtroStatusAtual =
-                    botao.dataset.status;
+            document
+                .querySelectorAll(".filtro")
+                .forEach(item => {
+                    item.classList.remove("ativo");
+                });
 
-                renderizarAnimais();
-            }
-        );
+            botao.classList.add("ativo");
+
+            filtroStatusAtual =
+                botao.dataset.status;
+
+            renderizarAnimais();
+        });
     });
 
 pesquisaAnimal.addEventListener(
@@ -436,18 +516,21 @@ filtroEspecie.addEventListener(
 );
 
 function entrarEmContato(numero) {
+
     const numeroLimpo =
-        String(numero || "").replace(/\D/g, "");
+        String(numero || "")
+            .replace(/\D/g, "");
 
     if (!numeroLimpo) {
-        alert("Telefone de contato não informado.");
+        alert(
+            "Telefone de contato não informado."
+        );
         return;
     }
 
-    const confirmar =
-        confirm(
-            `Deseja entrar em contato pelo número ${numero}?`
-        );
+    const confirmar = confirm(
+        `Deseja entrar em contato pelo número ${numero}?`
+    );
 
     if (confirmar) {
         window.open(
@@ -458,16 +541,17 @@ function entrarEmContato(numero) {
 }
 
 async function removerAnimal(id) {
-    const confirmar =
-        confirm(
-            "Tem certeza que deseja remover este anúncio?"
-        );
+
+    const confirmar = confirm(
+        "Tem certeza que deseja remover este anúncio?"
+    );
 
     if (!confirmar) {
         return;
     }
 
     try {
+
         const resposta = await fetch(
             `${API_URL}/animais/${id}`,
             {
@@ -475,7 +559,8 @@ async function removerAnimal(id) {
             }
         );
 
-        const dados = await resposta.json();
+        const dados =
+            await resposta.json();
 
         if (!resposta.ok) {
             throw new Error(
@@ -484,12 +569,18 @@ async function removerAnimal(id) {
             );
         }
 
-        alert("Anúncio removido com sucesso.");
+        alert(
+            "Anúncio removido com sucesso."
+        );
 
         await carregarAnimais();
 
     } catch (erro) {
-        console.error("Erro ao remover animal:", erro);
+
+        console.error(
+            "Erro ao remover animal:",
+            erro
+        );
 
         alert(
             erro.message ||

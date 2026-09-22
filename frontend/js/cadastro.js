@@ -28,7 +28,9 @@ if (tutorIdParametro) {
 }
 
 function formatarCPF(valor) {
-    const numeros = String(valor || "").replace(/\D/g, "").slice(0, 11);
+    const numeros = String(valor || "")
+        .replace(/\D/g, "")
+        .slice(0, 11);
 
     if (numeros.length <= 3) {
         return numeros;
@@ -39,7 +41,10 @@ function formatarCPF(valor) {
     }
 
     if (numeros.length <= 9) {
-        return numeros.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
+        return numeros.replace(
+            /(\d{3})(\d{3})(\d+)/,
+            "$1.$2.$3"
+        );
     }
 
     return numeros.replace(
@@ -49,18 +54,26 @@ function formatarCPF(valor) {
 }
 
 function formatarTelefone(valor) {
-    const numeros = String(valor || "").replace(/\D/g, "").slice(0, 11);
+    const numeros = String(valor || "")
+        .replace(/\D/g, "")
+        .slice(0, 11);
 
     if (numeros.length <= 2) {
         return numeros;
     }
 
     if (numeros.length <= 6) {
-        return numeros.replace(/(\d{2})(\d+)/, "($1) $2");
+        return numeros.replace(
+            /(\d{2})(\d+)/,
+            "($1) $2"
+        );
     }
 
     if (numeros.length <= 10) {
-        return numeros.replace(/(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+        return numeros.replace(
+            /(\d{2})(\d{4})(\d+)/,
+            "($1) $2-$3"
+        );
     }
 
     return numeros.replace(
@@ -70,13 +83,18 @@ function formatarTelefone(valor) {
 }
 
 function formatarCEP(valor) {
-    const numeros = String(valor || "").replace(/\D/g, "").slice(0, 8);
+    const numeros = String(valor || "")
+        .replace(/\D/g, "")
+        .slice(0, 8);
 
     if (numeros.length <= 5) {
         return numeros;
     }
 
-    return numeros.replace(/(\d{5})(\d{1,3})/, "$1-$2");
+    return numeros.replace(
+        /(\d{5})(\d{1,3})/,
+        "$1-$2"
+    );
 }
 
 cpfTutor.addEventListener("input", () => {
@@ -85,7 +103,9 @@ cpfTutor.addEventListener("input", () => {
 });
 
 telefoneTutor.addEventListener("input", () => {
-    telefoneTutor.value = formatarTelefone(telefoneTutor.value);
+    telefoneTutor.value = formatarTelefone(
+        telefoneTutor.value
+    );
     telefoneTutor.setCustomValidity("");
 });
 
@@ -148,7 +168,6 @@ function validarCPF(valor) {
 
     return resto === Number(cpf[10]);
 }
-
 function validarNome(valor) {
     const nome = String(valor || "").trim();
 
@@ -162,11 +181,16 @@ function validarNome(valor) {
 function validarTelefone(valor) {
     const telefone = String(valor || "").replace(/\D/g, "");
 
-    if (telefone.length !== 10 && telefone.length !== 11) {
+    if (
+        telefone.length !== 10 &&
+        telefone.length !== 11
+    ) {
         return false;
     }
 
-    const ddd = Number(telefone.substring(0, 2));
+    const ddd = Number(
+        telefone.substring(0, 2)
+    );
 
     if (ddd < 11 || ddd > 99) {
         return false;
@@ -176,7 +200,10 @@ function validarTelefone(valor) {
         return false;
     }
 
-    if (telefone.length === 11 && telefone[2] !== "9") {
+    if (
+        telefone.length === 11 &&
+        telefone[2] !== "9"
+    ) {
         return false;
     }
 
@@ -190,7 +217,9 @@ function validarTelefone(valor) {
 }
 
 function validarEmail(valor) {
-    const email = String(valor || "").trim().toLowerCase();
+    const email = String(valor || "")
+        .trim()
+        .toLowerCase();
 
     if (email.length < 6 || email.length > 100) {
         return false;
@@ -213,27 +242,47 @@ function validarEmail(valor) {
         return false;
     }
 
-    if (usuario.length < 2 || dominio.length < 4) {
+    if (
+        usuario.length < 2 ||
+        dominio.length < 4
+    ) {
         return false;
     }
 
-    if (usuario.startsWith(".") || usuario.endsWith(".")) {
+    if (
+        usuario.startsWith(".") ||
+        usuario.endsWith(".")
+    ) {
         return false;
     }
 
-    if (usuario.includes("..") || dominio.includes("..")) {
+    if (
+        usuario.includes("..") ||
+        dominio.includes("..")
+    ) {
         return false;
     }
 
-    if (!/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$/.test(usuario)) {
+    if (
+        !/^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+$/.test(
+            usuario
+        )
+    ) {
         return false;
     }
 
-    if (!/^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(dominio)) {
+    if (
+        !/^[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(
+            dominio
+        )
+    ) {
         return false;
     }
 
-    if (dominio.startsWith(".") || dominio.endsWith(".")) {
+    if (
+        dominio.startsWith(".") ||
+        dominio.endsWith(".")
+    ) {
         return false;
     }
 
@@ -245,7 +294,10 @@ function validarEndereco(valor) {
         .trim()
         .replace(/\s+/g, " ");
 
-    if (endereco.length < 8 || endereco.length > 255) {
+    if (
+        endereco.length < 8 ||
+        endereco.length > 255
+    ) {
         return false;
     }
 
@@ -265,7 +317,8 @@ function validarEndereco(valor) {
         return false;
     }
 
-    const possuiNumero = /\b\d+[A-Za-z]?\b/.test(endereco);
+    const possuiNumero =
+        /\b\d+[A-Za-z]?\b/.test(endereco);
 
     if (!possuiNumero) {
         return false;
@@ -297,7 +350,9 @@ async function consultarCEP() {
     }
 
     try {
-        cepTutor.setCustomValidity("Consultando CEP...");
+        cepTutor.setCustomValidity(
+            "Consultando CEP..."
+        );
 
         const resposta = await fetch(
             `https://viacep.com.br/ws/${cep}/json/`
@@ -323,40 +378,53 @@ async function consultarCEP() {
 
         cepValidado = cep;
         cepTutor.setCustomValidity("");
+
         return true;
 
     } catch (erro) {
-        console.error("Erro ao consultar CEP:", erro);
+        console.error(
+            "Erro ao consultar CEP:",
+            erro
+        );
 
         cepTutor.setCustomValidity(
             "Não foi possível verificar o CEP. Verifique sua conexão."
         );
 
         cepValidado = "";
+
         return false;
     }
 }
 
-cepTutor.addEventListener("blur", async () => {
-    if (cepTutor.value.trim() !== "") {
-        const valido = await consultarCEP();
+cepTutor.addEventListener(
+    "blur",
+    async () => {
+        if (cepTutor.value.trim() !== "") {
+            const valido = await consultarCEP();
 
-        if (!valido) {
-            cepTutor.reportValidity();
+            if (!valido) {
+                cepTutor.reportValidity();
+            }
         }
     }
-});
+);
 
 function adicionarEventosCampo(campo) {
-    campo.addEventListener("input", () => {
-        campo.setCustomValidity("");
-    });
+    campo.addEventListener(
+        "input",
+        () => {
+            campo.setCustomValidity("");
+        }
+    );
 
-    campo.addEventListener("change", () => {
-        campo.setCustomValidity("");
-    });
+    campo.addEventListener(
+        "change",
+        () => {
+            campo.setCustomValidity("");
+        }
+    );
 }
-
 function criarPet(dados = null) {
     contadorPets++;
 
@@ -381,13 +449,27 @@ function criarPet(dados = null) {
 
             <div class="campo">
                 <label>Espécie *</label>
-                <select class="especiePet" required>
-                    <option value="">Selecione</option>
-                    <option value="Cão">Cão</option>
-                    <option value="Gato">Gato</option>
-                    <option value="Ave">Ave</option>
-                    <option value="Roedor">Roedor</option>
-                    <option value="Outro">Outro</option>
+                <select
+                    class="especiePet"
+                    required>
+                    <option value="">
+                        Selecione
+                    </option>
+                    <option value="Cão">
+                        Cão
+                    </option>
+                    <option value="Gato">
+                        Gato
+                    </option>
+                    <option value="Ave">
+                        Ave
+                    </option>
+                    <option value="Roedor">
+                        Roedor
+                    </option>
+                    <option value="Outro">
+                        Outro
+                    </option>
                 </select>
             </div>
 
@@ -413,10 +495,18 @@ function criarPet(dados = null) {
 
             <div class="campo">
                 <label>Sexo *</label>
-                <select class="sexoPet" required>
-                    <option value="">Selecione</option>
-                    <option value="Macho">Macho</option>
-                    <option value="Fêmea">Fêmea</option>
+                <select
+                    class="sexoPet"
+                    required>
+                    <option value="">
+                        Selecione
+                    </option>
+                    <option value="Macho">
+                        Macho
+                    </option>
+                    <option value="Fêmea">
+                        Fêmea
+                    </option>
                 </select>
             </div>
 
@@ -435,19 +525,38 @@ function criarPet(dados = null) {
 
     petsContainer.appendChild(pet);
 
-    const campos = pet.querySelectorAll("input, select");
+    const campos = pet.querySelectorAll(
+        "input, select"
+    );
 
     campos.forEach(campo => {
         adicionarEventosCampo(campo);
     });
 
     if (dados) {
-        pet.querySelector(".nomePet").value = dados.nome || "";
-        pet.querySelector(".especiePet").value = dados.especie || "";
-        pet.querySelector(".racaPet").value = dados.raca || "";
-        pet.querySelector(".idadePet").value = dados.idade || "";
-        pet.querySelector(".sexoPet").value = dados.sexo || "";
-        pet.querySelector(".pesoPet").value = dados.peso || "";
+        pet.querySelector(
+            ".nomePet"
+        ).value = dados.nome || "";
+
+        pet.querySelector(
+            ".especiePet"
+        ).value = dados.especie || "";
+
+        pet.querySelector(
+            ".racaPet"
+        ).value = dados.raca || "";
+
+        pet.querySelector(
+            ".idadePet"
+        ).value = dados.idade || "";
+
+        pet.querySelector(
+            ".sexoPet"
+        ).value = dados.sexo || "";
+
+        pet.querySelector(
+            ".pesoPet"
+        ).value = dados.peso || "";
 
         if (dados.id) {
             pet.dataset.id = dados.id;
@@ -455,9 +564,12 @@ function criarPet(dados = null) {
     }
 }
 
-btnAdicionarPet.addEventListener("click", () => {
-    criarPet();
-});
+btnAdicionarPet.addEventListener(
+    "click",
+    () => {
+        criarPet();
+    }
+);
 
 function obterDadosTutor() {
     return {
@@ -473,17 +585,31 @@ function obterDadosTutor() {
 function obterPets() {
     const pets = [];
 
-    document.querySelectorAll(".pet").forEach(pet => {
-        pets.push({
-            id: pet.dataset.id || null,
-            nome: pet.querySelector(".nomePet").value.trim(),
-            especie: pet.querySelector(".especiePet").value,
-            raca: pet.querySelector(".racaPet").value.trim(),
-            idade: pet.querySelector(".idadePet").value.trim(),
-            sexo: pet.querySelector(".sexoPet").value,
-            peso: pet.querySelector(".pesoPet").value.trim()
-        });
-    });
+    document.querySelectorAll(".pet").forEach(
+        pet => {
+            pets.push({
+                id: pet.dataset.id || null,
+                nome: pet.querySelector(
+                    ".nomePet"
+                ).value.trim(),
+                especie: pet.querySelector(
+                    ".especiePet"
+                ).value,
+                raca: pet.querySelector(
+                    ".racaPet"
+                ).value.trim(),
+                idade: pet.querySelector(
+                    ".idadePet"
+                ).value.trim(),
+                sexo: pet.querySelector(
+                    ".sexoPet"
+                ).value,
+                peso: pet.querySelector(
+                    ".pesoPet"
+                ).value.trim()
+            });
+        }
+    );
 
     return pets;
 }
@@ -556,18 +682,30 @@ function validarPets(pets) {
         return false;
     }
 
-    const elementosPet = document.querySelectorAll(".pet");
+    const elementosPet =
+        document.querySelectorAll(".pet");
 
     for (let i = 0; i < pets.length; i++) {
         const dados = pets[i];
         const elemento = elementosPet[i];
 
-        const campoNome = elemento.querySelector(".nomePet");
-        const campoEspecie = elemento.querySelector(".especiePet");
-        const campoRaca = elemento.querySelector(".racaPet");
-        const campoIdade = elemento.querySelector(".idadePet");
-        const campoSexo = elemento.querySelector(".sexoPet");
-        const campoPeso = elemento.querySelector(".pesoPet");
+        const campoNome =
+            elemento.querySelector(".nomePet");
+
+        const campoEspecie =
+            elemento.querySelector(".especiePet");
+
+        const campoRaca =
+            elemento.querySelector(".racaPet");
+
+        const campoIdade =
+            elemento.querySelector(".idadePet");
+
+        const campoSexo =
+            elemento.querySelector(".sexoPet");
+
+        const campoPeso =
+            elemento.querySelector(".pesoPet");
 
         if (dados.nome.length < 2) {
             campoNome.setCustomValidity(
@@ -640,7 +778,6 @@ function validarPets(pets) {
 
     return true;
 }
-
 async function cadastrarTutor(dados) {
     const resposta = await fetch(
         `${API_URL}/tutores`,
@@ -657,9 +794,9 @@ async function cadastrarTutor(dados) {
 
     if (!resposta.ok) {
         throw new Error(
-            resultado.mensagem ||
             resultado.erro ||
-            "Erro ao cadastrar tutor."
+            resultado.message ||
+            "Não foi possível cadastrar o tutor."
         );
     }
 
@@ -682,9 +819,9 @@ async function atualizarTutor(dados) {
 
     if (!resposta.ok) {
         throw new Error(
-            resultado.mensagem ||
             resultado.erro ||
-            "Erro ao atualizar tutor."
+            resultado.message ||
+            "Não foi possível atualizar o tutor."
         );
     }
 
@@ -700,7 +837,7 @@ async function cadastrarPet(pet) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                tutor_id: tutorId,
+                tutor_id: Number(tutorId),
                 nome: pet.nome,
                 especie: pet.especie,
                 raca: pet.raca,
@@ -715,9 +852,9 @@ async function cadastrarPet(pet) {
 
     if (!resposta.ok) {
         throw new Error(
-            resultado.mensagem ||
             resultado.erro ||
-            "Erro ao cadastrar pet."
+            resultado.message ||
+            "Não foi possível cadastrar o pet."
         );
     }
 
@@ -733,7 +870,7 @@ async function atualizarPet(pet) {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                tutor_id: tutorId,
+                tutor_id: Number(tutorId),
                 nome: pet.nome,
                 especie: pet.especie,
                 raca: pet.raca,
@@ -748,17 +885,46 @@ async function atualizarPet(pet) {
 
     if (!resposta.ok) {
         throw new Error(
-            resultado.mensagem ||
             resultado.erro ||
-            "Erro ao atualizar pet."
+            resultado.message ||
+            "Não foi possível atualizar o pet."
         );
     }
 
     return resultado;
 }
 
+async function verificarTutorExistente() {
+    if (!tutorId) {
+        return false;
+    }
+
+    try {
+        const resposta = await fetch(
+            `${API_URL}/tutores/${tutorId}`
+        );
+
+        if (!resposta.ok) {
+            tutorId = null;
+            return false;
+        }
+
+        return true;
+
+    } catch (erro) {
+        console.error(
+            "Erro ao verificar tutor:",
+            erro
+        );
+
+        tutorId = null;
+        return false;
+    }
+}
+
 async function carregarTutor() {
     if (!tutorId) {
+        criarPet();
         return;
     }
 
@@ -768,21 +934,38 @@ async function carregarTutor() {
         );
 
         if (!resposta.ok) {
-            throw new Error(
-                "Tutor não encontrado."
-            );
+            tutorId = null;
+            criarPet();
+            return;
         }
 
         const tutor = await resposta.json();
 
         nomeTutor.value = tutor.nome || "";
-        cpfTutor.value = formatarCPF(tutor.cpf || "");
-        telefoneTutor.value = formatarTelefone(
-            tutor.telefone || ""
+
+        cpfTutor.value = formatarCPF(
+            tutor.cpf || ""
         );
-        emailTutor.value = tutor.email || "";
-        enderecoTutor.value = tutor.endereco || "";
-        cepTutor.value = formatarCEP(tutor.cep || "");
+
+        telefoneTutor.value =
+            formatarTelefone(
+                tutor.telefone || ""
+            );
+
+        emailTutor.value =
+            tutor.email || "";
+
+        enderecoTutor.value =
+            tutor.endereco || "";
+
+        cepTutor.value =
+            formatarCEP(tutor.cep || "");
+
+        cepValidado =
+            tutor.cep
+                ? String(tutor.cep)
+                    .replace(/\D/g, "")
+                : "";
 
         await carregarPets();
 
@@ -792,13 +975,22 @@ async function carregarTutor() {
             erro
         );
 
-        alert(
-            "Não foi possível carregar os dados do cadastro."
-        );
+        tutorId = null;
+
+        petsContainer.innerHTML = "";
+
+        contadorPets = 0;
+
+        criarPet();
     }
 }
 
 async function carregarPets() {
+    if (!tutorId) {
+        criarPet();
+        return;
+    }
+
     try {
         const resposta = await fetch(
             `${API_URL}/tutores/${tutorId}/pets`
@@ -806,16 +998,20 @@ async function carregarPets() {
 
         if (!resposta.ok) {
             throw new Error(
-                "Erro ao buscar pets."
+                "Não foi possível carregar os pets."
             );
         }
 
         const pets = await resposta.json();
 
         petsContainer.innerHTML = "";
+
         contadorPets = 0;
 
-        if (pets.length === 0) {
+        if (
+            !Array.isArray(pets) ||
+            pets.length === 0
+        ) {
             criarPet();
             return;
         }
@@ -831,38 +1027,25 @@ async function carregarPets() {
         );
 
         petsContainer.innerHTML = "";
+
         contadorPets = 0;
 
         criarPet();
-
-        alert(
-            "Não foi possível carregar os pets cadastrados."
-        );
     }
 }
-
 formCadastro.addEventListener(
     "submit",
-    async evento => {
+    async (evento) => {
         evento.preventDefault();
 
-        if (btnProsseguir.disabled) {
-            return;
-        }
+        const cepValido = await consultarCEP();
 
-        const dadosTutor = obterDadosTutor();
-        const pets = obterPets();
-
-        if (!validarDadosTutor()) {
-            return;
-        }
-
-        if (!(await consultarCEP())) {
+        if (!cepValido) {
             cepTutor.reportValidity();
             return;
         }
 
-        if (!validarPets(pets)) {
+        if (!validarDadosTutor()) {
             return;
         }
 
@@ -870,6 +1053,15 @@ formCadastro.addEventListener(
             formCadastro.reportValidity();
             return;
         }
+
+        const pets = obterPets();
+
+        if (!validarPets(pets)) {
+            return;
+        }
+
+        const textoOriginal =
+            btnProsseguir.innerHTML;
 
         btnProsseguir.disabled = true;
 
@@ -879,33 +1071,34 @@ formCadastro.addEventListener(
         `;
 
         try {
-            if (tutorId) {
-                await atualizarTutor(dadosTutor);
-            } else {
+            const dadosTutor =
+                obterDadosTutor();
+
+            const tutorExiste =
+                await verificarTutorExistente();
+
+            if (!tutorExiste) {
                 const resultadoTutor =
-                    await cadastrarTutor(dadosTutor);
+                    await cadastrarTutor(
+                        dadosTutor
+                    );
 
                 tutorId =
                     resultadoTutor.id ||
                     resultadoTutor.tutor_id ||
+                    resultadoTutor.tutorId ||
                     resultadoTutor.insertId;
 
                 if (!tutorId) {
                     throw new Error(
-                        "O cadastro foi salvo, mas o ID do tutor não foi retornado."
+                        "O cadastro foi realizado, mas o ID do tutor não foi retornado pelo servidor."
                     );
                 }
+            } else {
+                await atualizarTutor(
+                    dadosTutor
+                );
             }
-
-            localStorage.setItem(
-                "tutor_id",
-                tutorId
-            );
-
-            sessionStorage.setItem(
-                "tutor_id",
-                tutorId
-            );
 
             for (const pet of pets) {
                 if (pet.id) {
@@ -915,8 +1108,13 @@ formCadastro.addEventListener(
                 }
             }
 
+            localStorage.setItem(
+                "tutor_id",
+                String(tutorId)
+            );
+
             alert(
-                "Cadastro salvo com sucesso!"
+                "Cadastro realizado com sucesso!"
             );
 
             window.location.href =
@@ -930,21 +1128,16 @@ formCadastro.addEventListener(
 
             alert(
                 erro.message ||
-                "Não foi possível salvar o cadastro."
+                "Não foi possível salvar o cadastro. Tente novamente."
             );
 
+        } finally {
             btnProsseguir.disabled = false;
 
-            btnProsseguir.innerHTML = `
-                <i class="fa-solid fa-check"></i>
-                Salvar cadastro
-            `;
+            btnProsseguir.innerHTML =
+                textoOriginal;
         }
     }
 );
 
-if (tutorId) {
-    carregarTutor();
-} else {
-    criarPet();
-}
+carregarTutor();

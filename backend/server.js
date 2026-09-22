@@ -73,11 +73,13 @@ function formatarCPF(valor) {
 
 function validarEmail(valor) {
     const email = String(valor || "").trim();
+
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function validarTelefone(valor) {
     const telefone = String(valor || "").replace(/\D/g, "");
+
     return telefone.length === 10 || telefone.length === 11;
 }
 
@@ -107,6 +109,7 @@ function validarNome(valor) {
 
 function validarEndereco(valor) {
     const endereco = String(valor || "").trim();
+
     return endereco.length >= 3 && endereco.length <= 255;
 }
 
@@ -383,10 +386,17 @@ app.post("/api/tutores", async (req, res) => {
         });
     }
 });
-
 app.put("/api/tutores/:id", async (req, res) => {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do tutor inválido."
+        });
+    }
+
     try {
-        const { id } = req.params;
+        const dadosValidados = await validarDadosTutor(req.body, id);
 
         const {
             nome,
@@ -394,240 +404,126 @@ app.put("/api/tutores/:id", async (req, res) => {
             telefone,
             email,
             endereco,
-            cep
-        } = req.body;
+            cep,
+            senha
+        } = dadosValidados;
 
-        const [tutorExistente] = await conexao.query(
-            "SELECT id FROM tutores WHERE id = ?",
-            [id]
+        const [resultado] = await conexao.execute(
+            `UPDATE tutores
+             SET nome = ?,
+                 cpf = ?,
+                 telefone = ?,
+                 email = ?,
+                 endereco = ?,
+                 cep = ?,
+                 senha = ?
+             WHERE id = ?`,
+            [
+                nome,
+                cpf,
+                telefone,
+                email,
+                endereco,
+                cep,
+                senha,
+                id
+            ]
         );
 
-        if (tutorExistente.length === 0) {
+        if (resultado.affectedRows === 0) {
             return res.status(404).json({
                 mensagem: "Tutor não encontrado."
             });
         }
 
-        const erroValidacao = validarDadosTutor({
-            nome,
-            cpf,
-            telefone,
-            email,
-            endereco
-        });
+        const [tutores] = await conexao.execute(
+            `SELECT id, nome, cpf, telefone, email, endereco, cep, created_at
+             FROM tutores
+             WHERE id = ?`,
+            [id]
+        );
 
-        if (erroValidacao) {
-            return res.status(400).json({
-                mensagem: erroValidacao
-            });
-        }
+        res.json(tutores[0]);
 
-        const resultadoCEP = await validarCEP(cep);
-
-        if (!resultadoCEP.valido) {
-            return res.status(
-                resultadoCEP.indisponivel ? 503 : 400
-            ).json({
-                mensagem: resultadoCEP.mensagem
-            });
-        }
-
-        const cpfLimpo = limparCPF(cpf);
-        const cpfFormatado = formatarCPF(cpf);
-        const telefoneFormatado = formatarTelefone(telefone);
-        const emailNormalizado = email.trim().toLowerCase();
-        const nomeNormalizado = nome.trim();
-        const enderecoNormalizado = endereco.trim();
-        const cepFinal = resultadoCEP.cep;
-
-        const [cpfExistente] = await conexao.query(`
-            SELECT id
-            FROM tutores
-            WHERE REPLACE(REPLACE(cpf, '.', ''), '-', '') = ?
-            AND id <> ?
-        `, [cpfLimpo, id]);
-
-        if (cpfExistente.length > 0) {
-            return res.status(409).json({
-                mensagem: "Este CPF já está cadastrado para outro tutor."
-            });
-        }
-
-        const [emailExistente] = await conexao.query(`
-            SELECT id
-            FROM tutores
-            WHERE LOWER(email) = ?
-            AND id <> ?
-        `, [emailNormalizado, id]);
-
-        if (emailExistente.length > 0) {
-            return res.status(409).json({
-                mensagem: "Este e-mail já está cadastrado para outro tutor."
-            });
-        }
-
-        const [resultado] = await conexao.query(`
-            UPDATE tutores
-            SET
-                nome = ?,
-                cpf = ?,
-                telefone = ?,
-                email = ?,
-                endereco = ?,
-                cep = ?
-            WHERE id = ?
-        `, [
-            nomeNormalizado,
-            cpfFormatado,
-            telefoneFormatado,
-            emailNormalizado,
-            enderecoNormalizado,
-            cepFinal,
-            id
-        ]);
-
-        res.json({
-            mensagem: "Dados do tutor atualizados com sucesso.",
-            alterado: resultado.affectedRows > 0
-        });
     } catch (erro) {
         console.error("Erro ao atualizar tutor:", erro);
 
         if (erro.code === "ER_DUP_ENTRY") {
             return res.status(409).json({
-                mensagem: "CPF ou e-mail já cadastrado para outro tutor."
+                mensagem: "CPF ou e-mail já cadastrado."
             });
         }
 
         res.status(500).json({
-            mensagem: "Erro ao atualizar os dados do tutor.",
-            erro: erro.message
+            mensagem: erro.message || "Erro ao atualizar tutor."
         });
     }
 });
 
-app.get("/api/tutores/:id/pets", async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        const [pets] = await conexao.query(`
-            SELECT
-                id,
-                tutor_id,
-                nome,
-                especie,
-                raca,
-                idade,
-                sexo,
-                peso,
-                created_at,
-                updated_at
-            FROM pets
-            WHERE tutor_id = ?
-            ORDER BY id
-        `, [id]);
+app.get("/api/tutores/:id/pets", async (req, res) => {
+    const tutorId = Number(req.params.id);
+
+    if (!Number.isInteger(tutorId) || tutorId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do tutor inválido."
+        });
+    }
+
+    try {
+        const [pets] = await conexao.execute(
+            `SELECT *
+             FROM pets
+             WHERE tutor_id = ?
+             ORDER BY id DESC`,
+            [tutorId]
+        );
 
         res.json(pets);
+
     } catch (erro) {
         console.error("Erro ao buscar pets:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao buscar pets.",
-            erro: erro.message
+            mensagem: "Erro ao buscar pets."
         });
     }
 });
 
-function validarPet({
-    nome,
-    especie,
-    raca,
-    idade,
-    sexo,
-    peso
-}) {
-    const nomePet = String(nome || "").trim();
-    const racaPet = String(raca || "").trim();
-    const idadePet = String(idade || "").trim();
-    const pesoPet = String(peso || "").trim();
-
-    if (!nomePet || nomePet.length < 2) {
-        return "Digite um nome válido para o pet.";
-    }
-
-    if (nomePet.length > 100) {
-        return "O nome do pet deve possuir no máximo 100 caracteres.";
-    }
-
-    const especiesPermitidas = [
-        "Cão",
-        "Gato",
-        "Ave",
-        "Roedor",
-        "Outro"
-    ];
-
-    if (!especie || !especiesPermitidas.includes(especie)) {
-        return "Selecione uma espécie válida.";
-    }
-
-    if (racaPet.length > 100) {
-        return "A raça deve possuir no máximo 100 caracteres.";
-    }
-
-    if (idadePet.length > 30) {
-        return "A idade deve possuir no máximo 30 caracteres.";
-    }
-
-    const sexosPermitidos = [
-        "Macho",
-        "Fêmea"
-    ];
-
-    if (sexo && !sexosPermitidos.includes(sexo)) {
-        return "Selecione um sexo válido.";
-    }
-
-    if (pesoPet) {
-        const pesoNumerico = Number(
-            pesoPet
-                .replace(",", ".")
-                .replace(/[^\d.]/g, "")
-        );
-
-        if (!Number.isFinite(pesoNumerico) || pesoNumerico <= 0) {
-            return "Digite um peso válido.";
-        }
-
-        if (pesoPet.length > 30) {
-            return "O peso deve possuir no máximo 30 caracteres.";
-        }
-    }
-
-    return null;
-}
 
 app.post("/api/pets", async (req, res) => {
+    const {
+        tutor_id,
+        nome,
+        especie,
+        raca,
+        idade,
+        sexo,
+        peso,
+        data_nascimento,
+        observacoes
+    } = req.body;
+
+    const tutorId = Number(tutor_id);
+
+    if (!Number.isInteger(tutorId) || tutorId <= 0) {
+        return res.status(400).json({
+            mensagem: "Tutor inválido."
+        });
+    }
+
+    if (!nome || !especie) {
+        return res.status(400).json({
+            mensagem: "Nome e espécie do pet são obrigatórios."
+        });
+    }
+
     try {
-        const {
-            tutor_id,
-            nome,
-            especie,
-            raca,
-            idade,
-            sexo,
-            peso
-        } = req.body;
-
-        if (!tutor_id) {
-            return res.status(400).json({
-                mensagem: "Tutor é obrigatório."
-            });
-        }
-
-        const [tutor] = await conexao.query(
-            "SELECT id FROM tutores WHERE id = ?",
-            [tutor_id]
+        const [tutor] = await conexao.execute(
+            `SELECT id
+             FROM tutores
+             WHERE id = ?`,
+            [tutorId]
         );
 
         if (tutor.length === 0) {
@@ -636,23 +532,8 @@ app.post("/api/pets", async (req, res) => {
             });
         }
 
-        const erroValidacao = validarPet({
-            nome,
-            especie,
-            raca,
-            idade,
-            sexo,
-            peso
-        });
-
-        if (erroValidacao) {
-            return res.status(400).json({
-                mensagem: erroValidacao
-            });
-        }
-
-        const [resultado] = await conexao.query(`
-            INSERT INTO pets
+        const [resultado] = await conexao.execute(
+            `INSERT INTO pets
             (
                 tutor_id,
                 nome,
@@ -660,145 +541,146 @@ app.post("/api/pets", async (req, res) => {
                 raca,
                 idade,
                 sexo,
-                peso
+                peso,
+                data_nascimento,
+                observacoes
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        `, [
-            tutor_id,
-            String(nome).trim(),
-            especie,
-            raca ? String(raca).trim() : null,
-            idade ? String(idade).trim() : null,
-            sexo || null,
-            peso ? String(peso).trim() : null
-        ]);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                tutorId,
+                nome.trim(),
+                especie,
+                raca || null,
+                idade || null,
+                sexo || null,
+                peso || null,
+                data_nascimento || null,
+                observacoes || null
+            ]
+        );
 
-        res.status(201).json({
-            mensagem: "Pet cadastrado com sucesso.",
-            id: resultado.insertId
-        });
+        const [pets] = await conexao.execute(
+            `SELECT *
+             FROM pets
+             WHERE id = ?`,
+            [resultado.insertId]
+        );
+
+        res.status(201).json(pets[0]);
+
     } catch (erro) {
         console.error("Erro ao cadastrar pet:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao cadastrar pet.",
-            erro: erro.message
+            mensagem: "Erro ao cadastrar pet."
         });
     }
 });
 
+
 app.put("/api/pets/:id", async (req, res) => {
+    const petId = Number(req.params.id);
+
+    if (!Number.isInteger(petId) || petId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do pet inválido."
+        });
+    }
+
+    const {
+        tutor_id,
+        nome,
+        especie,
+        raca,
+        idade,
+        sexo,
+        peso,
+        data_nascimento,
+        observacoes
+    } = req.body;
+
+    const tutorId = Number(tutor_id);
+
+    if (!Number.isInteger(tutorId) || tutorId <= 0) {
+        return res.status(400).json({
+            mensagem: "Tutor inválido."
+        });
+    }
+
+    if (!nome || !especie) {
+        return res.status(400).json({
+            mensagem: "Nome e espécie do pet são obrigatórios."
+        });
+    }
+
     try {
-        const { id } = req.params;
+        const [pet] = await conexao.execute(
+            `SELECT id
+             FROM pets
+             WHERE id = ? AND tutor_id = ?`,
+            [petId, tutorId]
+        );
 
-        const {
-            tutor_id,
-            nome,
-            especie,
-            raca,
-            idade,
-            sexo,
-            peso
-        } = req.body;
-
-        if (!tutor_id) {
-            return res.status(400).json({
-                mensagem: "Tutor é obrigatório."
-            });
-        }
-
-        const [petExistente] = await conexao.query(`
-            SELECT
-                id,
-                tutor_id
-            FROM pets
-            WHERE id = ?
-        `, [id]);
-
-        if (petExistente.length === 0) {
+        if (pet.length === 0) {
             return res.status(404).json({
-                mensagem: "Pet não encontrado."
+                mensagem: "Pet não encontrado para este tutor."
             });
         }
 
-        if (
-            Number(petExistente[0].tutor_id) !==
-            Number(tutor_id)
-        ) {
-            return res.status(403).json({
-                mensagem: "Este pet não pertence ao tutor informado."
-            });
-        }
+        await conexao.execute(
+            `UPDATE pets
+             SET nome = ?,
+                 especie = ?,
+                 raca = ?,
+                 idade = ?,
+                 sexo = ?,
+                 peso = ?,
+                 data_nascimento = ?,
+                 observacoes = ?
+             WHERE id = ? AND tutor_id = ?`,
+            [
+                nome.trim(),
+                especie,
+                raca || null,
+                idade || null,
+                sexo || null,
+                peso || null,
+                data_nascimento || null,
+                observacoes || null,
+                petId,
+                tutorId
+            ]
+        );
 
-        const erroValidacao = validarPet({
-            nome,
-            especie,
-            raca,
-            idade,
-            sexo,
-            peso
-        });
+        const [pets] = await conexao.execute(
+            `SELECT *
+             FROM pets
+             WHERE id = ?`,
+            [petId]
+        );
 
-        if (erroValidacao) {
-            return res.status(400).json({
-                mensagem: erroValidacao
-            });
-        }
+        res.json(pets[0]);
 
-        const [resultado] = await conexao.query(`
-            UPDATE pets
-            SET
-                nome = ?,
-                especie = ?,
-                raca = ?,
-                idade = ?,
-                sexo = ?,
-                peso = ?
-            WHERE id = ?
-            AND tutor_id = ?
-        `, [
-            String(nome).trim(),
-            especie,
-            raca ? String(raca).trim() : null,
-            idade ? String(idade).trim() : null,
-            sexo || null,
-            peso ? String(peso).trim() : null,
-            id,
-            tutor_id
-        ]);
-
-        res.json({
-            mensagem: "Pet atualizado com sucesso.",
-            alterado: resultado.affectedRows > 0
-        });
     } catch (erro) {
         console.error("Erro ao atualizar pet:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao atualizar pet.",
-            erro: erro.message
+            mensagem: "Erro ao atualizar pet."
         });
     }
 });
 
+
 app.get("/api/clinicas", async (req, res) => {
     try {
-        const [clinicas] = await conexao.query(`
-            SELECT
-                id,
-                nome,
-                regiao,
-                endereco,
-                telefone,
-                horario_atendimento,
-                atendimento_24h,
-                descricao,
-                imagem
-            FROM clinicas
-            ORDER BY id
-        `);
+        const [clinicas] = await conexao.execute(
+            `SELECT *
+             FROM clinicas
+             ORDER BY nome`
+        );
 
         res.json(clinicas);
+
     } catch (erro) {
         console.error("Erro ao buscar clínicas:", erro);
 
@@ -808,24 +690,23 @@ app.get("/api/clinicas", async (req, res) => {
     }
 });
 
-app.get("/api/clinicas/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        const [clinicas] = await conexao.query(`
-            SELECT
-                id,
-                nome,
-                regiao,
-                endereco,
-                telefone,
-                horario_atendimento,
-                atendimento_24h,
-                descricao,
-                imagem
-            FROM clinicas
-            WHERE id = ?
-        `, [id]);
+app.get("/api/clinicas/:id", async (req, res) => {
+    const clinicaId = Number(req.params.id);
+
+    if (!Number.isInteger(clinicaId) || clinicaId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID da clínica inválido."
+        });
+    }
+
+    try {
+        const [clinicas] = await conexao.execute(
+            `SELECT *
+             FROM clinicas
+             WHERE id = ?`,
+            [clinicaId]
+        );
 
         if (clinicas.length === 0) {
             return res.status(404).json({
@@ -834,6 +715,7 @@ app.get("/api/clinicas/:id", async (req, res) => {
         }
 
         res.json(clinicas[0]);
+
     } catch (erro) {
         console.error("Erro ao buscar clínica:", erro);
 
@@ -843,24 +725,27 @@ app.get("/api/clinicas/:id", async (req, res) => {
     }
 });
 
-app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        const [veterinarios] = await conexao.query(`
-            SELECT
-                id,
-                nome,
-                especialidade,
-                telefone,
-                email,
-                disponivel
-            FROM veterinarios
-            WHERE clinica_id = ?
-            ORDER BY nome
-        `, [id]);
+app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
+    const clinicaId = Number(req.params.id);
+
+    if (!Number.isInteger(clinicaId) || clinicaId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID da clínica inválido."
+        });
+    }
+
+    try {
+        const [veterinarios] = await conexao.execute(
+            `SELECT *
+             FROM veterinarios
+             WHERE clinica_id = ?
+             ORDER BY nome`,
+            [clinicaId]
+        );
 
         res.json(veterinarios);
+
     } catch (erro) {
         console.error("Erro ao buscar veterinários:", erro);
 
@@ -870,32 +755,27 @@ app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
     }
 });
 
-app.get("/api/clinicas/:id/servicos", async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        const [servicos] = await conexao.query(`
-            SELECT
-                s.id,
-                s.clinica_id,
-                s.veterinario_id,
-                s.nome,
-                s.tipo,
-                s.descricao,
-                s.preco,
-                s.duracao_minutos,
-                s.ativo,
-                v.nome AS veterinario_nome,
-                v.especialidade AS veterinario_especialidade
-            FROM servicos s
-            LEFT JOIN veterinarios v
-                ON s.veterinario_id = v.id
-            WHERE s.clinica_id = ?
-            AND s.ativo = TRUE
-            ORDER BY s.tipo, s.nome
-        `, [id]);
+app.get("/api/clinicas/:id/servicos", async (req, res) => {
+    const clinicaId = Number(req.params.id);
+
+    if (!Number.isInteger(clinicaId) || clinicaId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID da clínica inválido."
+        });
+    }
+
+    try {
+        const [servicos] = await conexao.execute(
+            `SELECT *
+             FROM servicos
+             WHERE clinica_id = ?
+             ORDER BY nome`,
+            [clinicaId]
+        );
 
         res.json(servicos);
+
     } catch (erro) {
         console.error("Erro ao buscar serviços:", erro);
 
@@ -905,39 +785,69 @@ app.get("/api/clinicas/:id/servicos", async (req, res) => {
     }
 });
 
-app.post("/api/agendamentos", async (req, res) => {
-    let conexaoAgendamento;
+
+app.get("/api/animais", async (req, res) => {
+    try {
+        const [animais] = await conexao.execute(
+            `SELECT *
+             FROM animais_perdidos
+             ORDER BY id DESC`
+        );
+
+        res.json(animais);
+
+    } catch (erro) {
+        console.error("Erro ao buscar animais perdidos:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao buscar animais."
+        });
+    }
+});
+
+
+app.post("/api/animais", async (req, res) => {
+    const {
+        tutor_id,
+        nome,
+        especie,
+        raca,
+        cor,
+        data,
+        bairro,
+        local,
+        descricao,
+        contato,
+        foto,
+        status
+    } = req.body;
+
+    const tutorId = Number(tutor_id);
+
+    if (!Number.isInteger(tutorId) || tutorId <= 0) {
+        return res.status(400).json({
+            mensagem: "Tutor inválido. Não foi possível identificar quem cadastrou o anúncio."
+        });
+    }
+
+    if (!especie || !data || !bairro || !local || !contato || !status) {
+        return res.status(400).json({
+            mensagem: "Preencha todos os campos obrigatórios."
+        });
+    }
+
+    if (!["perdido", "encontrado"].includes(status)) {
+        return res.status(400).json({
+            mensagem: "Situação do animal inválida."
+        });
+    }
 
     try {
-        conexaoAgendamento = await conexao.getConnection();
-
-        const {
-            tutor_id,
-            pet_id,
-            clinica_id,
-            veterinario_id,
-            servico_id,
-            data_agendamento,
-            horario,
-            observacoes
-        } = req.body;
-
-        if (
-            !tutor_id ||
-            !pet_id ||
-            !clinica_id ||
-            !servico_id ||
-            !data_agendamento ||
-            !horario
-        ) {
-            return res.status(400).json({
-                mensagem: "Preencha todos os campos obrigatórios."
-            });
-        }
-
-        const [tutor] = await conexaoAgendamento.query(
-            "SELECT id FROM tutores WHERE id = ?",
-            [tutor_id]
+        const [tutor] = await conexao.execute(
+            `SELECT id
+             FROM tutores
+             WHERE id = ?`,
+            [tutorId]
         );
 
         if (tutor.length === 0) {
@@ -946,366 +856,8 @@ app.post("/api/agendamentos", async (req, res) => {
             });
         }
 
-        const [pet] = await conexaoAgendamento.query(`
-            SELECT id
-            FROM pets
-            WHERE id = ?
-            AND tutor_id = ?
-        `, [
-            pet_id,
-            tutor_id
-        ]);
-
-        if (pet.length === 0) {
-            return res.status(400).json({
-                mensagem: "Pet inválido para este tutor."
-            });
-        }
-
-        const [clinica] = await conexaoAgendamento.query(`
-            SELECT id
-            FROM clinicas
-            WHERE id = ?
-        `, [clinica_id]);
-
-        if (clinica.length === 0) {
-            return res.status(400).json({
-                mensagem: "Clínica não encontrada."
-            });
-        }
-
-        const [servicos] = await conexaoAgendamento.query(`
-            SELECT
-                id,
-                clinica_id,
-                veterinario_id
-            FROM servicos
-            WHERE id = ?
-            AND clinica_id = ?
-            AND ativo = TRUE
-        `, [
-            servico_id,
-            clinica_id
-        ]);
-
-        if (servicos.length === 0) {
-            return res.status(400).json({
-                mensagem: "Serviço inválido para esta clínica."
-            });
-        }
-
-        const veterinarioFinal =
-            veterinario_id ||
-            servicos[0].veterinario_id ||
-            null;
-
-        if (veterinarioFinal) {
-            const [veterinarios] = await conexaoAgendamento.query(`
-                SELECT id
-                FROM veterinarios
-                WHERE id = ?
-                AND clinica_id = ?
-                AND disponivel = TRUE
-            `, [
-                veterinarioFinal,
-                clinica_id
-            ]);
-
-            if (veterinarios.length === 0) {
-                return res.status(400).json({
-                    mensagem: "Veterinário inválido ou indisponível."
-                });
-            }
-        }
-
-        const [conflito] = await conexaoAgendamento.query(`
-            SELECT id
-            FROM agendamentos
-            WHERE clinica_id = ?
-            AND data_agendamento = ?
-            AND horario = ?
-            AND status IN ('Agendado', 'Confirmado')
-        `, [
-            clinica_id,
-            data_agendamento,
-            horario
-        ]);
-
-        if (conflito.length > 0) {
-            return res.status(409).json({
-                mensagem: "Este horário já está ocupado."
-            });
-        }
-
-        const [resultado] = await conexaoAgendamento.query(`
-            INSERT INTO agendamentos
-            (
-                tutor_id,
-                pet_id,
-                clinica_id,
-                veterinario_id,
-                servico_id,
-                data_agendamento,
-                horario,
-                observacoes
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        `, [
-            tutor_id,
-            pet_id,
-            clinica_id,
-            veterinarioFinal,
-            servico_id,
-            data_agendamento,
-            horario,
-            observacoes || null
-        ]);
-
-        res.status(201).json({
-            mensagem: "Agendamento realizado com sucesso.",
-            id: resultado.insertId
-        });
-    } catch (erro) {
-        console.error(
-            "Erro ao realizar agendamento:",
-            erro
-        );
-
-        res.status(500).json({
-            mensagem: "Erro ao realizar agendamento.",
-            erro: erro.message
-        });
-    } finally {
-        if (conexaoAgendamento) {
-            conexaoAgendamento.release();
-        }
-    }
-});
-
-app.get("/api/tutores/:id/agendamentos", async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const [agendamentos] = await conexao.query(`
-            SELECT
-                a.id,
-                a.data_agendamento,
-                a.horario,
-                a.status,
-                a.observacoes,
-                c.id AS clinica_id,
-                c.nome AS clinica,
-                c.endereco,
-                p.id AS pet_id,
-                p.nome AS pet,
-                s.id AS servico_id,
-                s.nome AS servico,
-                s.tipo AS tipo_servico,
-                v.id AS veterinario_id,
-                v.nome AS veterinario
-            FROM agendamentos a
-            INNER JOIN clinicas c
-                ON a.clinica_id = c.id
-            INNER JOIN pets p
-                ON a.pet_id = p.id
-            INNER JOIN servicos s
-                ON a.servico_id = s.id
-            LEFT JOIN veterinarios v
-                ON a.veterinario_id = v.id
-            WHERE a.tutor_id = ?
-            ORDER BY
-                a.data_agendamento DESC,
-                a.horario DESC
-        `, [id]);
-
-        res.json(agendamentos);
-    } catch (erro) {
-        console.error(
-            "Erro ao buscar agendamentos:",
-            erro
-        );
-
-        res.status(500).json({
-            mensagem: "Erro ao buscar agendamentos."
-        });
-    }
-});
-
-app.get("/api/agendamentos/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const [agendamentos] = await conexao.query(`
-            SELECT
-                a.id,
-                a.tutor_id,
-                a.pet_id,
-                a.clinica_id,
-                a.veterinario_id,
-                a.servico_id,
-                a.data_agendamento,
-                a.horario,
-                a.status,
-                a.observacoes,
-                c.nome AS clinica,
-                c.endereco AS endereco_clinica,
-                p.nome AS pet,
-                p.especie,
-                p.raca,
-                s.nome AS servico,
-                s.tipo AS tipo_servico,
-                s.preco,
-                s.duracao_minutos,
-                v.nome AS veterinario,
-                v.especialidade
-            FROM agendamentos a
-            INNER JOIN clinicas c
-                ON a.clinica_id = c.id
-            INNER JOIN pets p
-                ON a.pet_id = p.id
-            INNER JOIN servicos s
-                ON a.servico_id = s.id
-            LEFT JOIN veterinarios v
-                ON a.veterinario_id = v.id
-            WHERE a.id = ?
-        `, [id]);
-
-        if (agendamentos.length === 0) {
-            return res.status(404).json({
-                mensagem: "Agendamento não encontrado."
-            });
-        }
-
-        res.json(agendamentos[0]);
-    } catch (erro) {
-        console.error(
-            "Erro ao buscar agendamento:",
-            erro
-        );
-
-        res.status(500).json({
-            mensagem: "Erro ao buscar agendamento."
-        });
-    }
-});
-
-app.delete("/api/agendamentos/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
-
-        const [resultado] = await conexao.query(`
-            UPDATE agendamentos
-            SET status = 'Cancelado'
-            WHERE id = ?
-        `, [id]);
-
-        if (resultado.affectedRows === 0) {
-            return res.status(404).json({
-                mensagem: "Agendamento não encontrado."
-            });
-        }
-
-        res.json({
-            mensagem: "Agendamento cancelado com sucesso."
-        });
-    } catch (erro) {
-        console.error(
-            "Erro ao cancelar agendamento:",
-            erro
-        );
-
-        res.status(500).json({
-            mensagem: "Erro ao cancelar agendamento."
-        });
-    }
-});
-
-app.get("/api/animais", async (req, res) => {
-    try {
-        const [animais] = await conexao.query(`
-            SELECT
-                id,
-                tutor_id,
-                nome,
-                especie,
-                raca,
-                cor,
-                DATE_FORMAT(data_perdido, '%Y-%m-%d') AS data_perdido,
-                bairro,
-                local_perdido,
-                descricao,
-                contato,
-                foto,
-                status,
-                created_at
-            FROM animais_perdidos
-            ORDER BY id DESC
-        `);
-
-        res.json(animais);
-    } catch (erro) {
-        console.error("Erro ao buscar animais:", erro);
-
-        res.status(500).json({
-            mensagem: "Erro ao buscar animais.",
-            erro: erro.message
-        });
-    }
-});
-
-app.post("/api/animais", async (req, res) => {
-    try {
-        const {
-            tutor_id,
-            nome,
-            especie,
-            raca,
-            cor,
-            data,
-            bairro,
-            local,
-            descricao,
-            contato,
-            foto,
-            status
-        } = req.body;
-
-        if (
-            !nome ||
-            !especie ||
-            !data ||
-            !bairro ||
-            !local ||
-            !contato
-        ) {
-            return res.status(400).json({
-                mensagem: "Preencha todos os campos obrigatórios."
-            });
-        }
-
-        const especiesPermitidas = [
-            "cachorro",
-            "gato",
-            "ave",
-            "roedor",
-            "outro"
-        ];
-
-        if (!especiesPermitidas.includes(
-            String(especie).trim().toLowerCase()
-        )) {
-            return res.status(400).json({
-                mensagem: "Selecione uma espécie válida."
-            });
-        }
-
-        const statusFinal =
-            status === "encontrado"
-                ? "encontrado"
-                : "perdido";
-
-        const [resultado] = await conexao.query(`
-            INSERT INTO animais_perdidos
+        const [resultado] = await conexao.execute(
+            `INSERT INTO animais_perdidos
             (
                 tutor_id,
                 nome,
@@ -1320,89 +872,486 @@ app.post("/api/animais", async (req, res) => {
                 foto,
                 status
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        `, [
-            tutor_id || null,
-            String(nome).trim(),
-            String(especie).trim().toLowerCase(),
-            raca ? String(raca).trim() : null,
-            cor ? String(cor).trim() : null,
-            data,
-            String(bairro).trim(),
-            String(local).trim(),
-            descricao ? String(descricao).trim() : null,
-            String(contato).trim(),
-            foto || null,
-            statusFinal
-        ]);
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                tutorId,
+                nome || null,
+                especie,
+                raca || null,
+                cor || null,
+                data,
+                bairro,
+                local,
+                descricao || null,
+                contato,
+                foto || null,
+                status
+            ]
+        );
 
-        res.status(201).json({
-            mensagem: "Animal cadastrado com sucesso.",
-            id: resultado.insertId
-        });
+        const [animais] = await conexao.execute(
+            `SELECT *
+             FROM animais_perdidos
+             WHERE id = ?`,
+            [resultado.insertId]
+        );
+
+        res.status(201).json(animais[0]);
+
     } catch (erro) {
-        console.error("Erro ao cadastrar animal:", erro);
+        console.error("Erro ao cadastrar animal perdido:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao cadastrar animal.",
-            erro: erro.message
+            mensagem: "Erro ao cadastrar animal."
         });
     }
 });
 
-app.delete("/api/animais/:id", async (req, res) => {
-    try {
-        const { id } = req.params;
 
-        const [resultado] = await conexao.query(`
-            DELETE FROM animais_perdidos
-            WHERE id = ?
-        `, [id]);
+app.delete("/api/animais/:id", async (req, res) => {
+    const animalId = Number(req.params.id);
+
+    if (!Number.isInteger(animalId) || animalId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do animal inválido."
+        });
+    }
+
+    try {
+        const [resultado] = await conexao.execute(
+            `DELETE FROM animais_perdidos
+             WHERE id = ?`,
+            [animalId]
+        );
 
         if (resultado.affectedRows === 0) {
             return res.status(404).json({
-                mensagem: "Animal não encontrado."
+                mensagem: "Anúncio não encontrado."
             });
         }
 
         res.json({
             mensagem: "Anúncio removido com sucesso."
         });
+
     } catch (erro) {
         console.error("Erro ao remover animal:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao remover anúncio.",
-            erro: erro.message
+            mensagem: "Erro ao remover anúncio."
+        });
+    }
+});
+app.post("/api/agendamentos", async (req, res) => {
+    const {
+        tutor_id,
+        pet_id,
+        clinica_id,
+        veterinario_id,
+        servico_id,
+        data_agendamento,
+        horario,
+        observacoes,
+        solicitar_transporte,
+        transporte,
+        endereco_coleta,
+        data_coleta,
+        horario_coleta,
+        observacoes_transporte
+    } = req.body;
+
+    const tutorId = Number(tutor_id);
+    const petId = Number(pet_id);
+    const clinicaId = Number(clinica_id);
+    const servicoId = Number(servico_id);
+    const veterinarioId =
+        veterinario_id !== undefined &&
+        veterinario_id !== null &&
+        veterinario_id !== ""
+            ? Number(veterinario_id)
+            : null;
+
+    if (
+        !Number.isInteger(tutorId) ||
+        !Number.isInteger(petId) ||
+        !Number.isInteger(clinicaId) ||
+        !Number.isInteger(servicoId) ||
+        !data_agendamento ||
+        !horario
+    ) {
+        return res.status(400).json({
+            mensagem: "Preencha todos os dados obrigatórios do agendamento."
+        });
+    }
+
+    const transporteSolicitado =
+        solicitar_transporte === true ||
+        solicitar_transporte === 1 ||
+        solicitar_transporte === "1" ||
+        solicitar_transporte === "true" ||
+        transporte === true ||
+        transporte === 1 ||
+        transporte === "1" ||
+        transporte === "true";
+
+    if (transporteSolicitado) {
+        if (!endereco_coleta || !data_coleta || !horario_coleta) {
+            return res.status(400).json({
+                mensagem:
+                    "Informe endereço, data e horário da coleta para solicitar o transporte."
+            });
+        }
+    }
+
+    let conexaoTransacao;
+
+    try {
+        const [tutor] = await conexao.execute(
+            `SELECT id
+             FROM tutores
+             WHERE id = ?`,
+            [tutorId]
+        );
+
+        if (tutor.length === 0) {
+            return res.status(404).json({
+                mensagem: "Tutor não encontrado."
+            });
+        }
+
+        const [pet] = await conexao.execute(
+            `SELECT id
+             FROM pets
+             WHERE id = ? AND tutor_id = ?`,
+            [petId, tutorId]
+        );
+
+        if (pet.length === 0) {
+            return res.status(404).json({
+                mensagem: "Pet não encontrado para este tutor."
+            });
+        }
+
+        const [clinica] = await conexao.execute(
+            `SELECT id
+             FROM clinicas
+             WHERE id = ?`,
+            [clinicaId]
+        );
+
+        if (clinica.length === 0) {
+            return res.status(404).json({
+                mensagem: "Clínica não encontrada."
+            });
+        }
+
+        const [servico] = await conexao.execute(
+            `SELECT id
+             FROM servicos
+             WHERE id = ?
+             AND clinica_id = ?
+             AND ativo = 1`,
+            [servicoId, clinicaId]
+        );
+
+        if (servico.length === 0) {
+            return res.status(404).json({
+                mensagem: "Serviço não encontrado ou indisponível."
+            });
+        }
+
+        if (veterinarioId !== null) {
+            if (!Number.isInteger(veterinarioId)) {
+                return res.status(400).json({
+                    mensagem: "Veterinário inválido."
+                });
+            }
+
+            const [veterinario] = await conexao.execute(
+                `SELECT id
+                 FROM veterinarios
+                 WHERE id = ?
+                 AND clinica_id = ?`,
+                [veterinarioId, clinicaId]
+            );
+
+            if (veterinario.length === 0) {
+                return res.status(404).json({
+                    mensagem: "Veterinário não encontrado nesta clínica."
+                });
+            }
+        }
+
+        const [conflitos] = await conexao.execute(
+            `SELECT id
+             FROM agendamentos
+             WHERE clinica_id = ?
+             AND data_agendamento = ?
+             AND horario = ?
+             AND status IN ('Agendado', 'Confirmado')`,
+            [
+                clinicaId,
+                data_agendamento,
+                horario
+            ]
+        );
+
+        if (conflitos.length > 0) {
+            return res.status(409).json({
+                mensagem:
+                    "Já existe um agendamento para esta clínica neste dia e horário."
+            });
+        }
+
+        conexaoTransacao = await conexao.getConnection();
+
+        await conexaoTransacao.beginTransaction();
+
+        const [resultado] = await conexaoTransacao.execute(
+            `INSERT INTO agendamentos
+            (
+                tutor_id,
+                pet_id,
+                clinica_id,
+                veterinario_id,
+                servico_id,
+                data_agendamento,
+                horario,
+                observacoes,
+                status
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Agendado')`,
+            [
+                tutorId,
+                petId,
+                clinicaId,
+                veterinarioId,
+                servicoId,
+                data_agendamento,
+                horario,
+                observacoes || null
+            ]
+        );
+
+        const agendamentoId = resultado.insertId;
+
+        if (transporteSolicitado) {
+            await conexaoTransacao.execute(
+                `INSERT INTO transportes
+                (
+                    agendamento_id,
+                    endereco_coleta,
+                    data_coleta,
+                    horario_coleta,
+                    observacoes,
+                    status
+                )
+                VALUES (?, ?, ?, ?, ?, 'Solicitado')`,
+                [
+                    agendamentoId,
+                    endereco_coleta,
+                    data_coleta,
+                    horario_coleta,
+                    observacoes_transporte || null
+                ]
+            );
+        }
+
+        await conexaoTransacao.commit();
+
+        res.status(201).json({
+            mensagem: "Agendamento realizado com sucesso.",
+            id: agendamentoId
+        });
+
+    } catch (erro) {
+        if (conexaoTransacao) {
+            try {
+                await conexaoTransacao.rollback();
+            } catch (erroRollback) {
+                console.error("Erro ao desfazer transação:", erroRollback);
+            }
+        }
+
+        console.error("Erro ao realizar agendamento:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao realizar agendamento."
+        });
+
+    } finally {
+        if (conexaoTransacao) {
+            conexaoTransacao.release();
+        }
+    }
+});
+
+
+app.get("/api/tutores/:id/agendamentos", async (req, res) => {
+    const tutorId = Number(req.params.id);
+
+    if (!Number.isInteger(tutorId) || tutorId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do tutor inválido."
+        });
+    }
+
+    try {
+        const [agendamentos] = await conexao.execute(
+            `SELECT
+                a.id,
+                a.tutor_id,
+                a.pet_id,
+                a.clinica_id,
+                a.veterinario_id,
+                a.servico_id,
+                a.data_agendamento,
+                a.horario,
+                a.observacoes,
+                a.status,
+                p.nome AS nome_pet,
+                c.nome AS nome_clinica,
+                c.endereco AS endereco_clinica,
+                v.nome AS nome_veterinario,
+                s.nome AS nome_servico
+             FROM agendamentos a
+             INNER JOIN pets p
+                ON a.pet_id = p.id
+             INNER JOIN clinicas c
+                ON a.clinica_id = c.id
+             LEFT JOIN veterinarios v
+                ON a.veterinario_id = v.id
+             INNER JOIN servicos s
+                ON a.servico_id = s.id
+             WHERE a.tutor_id = ?
+             ORDER BY a.data_agendamento DESC, a.horario DESC`,
+            [tutorId]
+        );
+
+        res.json(agendamentos);
+
+    } catch (erro) {
+        console.error("Erro ao buscar agendamentos:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao buscar agendamentos."
         });
     }
 });
 
-app.get("/api/status", async (req, res) => {
-    try {
-        await conexao.query("SELECT 1");
 
-        res.json({
-            status: "ok",
-            banco: "conectado"
+app.get("/api/agendamentos/:id", async (req, res) => {
+    const agendamentoId = Number(req.params.id);
+
+    if (!Number.isInteger(agendamentoId) || agendamentoId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do agendamento inválido."
         });
-    } catch (erro) {
-        console.error(
-            "Erro na conexão com o banco:",
-            erro
+    }
+
+    try {
+        const [agendamentos] = await conexao.execute(
+            `SELECT
+                a.*,
+                p.nome AS nome_pet,
+                p.especie AS especie_pet,
+                p.raca AS raca_pet,
+                c.nome AS nome_clinica,
+                c.endereco AS endereco_clinica,
+                c.telefone AS telefone_clinica,
+                v.nome AS nome_veterinario,
+                s.nome AS nome_servico,
+                s.preco AS preco_servico
+             FROM agendamentos a
+             INNER JOIN pets p
+                ON a.pet_id = p.id
+             INNER JOIN clinicas c
+                ON a.clinica_id = c.id
+             LEFT JOIN veterinarios v
+                ON a.veterinario_id = v.id
+             INNER JOIN servicos s
+                ON a.servico_id = s.id
+             WHERE a.id = ?`,
+            [agendamentoId]
         );
 
+        if (agendamentos.length === 0) {
+            return res.status(404).json({
+                mensagem: "Agendamento não encontrado."
+            });
+        }
+
+        res.json(agendamentos[0]);
+
+    } catch (erro) {
+        console.error("Erro ao buscar agendamento:", erro);
+
         res.status(500).json({
-            status: "erro",
+            mensagem: "Erro ao buscar agendamento."
+        });
+    }
+});
+
+
+app.delete("/api/agendamentos/:id", async (req, res) => {
+    const agendamentoId = Number(req.params.id);
+
+    if (!Number.isInteger(agendamentoId) || agendamentoId <= 0) {
+        return res.status(400).json({
+            mensagem: "ID do agendamento inválido."
+        });
+    }
+
+    try {
+        const [resultado] = await conexao.execute(
+            `UPDATE agendamentos
+             SET status = 'Cancelado'
+             WHERE id = ?`,
+            [agendamentoId]
+        );
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem: "Agendamento não encontrado."
+            });
+        }
+
+        res.json({
+            mensagem: "Agendamento cancelado com sucesso."
+        });
+
+    } catch (erro) {
+        console.error("Erro ao cancelar agendamento:", erro);
+
+        res.status(500).json({
+            mensagem: "Erro ao cancelar agendamento."
+        });
+    }
+});
+
+
+app.get("/api/status", async (req, res) => {
+    try {
+        await conexao.execute("SELECT 1");
+
+        res.json({
+            servidor: "online",
+            banco: "conectado"
+        });
+
+    } catch (erro) {
+        console.error("Erro ao verificar banco:", erro);
+
+        res.status(500).json({
+            servidor: "online",
             banco: "desconectado"
         });
     }
 });
 
+
 const PORTA = process.env.PORT || 3000;
 
 app.listen(PORTA, () => {
-    console.log(
-        `Servidor do Agenda Pet rodando em http://localhost:${PORTA}`
-    );
+    console.log(`Servidor do Agenda Pet rodando em http://localhost:${PORTA}`);
 });
