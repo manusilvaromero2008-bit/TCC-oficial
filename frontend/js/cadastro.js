@@ -778,29 +778,28 @@ function validarPets(pets) {
 
     return true;
 }
-async function cadastrarTutor(dados) {
-    const resposta = await fetch(
-        `${API_URL}/tutores`,
-        {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dados)
-        }
-    );
+async function cadastrarTutor(dadosTutor) {
+    const url = tutorId ? `${API_URL}/tutores/${tutorId}` : `${API_URL}/tutores`;
+    const metodo = tutorId ? "PUT" : "POST";
 
-    const resultado = await resposta.json();
+    const response = await fetch(url, {
+        method: metodo,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(dadosTutor)
+    });
 
-    if (!resposta.ok) {
-        throw new Error(
-            resultado.erro ||
-            resultado.message ||
-            "Não foi possível cadastrar o tutor."
-        );
+    // Trata especificamente o conflito de duplicidade (Erro 409)
+    if (response.status === 409) {
+        throw new Error("Este tutor já está cadastrado (CPF, E-mail ou Telefone duplicado).");
     }
 
-    return resultado;
+    if (!response.ok) {
+        throw new Error("Não foi possível cadastrar o tutor.");
+    }
+
+    return await response.json();
 }
 
 async function atualizarTutor(dados) {
@@ -1071,54 +1070,56 @@ formCadastro.addEventListener(
         `;
 
         try {
-            const dadosTutor =
-                obterDadosTutor();
-
-            const tutorExiste =
-                await verificarTutorExistente();
-
-            if (!tutorExiste) {
-                const resultadoTutor =
-                    await cadastrarTutor(
-                        dadosTutor
-                    );
-
-                tutorId =
-                    resultadoTutor.id ||
-                    resultadoTutor.tutor_id ||
-                    resultadoTutor.tutorId ||
-                    resultadoTutor.insertId;
-
-                if (!tutorId) {
-                    throw new Error(
-                        "O cadastro foi realizado, mas o ID do tutor não foi retornado pelo servidor."
-                    );
+            const dadosTutor = obterDadosTutor();
+        
+            // Se já temos um tutorId na URL/Estado, atualiza direto. 
+            // Caso contrário, tenta cadastrar.
+            if (!tutorId) {
+                try {
+                    const resultadoTutor = await cadastrarTutor(dadosTutor);
+        
+                    tutorId =
+                        resultadoTutor.id ||
+                        resultadoTutor.tutor_id ||
+                        resultadoTutor.tutorId ||
+                        resultadoTutor.insertId;
+        
+                    if (!tutorId) {
+                        throw new Error(
+                            "O cadastro foi realizado, mas o ID do tutor não foi retornado pelo servidor."
+                        );
+                    }
+                } catch (erroCadastrar) {
+                    // Se o servidor respondeu 409 (Conflito), significa que o tutor já existe no banco
+                    if (erroCadastrar.message.includes("409") || erroCadastrar.message.includes("já está cadastrado")) {
+                        // Opcional: Você pode tentar recuperar o ID dele ou apenas avisar o usuário
+                        throw new Error("Este tutor (CPF ou E-mail) já está cadastrado no sistema.");
+                    }
+                    throw erroCadastrar; // Passa adiante outros erros de rede/servidor
                 }
             } else {
-                await atualizarTutor(
-                    dadosTutor
-                );
+                await atualizarTutor(dadosTutor);
             }
-
+        
+            // Processa os pets normalmente utilizando o tutorId definido
             for (const pet of pets) {
+                // Garante que o pet saiba a qual tutor ele pertence antes de enviar
+                pet.tutor_id = tutorId; 
+                
                 if (pet.id) {
                     await atualizarPet(pet);
                 } else {
                     await cadastrarPet(pet);
                 }
             }
+        
+            localStorage.setItem("tutor_id", String(tutorId));
+        
+            alert("Cadastro realizado com sucesso!");
+        
+            window.location.href = `perfil.html?tutor_id=${tutorId}`;
 
-            localStorage.setItem(
-                "tutor_id",
-                String(tutorId)
-            );
-
-            alert(
-                "Cadastro realizado com sucesso!"
-            );
-
-            window.location.href =
-                `perfil.html?tutor_id=${tutorId}`;
+        
 
         } catch (erro) {
             console.error(
