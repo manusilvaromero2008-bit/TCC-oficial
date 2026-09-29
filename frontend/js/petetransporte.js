@@ -1,10 +1,10 @@
-
 document.addEventListener("DOMContentLoaded", async () => {
 
     const API_URL = "http://localhost:3000/api";
 
     const nomeClinica = document.getElementById("nomeClinica");
     const listaPets = document.getElementById("listaPets");
+
     const resumoClinica = document.getElementById("resumoClinica");
     const resumoData = document.getElementById("resumoData");
     const resumoHorario = document.getElementById("resumoHorario");
@@ -14,84 +14,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     const resumoTutor = document.getElementById("resumoTutor");
     const resumoTelefone = document.getElementById("resumoTelefone");
     const resumoTransporte = document.getElementById("resumoTransporte");
+
     const transportOption = document.getElementById("transportOption");
     const addressCard = document.getElementById("addressCard");
+
     const endereco = document.getElementById("endereco");
     const cep = document.getElementById("cep");
+
     const btnContinuar = document.getElementById("btnContinuar");
 
     const params = new URLSearchParams(window.location.search);
 
-    const clinicaId =
-        params.get("clinica_id") ||
-        sessionStorage.getItem("clinica_id") ||
-        sessionStorage.getItem("clinicaId") ||
-        localStorage.getItem("clinica_id") ||
-        localStorage.getItem("clinicaId");
-
-    const tutorId =
-        params.get("tutor_id") ||
-        sessionStorage.getItem("tutor_id") ||
-        localStorage.getItem("tutor_id");
-
-    const data =
-        params.get("data") ||
-        sessionStorage.getItem("data");
-
-    const dataVisual =
-        params.get("data_visual") ||
-        sessionStorage.getItem("data_visual");
-
-    const horario =
-        params.get("horario") ||
-        sessionStorage.getItem("horario");
-
-    const servicoId =
-        params.get("servico_id") ||
-        sessionStorage.getItem("servico_id");
+    const clinicaId = params.get("clinica_id");
+    const tutorId = params.get("tutor_id");
+    const data = params.get("data");
+    const dataVisual = params.get("data_visual");
+    const horario = params.get("horario");
+    const servicoId = params.get("servico_id");
+    const veterinarioId = params.get("veterinario_id");
 
     let petSelecionado = null;
     let transporte = false;
     let servicoSelecionado = null;
 
     if (!clinicaId || !tutorId || !data || !horario || !servicoId) {
-
         alert(
             "Não foi possível carregar todos os dados do agendamento."
         );
-
         return;
     }
-
-    sessionStorage.setItem(
-        "clinica_id",
-        String(clinicaId)
-    );
-
-    sessionStorage.setItem(
-        "clinicaId",
-        String(clinicaId)
-    );
-
-    sessionStorage.setItem(
-        "tutor_id",
-        String(tutorId)
-    );
-
-    sessionStorage.setItem(
-        "data",
-        String(data)
-    );
-
-    sessionStorage.setItem(
-        "horario",
-        String(horario)
-    );
-
-    sessionStorage.setItem(
-        "servico_id",
-        String(servicoId)
-    );
 
     function formatarData(dataRecebida) {
 
@@ -99,7 +50,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             return "Não informado";
         }
 
-        const partes = dataRecebida.split("-");
+        const partes = String(dataRecebida)
+            .split("T")[0]
+            .split("-");
 
         if (partes.length !== 3) {
             return dataRecebida;
@@ -277,7 +230,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            pets.forEach((pet) => {
+            pets.forEach(pet => {
 
                 const card =
                     document.createElement("div");
@@ -311,10 +264,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                         document
                             .querySelectorAll(".pet-card")
-                            .forEach((item) => {
+                            .forEach(item => {
+
                                 item.classList.remove(
                                     "selecionado"
                                 );
+
                             });
 
                         card.classList.add(
@@ -323,16 +278,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                         petSelecionado =
                             pet;
-
-                        sessionStorage.setItem(
-                            "pet_id",
-                            String(pet.id)
-                        );
-
-                        sessionStorage.setItem(
-                            "pet_nome",
-                            pet.nome || ""
-                        );
 
                         if (resumoPet) {
                             resumoPet.textContent =
@@ -376,7 +321,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             servicoSelecionado =
                 servicos.find(
-                    (servico) =>
+                    servico =>
                         Number(servico.id) ===
                         Number(servicoId)
                 );
@@ -395,7 +340,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     servicoSelecionado.preco !== ""
                         ? ` - R$ ${Number(
                             servicoSelecionado.preco
-                        ).toFixed(2).replace(".", ",")}`
+                        )
+                            .toFixed(2)
+                            .replace(".", ",")}`
                         : "";
 
                 resumoServico.textContent =
@@ -408,36 +355,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     servicoSelecionado.veterinario_nome ||
                     "Não informado";
             }
-
-            sessionStorage.setItem(
-                "servico_id",
-                String(servicoSelecionado.id)
-            );
-
-            sessionStorage.setItem(
-                "servico_nome",
-                servicoSelecionado.nome || ""
-            );
-
-            sessionStorage.setItem(
-                "servico_preco",
-                servicoSelecionado.preco || ""
-            );
-
-            sessionStorage.setItem(
-                "servico_tipo",
-                servicoSelecionado.tipo || ""
-            );
-
-            sessionStorage.setItem(
-                "veterinario_id",
-                servicoSelecionado.veterinario_id || ""
-            );
-
-            sessionStorage.setItem(
-                "veterinario",
-                servicoSelecionado.veterinario_nome || ""
-            );
 
         } catch (erro) {
 
@@ -462,13 +379,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (transporte) {
 
-            transportOption.classList.add(
-                "selected"
-            );
+            if (transportOption) {
+                transportOption.classList.add(
+                    "selected"
+                );
+            }
 
-            addressCard.classList.add(
-                "show"
-            );
+            if (addressCard) {
+                addressCard.classList.add(
+                    "show"
+                );
+            }
 
             if (resumoTransporte) {
                 resumoTransporte.textContent =
@@ -477,13 +398,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } else {
 
-            transportOption.classList.remove(
-                "selected"
-            );
+            if (transportOption) {
+                transportOption.classList.remove(
+                    "selected"
+                );
+            }
 
-            addressCard.classList.remove(
-                "show"
-            );
+            if (addressCard) {
+                addressCard.classList.remove(
+                    "show"
+                );
+            }
 
             if (resumoTransporte) {
                 resumoTransporte.textContent =
@@ -512,11 +437,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 transporte =
                     !transporte;
 
-                sessionStorage.setItem(
-                    "transporte",
-                    String(transporte)
-                );
-
                 atualizarTransporte();
             }
         );
@@ -541,6 +461,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     alert(
                         "Não foi possível identificar o serviço selecionado."
+                    );
+
+                    return;
+                }
+
+                if (
+                    transporte &&
+                    (!endereco || !endereco.textContent.trim())
+                ) {
+
+                    alert(
+                        "Não foi possível identificar o endereço para o transporte."
                     );
 
                     return;
@@ -575,11 +507,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                             ),
 
                         veterinario_id:
-                            servicoSelecionado.veterinario_id
-                                ? Number(
+                            veterinarioId
+                                ? Number(veterinarioId)
+                                : (
                                     servicoSelecionado.veterinario_id
-                                )
-                                : null,
+                                        ? Number(
+                                            servicoSelecionado.veterinario_id
+                                        )
+                                        : null
+                                ),
 
                         data_agendamento:
                             data,
@@ -588,9 +524,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             horario,
 
                         observacoes:
-                            transporte
-                                ? "Transporte solicitado"
-                                : null
+                            null
                     };
 
                     const resposta =
@@ -598,10 +532,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                             `${API_URL}/agendamentos`,
                             {
                                 method: "POST",
+
                                 headers: {
                                     "Content-Type":
                                         "application/json"
                                 },
+
                                 body:
                                     JSON.stringify(
                                         dadosAgendamento
@@ -621,70 +557,94 @@ document.addEventListener("DOMContentLoaded", async () => {
                         );
                     }
 
-                    sessionStorage.setItem(
+                    const agendamentoId =
+                        resultado.id;
+
+                    if (!agendamentoId) {
+
+                        throw new Error(
+                            "O agendamento foi criado, mas o servidor não retornou o ID."
+                        );
+                    }
+
+                    if (transporte) {
+
+                        const dadosTransporte = {
+
+                            agendamento_id:
+                                Number(
+                                    agendamentoId
+                                ),
+
+                            endereco_coleta:
+                                endereco
+                                    ? endereco.textContent.trim()
+                                    : "",
+
+                            data_coleta:
+                                data,
+
+                            horario_coleta:
+                                horario,
+
+                            observacoes:
+                                "Transporte solicitado"
+                        };
+
+                        const respostaTransporte =
+                            await fetch(
+                                `${API_URL}/transportes`,
+                                {
+                                    method: "POST",
+
+                                    headers: {
+                                        "Content-Type":
+                                            "application/json"
+                                    },
+
+                                    body:
+                                        JSON.stringify(
+                                            dadosTransporte
+                                        )
+                                }
+                            );
+
+                        const resultadoTransporte =
+                            await respostaTransporte.json();
+
+                        if (!respostaTransporte.ok) {
+
+                            throw new Error(
+                                resultadoTransporte.mensagem ||
+                                resultadoTransporte.erro ||
+                                "O agendamento foi criado, mas não foi possível solicitar o transporte."
+                            );
+                        }
+                    }
+
+                    const proximaPagina =
+                        new URL(
+                            "final.html",
+                            window.location.href
+                        );
+
+                    proximaPagina.searchParams.set(
+                        "agendamento_id",
+                        agendamentoId
+                    );
+
+                    proximaPagina.searchParams.set(
                         "tutor_id",
-                        String(tutorId)
+                        tutorId
                     );
 
-                    sessionStorage.setItem(
+                    proximaPagina.searchParams.set(
                         "clinica_id",
-                        String(clinicaId)
+                        clinicaId
                     );
-
-                    sessionStorage.setItem(
-                        "clinicaId",
-                        String(clinicaId)
-                    );
-
-                    sessionStorage.setItem(
-                        "data",
-                        String(data)
-                    );
-
-                    sessionStorage.setItem(
-                        "horario",
-                        String(horario)
-                    );
-
-                    sessionStorage.setItem(
-                        "servico_id",
-                        String(
-                            servicoSelecionado.id
-                        )
-                    );
-
-                    sessionStorage.setItem(
-                        "transporte",
-                        String(transporte)
-                    );
-
-                    if (petSelecionado) {
-
-                        sessionStorage.setItem(
-                            "pet_id",
-                            String(
-                                petSelecionado.id
-                            )
-                        );
-
-                        sessionStorage.setItem(
-                            "pet_nome",
-                            petSelecionado.nome || ""
-                        );
-                    }
-
-                    if (resultado.id) {
-
-                        sessionStorage.setItem(
-                            "agendamentoId",
-                            String(
-                                resultado.id
-                            )
-                        );
-                    }
 
                     window.location.href =
-                        "final.html";
+                        proximaPagina.href;
 
                 } catch (erro) {
 
@@ -716,6 +676,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     await carregarTutor();
     await carregarPets();
     await carregarServico();
-
 });
-
