@@ -16,18 +16,27 @@ const btnContinuar = document.getElementById("btnContinuar");
 let servicos = [];
 let servicoSelecionado = null;
 
+
 async function carregarClinica() {
+
     if (!clinicaId) {
-        nomeClinica.textContent = "Clínica não informada";
+
+        if (nomeClinica) {
+            nomeClinica.textContent =
+                "Clínica não informada";
+        }
+
         return;
     }
 
     try {
+
         const resposta = await fetch(
             `${API_URL}/clinicas/${clinicaId}`
         );
 
         if (!resposta.ok) {
+
             throw new Error(
                 `Erro ao buscar clínica: ${resposta.status}`
             );
@@ -35,37 +44,55 @@ async function carregarClinica() {
 
         const clinica = await resposta.json();
 
-        nomeClinica.textContent =
-            clinica.nome || "Clínica";
+        if (nomeClinica) {
+
+            nomeClinica.textContent =
+                clinica.nome || "Clínica";
+        }
 
     } catch (erro) {
+
         console.error(
             "Erro ao carregar clínica:",
             erro
         );
 
-        nomeClinica.textContent =
-            "Erro ao carregar clínica";
+        if (nomeClinica) {
+
+            nomeClinica.textContent =
+                "Erro ao carregar clínica";
+        }
     }
 }
 
-async function carregarServicos() {
-    if (!clinicaId) {
-        listaConsultas.innerHTML =
-            "<p>Clínica não informada.</p>";
 
-        listaExames.innerHTML =
-            "<p>Clínica não informada.</p>";
+async function carregarServicos() {
+
+    if (!clinicaId) {
+
+        if (listaConsultas) {
+
+            listaConsultas.innerHTML =
+                "<p>Clínica não informada.</p>";
+        }
+
+        if (listaExames) {
+
+            listaExames.innerHTML =
+                "<p>Clínica não informada.</p>";
+        }
 
         return;
     }
 
     try {
+
         const resposta = await fetch(
             `${API_URL}/clinicas/${clinicaId}/servicos`
         );
 
         if (!resposta.ok) {
+
             throw new Error(
                 `Erro ao buscar serviços: ${resposta.status}`
             );
@@ -74,6 +101,7 @@ async function carregarServicos() {
         const dados = await resposta.json();
 
         if (!Array.isArray(dados)) {
+
             throw new Error(
                 "A API não retornou uma lista de serviços."
             );
@@ -81,17 +109,23 @@ async function carregarServicos() {
 
         servicos = dados;
 
-        const consultas = servicos.filter(servico =>
-            String(servico.tipo || "")
-                .trim()
-                .toLowerCase() === "consulta"
-        );
+        const consultas = servicos.filter(servico => {
 
-        const exames = servicos.filter(servico =>
-            String(servico.tipo || "")
+            return String(
+                servico.tipo || ""
+            )
                 .trim()
-                .toLowerCase() === "exame"
-        );
+                .toLowerCase() === "consulta";
+        });
+
+        const exames = servicos.filter(servico => {
+
+            return String(
+                servico.tipo || ""
+            )
+                .trim()
+                .toLowerCase() === "exame";
+        });
 
         renderizarServicos(
             consultas,
@@ -104,23 +138,37 @@ async function carregarServicos() {
         );
 
     } catch (erro) {
+
         console.error(
             "Erro ao carregar serviços:",
             erro
         );
 
-        listaConsultas.innerHTML =
-            "<p>Erro ao carregar os serviços.</p>";
+        if (listaConsultas) {
 
-        listaExames.innerHTML =
-            "<p>Erro ao carregar os serviços.</p>";
+            listaConsultas.innerHTML =
+                "<p>Erro ao carregar os serviços.</p>";
+        }
+
+        if (listaExames) {
+
+            listaExames.innerHTML =
+                "<p>Erro ao carregar os serviços.</p>";
+        }
     }
 }
 
+
 function renderizarServicos(lista, container) {
+
+    if (!container) {
+        return;
+    }
+
     container.innerHTML = "";
 
     if (lista.length === 0) {
+
         container.innerHTML =
             "<p>Nenhum serviço disponível.</p>";
 
@@ -128,6 +176,7 @@ function renderizarServicos(lista, container) {
     }
 
     lista.forEach(servico => {
+
         const card =
             document.createElement("div");
 
@@ -204,6 +253,7 @@ function renderizarServicos(lista, container) {
                 document
                     .querySelectorAll(".servico")
                     .forEach(item => {
+
                         item.classList.remove(
                             "selecionado"
                         );
@@ -216,7 +266,11 @@ function renderizarServicos(lista, container) {
                 servicoSelecionado =
                     servico;
 
-                btnContinuar.disabled = false;
+                if (btnContinuar) {
+
+                    btnContinuar.disabled =
+                        false;
+                }
             }
         );
 
@@ -224,83 +278,97 @@ function renderizarServicos(lista, container) {
     });
 }
 
-btnContinuar.addEventListener(
-    "click",
-    () => {
 
-        if (!servicoSelecionado) {
-            alert(
-                "Selecione um serviço para continuar."
-            );
+if (btnContinuar) {
 
-            return;
-        }
+    btnContinuar.disabled = true;
 
-        if (!clinicaId) {
-            alert(
-                "Clínica não identificada."
-            );
+    btnContinuar.addEventListener(
+        "click",
+        () => {
 
-            return;
-        }
+            if (!servicoSelecionado) {
 
-        if (!data || !horario) {
-            alert(
-                "Data ou horário não informado."
-            );
+                alert(
+                    "Selecione um serviço para continuar."
+                );
 
-            return;
-        }
+                return;
+            }
 
-        const proximaPagina =
-            new URL(
-                "petetransporte.html",
-                window.location.href
-            );
+            if (!clinicaId) {
 
-        proximaPagina.searchParams.set(
-            "clinica_id",
-            clinicaId
-        );
+                alert(
+                    "Clínica não identificada."
+                );
 
-        proximaPagina.searchParams.set(
-            "data",
-            data
-        );
+                return;
+            }
 
-        proximaPagina.searchParams.set(
-            "data_visual",
-            dataVisual || data
-        );
+            if (!data || !horario) {
 
-        proximaPagina.searchParams.set(
-            "horario",
-            horario
-        );
+                alert(
+                    "Data ou horário não informado."
+                );
 
-        proximaPagina.searchParams.set(
-            "servico_id",
-            servicoSelecionado.id
-        );
+                return;
+            }
 
-        if (servicoSelecionado.veterinario_id) {
+            const proximaPagina =
+                new URL(
+                    "petetransporte.html",
+                    window.location.href
+                );
+
             proximaPagina.searchParams.set(
-                "veterinario_id",
+                "clinica_id",
+                clinicaId
+            );
+
+            proximaPagina.searchParams.set(
+                "data",
+                data
+            );
+
+            proximaPagina.searchParams.set(
+                "data_visual",
+                dataVisual || data
+            );
+
+            proximaPagina.searchParams.set(
+                "horario",
+                horario
+            );
+
+            proximaPagina.searchParams.set(
+                "servico_id",
+                servicoSelecionado.id
+            );
+
+            if (
                 servicoSelecionado.veterinario_id
-            );
-        }
+            ) {
 
-        if (tutorId) {
-            proximaPagina.searchParams.set(
-                "tutor_id",
-                tutorId
-            );
-        }
+                proximaPagina.searchParams.set(
+                    "veterinario_id",
+                    servicoSelecionado.veterinario_id
+                );
+            }
 
-        window.location.href =
-            proximaPagina.href;
-    }
-);
+            if (tutorId) {
+
+                proximaPagina.searchParams.set(
+                    "tutor_id",
+                    tutorId
+                );
+            }
+
+            window.location.href =
+                proximaPagina.href;
+        }
+    );
+}
+
 
 carregarClinica();
 carregarServicos();

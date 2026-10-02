@@ -1,127 +1,208 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #e0effa65;
+    background: #e0effa;
     color: #333;
+    min-height: 100vh;
 }
 
-
-
-.cadastro-header{
-    background: linear-gradient(135deg, #0756a6cc, #63b1f0);
+.cadastro-header {
+    background: linear-gradient(135deg, #0756a6, #63b1f0);
     color: white;
     padding: 40px;
 }
 
-.cadastro-header h1{
+.cadastro-header h1 {
     font-size: 38px;
     margin: 15px 0 10px;
 }
 
-.cadastro-header p{
+.cadastro-header p {
     font-size: 17px;
 }
 
-.voltar{
-    display: inline-block;
-    color: rgb(255, 255, 255);
+.voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
     text-decoration: none;
     font-weight: bold;
     transition: .3s;
 }
 
-.voltar:hover{
+.voltar:hover {
     opacity: .8;
+    transform: translateX(-3px);
 }
 
-
-
-.container{
+.container {
     max-width: 1100px;
     margin: 40px auto;
     padding: 0 20px;
 }
 
-
-
-.box{
-    background: rgb(255, 255, 255);
+.box {
+    background: #ffffff;
     border-radius: 20px;
     padding: 30px;
     margin-bottom: 30px;
-    box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    box-shadow: 0 8px 20px rgba(7, 86, 166, .10);
 }
 
-.box h2{
+.box h2 {
     color: #044281;
     margin-bottom: 25px;
     font-size: 28px;
 }
 
-.box h3{
+.box h3 {
     color: #044281;
     margin-bottom: 20px;
     font-size: 22px;
 }
 
-
-
-.pet{
-    border: 2px solid #0756a654;
+.pet {
+    border: 2px solid #9ac9ed;
     border-radius: 18px;
     padding: 25px;
     margin-bottom: 25px;
-    background: #fcfffc;
+    background: #f8fcff;
 }
 
-
-.grid{
+.grid {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
 
-.full{
+.full {
     grid-column: span 2;
 }
 
-
-
-.campo{
+.campo {
     display: flex;
     flex-direction: column;
 }
 
-.campo label{
+.campo label {
     margin-bottom: 8px;
     font-weight: bold;
-    color: #000000;
+    color: #163b5c;
 }
 
 .campo input,
-.campo select{
+.campo select {
+    width: 100%;
     padding: 14px;
-    border: 2px solid #0756a638;
+    border: 2px solid #b7d7ef;
     border-radius: 12px;
     font-size: 16px;
     outline: none;
     transition: .3s;
-    background: white;
+    background: #ffffff;
+    color: #333;
 }
 
 .campo input:focus,
-.campo select:focus{
+.campo select:focus {
     border-color: #0756a6;
-    box-shadow: 0 0 8px rgba(45,155,61,.25);
+    box-shadow: 0 0 8px rgba(7, 86, 166, .18);
 }
 
+.campo input::placeholder {
+    color: #8a9aaa;
+}
 
-.btn-add{
+.campo input[type="date"] {
+    color: #333;
+}
+
+.campo input[type="file"] {
+    padding: 10px;
+    cursor: pointer;
+    background: #f5faff;
+}
+
+.campo input[type="file"]::file-selector-button {
+    border: none;
+    background: #0757a6;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 8px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.campo input[type="file"]::file-selector-button:hover {
+    background: #044281;
+}
+
+/* Carteira de vacinação */
+
+.carteira-area {
+    grid-column: span 2;
+    margin-top: 5px;
+    padding: 20px;
+    border: 2px solid #b7d7ef;
+    border-radius: 15px;
+    background: #f5faff;
+}
+
+.carteira-area .titulo-carteira {
+    color: #044281;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.carteira-area .descricao-carteira {
+    color: #5d7182;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.carteira-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.carteira-upload label {
+    font-weight: bold;
+    color: #163b5c;
+}
+
+.carteira-status {
+    margin-top: 12px;
+    padding: 12px 15px;
+    border-radius: 10px;
+    background: #e0effa;
+    color: #0757a6;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.carteira-status.sem-carteira {
+    background: #f0f5f9;
+    color: #647585;
+}
+
+.carteira-status.tem-carteira {
+    background: #e0effa;
+    color: #0757a6;
+}
+
+/* Botão adicionar pet */
+
+.btn-add {
     width: 100%;
     padding: 18px;
     border: 2px dashed #0757a6;
@@ -134,52 +215,114 @@ body{
     transition: .3s;
 }
 
-.btn-add:hover{
-    background: #78a1c5;
-    color: white;
+.btn-add:hover {
+    background: #d7ecfb;
+    border-color: #044281;
+    color: #044281;
 }
 
+/* Botão salvar */
 
-
-.btn-confirmar{
+.btn-confirmar {
     width: 100%;
     padding: 18px;
     border: none;
     border-radius: 15px;
-    background: #0756a6cc;
+    background: #0756a6;
     color: white;
     font-size: 20px;
     font-weight: bold;
     cursor: pointer;
     transition: .3s;
+    box-shadow: 0 5px 12px rgba(7, 86, 166, .18);
 }
 
-.btn-confirmar:hover{
-    background: #0757a6;
+.btn-confirmar:hover {
+    background: #044281;
     transform: translateY(-2px);
 }
 
+.btn-confirmar:disabled {
+    background: #9eb8cc;
+    cursor: not-allowed;
+    transform: none;
+}
 
+/* Mensagens */
 
-@media(max-width:768px){
+.mensagem {
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    font-weight: bold;
+}
 
-    .grid{
+.mensagem.sucesso {
+    background: #e0effa;
+    color: #0757a6;
+    border: 1px solid #9ac9ed;
+}
+
+.mensagem.erro {
+    background: #fcecec;
+    color: #a33a3a;
+    border: 1px solid #e5aaaa;
+}
+
+/* Responsivo */
+
+@media (max-width: 768px) {
+
+    .grid {
         grid-template-columns: 1fr;
     }
 
-    .full{
+    .full,
+    .carteira-area {
         grid-column: span 1;
     }
 
-    .cadastro-header{
+    .cadastro-header {
         padding: 30px 20px;
     }
 
-    .cadastro-header h1{
+    .cadastro-header h1 {
         font-size: 30px;
     }
 
-    .box{
+    .box {
         padding: 20px;
+    }
+
+    .pet {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .container {
+        padding: 0 12px;
+    }
+
+    .cadastro-header h1 {
+        font-size: 26px;
+    }
+
+    .cadastro-header p {
+        font-size: 15px;
+    }
+
+    .box h2 {
+        font-size: 23px;
+    }
+
+    .campo input,
+    .campo select {
+        font-size: 15px;
+    }
+
+    .carteira-area {
+        padding: 15px;
     }
 }

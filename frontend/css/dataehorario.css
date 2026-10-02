@@ -1,193 +1,36 @@
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-body{
-    background:#e0effa65;
+body {
+    background: #e0effa;
+    color: #333;
+    min-height: 100vh;
 }
 
-.container{
-    width:90%;
-    max-width:1100px;
-    margin:40px auto;
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
 }
 
-header{
-    background:#0a63bdcc;
-    color:white;
-    padding:30px;
-    border-radius:15px 15px 0 0;
+header {
+    background: linear-gradient(135deg, #0756a6, #63b1f0);
+    color: white;
+    padding: 30px;
+    border-radius: 15px 15px 0 0;
 }
 
-header h1{
-    font-size:35px;
+header h1 {
+    font-size: 35px;
 }
 
-header p{
-    margin-top:8px;
-    font-size:18px;
-}
-
-.etapas{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:rgb(255, 255, 255);
-    padding:25px;
-}
-
-.etapa{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.numero{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:#4d82ab4b;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-}
-
-.ativa .numero{
-    background:#0757a6;
-    color:white;
-}
-
-.linha{
-    flex:1;
-    height:3px;
-    background:#051dcbac;
-    margin:0 15px;
-}
-
-.card{
-    background:white;
-    padding:35px;
-    border-radius:15px;
-    margin-top:25px;
-}
-
-.card h2{
-    margin-bottom:30px;
-    color:#033b74;
-}
-
-.datas{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.datas button{
-
-    height:70px;
-
-    border:2px solid #0756a657;
-
-    background:white;
-
-    border-radius:12px;
-
-    font-size:16px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.datas button:hover{
-
-    border-color:#0757a6;
-
-}
-
-.selecionado{
-
-    border:2px solid #0757a6 !important;
-
-    background:#eff8ff !important;
-
-}
-
-.continuar{
-
-    width:100%;
-
-    margin-top:30px;
-
-    height:60px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#1c568693;
-
-    color:white;
-
-    font-size:22px;
-
-    cursor:pointer;
-
-}
-
-.continuar:hover{
-
-    background:#0757a6;
-
-}
-
-#cardHorario{
-    display:none;
-}
-
-.horarios{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:20px;
-}
-
-.horarios button{
-
-    height:65px;
-
-    border:2px solid #ddd;
-
-    background:white;
-
-    border-radius:12px;
-
-    font-size:18px;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-.horarios button:hover{
-
-    border-color:#0756a657;
-
-}
-
-.horarios .selecionado{
-
-    background:#4CAF50;
-
-    color:rgb(1, 1, 29);
-
-    border-color:#4CAF50;
-
+header p {
+    margin-top: 8px;
+    font-size: 18px;
 }
 
 .voltar {
@@ -205,4 +48,293 @@ header p{
 .voltar:hover {
     transform: translateX(-4px);
     opacity: 0.85;
+}
+
+/* Etapas */
+
+.etapas {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    padding: 25px;
+    box-shadow: 0 5px 15px rgba(7, 86, 166, .08);
+}
+
+.etapa {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #657482;
+    white-space: nowrap;
+}
+
+.etapa.ativa {
+    color: #0757a6;
+    font-weight: bold;
+}
+
+.numero {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #d9eaf7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #31516a;
+}
+
+.ativa .numero {
+    background: #0757a6;
+    color: white;
+}
+
+.linha {
+    flex: 1;
+    height: 3px;
+    background: #b7d7ef;
+    margin: 0 15px;
+}
+
+/* Card */
+
+.card {
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    margin-top: 25px;
+    box-shadow: 0 8px 20px rgba(7, 86, 166, .08);
+}
+
+.card h2 {
+    margin-bottom: 30px;
+    color: #033b74;
+    font-size: 24px;
+}
+
+.card h2 i {
+    margin-right: 8px;
+    color: #0757a6;
+}
+
+/* Datas */
+
+.datas {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.datas button {
+    height: 70px;
+    border: 2px solid #b7d7ef;
+    background: white;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #333;
+}
+
+.datas button:hover {
+    border-color: #0757a6;
+    background: #eff8ff;
+    color: #0757a6;
+}
+
+.datas button.selecionado {
+    border: 2px solid #0757a6 !important;
+    background: #e0effa !important;
+    color: #0757a6;
+    font-weight: bold;
+}
+
+/* Horários */
+
+#cardHorario {
+    display: none;
+}
+
+.legenda-horarios {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    margin-bottom: 20px;
+    color: #657482;
+    font-size: 14px;
+}
+
+.legenda-horarios span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.legenda-horarios i {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legenda-horarios .disponivel {
+    background: white;
+    border: 2px solid #0757a6;
+}
+
+.legenda-horarios .indisponivel {
+    background: #e5edf3;
+    border: 2px solid #b9c8d3;
+}
+
+.horarios {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.horarios button {
+    height: 65px;
+    border: 2px solid #c4d9e8;
+    background: white;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #333;
+}
+
+.horarios button:hover {
+    border-color: #0757a6;
+    background: #eff8ff;
+    color: #0757a6;
+}
+
+.horarios button.selecionado {
+    background: #0757a6;
+    color: white;
+    border-color: #0757a6;
+    font-weight: bold;
+}
+
+.horarios button.indisponivel,
+.horarios button:disabled {
+    background: #e5edf3;
+    color: #8999a7;
+    border-color: #c5d1da;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.horarios button.indisponivel:hover,
+.horarios button:disabled:hover {
+    background: #e5edf3;
+    border-color: #c5d1da;
+    color: #8999a7;
+}
+
+.horarios button.carregando {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.horarios button:disabled.selecionado {
+    background: #e5edf3 !important;
+    color: #8999a7 !important;
+    border-color: #c5d1da !important;
+}
+
+/* Continuar */
+
+.continuar {
+    width: 100%;
+    margin-top: 30px;
+    height: 60px;
+    border: none;
+    border-radius: 10px;
+    background: #0756a6;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.continuar:hover {
+    background: #044281;
+    transform: translateY(-2px);
+}
+
+.continuar:disabled {
+    background: #aebdca;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Responsivo */
+
+@media (max-width: 800px) {
+
+    .container {
+        width: 95%;
+        margin: 20px auto;
+    }
+
+    .etapas {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .linha {
+        width: 3px;
+        height: 25px;
+        flex: none;
+        margin: 0 18px;
+    }
+
+    .datas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .horarios {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    header h1 {
+        font-size: 28px;
+    }
+
+    .card {
+        padding: 25px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .datas {
+        grid-template-columns: 1fr;
+    }
+
+    .horarios {
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .horarios button {
+        height: 55px;
+        font-size: 16px;
+    }
+
+    .legenda-horarios {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .card h2 {
+        font-size: 20px;
+    }
 }

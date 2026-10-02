@@ -2,9 +2,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const API_URL = "http://localhost:3000/api";
 
-    const pesquisa = document.getElementById("pesquisa");
-    const regiao = document.getElementById("regiao");
-    const listaClinicas = document.getElementById("listaClinicas");
+    const pesquisa =
+        document.getElementById("pesquisa");
+
+    const regiao =
+        document.getElementById("regiao");
+
+    const listaClinicas =
+        document.getElementById("listaClinicas");
 
     let clinicas = [];
 
@@ -14,6 +19,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         3: "vetcare.html",
         4: "pethealth.html"
     };
+
+
+    function normalizarTexto(valor) {
+
+        return String(valor || "")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, " ");
+
+    }
+
+
+    function normalizarRegiao(valor) {
+
+        return normalizarTexto(valor)
+            .replace(/[-_]/g, " ");
+
+    }
 
 
     async function carregarClinicas() {
@@ -26,15 +51,19 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </p>
             `;
 
-            const resposta = await fetch(`${API_URL}/clinicas`);
+            const resposta =
+                await fetch(`${API_URL}/clinicas`);
 
             if (!resposta.ok) {
+
                 throw new Error(
                     `Erro HTTP: ${resposta.status}`
                 );
+
             }
 
-            const dados = await resposta.json();
+            const dados =
+                await resposta.json();
 
             console.log(
                 "CLÍNICAS RECEBIDAS:",
@@ -42,14 +71,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
             if (!Array.isArray(dados)) {
+
                 throw new Error(
                     "A API não retornou uma lista de clínicas."
                 );
+
             }
 
             clinicas = dados;
 
             renderizarClinicas(clinicas);
+
+            filtrarClinicas();
 
         } catch (erro) {
 
@@ -65,7 +98,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     Verifique se o servidor está rodando.
                 </p>
             `;
+
         }
+
     }
 
 
@@ -82,7 +117,9 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             return;
+
         }
+
 
         lista.forEach(clinica => {
 
@@ -92,20 +129,51 @@ document.addEventListener("DOMContentLoaded", async () => {
             cardLink.className =
                 "card-link";
 
+
             const pagina =
                 paginasClinicas[
                     Number(clinica.id)
                 ];
 
+
+            const parametros =
+                new URLSearchParams();
+
+            parametros.set(
+                "id",
+                clinica.id
+            );
+
+
+            const parametrosPagina =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const tutorId =
+                parametrosPagina.get("tutor_id");
+
+
+            if (tutorId) {
+
+                parametros.set(
+                    "tutor_id",
+                    tutorId
+                );
+
+            }
+
+
             if (pagina) {
 
                 cardLink.href =
-                    `./${pagina}?id=${clinica.id}`;
+                    `./${pagina}?${parametros.toString()}`;
 
             } else {
 
                 cardLink.href =
-                    `./clinica.html?id=${clinica.id}`;
+                    `./clinica.html?${parametros.toString()}`;
+
             }
 
 
@@ -115,8 +183,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             card.className =
                 "card";
 
+
             card.dataset.regiao =
                 clinica.regiao || "";
+
 
             card.dataset.clinica =
                 clinica.id;
@@ -124,23 +194,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             let classeClinica = "";
 
+
             switch (Number(clinica.id)) {
 
                 case 1:
+
                     classeClinica = "petvida";
+
                     break;
 
                 case 2:
+
                     classeClinica = "animalcare";
+
                     break;
 
                 case 3:
+
                     classeClinica = "vetcare";
+
                     break;
 
                 case 4:
+
                     classeClinica = "pethealth";
+
                     break;
+
             }
 
 
@@ -173,6 +253,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         )}
                     </p>
 
+
                     <p>
                         <i class="fa-solid fa-phone"></i>
                         ${escaparHTML(
@@ -180,6 +261,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                             "Não informado"
                         )}
                     </p>
+
 
                     <p>
                         <i class="fa-regular fa-clock"></i>
@@ -190,14 +272,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </p>
 
                 </div>
+
             `;
 
 
             cardLink.appendChild(card);
 
-            listaClinicas.appendChild(cardLink);
+            listaClinicas.appendChild(
+                cardLink
+            );
 
         });
+
     }
 
 
@@ -207,16 +293,22 @@ document.addEventListener("DOMContentLoaded", async () => {
             valor === null ||
             valor === undefined
         ) {
+
             return "";
+
         }
+
 
         const elemento =
             document.createElement("div");
 
+
         elemento.textContent =
             String(valor);
 
+
         return elemento.innerHTML;
+
     }
 
 
@@ -224,16 +316,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const texto =
             pesquisa
-                ? pesquisa.value
-                    .toLowerCase()
-                    .trim()
+                ? normalizarTexto(
+                    pesquisa.value
+                )
                 : "";
+
 
         const filtroRegiao =
             regiao
-                ? regiao.value
-                    .toLowerCase()
-                    .trim()
+                ? normalizarRegiao(
+                    regiao.value
+                )
                 : "todas";
 
 
@@ -249,10 +342,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         cards.forEach(cardLink => {
 
             const card =
-                cardLink.querySelector(".card");
+                cardLink.querySelector(
+                    ".card"
+                );
+
 
             if (!card) {
+
                 return;
+
             }
 
 
@@ -262,19 +360,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             const nome =
                 titulo
-                    ? titulo.textContent
-                        .toLowerCase()
-                        .trim()
+                    ? normalizarTexto(
+                        titulo.textContent
+                    )
                     : "";
 
 
             const regiaoCard =
-                (
-                    card.dataset.regiao ||
-                    ""
-                )
-                    .toLowerCase()
-                    .trim();
+                normalizarRegiao(
+                    card.dataset.regiao
+                );
 
 
             const nomeCorreto =
@@ -298,7 +393,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             if (deveMostrar) {
+
                 quantidadeVisivel++;
+
             }
 
         });
@@ -310,23 +407,31 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
 
-        if (quantidadeVisivel === 0) {
+        if (
+            quantidadeVisivel === 0 &&
+            cards.length > 0
+        ) {
 
             if (!mensagem) {
 
                 mensagem =
                     document.createElement("p");
 
+
                 mensagem.id =
                     "mensagemFiltro";
+
 
                 mensagem.className =
                     "mensagem-erro";
 
+
                 listaClinicas.appendChild(
                     mensagem
                 );
+
             }
+
 
             mensagem.textContent =
                 "Nenhuma clínica encontrada.";
@@ -334,9 +439,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
 
             if (mensagem) {
+
                 mensagem.remove();
+
             }
+
         }
+
     }
 
 

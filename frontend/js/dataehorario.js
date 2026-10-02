@@ -1,471 +1,553 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
+    const API_URL = "http://localhost:3000/api";
 
-const API_URL = "http://localhost:3000/api";
+    const nomeClinica =
+        document.getElementById("nomeClinica");
 
-const nomeClinica =
-    document.getElementById("nomeClinica");
+    const listaDatas =
+        document.getElementById("listaDatas");
 
-const listaDatas =
-    document.getElementById("listaDatas");
+    const cardHorario =
+        document.getElementById("cardHorario");
 
-const cardHorario =
-    document.getElementById("cardHorario");
+    const btnContinuar =
+        document.getElementById("btnContinuar");
 
-const btnContinuar =
-    document.getElementById("btnContinuar");
+    const botoesHora =
+        document.querySelectorAll(".horarios button");
 
-const botoesHora =
-    document.querySelectorAll(".horarios button");
+    const parametros =
+        new URLSearchParams(window.location.search);
 
-const parametros =
-    new URLSearchParams(window.location.search);
+    const clinicaId =
+        parametros.get("clinica_id");
 
-const clinicaId =
-    parametros.get("clinica_id");
+    const tutorId =
+        parametros.get("tutor_id");
 
-const tutorId =
-    parametros.get("tutor_id");
+    let clinica = null;
+    let dataSelecionada = "";
+    let dataBanco = "";
+    let horarioSelecionado = "";
 
-let clinica = null;
-let dataSelecionada = "";
-let dataBanco = "";
-let horarioSelecionado = "";
-
-if (!clinicaId || !tutorId) {
-
-    alert(
-        "Não foi possível identificar a clínica ou o tutor."
-    );
-
-    window.location.href =
-        "../../home.html";
-
-    return;
-}
-
-async function carregarClinica() {
-
-    try {
-
-        const resposta = await fetch(
-            `${API_URL}/clinicas/${clinicaId}`
-        );
-
-        const dados =
-            await resposta.json();
-
-        if (!resposta.ok) {
-
-            throw new Error(
-                dados.mensagem ||
-                "Clínica não encontrada."
-            );
-        }
-
-        clinica = dados;
-
-        if (nomeClinica) {
-
-            nomeClinica.textContent =
-                clinica.nome || "";
-        }
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao carregar clínica:",
-            erro
-        );
-
-        if (nomeClinica) {
-
-            nomeClinica.textContent =
-                "Clínica não encontrada";
-        }
+    if (!clinicaId || !tutorId) {
 
         alert(
-            "Não foi possível carregar os dados da clínica."
-        );
-    }
-}
-
-async function verificarTutor() {
-
-    try {
-
-        const resposta = await fetch(
-            `${API_URL}/tutores/${tutorId}`
+            "Não foi possível identificar a clínica ou o tutor."
         );
 
-        if (!resposta.ok) {
+        window.location.href =
+            "../../home.html";
 
-            alert(
-                "Tutor não encontrado. Faça seu cadastro novamente."
-            );
-
-            window.location.href =
-                "cadastro.html";
-
-            return false;
-        }
-
-        return true;
-
-    } catch (erro) {
-
-        console.error(
-            "Erro ao verificar tutor:",
-            erro
-        );
-
-        alert(
-            "Não foi possível conectar ao servidor."
-        );
-
-        return false;
-    }
-}
-
-function formatarDataVisual(data) {
-
-    const diasSemana = [
-        "domingo",
-        "segunda-feira",
-        "terça-feira",
-        "quarta-feira",
-        "quinta-feira",
-        "sexta-feira",
-        "sábado"
-    ];
-
-    const meses = [
-        "janeiro",
-        "fevereiro",
-        "março",
-        "abril",
-        "maio",
-        "junho",
-        "julho",
-        "agosto",
-        "setembro",
-        "outubro",
-        "novembro",
-        "dezembro"
-    ];
-
-    const partes =
-        data.split("-");
-
-    const ano =
-        Number(partes[0]);
-
-    const mes =
-        Number(partes[1]) - 1;
-
-    const dia =
-        Number(partes[2]);
-
-    const dataObj =
-        new Date(
-            ano,
-            mes,
-            dia
-        );
-
-    return `${diasSemana[dataObj.getDay()]}, ${dia} de ${meses[mes]}`;
-}
-
-function gerarDatas() {
-
-    if (!listaDatas) {
         return;
     }
 
-    listaDatas.innerHTML = "";
+    async function carregarClinica() {
 
-    const hoje =
-        new Date();
+        try {
 
-    for (let i = 1; i <= 7; i++) {
+            const resposta =
+                await fetch(
+                    `${API_URL}/clinicas/${clinicaId}`
+                );
 
-        const data =
-            new Date(hoje);
+            const dados =
+                await resposta.json();
 
-        data.setDate(
-            hoje.getDate() + i
-        );
+            if (!resposta.ok) {
 
-        const ano =
-            data.getFullYear();
+                throw new Error(
+                    dados.mensagem ||
+                    "Clínica não encontrada."
+                );
+            }
 
-        const mes =
-            String(
-                data.getMonth() + 1
-            ).padStart(2, "0");
+            clinica = dados;
 
-        const dia =
-            String(
-                data.getDate()
-            ).padStart(2, "0");
+            if (nomeClinica) {
 
-        const dataFormatada =
-            `${ano}-${mes}-${dia}`;
+                nomeClinica.textContent =
+                    clinica.nome || "";
+            }
 
-        const botao =
-            document.createElement("button");
+        } catch (erro) {
 
-        botao.type = "button";
-
-        botao.textContent =
-            formatarDataVisual(
-                dataFormatada
+            console.error(
+                "Erro ao carregar clínica:",
+                erro
             );
 
-        botao.dataset.data =
-            dataFormatada;
+            if (nomeClinica) {
 
-        listaDatas.appendChild(botao);
+                nomeClinica.textContent =
+                    "Clínica não encontrada";
+            }
+
+            alert(
+                "Não foi possível carregar os dados da clínica."
+            );
+        }
+    }
+
+    async function verificarTutor() {
+
+        try {
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/tutores/${tutorId}`
+                );
+
+            if (!resposta.ok) {
+
+                alert(
+                    "Tutor não encontrado. Faça seu cadastro novamente."
+                );
+
+                window.location.href =
+                    "cadastro.html";
+
+                return false;
+            }
+
+            return true;
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao verificar tutor:",
+                erro
+            );
+
+            alert(
+                "Não foi possível conectar ao servidor."
+            );
+
+            return false;
+        }
+    }
+
+    function formatarDataVisual(data) {
+
+        const diasSemana = [
+            "domingo",
+            "segunda-feira",
+            "terça-feira",
+            "quarta-feira",
+            "quinta-feira",
+            "sexta-feira",
+            "sábado"
+        ];
+
+        const meses = [
+            "janeiro",
+            "fevereiro",
+            "março",
+            "abril",
+            "maio",
+            "junho",
+            "julho",
+            "agosto",
+            "setembro",
+            "outubro",
+            "novembro",
+            "dezembro"
+        ];
+
+        const partes =
+            data.split("-");
+
+        const ano =
+            Number(partes[0]);
+
+        const mes =
+            Number(partes[1]) - 1;
+
+        const dia =
+            Number(partes[2]);
+
+        const dataObj =
+            new Date(
+                ano,
+                mes,
+                dia
+            );
+
+        return `${diasSemana[dataObj.getDay()]}, ${dia} de ${meses[mes]}`;
+    }
+
+    function limparSelecaoHorario() {
+
+        horarioSelecionado = "";
+
+        botoesHora.forEach(botao => {
+
+            botao.classList.remove(
+                "selecionado"
+            );
+        });
+
+        if (btnContinuar) {
+
+            btnContinuar.style.display =
+                "none";
+        }
+    }
+
+    function restaurarBotoesHorario() {
+
+        botoesHora.forEach(botao => {
+
+            botao.disabled = false;
+
+            botao.classList.remove(
+                "indisponivel"
+            );
+
+            botao.removeAttribute(
+                "title"
+            );
+        });
+    }
+
+    async function carregarDisponibilidade() {
+
+        if (!dataBanco) {
+            return;
+        }
+
+        restaurarBotoesHorario();
+
+        limparSelecaoHorario();
+
+        try {
+
+            botoesHora.forEach(botao => {
+
+                botao.disabled = true;
+
+                botao.classList.add(
+                    "carregando"
+                );
+            });
+
+            const resposta =
+                await fetch(
+                    `${API_URL}/agendamentos/disponibilidade?clinica_id=${encodeURIComponent(clinicaId)}&data=${encodeURIComponent(dataBanco)}`
+                );
+
+            const dados =
+                await resposta.json();
+
+            if (!resposta.ok) {
+
+                throw new Error(
+                    dados.mensagem ||
+                    "Não foi possível consultar a disponibilidade."
+                );
+            }
+
+            const horariosOcupados =
+                Array.isArray(
+                    dados.horarios_ocupados
+                )
+                    ? dados.horarios_ocupados
+                    : [];
+
+            const horariosOcupadosFormatados =
+                horariosOcupados.map(
+                    agendamento => {
+
+                        return String(
+                            agendamento.horario
+                        ).substring(0, 5);
+                    }
+                );
+
+            botoesHora.forEach(botao => {
+
+                botao.classList.remove(
+                    "carregando"
+                );
+
+                const horario =
+                    botao.textContent
+                        .trim()
+                        .substring(0, 5);
+
+                const ocupado =
+                    horariosOcupadosFormatados.includes(
+                        horario
+                    );
+
+                if (ocupado) {
+
+                    botao.disabled = true;
+
+                    botao.classList.add(
+                        "indisponivel"
+                    );
+
+                    botao.title =
+                        "Horário indisponível";
+
+                } else {
+
+                    botao.disabled =
+                        false;
+
+                    botao.classList.remove(
+                        "indisponivel"
+                    );
+
+                    botao.removeAttribute(
+                        "title"
+                    );
+                }
+            });
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao carregar disponibilidade:",
+                erro
+            );
+
+            botoesHora.forEach(botao => {
+
+                botao.classList.remove(
+                    "carregando"
+                );
+
+                botao.disabled =
+                    false;
+            });
+
+            alert(
+                "Não foi possível consultar os horários disponíveis."
+            );
+        }
+    }
+
+    function gerarDatas() {
+
+        if (!listaDatas) {
+            return;
+        }
+
+        listaDatas.innerHTML = "";
+
+        const hoje =
+            new Date();
+
+        for (let i = 1; i <= 7; i++) {
+
+            const data =
+                new Date(hoje);
+
+            data.setDate(
+                hoje.getDate() + i
+            );
+
+            const ano =
+                data.getFullYear();
+
+            const mes =
+                String(
+                    data.getMonth() + 1
+                ).padStart(2, "0");
+
+            const dia =
+                String(
+                    data.getDate()
+                ).padStart(2, "0");
+
+            const dataFormatada =
+                `${ano}-${mes}-${dia}`;
+
+            const botao =
+                document.createElement(
+                    "button"
+                );
+
+            botao.type =
+                "button";
+
+            botao.textContent =
+                formatarDataVisual(
+                    dataFormatada
+                );
+
+            botao.dataset.data =
+                dataFormatada;
+
+            listaDatas.appendChild(
+                botao
+            );
+
+            botao.addEventListener(
+                "click",
+                async () => {
+
+                    document
+                        .querySelectorAll(
+                            ".datas button"
+                        )
+                        .forEach(item => {
+
+                            item.classList.remove(
+                                "selecionado"
+                            );
+                        });
+
+                    botao.classList.add(
+                        "selecionado"
+                    );
+
+                    dataSelecionada =
+                        botao.textContent.trim();
+
+                    dataBanco =
+                        botao.dataset.data;
+
+                    limparSelecaoHorario();
+
+                    if (cardHorario) {
+
+                        cardHorario.style.display =
+                            "block";
+
+                        cardHorario.scrollIntoView({
+                            behavior: "smooth",
+                            block: "start"
+                        });
+                    }
+
+                    await carregarDisponibilidade();
+                }
+            );
+        }
+    }
+
+    if (cardHorario) {
+
+        cardHorario.style.display =
+            "none";
+    }
+
+    if (btnContinuar) {
+
+        btnContinuar.style.display =
+            "none";
+    }
+
+    botoesHora.forEach(botao => {
 
         botao.addEventListener(
             "click",
             () => {
 
-                document
-                    .querySelectorAll(".datas button")
-                    .forEach(item => {
+                if (botao.disabled) {
+                    return;
+                }
 
-                        item.classList.remove(
-                            "selecionado"
-                        );
+                if (
+                    !dataBanco ||
+                    !botao.textContent.trim()
+                ) {
+                    return;
+                }
 
-                    });
+                botoesHora.forEach(item => {
+
+                    item.classList.remove(
+                        "selecionado"
+                    );
+                });
 
                 botao.classList.add(
                     "selecionado"
                 );
 
-                dataSelecionada =
+                horarioSelecionado =
                     botao.textContent.trim();
 
-                dataBanco =
-                    botao.dataset.data;
+                if (btnContinuar) {
 
-                if (cardHorario) {
-
-                    cardHorario.style.display =
+                    btnContinuar.style.display =
                         "block";
-
-                    cardHorario.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
                 }
             }
         );
-    }
-}
+    });
 
-if (cardHorario) {
+    if (btnContinuar) {
 
-    cardHorario.style.display =
-        "none";
-}
+        btnContinuar.addEventListener(
+            "click",
+            () => {
 
-if (btnContinuar) {
+                if (!dataBanco) {
 
-    btnContinuar.style.display =
-        "none";
-}
-
-botoesHora.forEach(botao => {
-
-    botao.addEventListener(
-        "click",
-        async () => {
-
-            botoesHora.forEach(item => {
-
-                item.classList.remove(
-                    "selecionado"
-                );
-
-            });
-
-            botao.classList.add(
-                "selecionado"
-            );
-
-            horarioSelecionado =
-                botao.textContent.trim();
-
-            if (
-                !dataBanco ||
-                !horarioSelecionado
-            ) {
-                return;
-            }
-
-            try {
-
-                const resposta =
-                    await fetch(
-                        `${API_URL}/tutores/${tutorId}/agendamentos`
+                    alert(
+                        "Selecione uma data."
                     );
 
-                const agendamentos =
-                    await resposta.json();
-
-                if (resposta.ok) {
-
-                    const horarioOcupado =
-                        agendamentos.some(
-                            agendamento => {
-
-                                const data =
-                                    String(
-                                        agendamento.data_agendamento
-                                    ).split("T")[0];
-
-                                const horario =
-                                    String(
-                                        agendamento.horario
-                                    ).substring(0, 5);
-
-                                return (
-                                    Number(
-                                        agendamento.clinica_id
-                                    ) ===
-                                    Number(clinicaId) &&
-                                    data ===
-                                    dataBanco &&
-                                    horario ===
-                                    horarioSelecionado &&
-                                    (
-                                        agendamento.status ===
-                                            "Agendado" ||
-                                        agendamento.status ===
-                                            "Confirmado"
-                                    )
-                                );
-                            }
-                        );
-
-                    if (horarioOcupado) {
-
-                        alert(
-                            "Este horário já está ocupado. Escolha outro horário."
-                        );
-
-                        botao.classList.remove(
-                            "selecionado"
-                        );
-
-                        horarioSelecionado =
-                            "";
-
-                        if (btnContinuar) {
-
-                            btnContinuar.style.display =
-                                "none";
-                        }
-
-                        return;
-                    }
+                    return;
                 }
 
-                if (btnContinuar) {
+                if (!horarioSelecionado) {
 
-                    btnContinuar.style.display =
-                        "block";
+                    alert(
+                        "Selecione um horário."
+                    );
+
+                    return;
                 }
 
-            } catch (erro) {
+                const parametrosProximaPagina =
+                    new URLSearchParams();
 
-                console.error(
-                    "Erro ao verificar horário:",
-                    erro
+                parametrosProximaPagina.set(
+                    "clinica_id",
+                    clinicaId
                 );
 
-                if (btnContinuar) {
-
-                    btnContinuar.style.display =
-                        "block";
-                }
-            }
-        }
-    );
-
-});
-
-if (btnContinuar) {
-
-    btnContinuar.addEventListener(
-        "click",
-        () => {
-
-            if (!dataBanco) {
-
-                alert(
-                    "Selecione uma data."
+                parametrosProximaPagina.set(
+                    "tutor_id",
+                    tutorId
                 );
 
-                return;
-            }
-
-            if (!horarioSelecionado) {
-
-                alert(
-                    "Selecione um horário."
+                parametrosProximaPagina.set(
+                    "data",
+                    dataBanco
                 );
 
-                return;
+                parametrosProximaPagina.set(
+                    "data_visual",
+                    dataSelecionada
+                );
+
+                parametrosProximaPagina.set(
+                    "horario",
+                    horarioSelecionado
+                );
+
+                window.location.href =
+                    `servicos.html?${parametrosProximaPagina.toString()}`;
             }
+        );
+    }
 
-            const parametrosProximaPagina =
-                new URLSearchParams();
+    const tutorValido =
+        await verificarTutor();
 
-            parametrosProximaPagina.set(
-                "clinica_id",
-                clinicaId
-            );
+    if (!tutorValido) {
+        return;
+    }
 
-            parametrosProximaPagina.set(
-                "tutor_id",
-                tutorId
-            );
+    await carregarClinica();
 
-            parametrosProximaPagina.set(
-                "data",
-                dataBanco
-            );
-
-            parametrosProximaPagina.set(
-                "data_visual",
-                dataSelecionada
-            );
-
-            parametrosProximaPagina.set(
-                "horario",
-                horarioSelecionado
-            );
-
-            window.location.href =
-                `servicos.html?${parametrosProximaPagina.toString()}`;
-        }
-    );
-}
-
-const tutorValido =
-    await verificarTutor();
-
-if (!tutorValido) {
-    return;
-}
-
-await carregarClinica();
-
-gerarDatas();
-
-
+    gerarDatas();
 });

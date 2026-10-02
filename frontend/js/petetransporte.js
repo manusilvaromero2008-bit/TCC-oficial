@@ -571,11 +571,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                         const dadosTransporte = {
 
-                            agendamento_id:
-                                Number(
-                                    agendamentoId
-                                ),
-
                             endereco_coleta:
                                 endereco
                                     ? endereco.textContent.trim()
@@ -593,7 +588,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                         const respostaTransporte =
                             await fetch(
-                                `${API_URL}/transportes`,
+                                `${API_URL}/agendamentos/${agendamentoId}/transporte`,
                                 {
                                     method: "POST",
 
