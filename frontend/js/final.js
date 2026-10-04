@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const API_URL = "http://localhost:3000/api";
 
     const btnInicio = document.getElementById("btnInicio");
@@ -10,9 +9,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const elementoServico = document.getElementById("servico");
     const elementoData = document.getElementById("data");
     const elementoHorario = document.getElementById("horario");
-    const elementoTransporte = document.getElementById("transporte");
+    const elementoTransporte =
+        document.getElementById("transporte");
 
-    const parametros = new URLSearchParams(window.location.search);
+    const parametros =
+        new URLSearchParams(window.location.search);
 
     const agendamentoId =
         parametros.get("agendamento_id") ||
@@ -20,15 +21,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     let tutorId =
         parametros.get("tutor_id") ||
+        sessionStorage.getItem("agendaPetTutorId") ||
         sessionStorage.getItem("tutor_id");
 
     let clinicaId =
         parametros.get("clinica_id") ||
         sessionStorage.getItem("clinica_id");
 
-
     function formatarData(data) {
-
         if (!data) {
             return "Data não informada";
         }
@@ -61,9 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
-
     function formatarHorario(horario) {
-
         if (!horario) {
             return "Horário não informado";
         }
@@ -71,9 +69,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         return String(horario).substring(0, 5);
     }
 
-
-    function mostrarErro(mensagem = "Agendamento não encontrado") {
-
+    function mostrarErro(
+        mensagem = "Agendamento não encontrado"
+    ) {
         if (elementoClinica) {
             elementoClinica.textContent = mensagem;
         }
@@ -99,13 +97,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
     function verificarTransporte(agendamento) {
-
         console.log("DADOS DO TRANSPORTE:", {
             transporte_id: agendamento.transporte_id,
-            transporte_solicitado: agendamento.transporte_solicitado,
-            transporte_status: agendamento.transporte_status,
+            transporte_solicitado:
+                agendamento.transporte_solicitado,
+            transporte_status:
+                agendamento.transporte_status,
             transporte: agendamento.transporte
         });
 
@@ -136,7 +134,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         if (
             agendamento.transporte_status &&
-            String(agendamento.transporte_status).trim() !== ""
+            String(
+                agendamento.transporte_status
+            ).trim() !== ""
         ) {
             return true;
         }
@@ -144,28 +144,23 @@ document.addEventListener("DOMContentLoaded", async () => {
         return false;
     }
 
-
     async function carregarAgendamento() {
-
         if (!agendamentoId) {
-
             mostrarErro(
                 "ID do agendamento não informado."
             );
-
             return;
         }
 
         try {
-
             const resposta = await fetch(
                 `${API_URL}/agendamentos/${agendamentoId}`
             );
 
-            const agendamento = await resposta.json();
+            const agendamento =
+                await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
                     agendamento.mensagem ||
                     agendamento.erro ||
@@ -173,33 +168,26 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
             }
 
-
             console.log(
                 "Agendamento carregado do banco:",
                 agendamento
             );
 
-
             if (elementoClinica) {
-
                 elementoClinica.textContent =
                     agendamento.clinica ||
                     agendamento.nome_clinica ||
                     "Clínica não informada";
             }
 
-
             if (elementoPet) {
-
                 elementoPet.textContent =
                     agendamento.pet ||
                     agendamento.nome_pet ||
                     "Pet não informado";
             }
 
-
             if (elementoServico) {
-
                 let textoServico =
                     agendamento.servico ||
                     agendamento.nome_servico ||
@@ -209,7 +197,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     agendamento.preco_servico !== null &&
                     agendamento.preco_servico !== undefined
                 ) {
-
                     textoServico +=
                         ` - R$ ${Number(
                             agendamento.preco_servico
@@ -222,43 +209,35 @@ document.addEventListener("DOMContentLoaded", async () => {
                     textoServico;
             }
 
-
             if (elementoData) {
-
                 elementoData.textContent =
                     formatarData(
                         agendamento.data_agendamento
                     );
             }
 
-
             if (elementoHorario) {
-
                 elementoHorario.textContent =
                     formatarHorario(
                         agendamento.horario
                     );
             }
 
-
             if (elementoTransporte) {
-
                 const transporteSolicitado =
-                    verificarTransporte(agendamento);
+                    verificarTransporte(
+                        agendamento
+                    );
 
                 if (transporteSolicitado) {
-
                     elementoTransporte.textContent =
                         agendamento.transporte_status ||
                         "Solicitado";
-
                 } else {
-
                     elementoTransporte.textContent =
                         "Não solicitado";
                 }
             }
-
 
             tutorId =
                 agendamento.tutor_id ||
@@ -268,8 +247,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 agendamento.clinica_id ||
                 clinicaId;
 
-
             if (tutorId) {
+                sessionStorage.setItem(
+                    "agendaPetTutorId",
+                    String(tutorId)
+                );
 
                 sessionStorage.setItem(
                     "tutor_id",
@@ -277,17 +259,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
             }
 
-
             if (clinicaId) {
-
                 sessionStorage.setItem(
                     "clinica_id",
                     String(clinicaId)
                 );
             }
-
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar agendamento:",
                 erro
@@ -299,45 +277,38 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
     if (btnInicio) {
-
         btnInicio.addEventListener(
             "click",
             () => {
-
                 window.location.href =
                     "../pages/home.html";
             }
         );
     }
 
-
     if (btnOutroPet) {
-
         btnOutroPet.addEventListener(
             "click",
             () => {
-
                 if (!tutorId) {
-
                     alert(
                         "Não foi possível identificar o tutor. Verifique se o cadastro está salvo."
                     );
-
                     return;
                 }
 
-
                 if (!clinicaId) {
-
                     alert(
                         "Não foi possível identificar a clínica. Volte para a escolha da clínica e tente novamente."
                     );
-
                     return;
                 }
 
+                sessionStorage.setItem(
+                    "agendaPetTutorId",
+                    String(tutorId)
+                );
 
                 sessionStorage.setItem(
                     "tutor_id",
@@ -348,7 +319,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "clinica_id",
                     String(clinicaId)
                 );
-
 
                 sessionStorage.removeItem(
                     "agendamentoId"
@@ -402,16 +372,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "transporte"
                 );
 
-
                 const destino =
-                    `../pages/dataehorario.html?tutor_id=${encodeURIComponent(tutorId)}&clinica_id=${encodeURIComponent(clinicaId)}`;
+                    `../pages/dataehorario.html?tutor_id=${encodeURIComponent(
+                        tutorId
+                    )}&clinica_id=${encodeURIComponent(
+                        clinicaId
+                    )}`;
 
                 window.location.href = destino;
             }
         );
     }
 
-
     await carregarAgendamento();
-
 });

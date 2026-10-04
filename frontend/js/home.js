@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const API_URL = "http://localhost:3000/api";
 
     const pesquisa = document.getElementById("pesquisa");
@@ -15,7 +14,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         4: "pethealth.html"
     };
 
-
     function normalizarTexto(valor) {
         return String(valor || "")
             .normalize("NFD")
@@ -25,12 +23,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             .replace(/\s+/g, " ");
     }
 
-
     function normalizarRegiao(valor) {
         return normalizarTexto(valor)
             .replace(/[-_]/g, " ");
     }
-
 
     function escaparHTML(valor) {
         if (
@@ -49,11 +45,25 @@ document.addEventListener("DOMContentLoaded", async () => {
         return elemento.innerHTML;
     }
 
+    function obterTutorId() {
+        const parametros =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        return (
+            parametros.get("tutor_id") ||
+            sessionStorage.getItem(
+                "agendaPetTutorId"
+            ) ||
+            sessionStorage.getItem(
+                "tutor_id"
+            )
+        );
+    }
 
     async function carregarClinicas() {
-
         try {
-
             listaClinicas.innerHTML = `
                 <p class="mensagem-carregando">
                     Carregando clínicas...
@@ -61,14 +71,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             const resposta =
-                await fetch(`${API_URL}/clinicas`);
+                await fetch(
+                    `${API_URL}/clinicas`
+                );
 
             if (!resposta.ok) {
-
                 throw new Error(
                     `Erro HTTP: ${resposta.status}`
                 );
-
             }
 
             const dados =
@@ -79,24 +89,17 @@ document.addEventListener("DOMContentLoaded", async () => {
                 dados
             );
 
-
             if (!Array.isArray(dados)) {
-
                 throw new Error(
                     "A API não retornou uma lista de clínicas."
                 );
-
             }
-
 
             clinicas = dados;
 
             renderizarClinicas(clinicas);
-
             filtrarClinicas();
-
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar clínicas:",
                 erro
@@ -112,37 +115,43 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-
     function renderizarClinicas(lista) {
-
         listaClinicas.innerHTML = "";
 
         if (lista.length === 0) {
-
             listaClinicas.innerHTML = `
                 <p class="mensagem-erro">
                     Nenhuma clínica encontrada.
                 </p>
             `;
-
             return;
         }
 
+        const tutorId = obterTutorId();
+
+        if (tutorId) {
+            sessionStorage.setItem(
+                "agendaPetTutorId",
+                String(tutorId)
+            );
+
+            sessionStorage.setItem(
+                "tutor_id",
+                String(tutorId)
+            );
+        }
 
         lista.forEach((clinica) => {
-
             const cardLink =
                 document.createElement("a");
 
             cardLink.className =
                 "card-link";
 
-
             const pagina =
                 paginasClinicas[
                     Number(clinica.id)
                 ];
-
 
             const parametros =
                 new URLSearchParams();
@@ -152,39 +161,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 clinica.id
             );
 
-
-            const parametrosPagina =
-                new URLSearchParams(
-                    window.location.search
-                );
-
-
-            const tutorId =
-                parametrosPagina.get("tutor_id");
-
-
             if (tutorId) {
-
                 parametros.set(
                     "tutor_id",
                     tutorId
                 );
-
             }
-
 
             if (pagina) {
-
                 cardLink.href =
                     `./${pagina}?${parametros.toString()}`;
-
             } else {
-
                 cardLink.href =
                     `./clinica.html?${parametros.toString()}`;
-
             }
-
 
             const card =
                 document.createElement("div");
@@ -192,20 +182,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             card.className =
                 "card";
 
-
             card.dataset.regiao =
                 clinica.regiao || "";
-
 
             card.dataset.clinica =
                 clinica.id;
 
-
             let classeClinica = "";
 
-
             switch (Number(clinica.id)) {
-
                 case 1:
                     classeClinica = "petvida";
                     break;
@@ -221,14 +206,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                 case 4:
                     classeClinica = "pethealth";
                     break;
-
             }
 
-
             card.innerHTML = `
-
                 <div class="topo-card ${classeClinica}">
-
                     <h2>
                         ${escaparHTML(clinica.nome)}
                     </h2>
@@ -240,12 +221,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                             "Região não informada"
                         )}
                     </p>
-
                 </div>
 
-
                 <div class="conteudo">
-
                     <p>
                         <i class="fa-solid fa-map-location-dot"></i>
                         ${escaparHTML(
@@ -253,7 +231,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                             "Endereço não informado"
                         )}
                     </p>
-
 
                     <p>
                         <i class="fa-solid fa-phone"></i>
@@ -263,7 +240,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                         )}
                     </p>
 
-
                     <p>
                         <i class="fa-regular fa-clock"></i>
                         ${escaparHTML(
@@ -271,31 +247,24 @@ document.addEventListener("DOMContentLoaded", async () => {
                             "Não informado"
                         )}
                     </p>
-
                 </div>
-
             `;
-
 
             cardLink.appendChild(card);
 
             listaClinicas.appendChild(
                 cardLink
             );
-
         });
     }
 
-
     function filtrarClinicas() {
-
         const texto =
             pesquisa
                 ? normalizarTexto(
                     pesquisa.value
                 )
                 : "";
-
 
         const filtroRegiao =
             regiao
@@ -304,32 +273,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 )
                 : "todas";
 
-
         const cards =
             document.querySelectorAll(
                 ".card-link"
             );
 
-
         let quantidadeVisivel = 0;
 
-
         cards.forEach((cardLink) => {
-
             const card =
                 cardLink.querySelector(
                     ".card"
                 );
 
-
             if (!card) {
                 return;
             }
 
-
             const titulo =
                 card.querySelector("h2");
-
 
             const nome =
                 titulo
@@ -338,105 +300,80 @@ document.addEventListener("DOMContentLoaded", async () => {
                     )
                     : "";
 
-
             const regiaoCard =
                 normalizarRegiao(
                     card.dataset.regiao
                 );
 
-
             const nomeCorreto =
                 nome.includes(texto);
-
 
             const regiaoCorreta =
                 filtroRegiao === "todas" ||
                 regiaoCard === filtroRegiao;
 
-
             const deveMostrar =
                 nomeCorreto &&
                 regiaoCorreta;
-
 
             cardLink.style.display =
                 deveMostrar
                     ? ""
                     : "none";
 
-
             if (deveMostrar) {
                 quantidadeVisivel++;
             }
-
         });
-
 
         let mensagem =
             document.getElementById(
                 "mensagemFiltro"
             );
 
-
         if (
             quantidadeVisivel === 0 &&
             cards.length > 0
         ) {
-
             if (!mensagem) {
-
                 mensagem =
-                    document.createElement("p");
-
+                    document.createElement(
+                        "p"
+                    );
 
                 mensagem.id =
                     "mensagemFiltro";
 
-
                 mensagem.className =
                     "mensagem-erro";
-
 
                 listaClinicas.appendChild(
                     mensagem
                 );
-
             }
-
 
             mensagem.textContent =
                 "Nenhuma clínica encontrada.";
-
         } else {
-
             if (mensagem) {
                 mensagem.remove();
             }
-
         }
     }
 
-
     if (pesquisa) {
-
         pesquisa.addEventListener(
             "input",
             filtrarClinicas
         );
-
     }
 
-
     if (regiao) {
-
         regiao.addEventListener(
             "change",
             filtrarClinicas
         );
-
     }
 
-
     await carregarClinicas();
-
 });

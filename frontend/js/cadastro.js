@@ -4,14 +4,19 @@ const params = new URLSearchParams(window.location.search);
 
 let tutorId =
     params.get("tutor_id") ||
-    params.get("id") ||
-    sessionStorage.getItem("agendaPetTutorId");
+    sessionStorage.getItem("agendaPetTutorId") ||
+    sessionStorage.getItem("tutor_id");
 
 const returnUrl = params.get("returnUrl");
 
 if (tutorId) {
     sessionStorage.setItem(
         "agendaPetTutorId",
+        String(tutorId)
+    );
+
+    sessionStorage.setItem(
+        "tutor_id",
         String(tutorId)
     );
 }
@@ -199,7 +204,6 @@ async function validarCEPViaCEP(cep) {
         const dados = await resposta.json();
 
         return !dados.erro;
-
     } catch (erro) {
         console.error(
             "Erro ao consultar CEP:",
@@ -220,7 +224,7 @@ function voltarParaOrigem() {
         if (tutorId) {
             origem.searchParams.set(
                 "tutor_id",
-                tutorId
+                String(tutorId)
             );
         }
 
@@ -236,7 +240,7 @@ function voltarParaOrigem() {
     if (tutorId) {
         home.searchParams.set(
             "tutor_id",
-            tutorId
+            String(tutorId)
         );
     }
 
@@ -250,11 +254,11 @@ function adicionarPet(dados = {}) {
 
     pet.className = "pet-card";
 
-    pet.dataset.petId =
-        dados.id || "";
+    pet.dataset.petId = dados.id || "";
 
     pet.innerHTML = `
         <div class="pet-header">
+
             <h3>
                 <i class="fa-solid fa-paw"></i>
                 Pet ${contadorPets}
@@ -263,11 +267,11 @@ function adicionarPet(dados = {}) {
             <button
                 type="button"
                 class="btn-remover-pet"
-                title="Remover pet">
-
+                title="Remover pet"
+            >
                 <i class="fa-solid fa-trash"></i>
-
             </button>
+
         </div>
 
         <div class="grid">
@@ -283,7 +287,8 @@ function adicionarPet(dados = {}) {
                     class="nome-pet"
                     placeholder="Digite o nome do pet"
                     value="${escaparHTML(dados.nome || "")}"
-                    required>
+                    required
+                >
 
             </div>
 
@@ -295,7 +300,8 @@ function adicionarPet(dados = {}) {
 
                 <select
                     class="especie-pet"
-                    required>
+                    required
+                >
 
                     <option value="">
                         Selecione
@@ -303,19 +309,22 @@ function adicionarPet(dados = {}) {
 
                     <option
                         value="Cachorro"
-                        ${dados.especie === "Cachorro" ? "selected" : ""}>
+                        ${dados.especie === "Cachorro" ? "selected" : ""}
+                    >
                         Cachorro
                     </option>
 
                     <option
                         value="Gato"
-                        ${dados.especie === "Gato" ? "selected" : ""}>
+                        ${dados.especie === "Gato" ? "selected" : ""}
+                    >
                         Gato
                     </option>
 
                     <option
                         value="Outro"
-                        ${dados.especie === "Outro" ? "selected" : ""}>
+                        ${dados.especie === "Outro" ? "selected" : ""}
+                    >
                         Outro
                     </option>
 
@@ -334,7 +343,8 @@ function adicionarPet(dados = {}) {
                     class="raca-pet"
                     placeholder="Digite a raça"
                     value="${escaparHTML(dados.raca || "")}"
-                    required>
+                    required
+                >
 
             </div>
 
@@ -349,7 +359,8 @@ function adicionarPet(dados = {}) {
                     class="idade-pet"
                     placeholder="Ex.: 2 anos ou 6 meses"
                     value="${escaparHTML(dados.idade ?? "")}"
-                    required>
+                    required
+                >
 
             </div>
 
@@ -368,7 +379,8 @@ function adicionarPet(dados = {}) {
                                 dados.data_nascimento
                             ).slice(0, 10)
                             : ""
-                    }">
+                    }"
+                >
 
             </div>
 
@@ -380,7 +392,8 @@ function adicionarPet(dados = {}) {
 
                 <select
                     class="sexo-pet"
-                    required>
+                    required
+                >
 
                     <option value="">
                         Selecione
@@ -388,13 +401,15 @@ function adicionarPet(dados = {}) {
 
                     <option
                         value="Macho"
-                        ${dados.sexo === "Macho" ? "selected" : ""}>
+                        ${dados.sexo === "Macho" ? "selected" : ""}
+                    >
                         Macho
                     </option>
 
                     <option
                         value="Fêmea"
-                        ${dados.sexo === "Fêmea" ? "selected" : ""}>
+                        ${dados.sexo === "Fêmea" ? "selected" : ""}
+                    >
                         Fêmea
                     </option>
 
@@ -415,7 +430,8 @@ function adicionarPet(dados = {}) {
                     step="0.1"
                     placeholder="Ex.: 5.2"
                     value="${dados.peso ?? ""}"
-                    required>
+                    required
+                >
 
             </div>
 
@@ -433,7 +449,8 @@ function adicionarPet(dados = {}) {
                             !dados.tem_carteira_vacinacao
                                 ? "selected"
                                 : ""
-                        }>
+                        }
+                    >
                         Não
                     </option>
 
@@ -443,7 +460,8 @@ function adicionarPet(dados = {}) {
                             dados.tem_carteira_vacinacao
                                 ? "selected"
                                 : ""
-                        }>
+                        }
+                    >
                         Sim
                     </option>
 
@@ -457,7 +475,8 @@ function adicionarPet(dados = {}) {
                     dados.tem_carteira_vacinacao
                         ? "block"
                         : "none"
-                };">
+                };"
+            >
 
                 <label>
                     Carteira de vacinação
@@ -466,7 +485,8 @@ function adicionarPet(dados = {}) {
                 <input
                     type="file"
                     class="arquivo-carteira-pet"
-                    accept=".pdf,.jpg,.jpeg,.png,.webp">
+                    accept=".pdf,.jpg,.jpeg,.png,.webp"
+                >
 
                 <small>
                     Opcional. PDF, JPG, JPEG, PNG ou WEBP até 5 MB.
@@ -510,17 +530,13 @@ function adicionarPet(dados = {}) {
     selectCarteira.addEventListener(
         "change",
         () => {
-
             if (
                 selectCarteira.value ===
                 "sim"
             ) {
-
                 campoArquivo.style.display =
                     "block";
-
             } else {
-
                 campoArquivo.style.display =
                     "none";
 
@@ -532,7 +548,6 @@ function adicionarPet(dados = {}) {
     arquivo.addEventListener(
         "change",
         () => {
-
             const arquivoSelecionado =
                 arquivo.files[0];
 
@@ -547,7 +562,6 @@ function adicionarPet(dados = {}) {
                 arquivoSelecionado.size >
                 tamanhoMaximo
             ) {
-
                 alert(
                     "O arquivo da carteira de vacinação deve ter no máximo 5 MB."
                 );
@@ -566,14 +580,12 @@ function atualizarNumeracaoPets() {
 
     pets.forEach(
         (pet, index) => {
-
             const titulo =
                 pet.querySelector(
                     ".pet-header h3"
                 );
 
             if (titulo) {
-
                 titulo.innerHTML = `
                     <i class="fa-solid fa-paw"></i>
                     Pet ${index + 1}
@@ -590,7 +602,6 @@ async function arquivoParaBase64(arquivo) {
 
     return new Promise(
         (resolve, reject) => {
-
             const leitor =
                 new FileReader();
 
@@ -624,7 +635,6 @@ async function obterPets() {
     const pets = [];
 
     for (const card of cards) {
-
         const nome =
             normalizarTexto(
                 card.querySelector(
@@ -723,9 +733,7 @@ async function obterPets() {
 }
 
 function validarPets(pets) {
-
     if (pets.length === 0) {
-
         alert(
             "Adicione pelo menos um pet."
         );
@@ -737,9 +745,7 @@ function validarPets(pets) {
         /^\d+(?:[.,]\d+)?\s+(meses?|anos?)$/i;
 
     for (const pet of pets) {
-
         if (!pet.nome) {
-
             alert(
                 "Informe o nome de todos os pets."
             );
@@ -748,7 +754,6 @@ function validarPets(pets) {
         }
 
         if (!pet.especie) {
-
             alert(
                 "Selecione a espécie de todos os pets."
             );
@@ -757,7 +762,6 @@ function validarPets(pets) {
         }
 
         if (!pet.raca) {
-
             alert(
                 "Informe a raça de todos os pets."
             );
@@ -771,7 +775,6 @@ function validarPets(pets) {
                 pet.idade
             )
         ) {
-
             alert(
                 "Informe a idade corretamente, por exemplo: 6 meses ou 2 anos."
             );
@@ -780,7 +783,6 @@ function validarPets(pets) {
         }
 
         if (!pet.sexo) {
-
             alert(
                 "Selecione o sexo de todos os pets."
             );
@@ -793,7 +795,6 @@ function validarPets(pets) {
             Number.isNaN(pet.peso) ||
             pet.peso <= 0
         ) {
-
             alert(
                 "Informe um peso válido para todos os pets."
             );
@@ -806,7 +807,6 @@ function validarPets(pets) {
 }
 
 async function cadastrarTutor(dados) {
-
     const url = tutorId
         ? `${API_URL}/tutores/${tutorId}`
         : `${API_URL}/tutores`;
@@ -837,17 +837,13 @@ async function cadastrarTutor(dados) {
     let resultado = {};
 
     try {
-
         resultado =
             await resposta.json();
-
     } catch (erro) {
-
         resultado = {};
     }
 
     if (!resposta.ok) {
-
         const erro =
             new Error(
                 resultado.mensagem ||
@@ -865,9 +861,7 @@ async function cadastrarTutor(dados) {
 }
 
 async function cadastrarPet(pet) {
-
     const dados = {
-
         tutor_id:
             Number(tutorId),
 
@@ -923,17 +917,13 @@ async function cadastrarPet(pet) {
     let resultado = {};
 
     try {
-
         resultado =
             await resposta.json();
-
     } catch (erro) {
-
         resultado = {};
     }
 
     if (!resposta.ok) {
-
         throw new Error(
             resultado.mensagem ||
             resultado.message ||
@@ -945,9 +935,7 @@ async function cadastrarPet(pet) {
 }
 
 async function atualizarPet(pet) {
-
     const dados = {
-
         tutor_id:
             Number(tutorId),
 
@@ -1003,17 +991,13 @@ async function atualizarPet(pet) {
     let resultado = {};
 
     try {
-
         resultado =
             await resposta.json();
-
     } catch (erro) {
-
         resultado = {};
     }
 
     if (!resposta.ok) {
-
         throw new Error(
             resultado.mensagem ||
             resultado.message ||
@@ -1025,30 +1009,29 @@ async function atualizarPet(pet) {
 }
 
 async function carregarTutor() {
-
     if (!tutorId) {
-
         adicionarPet();
-
         return;
     }
 
     try {
-
         const respostaTutor =
             await fetch(
                 `${API_URL}/tutores/${tutorId}`
             );
 
         if (!respostaTutor.ok) {
-
             throw new Error(
                 "Não foi possível carregar o tutor."
             );
         }
 
-        const tutor =
+        const dadosTutor =
             await respostaTutor.json();
+
+        const tutor =
+            dadosTutor.tutor ||
+            dadosTutor;
 
         tutorId =
             tutor.id ||
@@ -1059,35 +1042,70 @@ async function carregarTutor() {
             String(tutorId)
         );
 
-        document.getElementById(
-            "nomeTutor"
-        ).value =
-            tutor.nome || "";
+        sessionStorage.setItem(
+            "tutor_id",
+            String(tutorId)
+        );
 
-        document.getElementById(
-            "cpfTutor"
-        ).value =
-            tutor.cpf || "";
+        const campoNome =
+            document.getElementById(
+                "nomeTutor"
+            );
 
-        document.getElementById(
-            "telefoneTutor"
-        ).value =
-            tutor.telefone || "";
+        const campoCpf =
+            document.getElementById(
+                "cpfTutor"
+            );
 
-        document.getElementById(
-            "emailTutor"
-        ).value =
-            tutor.email || "";
+        const campoTelefone =
+            document.getElementById(
+                "telefoneTutor"
+            );
 
-        document.getElementById(
-            "enderecoTutor"
-        ).value =
-            tutor.endereco || "";
+        const campoEmail =
+            document.getElementById(
+                "emailTutor"
+            );
 
-        document.getElementById(
-            "cep"
-        ).value =
-            tutor.cep || "";
+        const campoEndereco =
+            document.getElementById(
+                "enderecoTutor"
+            );
+
+        const campoCep =
+            document.getElementById(
+                "cep"
+            );
+
+        if (campoNome) {
+            campoNome.value =
+                tutor.nome || "";
+        }
+
+        if (campoCpf) {
+            campoCpf.value =
+                tutor.cpf || "";
+        }
+
+        if (campoTelefone) {
+            campoTelefone.value =
+                tutor.telefone || "";
+        }
+
+        if (campoEmail) {
+            campoEmail.value =
+                tutor.email || "";
+        }
+
+        if (campoEndereco) {
+            campoEndereco.value =
+                tutor.endereco || "";
+        }
+
+        if (campoCep) {
+            campoCep.value =
+                tutor.cep || "";
+        }
 
         const respostaPets =
             await fetch(
@@ -1095,7 +1113,6 @@ async function carregarTutor() {
             );
 
         if (!respostaPets.ok) {
-
             throw new Error(
                 "Não foi possível carregar os pets."
             );
@@ -1112,22 +1129,20 @@ async function carregarTutor() {
             Array.isArray(pets) &&
             pets.length > 0
         ) {
-
             pets.forEach(
-                pet =>
-                    adicionarPet(
-                        pet
-                    )
+                (pet) => {
+                    adicionarPet(pet);
+                }
             );
-
         } else {
-
             adicionarPet();
         }
 
     } catch (erro) {
-
-        console.error(erro);
+        console.error(
+            "Erro ao carregar cadastro:",
+            erro
+        );
 
         alert(
             "Não foi possível carregar os dados do cadastro."
@@ -1136,7 +1151,6 @@ async function carregarTutor() {
 }
 
 if (btnAdicionarPet) {
-
     btnAdicionarPet.addEventListener(
         "click",
         () => {
@@ -1146,13 +1160,10 @@ if (btnAdicionarPet) {
 }
 
 if (btnVoltarCadastro) {
-
     btnVoltarCadastro.addEventListener(
         "click",
-        event => {
-
+        (event) => {
             event.preventDefault();
-
             voltarParaOrigem();
         }
     );
@@ -1164,11 +1175,9 @@ const cpfInput =
     );
 
 if (cpfInput) {
-
     cpfInput.addEventListener(
         "input",
         () => {
-
             cpfInput.value =
                 formatarCPF(
                     cpfInput.value
@@ -1183,11 +1192,9 @@ const telefoneInput =
     );
 
 if (telefoneInput) {
-
     telefoneInput.addEventListener(
         "input",
         () => {
-
             telefoneInput.value =
                 formatarTelefone(
                     telefoneInput.value
@@ -1202,11 +1209,9 @@ const cepInput =
     );
 
 if (cepInput) {
-
     cepInput.addEventListener(
         "input",
         () => {
-
             cepInput.value =
                 formatarCEP(
                     cepInput.value
@@ -1216,19 +1221,17 @@ if (cepInput) {
 }
 
 if (formCadastro) {
-
     formCadastro.addEventListener(
         "submit",
-        async event => {
-
+        async (event) => {
             event.preventDefault();
 
             if (btnProsseguir) {
-                btnProsseguir.disabled = true;
+                btnProsseguir.disabled =
+                    true;
             }
 
             try {
-
                 const nome =
                     normalizarTexto(
                         document.getElementById(
@@ -1272,7 +1275,6 @@ if (formCadastro) {
                     );
 
                 if (!nome) {
-
                     alert(
                         "Informe seu nome completo."
                     );
@@ -1281,7 +1283,6 @@ if (formCadastro) {
                 }
 
                 if (!validarCPF(cpf)) {
-
                     alert(
                         "Informe um CPF válido."
                     );
@@ -1290,7 +1291,6 @@ if (formCadastro) {
                 }
 
                 if (!validarTelefone(telefone)) {
-
                     alert(
                         "Informe um telefone válido."
                     );
@@ -1299,7 +1299,6 @@ if (formCadastro) {
                 }
 
                 if (!validarEmail(email)) {
-
                     alert(
                         "Informe um e-mail válido."
                     );
@@ -1308,7 +1307,6 @@ if (formCadastro) {
                 }
 
                 if (!endereco) {
-
                     alert(
                         "Informe seu endereço."
                     );
@@ -1320,7 +1318,6 @@ if (formCadastro) {
                     cep &&
                     !validarCEP(cep)
                 ) {
-
                     alert(
                         "Informe um CEP válido."
                     );
@@ -1329,14 +1326,12 @@ if (formCadastro) {
                 }
 
                 if (cep) {
-
                     const cepValido =
                         await validarCEPViaCEP(
                             cep
                         );
 
                     if (!cepValido) {
-
                         alert(
                             "O CEP informado não foi encontrado."
                         );
@@ -1357,17 +1352,11 @@ if (formCadastro) {
                 }
 
                 const dadosTutor = {
-
                     nome,
-
                     cpf,
-
                     telefone,
-
                     email,
-
                     endereco,
-
                     cep:
                         cep || null
                 };
@@ -1378,7 +1367,6 @@ if (formCadastro) {
                     );
 
                 if (!tutorId) {
-
                     tutorId =
                         resultadoTutor.id ||
                         resultadoTutor.tutor_id ||
@@ -1388,7 +1376,6 @@ if (formCadastro) {
                 }
 
                 if (!tutorId) {
-
                     throw new Error(
                         "O servidor não retornou o ID do tutor."
                     );
@@ -1402,16 +1389,17 @@ if (formCadastro) {
                     String(tutorId)
                 );
 
+                sessionStorage.setItem(
+                    "tutor_id",
+                    String(tutorId)
+                );
+
                 for (const pet of pets) {
-
                     if (pet.id) {
-
                         await atualizarPet(
                             pet
                         );
-
                     } else {
-
                         await cadastrarPet(
                             pet
                         );
@@ -1423,7 +1411,6 @@ if (formCadastro) {
                 );
 
                 if (returnUrl) {
-
                     const origem =
                         new URL(
                             returnUrl,
@@ -1432,7 +1419,7 @@ if (formCadastro) {
 
                     origem.searchParams.set(
                         "tutor_id",
-                        tutorId
+                        String(tutorId)
                     );
 
                     origem.searchParams.delete(
@@ -1443,13 +1430,13 @@ if (formCadastro) {
                         origem.href;
 
                 } else {
-
                     window.location.href =
-                        `perfil.html?tutor_id=${encodeURIComponent(tutorId)}`;
+                        `perfil.html?tutor_id=${encodeURIComponent(
+                            tutorId
+                        )}`;
                 }
 
             } catch (erro) {
-
                 console.error(
                     "Erro ao salvar cadastro:",
                     erro
@@ -1458,14 +1445,11 @@ if (formCadastro) {
                 if (
                     erro.status === 409
                 ) {
-
                     alert(
                         erro.message ||
                         "Já existe um cadastro com esses dados."
                     );
-
                 } else {
-
                     alert(
                         erro.message ||
                         "Não foi possível salvar o cadastro."
@@ -1473,9 +1457,9 @@ if (formCadastro) {
                 }
 
             } finally {
-
                 if (btnProsseguir) {
-                    btnProsseguir.disabled = false;
+                    btnProsseguir.disabled =
+                        false;
                 }
             }
         }
@@ -1483,10 +1467,7 @@ if (formCadastro) {
 }
 
 if (tutorId) {
-
     carregarTutor();
-
 } else {
-
     adicionarPet();
 }

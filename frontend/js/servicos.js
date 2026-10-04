@@ -3,7 +3,12 @@ const API_URL = "http://localhost:3000/api";
 const params = new URLSearchParams(window.location.search);
 
 const clinicaId = params.get("clinica_id");
-const tutorId = params.get("tutor_id");
+
+const tutorId =
+    params.get("tutor_id") ||
+    sessionStorage.getItem("agendaPetTutorId") ||
+    sessionStorage.getItem("tutor_id");
+
 const data = params.get("data");
 const dataVisual = params.get("data_visual");
 const horario = params.get("horario");
@@ -17,26 +22,27 @@ let servicos = [];
 let servicoSelecionado = null;
 
 
+if (tutorId) {
+    sessionStorage.setItem("agendaPetTutorId", String(tutorId));
+    sessionStorage.setItem("tutor_id", String(tutorId));
+}
+
+
 async function carregarClinica() {
-
     if (!clinicaId) {
-
         if (nomeClinica) {
-            nomeClinica.textContent =
-                "Clínica não informada";
+            nomeClinica.textContent = "Clínica não informada";
         }
 
         return;
     }
 
     try {
-
         const resposta = await fetch(
             `${API_URL}/clinicas/${clinicaId}`
         );
 
         if (!resposta.ok) {
-
             throw new Error(
                 `Erro ao buscar clínica: ${resposta.status}`
             );
@@ -45,20 +51,17 @@ async function carregarClinica() {
         const clinica = await resposta.json();
 
         if (nomeClinica) {
-
             nomeClinica.textContent =
                 clinica.nome || "Clínica";
         }
 
     } catch (erro) {
-
         console.error(
             "Erro ao carregar clínica:",
             erro
         );
 
         if (nomeClinica) {
-
             nomeClinica.textContent =
                 "Erro ao carregar clínica";
         }
@@ -67,17 +70,13 @@ async function carregarClinica() {
 
 
 async function carregarServicos() {
-
     if (!clinicaId) {
-
         if (listaConsultas) {
-
             listaConsultas.innerHTML =
                 "<p>Clínica não informada.</p>";
         }
 
         if (listaExames) {
-
             listaExames.innerHTML =
                 "<p>Clínica não informada.</p>";
         }
@@ -86,13 +85,11 @@ async function carregarServicos() {
     }
 
     try {
-
         const resposta = await fetch(
             `${API_URL}/clinicas/${clinicaId}/servicos`
         );
 
         if (!resposta.ok) {
-
             throw new Error(
                 `Erro ao buscar serviços: ${resposta.status}`
             );
@@ -101,7 +98,6 @@ async function carregarServicos() {
         const dados = await resposta.json();
 
         if (!Array.isArray(dados)) {
-
             throw new Error(
                 "A API não retornou uma lista de serviços."
             );
@@ -110,19 +106,13 @@ async function carregarServicos() {
         servicos = dados;
 
         const consultas = servicos.filter(servico => {
-
-            return String(
-                servico.tipo || ""
-            )
+            return String(servico.tipo || "")
                 .trim()
                 .toLowerCase() === "consulta";
         });
 
         const exames = servicos.filter(servico => {
-
-            return String(
-                servico.tipo || ""
-            )
+            return String(servico.tipo || "")
                 .trim()
                 .toLowerCase() === "exame";
         });
@@ -138,20 +128,17 @@ async function carregarServicos() {
         );
 
     } catch (erro) {
-
         console.error(
             "Erro ao carregar serviços:",
             erro
         );
 
         if (listaConsultas) {
-
             listaConsultas.innerHTML =
                 "<p>Erro ao carregar os serviços.</p>";
         }
 
         if (listaExames) {
-
             listaExames.innerHTML =
                 "<p>Erro ao carregar os serviços.</p>";
         }
@@ -160,7 +147,6 @@ async function carregarServicos() {
 
 
 function renderizarServicos(lista, container) {
-
     if (!container) {
         return;
     }
@@ -168,7 +154,6 @@ function renderizarServicos(lista, container) {
     container.innerHTML = "";
 
     if (lista.length === 0) {
-
         container.innerHTML =
             "<p>Nenhum serviço disponível.</p>";
 
@@ -176,12 +161,9 @@ function renderizarServicos(lista, container) {
     }
 
     lista.forEach(servico => {
+        const card = document.createElement("div");
 
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "servico-card";
+        card.className = "servico-card";
 
         const preco =
             servico.preco !== null &&
@@ -249,11 +231,9 @@ function renderizarServicos(lista, container) {
         servicoElemento.addEventListener(
             "click",
             () => {
-
                 document
                     .querySelectorAll(".servico")
                     .forEach(item => {
-
                         item.classList.remove(
                             "selecionado"
                         );
@@ -263,13 +243,10 @@ function renderizarServicos(lista, container) {
                     "selecionado"
                 );
 
-                servicoSelecionado =
-                    servico;
+                servicoSelecionado = servico;
 
                 if (btnContinuar) {
-
-                    btnContinuar.disabled =
-                        false;
+                    btnContinuar.disabled = false;
                 }
             }
         );
@@ -280,15 +257,12 @@ function renderizarServicos(lista, container) {
 
 
 if (btnContinuar) {
-
     btnContinuar.disabled = true;
 
     btnContinuar.addEventListener(
         "click",
         () => {
-
             if (!servicoSelecionado) {
-
                 alert(
                     "Selecione um serviço para continuar."
                 );
@@ -297,7 +271,6 @@ if (btnContinuar) {
             }
 
             if (!clinicaId) {
-
                 alert(
                     "Clínica não identificada."
                 );
@@ -306,7 +279,6 @@ if (btnContinuar) {
             }
 
             if (!data || !horario) {
-
                 alert(
                     "Data ou horário não informado."
                 );
@@ -314,15 +286,27 @@ if (btnContinuar) {
                 return;
             }
 
-            const proximaPagina =
-                new URL(
-                    "petetransporte.html",
-                    window.location.href
+            if (!tutorId) {
+                alert(
+                    "Tutor não identificado. Volte ao início e tente novamente."
                 );
+
+                return;
+            }
+
+            const proximaPagina = new URL(
+                "petetransporte.html",
+                window.location.href
+            );
 
             proximaPagina.searchParams.set(
                 "clinica_id",
                 clinicaId
+            );
+
+            proximaPagina.searchParams.set(
+                "tutor_id",
+                tutorId
             );
 
             proximaPagina.searchParams.set(
@@ -345,21 +329,10 @@ if (btnContinuar) {
                 servicoSelecionado.id
             );
 
-            if (
-                servicoSelecionado.veterinario_id
-            ) {
-
+            if (servicoSelecionado.veterinario_id) {
                 proximaPagina.searchParams.set(
                     "veterinario_id",
                     servicoSelecionado.veterinario_id
-                );
-            }
-
-            if (tutorId) {
-
-                proximaPagina.searchParams.set(
-                    "tutor_id",
-                    tutorId
                 );
             }
 

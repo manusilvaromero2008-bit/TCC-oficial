@@ -2,575 +2,795 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Perfil | Agenda Pet</title>
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    >
 
     <link rel="stylesheet" href="../css/perfil.css">
+
 </head>
 
 <body>
 
-    <header>
+<header>
 
-        <div class="logo-area">
+    <div class="logo-area">
 
-            <div class="logo">
-                <i class="fa-solid fa-paw"></i>
-            </div>
-
-            <div>
-                <h1>Agenda Pet</h1>
-                <span>Perfil do tutor</span>
-            </div>
-
+        <div class="logo">
+            <i class="fa-solid fa-paw"></i>
         </div>
 
-        <button id="btnVoltar" type="button">
-            <i class="fa-solid fa-arrow-left"></i>
-            Voltar
-        </button>
-
-    </header>
-
-    <main>
-
-        <section id="areaCadastro" class="area-cadastro">
-
-            <div class="cadastro-card">
-
-                <div class="icone-cadastro">
-                    <i class="fa-solid fa-paw"></i>
-                </div>
-
-                <h2>Você ainda não possui um cadastro</h2>
-
-                <p>
-                    Cadastre seus dados e seus pets para utilizar o Agenda Pet.
-                </p>
-
-                <button id="btnCadastrar" type="button">
-                    <i class="fa-solid fa-user-plus"></i>
-                    Fazer cadastro
-                </button>
-
-            </div>
-
-        </section>
-
-        <section id="areaPerfil" class="area-perfil" style="display: none;">
-
-            <div class="perfil-container">
-
-                <div class="perfil-topo">
-
-                    <div class="foto-perfil-container">
-
-                        <img id="fotoPerfil"
-                            src="../img/perfil-padrao.png"
-                            alt="Foto do tutor">
-
-                        <div class="botoes-foto">
-
-                            <button type="button" id="btnAlterarFoto">
-                                <i class="fa-solid fa-camera"></i>
-                                Alterar foto
-                            </button>
-
-                            <button type="button" id="btnRemoverFoto">
-                                <i class="fa-solid fa-trash"></i>
-                                Remover foto
-                            </button>
-
-                        </div>
-
-                        <input type="file"
-                            id="inputFotoPerfil"
-                            accept="image/png,image/jpeg,image/webp"
-                            style="display: none;">
-
-                    </div>
-
-                    <div class="dados-principais">
-
-                        <h2 id="nomeTutor">
-                            Nome do tutor
-                        </h2>
-
-                        <p>
-                            <i class="fa-solid fa-user"></i>
-                            Perfil do tutor
-                        </p>
-
-                    </div>
-
-                </div>
-
-                <div class="dados-tutor">
-
-                    <h3>
-                        <i class="fa-solid fa-user"></i>
-                        Meus dados
-                    </h3>
-
-                    <div class="resumo-dados" id="perfil-resumo">
-
-                        <div class="campo-resumo">
-                            <span>
-                                <i class="fa-solid fa-id-card"></i>
-                                CPF
-                            </span>
-                            <strong id="cpfTutor">-</strong>
-                        </div>
-
-                        <div class="campo-resumo">
-                            <span>
-                                <i class="fa-solid fa-phone"></i>
-                                Telefone
-                            </span>
-                            <strong id="telefoneTutor">-</strong>
-                        </div>
-
-                        <div class="campo-resumo">
-                            <span>
-                                <i class="fa-solid fa-envelope"></i>
-                                E-mail
-                            </span>
-                            <strong id="emailTutor">-</strong>
-                        </div>
-
-                        <div class="campo-resumo">
-                            <span>
-                                <i class="fa-solid fa-location-dot"></i>
-                                Endereço
-                            </span>
-                            <strong id="enderecoTutor">-</strong>
-                        </div>
-
-                        <div class="campo-resumo">
-                            <span>
-                                <i class="fa-solid fa-map-pin"></i>
-                                CEP
-                            </span>
-                            <strong id="cepTutor">-</strong>
-                        </div>
-
-                    </div>
-
-                    <form id="formulario" style="display: none;">
-
-                        <div class="campo">
-
-                            <label for="nome">
-                                <i class="fa-solid fa-user"></i>
-                                Nome
-                            </label>
-
-                            <input type="text"
-                                id="nome"
-                                required>
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="cpf">
-                                <i class="fa-solid fa-id-card"></i>
-                                CPF
-                            </label>
-
-                            <input type="text"
-                                id="cpf"
-                                required>
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="telefone">
-                                <i class="fa-solid fa-phone"></i>
-                                Telefone
-                            </label>
-
-                            <input type="text"
-                                id="telefone"
-                                required>
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="email">
-                                <i class="fa-solid fa-envelope"></i>
-                                E-mail
-                            </label>
-
-                            <input type="email"
-                                id="email"
-                                required>
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="endereco">
-                                <i class="fa-solid fa-location-dot"></i>
-                                Endereço
-                            </label>
-
-                            <input type="text"
-                                id="endereco"
-                                required>
-
-                        </div>
-
-                        <div class="campo">
-
-                            <label for="cep">
-                                <i class="fa-solid fa-map-pin"></i>
-                                CEP
-                            </label>
-
-                            <input type="text"
-                                id="cep"
-                                required>
-
-                        </div>
-
-                        <div class="botoes-formulario">
-
-                            <button type="submit">
-                                <i class="fa-solid fa-check"></i>
-                                Salvar alterações
-                            </button>
-
-                            <button type="button"
-                                id="btnCancelarEdicao">
-
-                                <i class="fa-solid fa-xmark"></i>
-                                Cancelar
-
-                            </button>
-
-                        </div>
-
-                    </form>
-
-                    <button type="button"
-                        id="btnEditarPerfil">
-
-                        <i class="fa-solid fa-pen"></i>
-                        Editar dados
-
-                    </button>
-
-                </div>
-
-                <section class="pets-section">
-
-                    <div class="pets-titulo">
-
-                        <div>
-
-                            <h3>
-                                <i class="fa-solid fa-paw"></i>
-                                Meus pets
-                            </h3>
-
-                            <p>
-                                Veja e gerencie os animais cadastrados.
-                            </p>
-
-                        </div>
-
-                        <button type="button"
-                            id="adicionarPet">
-
-                            <i class="fa-solid fa-plus"></i>
-                            Adicionar pet
-
-                        </button>
-
-                    </div>
-
-                    <div id="lista-pets"
-                        class="lista-pets">
-                    </div>
-
-                </section>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <div id="modalPet" class="modal">
-
-        <div class="modal-conteudo">
-
-            <div class="modal-cabecalho">
-
-                <h2 id="tituloModalPet">
-                    <i class="fa-solid fa-paw"></i>
-                    Adicionar pet
-                </h2>
-
-                <button type="button"
-                    id="btnFecharModal"
-                    aria-label="Fechar">
-
-                    <i class="fa-solid fa-xmark"></i>
-
-                </button>
-
-            </div>
-
-            <form id="formPet">
-
-                <div class="foto-pet-area">
-
-                    <img id="previewFotoPet"
-                        class="preview-foto-pet"
-                        src=""
-                        alt="Foto do pet">
-
-                    <label for="fotoPet"
-                        class="btn-foto-pet">
-
-                        <i class="fa-solid fa-camera"></i>
-                        Adicionar foto
-
-                    </label>
-
-                    <input type="file"
-                        id="fotoPet"
-                        accept="image/png,image/jpeg,image/webp"
-                        style="display: none;">
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="nomePet">
-                        <i class="fa-solid fa-paw"></i>
-                        Nome do pet
-                    </label>
-
-                    <input type="text"
-                        id="nomePet"
-                        required>
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="especiePet">
-                        <i class="fa-solid fa-paw"></i>
-                        Espécie
-                    </label>
-
-                    <select id="especiePet"
-                        required>
-
-                        <option value="">
-                            Selecione
-                        </option>
-
-                        <option value="Cachorro">
-                            Cachorro
-                        </option>
-
-                        <option value="Gato">
-                            Gato
-                        </option>
-
-                        <option value="Outro">
-                            Outro
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="racaPet">
-                        <i class="fa-solid fa-dog"></i>
-                        Raça
-                    </label>
-
-                    <input type="text"
-                        id="racaPet">
-
-                </div>
-
-                <div class="campo">
-
-                    <label>
-                        <i class="fa-solid fa-calendar"></i>
-                        Idade
-                    </label>
-
-                    <div class="idade-container">
-
-                        <input type="number"
-                            id="idadePet"
-                            min="0"
-                            step="0.1"
-                            placeholder="Ex: 2"
-                            required>
-
-                        <select id="unidadeIdadePet"
-                            required>
-
-                            <option value="anos">
-                                Anos
-                            </option>
-
-                            <option value="meses">
-                                Meses
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="dataNascimentoPet">
-                        <i class="fa-solid fa-calendar-days"></i>
-                        Data de nascimento
-                    </label>
-
-                    <input type="date"
-                        id="dataNascimentoPet">
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="sexoPet">
-                        <i class="fa-solid fa-venus-mars"></i>
-                        Sexo
-                    </label>
-
-                    <select id="sexoPet"
-                        required>
-
-                        <option value="">
-                            Selecione
-                        </option>
-
-                        <option value="Macho">
-                            Macho
-                        </option>
-
-                        <option value="Fêmea">
-                            Fêmea
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="pesoPet">
-                        <i class="fa-solid fa-weight-scale"></i>
-                        Peso (kg)
-                    </label>
-
-                    <input type="number"
-                        id="pesoPet"
-                        min="0"
-                        step="0.1">
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="carteiraPet">
-                        <i class="fa-solid fa-syringe"></i>
-                        Possui carteira de vacinação?
-                    </label>
-
-                    <select id="carteiraPet"
-                        required>
-
-                        <option value="nao">
-                            Não
-                        </option>
-
-                        <option value="sim">
-                            Sim
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div class="campo"
-                    id="campoArquivoCarteira"
-                    style="display: none;">
-
-                    <label for="carteiraArquivoPet">
-                        <i class="fa-solid fa-file-medical"></i>
-                        Foto ou PDF da carteira de vacinação
-                    </label>
-
-                    <input type="file"
-                        id="carteiraArquivoPet"
-                        accept="image/png,image/jpeg,image/webp,application/pdf">
-
-                    <span id="nomeCarteiraArquivo"></span>
-
-                    <button type="button"
-                        id="btnVisualizarCarteiraPet"
-                        style="display: none;">
-
-                        <i class="fa-solid fa-eye"></i>
-                        Visualizar carteira
-
-                    </button>
-
-                </div>
-
-                <div class="botoes-modal">
-
-                    <button type="submit"
-                        id="btnSalvarPet">
-
-                        <i class="fa-solid fa-check"></i>
-                        Salvar pet
-
-                    </button>
-
-                    <button type="button"
-                        id="btnCancelarPet">
-
-                        <i class="fa-solid fa-xmark"></i>
-                        Cancelar
-
-                    </button>
-
-                </div>
-
-            </form>
+        <div>
+
+            <h1>
+                Agenda Pet
+            </h1>
+
+            <span>
+                Perfil do tutor
+            </span>
 
         </div>
 
     </div>
 
-    <div id="mensagem"></div>
+    <button
+        id="btnVoltar"
+        type="button"
+    >
 
-    <script src="../js/perfil.js"></script>
+        <i class="fa-solid fa-arrow-left"></i>
+
+        Voltar
+
+    </button>
+
+</header>
+
+<main>
+
+    <section
+        id="areaCadastro"
+        class="area-cadastro"
+    >
+
+        <div class="cadastro-card">
+
+            <div class="icone-cadastro">
+                <i class="fa-solid fa-paw"></i>
+            </div>
+
+            <h2>
+                Você ainda não possui um cadastro
+            </h2>
+
+            <p>
+                Cadastre seus dados e seus pets para utilizar o Agenda Pet.
+            </p>
+
+            <button
+                id="btnCadastrar"
+                type="button"
+            >
+
+                <i class="fa-solid fa-user-plus"></i>
+
+                Fazer cadastro
+
+            </button>
+
+        </div>
+
+    </section>
+
+    <section
+        id="areaPerfil"
+        class="area-perfil"
+        style="display: none;"
+    >
+
+        <div class="perfil-container">
+
+            <div class="perfil-topo">
+
+                <div class="foto-perfil-container">
+
+                    <img
+                        id="fotoPerfil"
+                        src="../img/perfil-padrao.png"
+                        alt="Foto do tutor"
+                    >
+
+                    <div class="botoes-foto">
+
+                        <button
+                            type="button"
+                            id="btnAlterarFoto"
+                        >
+
+                            <i class="fa-solid fa-camera"></i>
+
+                            Alterar foto
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="btnRemoverFoto"
+                        >
+
+                            <i class="fa-solid fa-trash"></i>
+
+                            Remover foto
+
+                        </button>
+
+                    </div>
+
+                    <input
+                        type="file"
+                        id="inputFotoPerfil"
+                        accept="image/png,image/jpeg,image/webp"
+                        style="display: none;"
+                    >
+
+                </div>
+
+                <div class="dados-principais">
+
+                    <h2 id="nomeTutor">
+                        Nome do tutor
+                    </h2>
+
+                    <p>
+
+                        <i class="fa-solid fa-user"></i>
+
+                        Perfil do tutor
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="dados-tutor">
+
+                <h3>
+
+                    <i class="fa-solid fa-user"></i>
+
+                    Meus dados
+
+                </h3>
+
+                <div
+                    class="resumo-dados"
+                    id="perfil-resumo"
+                >
+
+                    <div class="campo-resumo">
+
+                        <span>
+
+                            <i class="fa-solid fa-id-card"></i>
+
+                            CPF
+
+                        </span>
+
+                        <strong id="cpfTutor">
+                            -
+                        </strong>
+
+                    </div>
+
+                    <div class="campo-resumo">
+
+                        <span>
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            Telefone
+
+                        </span>
+
+                        <strong id="telefoneTutor">
+                            -
+                        </strong>
+
+                    </div>
+
+                    <div class="campo-resumo">
+
+                        <span>
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            E-mail
+
+                        </span>
+
+                        <strong id="emailTutor">
+                            -
+                        </strong>
+
+                    </div>
+
+                    <div class="campo-resumo">
+
+                        <span>
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            Endereço
+
+                        </span>
+
+                        <strong id="enderecoTutor">
+                            -
+                        </strong>
+
+                    </div>
+
+                    <div class="campo-resumo">
+
+                        <span>
+
+                            <i class="fa-solid fa-map-pin"></i>
+
+                            CEP
+
+                        </span>
+
+                        <strong id="cepTutor">
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <form
+                    id="formulario"
+                    style="display: none;"
+                >
+
+                    <div class="campo">
+
+                        <label for="nome">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            Nome
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nome"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="cpf">
+
+                            <i class="fa-solid fa-id-card"></i>
+
+                            CPF
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cpf"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="telefone">
+
+                            <i class="fa-solid fa-phone"></i>
+
+                            Telefone
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="telefone"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="email">
+
+                            <i class="fa-solid fa-envelope"></i>
+
+                            E-mail
+
+                        </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="endereco">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            Endereço
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="endereco"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="campo">
+
+                        <label for="cep">
+
+                            <i class="fa-solid fa-map-pin"></i>
+
+                            CEP
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="cep"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="botoes-formulario">
+
+                        <button type="submit">
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Salvar alterações
+
+                        </button>
+
+                        <button
+                            type="button"
+                            id="btnCancelarEdicao"
+                        >
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                            Cancelar
+
+                        </button>
+
+                    </div>
+
+                </form>
+
+                <button
+                    type="button"
+                    id="btnEditarPerfil"
+                >
+
+                    <i class="fa-solid fa-pen"></i>
+
+                    Editar dados
+
+                </button>
+
+            </div>
+
+            <section class="pets-section">
+
+                <div class="pets-titulo">
+
+                    <div>
+
+                        <h3>
+
+                            <i class="fa-solid fa-paw"></i>
+
+                            Meus pets
+
+                        </h3>
+
+                        <p>
+                            Veja e gerencie os animais cadastrados.
+                        </p>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="adicionarPet"
+                    >
+
+                        <i class="fa-solid fa-plus"></i>
+
+                        Adicionar pet
+
+                    </button>
+
+                </div>
+
+                <div
+                    id="lista-pets"
+                    class="lista-pets"
+                >
+                </div>
+
+            </section>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div
+    id="modalPet"
+    class="modal"
+>
+
+    <div class="modal-conteudo">
+
+        <div class="modal-cabecalho">
+
+            <h2 id="tituloModalPet">
+
+                <i class="fa-solid fa-paw"></i>
+
+                Adicionar pet
+
+            </h2>
+
+            <button
+                type="button"
+                id="btnFecharModal"
+                aria-label="Fechar"
+            >
+
+                <i class="fa-solid fa-xmark"></i>
+
+            </button>
+
+        </div>
+
+        <form id="formPet">
+
+            <div class="foto-pet-area">
+
+                <img
+                    id="previewFotoPet"
+                    class="preview-foto-pet"
+                    src=""
+                    alt="Foto do pet"
+                >
+
+                <label
+                    for="fotoPet"
+                    class="btn-foto-pet"
+                >
+
+                    <i class="fa-solid fa-camera"></i>
+
+                    Adicionar foto
+
+                </label>
+
+                <input
+                    type="file"
+                    id="fotoPet"
+                    accept="image/png,image/jpeg,image/webp"
+                    style="display: none;"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="nomePet">
+
+                    <i class="fa-solid fa-paw"></i>
+
+                    Nome do pet
+
+                </label>
+
+                <input
+                    type="text"
+                    id="nomePet"
+                    required
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="especiePet">
+
+                    <i class="fa-solid fa-paw"></i>
+
+                    Espécie
+
+                </label>
+
+                <select
+                    id="especiePet"
+                    required
+                >
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="Cachorro">
+                        Cachorro
+                    </option>
+
+                    <option value="Gato">
+                        Gato
+                    </option>
+
+                    <option value="Outro">
+                        Outro
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="campo">
+
+                <label for="racaPet">
+
+                    <i class="fa-solid fa-dog"></i>
+
+                    Raça
+
+                </label>
+
+                <input
+                    type="text"
+                    id="racaPet"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label>
+
+                    <i class="fa-solid fa-calendar"></i>
+
+                    Idade
+
+                </label>
+
+                <div class="idade-container">
+
+                    <input
+                        type="number"
+                        id="idadePet"
+                        min="0"
+                        step="0.1"
+                        placeholder="Ex: 2"
+                        required
+                    >
+
+                    <select
+                        id="unidadeIdadePet"
+                        required
+                    >
+
+                        <option value="anos">
+                            Anos
+                        </option>
+
+                        <option value="meses">
+                            Meses
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="campo">
+
+                <label for="dataNascimentoPet">
+
+                    <i class="fa-solid fa-calendar-days"></i>
+
+                    Data de nascimento
+
+                </label>
+
+                <input
+                    type="date"
+                    id="dataNascimentoPet"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="sexoPet">
+
+                    <i class="fa-solid fa-venus-mars"></i>
+
+                    Sexo
+
+                </label>
+
+                <select
+                    id="sexoPet"
+                    required
+                >
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="Macho">
+                        Macho
+                    </option>
+
+                    <option value="Fêmea">
+                        Fêmea
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="campo">
+
+                <label for="pesoPet">
+
+                    <i class="fa-solid fa-weight-scale"></i>
+
+                    Peso (kg)
+
+                </label>
+
+                <input
+                    type="number"
+                    id="pesoPet"
+                    min="0"
+                    step="0.1"
+                >
+
+            </div>
+
+            <div class="campo">
+
+                <label for="carteiraPet">
+
+                    <i class="fa-solid fa-syringe"></i>
+
+                    Possui carteira de vacinação?
+
+                </label>
+
+                <select
+                    id="carteiraPet"
+                    required
+                >
+
+                    <option value="nao">
+                        Não
+                    </option>
+
+                    <option value="sim">
+                        Sim
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div
+                class="campo"
+                id="campoArquivoCarteira"
+                style="display: none;"
+            >
+
+                <label for="carteiraArquivoPet">
+
+                    <i class="fa-solid fa-file-medical"></i>
+
+                    Foto ou PDF da carteira de vacinação
+
+                </label>
+
+                <input
+                    type="file"
+                    id="carteiraArquivoPet"
+                    accept="image/png,image/jpeg,image/webp,application/pdf"
+                >
+
+                <span id="nomeCarteiraArquivo"></span>
+
+                <button
+                    type="button"
+                    id="btnVisualizarCarteiraPet"
+                    style="display: none;"
+                >
+
+                    <i class="fa-solid fa-eye"></i>
+
+                    Visualizar carteira
+
+                </button>
+
+            </div>
+
+            <div class="botoes-modal">
+
+                <button
+                    type="submit"
+                    id="btnSalvarPet"
+                >
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Salvar pet
+
+                </button>
+
+                <button
+                    type="button"
+                    id="btnCancelarPet"
+                >
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                    Cancelar
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<div id="mensagem"></div>
+
+<script src="../js/perfil.js"></script>
 
 </body>
 

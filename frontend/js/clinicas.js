@@ -1,24 +1,48 @@
 document.addEventListener("DOMContentLoaded", async () => {
+
     const API_URL = "http://localhost:3000/api";
 
-    const nomeClinica = document.getElementById("nomeClinica");
-    const enderecoClinica = document.getElementById("enderecoClinica");
-    const telefoneClinica = document.getElementById("telefoneClinica");
-    const horarioClinica = document.getElementById("horarioClinica");
-    const precoConsulta = document.getElementById("precoConsulta");
-    const listaServicos = document.getElementById("listaServicos");
-    const listaVeterinarios = document.getElementById("listaVeterinarios");
-    const btnAgendar = document.getElementById("btnAgendar");
+    const nomeClinica =
+        document.getElementById("nomeClinica");
 
-    const clinicaId = document.body.dataset.clinicaId;
+    const enderecoClinica =
+        document.getElementById("enderecoClinica");
+
+    const telefoneClinica =
+        document.getElementById("telefoneClinica");
+
+    const horarioClinica =
+        document.getElementById("horarioClinica");
+
+    const precoConsulta =
+        document.getElementById("precoConsulta");
+
+    const listaServicos =
+        document.getElementById("listaServicos");
+
+    const listaVeterinarios =
+        document.getElementById("listaVeterinarios");
+
+    const btnAgendar =
+        document.getElementById("btnAgendar");
+
+    const clinicaId =
+        document.body.dataset.clinicaId;
 
     if (!clinicaId) {
-        console.error("ID da clínica não encontrado no HTML.");
+        console.error(
+            "ID da clínica não encontrado no HTML."
+        );
+
         return;
     }
 
+
     function escaparHTML(valor) {
-        if (valor === null || valor === undefined) {
+        if (
+            valor === null ||
+            valor === undefined
+        ) {
             return "";
         }
 
@@ -30,14 +54,15 @@ document.addEventListener("DOMContentLoaded", async () => {
             .replace(/'/g, "&#039;");
     }
 
+
     function obterTutorId() {
-        const params = new URLSearchParams(
-            window.location.search
-        );
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
 
         const tutorIdUrl =
-            params.get("tutor_id") ||
-            params.get("id");
+            params.get("tutor_id");
 
         if (tutorIdUrl) {
             sessionStorage.setItem(
@@ -50,11 +75,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 String(tutorIdUrl)
             );
 
-            console.log(
-                "Tutor encontrado pela URL:",
-                tutorIdUrl
-            );
-
             return String(tutorIdUrl);
         }
 
@@ -64,16 +84,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
         if (agendaPetTutorId) {
-            console.log(
-                "Tutor encontrado no sessionStorage:",
-                agendaPetTutorId
-            );
-
             return String(agendaPetTutorId);
         }
 
         const tutorIdAntigo =
-            sessionStorage.getItem("tutor_id");
+            sessionStorage.getItem(
+                "tutor_id"
+            );
 
         if (tutorIdAntigo) {
             sessionStorage.setItem(
@@ -81,20 +98,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 String(tutorIdAntigo)
             );
 
-            console.log(
-                "Tutor encontrado na chave antiga:",
-                tutorIdAntigo
-            );
-
             return String(tutorIdAntigo);
         }
 
-        console.error(
-            "Nenhum tutor_id encontrado."
-        );
-
         return null;
     }
+
 
     function mostrarMensagemCadastro() {
         const modalExistente =
@@ -127,7 +136,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <i class="fa-solid fa-user-plus"></i>
                 </div>
 
-                <h2>Você ainda não possui um cadastro</h2>
+                <h2>
+                    Você ainda não possui um cadastro
+                </h2>
 
                 <p>
                     Para agendar uma consulta, primeiro é necessário
@@ -189,7 +200,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         fundo.addEventListener(
             "click",
-            (event) => {
+            event => {
                 if (event.target === fundo) {
                     fechar();
                 }
@@ -197,17 +208,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         );
     }
 
+
     async function verificarCadastro() {
-        const tutorId = obterTutorId();
+        const tutorId =
+            obterTutorId();
 
         if (!tutorId) {
             return null;
         }
-
-        console.log(
-            "Verificando tutor:",
-            tutorId
-        );
 
         try {
             const resposta =
@@ -215,25 +223,10 @@ document.addEventListener("DOMContentLoaded", async () => {
                     `${API_URL}/tutores/${encodeURIComponent(tutorId)}`
                 );
 
-            console.log(
-                "Status da busca do tutor:",
-                resposta.status
-            );
-
             const dados =
                 await resposta.json();
 
-            console.log(
-                "Dados retornados pelo servidor:",
-                dados
-            );
-
             if (!resposta.ok) {
-                console.error(
-                    "Tutor não encontrado:",
-                    dados
-                );
-
                 return null;
             }
 
@@ -241,11 +234,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                 dados.tutor || dados;
 
             if (!tutor || !tutor.id) {
-                console.error(
-                    "Resposta não possui ID do tutor:",
-                    dados
-                );
-
                 return null;
             }
 
@@ -271,6 +259,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+
     async function carregarClinica() {
         try {
             const resposta =
@@ -292,15 +281,13 @@ document.addEventListener("DOMContentLoaded", async () => {
                 nomeClinica.innerHTML = `
                     <i class="fa-solid fa-hospital"></i>
                     ${escaparHTML(
-                        dados.nome ||
-                        "Clínica"
+                        dados.nome || "Clínica"
                     )}
                 `;
             }
 
             document.title =
-                dados.nome ||
-                "Clínica";
+                dados.nome || "Clínica";
 
             if (enderecoClinica) {
                 enderecoClinica.innerHTML = `
@@ -374,6 +361,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+
     async function carregarServicos() {
         if (!listaServicos) {
             return;
@@ -414,7 +402,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
 
             const consulta =
-                servicos.find((servico) => {
+                servicos.find(servico => {
                     const tipo =
                         String(
                             servico.tipo || ""
@@ -443,112 +431,101 @@ document.addEventListener("DOMContentLoaded", async () => {
                         );
 
                     if (
-                        !Number.isNaN(
-                            valor
-                        )
+                        !Number.isNaN(valor)
                     ) {
                         precoConsulta.textContent =
                             valor.toLocaleString(
                                 "pt-BR",
                                 {
-                                    style:
-                                        "currency",
-                                    currency:
-                                        "BRL"
+                                    style: "currency",
+                                    currency: "BRL"
                                 }
                             );
                     } else {
                         precoConsulta.textContent =
                             `R$ ${consulta.preco}`;
                     }
+
                 } else {
                     precoConsulta.textContent =
                         "Consultar valor";
                 }
             }
 
-            servicos.forEach(
-                (servico) => {
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
+            servicos.forEach(servico => {
+                const card =
+                    document.createElement("div");
 
-                    card.className =
-                        "exame";
+                card.className =
+                    "exame";
 
-                    const preco =
-                        servico.preco !== null &&
-                        servico.preco !== undefined
-                            ? Number(
-                                  servico.preco
-                              ).toLocaleString(
-                                  "pt-BR",
-                                  {
-                                      style:
-                                          "currency",
-                                      currency:
-                                          "BRL"
-                                  }
-                              )
-                            : "";
-
-                    card.innerHTML = `
-                        <div class="icone-exame">
-                            <i class="fa-solid fa-flask"></i>
-                        </div>
-
-                        <div class="exame-info">
-
-                            <h3>
-                                ${escaparHTML(
-                                    servico.nome ||
-                                    "Serviço"
-                                )}
-                            </h3>
-
-                            ${
-                                servico.tipo
-                                    ? `
-                                        <span class="tipo-exame">
-                                            ${escaparHTML(
-                                                servico.tipo
-                                            )}
-                                        </span>
-                                    `
-                                    : ""
+                const preco =
+                    servico.preco !== null &&
+                    servico.preco !== undefined
+                        ? Number(
+                            servico.preco
+                        ).toLocaleString(
+                            "pt-BR",
+                            {
+                                style: "currency",
+                                currency: "BRL"
                             }
+                        )
+                        : "";
 
-                            ${
-                                servico.descricao
-                                    ? `
-                                        <p>
-                                            ${escaparHTML(
-                                                servico.descricao
-                                            )}
-                                        </p>
-                                    `
-                                    : ""
-                            }
+                card.innerHTML = `
+                    <div class="icone-exame">
+                        <i class="fa-solid fa-flask"></i>
+                    </div>
 
-                            ${
-                                preco
-                                    ? `
-                                        <strong>
-                                            ${preco}
-                                        </strong>
-                                    `
-                                    : ""
-                            }
+                    <div class="exame-info">
 
-                        </div>
-                    `;
+                        <h3>
+                            ${escaparHTML(
+                                servico.nome ||
+                                "Serviço"
+                            )}
+                        </h3>
 
-                    listaServicos.appendChild(
-                        card
-                    );
-                }
-            );
+                        ${
+                            servico.tipo
+                                ? `
+                                    <span class="tipo-exame">
+                                        ${escaparHTML(
+                                            servico.tipo
+                                        )}
+                                    </span>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            servico.descricao
+                                ? `
+                                    <p>
+                                        ${escaparHTML(
+                                            servico.descricao
+                                        )}
+                                    </p>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            preco
+                                ? `
+                                    <strong>
+                                        ${preco}
+                                    </strong>
+                                `
+                                : ""
+                        }
+
+                    </div>
+                `;
+
+                listaServicos.appendChild(card);
+            });
 
         } catch (erro) {
             console.error(
@@ -568,6 +545,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             }
         }
     }
+
 
     async function carregarVeterinarios() {
         if (!listaVeterinarios) {
@@ -593,9 +571,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             listaVeterinarios.innerHTML = "";
 
             if (
-                !Array.isArray(
-                    veterinarios
-                ) ||
+                !Array.isArray(veterinarios) ||
                 veterinarios.length === 0
             ) {
                 listaVeterinarios.innerHTML = `
@@ -607,95 +583,92 @@ document.addEventListener("DOMContentLoaded", async () => {
                 return;
             }
 
-            veterinarios.forEach(
-                (veterinario) => {
-                    const card =
-                        document.createElement(
-                            "div"
-                        );
+            veterinarios.forEach(veterinario => {
+                const card =
+                    document.createElement("div");
 
-                    card.className =
-                        "vet-card";
+                card.className =
+                    "vet-card";
 
-                    const disponivel =
-                        veterinario.disponivel === true ||
-                        veterinario.disponivel === 1 ||
-                        veterinario.disponivel === "1";
+                const disponivel =
+                    veterinario.disponivel === true ||
+                    veterinario.disponivel === 1 ||
+                    veterinario.disponivel === "1";
 
-                    card.innerHTML = `
-                        <div class="vet-icon">
-                            <i class="fa-solid fa-user-doctor"></i>
-                        </div>
+                card.innerHTML = `
+                    <div class="vet-icon">
+                        <i class="fa-solid fa-user-doctor"></i>
+                    </div>
 
-                        <div class="vet-info">
+                    <div class="vet-info">
 
-                            <h3>
-                                ${escaparHTML(
-                                    veterinario.nome ||
-                                    "Veterinário"
-                                )}
-                            </h3>
+                        <h3>
+                            ${escaparHTML(
+                                veterinario.nome ||
+                                "Veterinário"
+                            )}
+                        </h3>
+
+                        ${
+                            veterinario.especialidade
+                                ? `
+                                    <p>
+                                        <i class="fa-solid fa-stethoscope"></i>
+                                        ${escaparHTML(
+                                            veterinario.especialidade
+                                        )}
+                                    </p>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            veterinario.telefone
+                                ? `
+                                    <p>
+                                        <i class="fa-solid fa-phone"></i>
+                                        ${escaparHTML(
+                                            veterinario.telefone
+                                        )}
+                                    </p>
+                                `
+                                : ""
+                        }
+
+                        ${
+                            veterinario.email
+                                ? `
+                                    <p>
+                                        <i class="fa-solid fa-envelope"></i>
+                                        ${escaparHTML(
+                                            veterinario.email
+                                        )}
+                                    </p>
+                                `
+                                : ""
+                        }
+
+                        <span class="status ${
+                            disponivel
+                                ? "disponivel"
+                                : "indisponivel"
+                        }">
+
+                            <i class="fa-solid fa-circle"></i>
 
                             ${
-                                veterinario.especialidade
-                                    ? `
-                                        <p>
-                                            <i class="fa-solid fa-stethoscope"></i>
-                                            ${escaparHTML(
-                                                veterinario.especialidade
-                                            )}
-                                        </p>
-                                    `
-                                    : ""
-                            }
-
-                            ${
-                                veterinario.telefone
-                                    ? `
-                                        <p>
-                                            <i class="fa-solid fa-phone"></i>
-                                            ${escaparHTML(
-                                                veterinario.telefone
-                                            )}
-                                        </p>
-                                    `
-                                    : ""
-                            }
-
-                            ${
-                                veterinario.email
-                                    ? `
-                                        <p>
-                                            <i class="fa-solid fa-envelope"></i>
-                                            ${escaparHTML(
-                                                veterinario.email
-                                            )}
-                                        </p>
-                                    `
-                                    : ""
-                            }
-
-                            <span class="status ${
                                 disponivel
-                                    ? "disponivel"
-                                    : "indisponivel"
-                            }">
-                                <i class="fa-solid fa-circle"></i>
-                                ${
-                                    disponivel
-                                        ? "Disponível"
-                                        : "Indisponível"
-                                }
-                            </span>
+                                    ? "Disponível"
+                                    : "Indisponível"
+                            }
 
-                        </div>
-                    `;
+                        </span>
 
-                    listaVeterinarios.appendChild(
-                        card
-                    );
-                }
-            );
+                    </div>
+                `;
+
+                listaVeterinarios.appendChild(card);
+            });
 
         } catch (erro) {
             console.error(
@@ -711,10 +684,11 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+
     if (btnAgendar) {
         btnAgendar.addEventListener(
             "click",
-            async (event) => {
+            async event => {
                 event.preventDefault();
 
                 btnAgendar.disabled = true;
@@ -764,13 +738,16 @@ document.addEventListener("DOMContentLoaded", async () => {
                     `dataehorario.html?${parametros.toString()}`;
             }
         );
+
     } else {
         console.error(
             "Botão Agendar Consulta não encontrado."
         );
     }
 
+
     await carregarClinica();
     await carregarServicos();
     await carregarVeterinarios();
+
 });

@@ -1,30 +1,20 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
     const API_URL = "http://localhost:3000/api";
 
-    const nomeClinica =
-        document.getElementById("nomeClinica");
+    const nomeClinica = document.getElementById("nomeClinica");
+    const listaDatas = document.getElementById("listaDatas");
+    const cardHorario = document.getElementById("cardHorario");
+    const btnContinuar = document.getElementById("btnContinuar");
+    const botoesHora = document.querySelectorAll(".horarios button");
 
-    const listaDatas =
-        document.getElementById("listaDatas");
+    const parametros = new URLSearchParams(window.location.search);
 
-    const cardHorario =
-        document.getElementById("cardHorario");
-
-    const btnContinuar =
-        document.getElementById("btnContinuar");
-
-    const botoesHora =
-        document.querySelectorAll(".horarios button");
-
-    const parametros =
-        new URLSearchParams(window.location.search);
-
-    const clinicaId =
-        parametros.get("clinica_id");
+    const clinicaId = parametros.get("clinica_id");
 
     const tutorId =
-        parametros.get("tutor_id");
+        parametros.get("tutor_id") ||
+        sessionStorage.getItem("agendaPetTutorId") ||
+        sessionStorage.getItem("tutor_id");
 
     let clinica = null;
     let dataSelecionada = "";
@@ -32,56 +22,39 @@ document.addEventListener("DOMContentLoaded", async () => {
     let horarioSelecionado = "";
 
     if (!clinicaId || !tutorId) {
+        alert("Não foi possível identificar a clínica ou o tutor.");
 
-        alert(
-            "Não foi possível identificar a clínica ou o tutor."
-        );
-
-        window.location.href =
-            "../../home.html";
-
+        window.location.href = "../home.html";
         return;
     }
 
+    sessionStorage.setItem("agendaPetTutorId", String(tutorId));
+    sessionStorage.setItem("tutor_id", String(tutorId));
+
     async function carregarClinica() {
-
         try {
+            const resposta = await fetch(
+                `${API_URL}/clinicas/${clinicaId}`
+            );
 
-            const resposta =
-                await fetch(
-                    `${API_URL}/clinicas/${clinicaId}`
-                );
-
-            const dados =
-                await resposta.json();
+            const dados = await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
-                    dados.mensagem ||
-                    "Clínica não encontrada."
+                    dados.mensagem || "Clínica não encontrada."
                 );
             }
 
             clinica = dados;
 
             if (nomeClinica) {
-
-                nomeClinica.textContent =
-                    clinica.nome || "";
+                nomeClinica.textContent = clinica.nome || "";
             }
-
         } catch (erro) {
-
-            console.error(
-                "Erro ao carregar clínica:",
-                erro
-            );
+            console.error("Erro ao carregar clínica:", erro);
 
             if (nomeClinica) {
-
-                nomeClinica.textContent =
-                    "Clínica não encontrada";
+                nomeClinica.textContent = "Clínica não encontrada";
             }
 
             alert(
@@ -91,34 +64,26 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     async function verificarTutor() {
-
         try {
-
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}`
-                );
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}`
+            );
 
             if (!resposta.ok) {
-
                 alert(
                     "Tutor não encontrado. Faça seu cadastro novamente."
                 );
 
-                window.location.href =
-                    "cadastro.html";
+                sessionStorage.removeItem("agendaPetTutorId");
+                sessionStorage.removeItem("tutor_id");
 
+                window.location.href = "cadastro.html";
                 return false;
             }
 
             return true;
-
         } catch (erro) {
-
-            console.error(
-                "Erro ao verificar tutor:",
-                erro
-            );
+            console.error("Erro ao verificar tutor:", erro);
 
             alert(
                 "Não foi possível conectar ao servidor."
@@ -129,7 +94,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function formatarDataVisual(data) {
-
         const diasSemana = [
             "domingo",
             "segunda-feira",
@@ -155,126 +119,94 @@ document.addEventListener("DOMContentLoaded", async () => {
             "dezembro"
         ];
 
-        const partes =
-            data.split("-");
+        const partes = data.split("-");
 
-        const ano =
-            Number(partes[0]);
+        const ano = Number(partes[0]);
+        const mes = Number(partes[1]) - 1;
+        const dia = Number(partes[2]);
 
-        const mes =
-            Number(partes[1]) - 1;
-
-        const dia =
-            Number(partes[2]);
-
-        const dataObj =
-            new Date(
-                ano,
-                mes,
-                dia
-            );
+        const dataObj = new Date(
+            ano,
+            mes,
+            dia
+        );
 
         return `${diasSemana[dataObj.getDay()]}, ${dia} de ${meses[mes]}`;
     }
 
     function limparSelecaoHorario() {
-
         horarioSelecionado = "";
 
-        botoesHora.forEach(botao => {
-
-            botao.classList.remove(
-                "selecionado"
-            );
+        botoesHora.forEach((botao) => {
+            botao.classList.remove("selecionado");
         });
 
         if (btnContinuar) {
-
-            btnContinuar.style.display =
-                "none";
+            btnContinuar.style.display = "none";
         }
     }
 
     function restaurarBotoesHorario() {
-
-        botoesHora.forEach(botao => {
-
+        botoesHora.forEach((botao) => {
             botao.disabled = false;
 
             botao.classList.remove(
-                "indisponivel"
+                "indisponivel",
+                "carregando"
             );
 
-            botao.removeAttribute(
-                "title"
-            );
+            botao.removeAttribute("title");
         });
     }
 
     async function carregarDisponibilidade() {
-
         if (!dataBanco) {
             return;
         }
 
         restaurarBotoesHorario();
-
         limparSelecaoHorario();
 
         try {
-
-            botoesHora.forEach(botao => {
-
+            botoesHora.forEach((botao) => {
                 botao.disabled = true;
-
-                botao.classList.add(
-                    "carregando"
-                );
+                botao.classList.add("carregando");
             });
 
-            const resposta =
-                await fetch(
-                    `${API_URL}/agendamentos/disponibilidade?clinica_id=${encodeURIComponent(clinicaId)}&data=${encodeURIComponent(dataBanco)}`
-                );
+            const resposta = await fetch(
+                `${API_URL}/agendamentos/disponibilidade?clinica_id=${encodeURIComponent(
+                    clinicaId
+                )}&data=${encodeURIComponent(dataBanco)}`
+            );
 
-            const dados =
-                await resposta.json();
+            const dados = await resposta.json();
 
             if (!resposta.ok) {
-
                 throw new Error(
                     dados.mensagem ||
                     "Não foi possível consultar a disponibilidade."
                 );
             }
 
-            const horariosOcupados =
-                Array.isArray(
-                    dados.horarios_ocupados
-                )
-                    ? dados.horarios_ocupados
-                    : [];
+            const horariosOcupados = Array.isArray(
+                dados.horarios_ocupados
+            )
+                ? dados.horarios_ocupados
+                : [];
 
             const horariosOcupadosFormatados =
-                horariosOcupados.map(
-                    agendamento => {
+                horariosOcupados.map((agendamento) => {
+                    return String(
+                        agendamento.horario
+                    ).substring(0, 5);
+                });
 
-                        return String(
-                            agendamento.horario
-                        ).substring(0, 5);
-                    }
-                );
+            botoesHora.forEach((botao) => {
+                botao.classList.remove("carregando");
 
-            botoesHora.forEach(botao => {
-
-                botao.classList.remove(
-                    "carregando"
-                );
-
-                const horario =
-                    botao.textContent
-                        .trim()
-                        .substring(0, 5);
+                const horario = botao.textContent
+                    .trim()
+                    .substring(0, 5);
 
                 const ocupado =
                     horariosOcupadosFormatados.includes(
@@ -282,7 +214,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     );
 
                 if (ocupado) {
-
                     botao.disabled = true;
 
                     botao.classList.add(
@@ -291,37 +222,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                     botao.title =
                         "Horário indisponível";
-
                 } else {
-
-                    botao.disabled =
-                        false;
+                    botao.disabled = false;
 
                     botao.classList.remove(
                         "indisponivel"
                     );
 
-                    botao.removeAttribute(
-                        "title"
-                    );
+                    botao.removeAttribute("title");
                 }
             });
-
         } catch (erro) {
-
             console.error(
                 "Erro ao carregar disponibilidade:",
                 erro
             );
 
-            botoesHora.forEach(botao => {
-
-                botao.classList.remove(
-                    "carregando"
-                );
-
-                botao.disabled =
-                    false;
+            botoesHora.forEach((botao) => {
+                botao.classList.remove("carregando");
+                botao.disabled = false;
             });
 
             alert(
@@ -331,48 +250,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function gerarDatas() {
-
         if (!listaDatas) {
             return;
         }
 
         listaDatas.innerHTML = "";
 
-        const hoje =
-            new Date();
+        const hoje = new Date();
 
         for (let i = 1; i <= 7; i++) {
-
-            const data =
-                new Date(hoje);
+            const data = new Date(hoje);
 
             data.setDate(
                 hoje.getDate() + i
             );
 
-            const ano =
-                data.getFullYear();
+            const ano = data.getFullYear();
 
-            const mes =
-                String(
-                    data.getMonth() + 1
-                ).padStart(2, "0");
+            const mes = String(
+                data.getMonth() + 1
+            ).padStart(2, "0");
 
-            const dia =
-                String(
-                    data.getDate()
-                ).padStart(2, "0");
+            const dia = String(
+                data.getDate()
+            ).padStart(2, "0");
 
             const dataFormatada =
                 `${ano}-${mes}-${dia}`;
 
             const botao =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
-            botao.type =
-                "button";
+            botao.type = "button";
 
             botao.textContent =
                 formatarDataVisual(
@@ -382,20 +291,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             botao.dataset.data =
                 dataFormatada;
 
-            listaDatas.appendChild(
-                botao
-            );
+            listaDatas.appendChild(botao);
 
             botao.addEventListener(
                 "click",
                 async () => {
-
                     document
-                        .querySelectorAll(
-                            ".datas button"
-                        )
-                        .forEach(item => {
-
+                        .querySelectorAll(".datas button")
+                        .forEach((item) => {
                             item.classList.remove(
                                 "selecionado"
                             );
@@ -414,7 +317,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     limparSelecaoHorario();
 
                     if (cardHorario) {
-
                         cardHorario.style.display =
                             "block";
 
@@ -431,23 +333,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (cardHorario) {
-
-        cardHorario.style.display =
-            "none";
+        cardHorario.style.display = "none";
     }
 
     if (btnContinuar) {
-
-        btnContinuar.style.display =
-            "none";
+        btnContinuar.style.display = "none";
     }
 
-    botoesHora.forEach(botao => {
-
+    botoesHora.forEach((botao) => {
         botao.addEventListener(
             "click",
             () => {
-
                 if (botao.disabled) {
                     return;
                 }
@@ -459,8 +355,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     return;
                 }
 
-                botoesHora.forEach(item => {
-
+                botoesHora.forEach((item) => {
                     item.classList.remove(
                         "selecionado"
                     );
@@ -474,7 +369,6 @@ document.addEventListener("DOMContentLoaded", async () => {
                     botao.textContent.trim();
 
                 if (btnContinuar) {
-
                     btnContinuar.style.display =
                         "block";
                 }
@@ -483,26 +377,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     if (btnContinuar) {
-
         btnContinuar.addEventListener(
             "click",
             () => {
-
                 if (!dataBanco) {
-
                     alert(
                         "Selecione uma data."
                     );
-
                     return;
                 }
 
                 if (!horarioSelecionado) {
-
                     alert(
                         "Selecione um horário."
                     );
-
                     return;
                 }
 

@@ -8,24 +8,15 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
+
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true, limit: "20mb" }));
-
-
-/* =========================
-   ROTA PRINCIPAL
-========================= */
 
 app.get("/", (req, res) => {
     res.json({
         mensagem: "API Agenda Pet funcionando!"
     });
 });
-
-
-/* =========================
-   STATUS
-========================= */
 
 app.get("/api/status", async (req, res) => {
     try {
@@ -46,18 +37,12 @@ app.get("/api/status", async (req, res) => {
     }
 });
 
-
-/* =========================
-   VALIDAÇÕES
-========================= */
-
 function validarNome(nome) {
     return (
         typeof nome === "string" &&
         /^[A-Za-zÀ-ÿ][A-Za-zÀ-ÿ\s'-]*$/.test(nome.trim())
     );
 }
-
 
 function validarCPF(cpf) {
     if (!cpf) {
@@ -69,14 +54,12 @@ function validarCPF(cpf) {
     return cpfLimpo.length === 11;
 }
 
-
 function validarEmail(email) {
     return (
         typeof email === "string" &&
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
     );
 }
-
 
 function validarTelefone(telefone) {
     if (!telefone) {
@@ -88,7 +71,6 @@ function validarTelefone(telefone) {
     return numero.length >= 10 && numero.length <= 11;
 }
 
-
 function validarCEP(cep) {
     if (!cep) {
         return true;
@@ -99,11 +81,9 @@ function validarCEP(cep) {
     return numero.length === 8;
 }
 
-
 function validarId(id) {
     return /^\d+$/.test(String(id));
 }
-
 
 function validarData(data) {
     if (!data) {
@@ -113,7 +93,6 @@ function validarData(data) {
     return /^\d{4}-\d{2}-\d{2}$/.test(String(data));
 }
 
-
 function validarHorario(horario) {
     if (!horario) {
         return false;
@@ -122,10 +101,7 @@ function validarHorario(horario) {
     return /^\d{2}:\d{2}(:\d{2})?$/.test(String(horario));
 }
 
-
-/* =========================
-   TUTORES
-========================= */
+/* ==================== TUTORES ==================== */
 
 app.get("/api/tutores", async (req, res) => {
     try {
@@ -146,7 +122,6 @@ app.get("/api/tutores", async (req, res) => {
         `);
 
         res.json(tutores);
-
     } catch (erro) {
         console.error("Erro ao buscar tutores:", erro);
 
@@ -156,7 +131,6 @@ app.get("/api/tutores", async (req, res) => {
         });
     }
 });
-
 
 app.get("/api/tutores/:id", async (req, res) => {
     try {
@@ -191,7 +165,6 @@ app.get("/api/tutores/:id", async (req, res) => {
         }
 
         res.json(tutores[0]);
-
     } catch (erro) {
         console.error("Erro ao buscar tutor:", erro);
 
@@ -201,7 +174,6 @@ app.get("/api/tutores/:id", async (req, res) => {
         });
     }
 });
-
 
 app.post("/api/tutores", async (req, res) => {
     try {
@@ -344,7 +316,6 @@ app.post("/api/tutores", async (req, res) => {
             id: resultado.insertId,
             tutor: novoTutor[0]
         });
-
     } catch (erro) {
         console.error("Erro ao cadastrar tutor:", erro);
 
@@ -354,7 +325,6 @@ app.post("/api/tutores", async (req, res) => {
         });
     }
 });
-
 
 app.put("/api/tutores/:id", async (req, res) => {
     try {
@@ -457,17 +427,6 @@ app.put("/api/tutores/:id", async (req, res) => {
             });
         }
 
-        if (
-            foto !== null &&
-            foto !== undefined &&
-            foto !== "" &&
-            typeof foto !== "string"
-        ) {
-            return res.status(400).json({
-                mensagem: "Foto do tutor inválida."
-            });
-        }
-
         const cpfLimpo = String(cpf).replace(/\D/g, "");
         const telefoneLimpo = String(telefone).replace(/\D/g, "");
 
@@ -545,7 +504,6 @@ app.put("/api/tutores/:id", async (req, res) => {
             mensagem: "Tutor atualizado com sucesso.",
             tutor: tutorAtualizado[0]
         });
-
     } catch (erro) {
         console.error("Erro ao atualizar tutor:", erro);
 
@@ -556,10 +514,7 @@ app.put("/api/tutores/:id", async (req, res) => {
     }
 });
 
-
-/* =========================
-   PETS
-========================= */
+/* ==================== PETS ==================== */
 
 app.get("/api/pets", async (req, res) => {
     try {
@@ -574,7 +529,6 @@ app.get("/api/pets", async (req, res) => {
         `);
 
         res.json(pets);
-
     } catch (erro) {
         console.error("Erro ao buscar pets:", erro);
 
@@ -584,7 +538,6 @@ app.get("/api/pets", async (req, res) => {
         });
     }
 });
-
 
 app.get("/api/tutores/:id/pets", async (req, res) => {
     try {
@@ -618,7 +571,6 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
         `, [id]);
 
         res.json(pets);
-
     } catch (erro) {
         console.error("Erro ao buscar pets do tutor:", erro);
 
@@ -628,7 +580,6 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
         });
     }
 });
-
 
 app.get("/api/pets/:id", async (req, res) => {
     try {
@@ -657,7 +608,6 @@ app.get("/api/pets/:id", async (req, res) => {
         }
 
         res.json(pets[0]);
-
     } catch (erro) {
         console.error("Erro ao buscar pet:", erro);
 
@@ -667,7 +617,6 @@ app.get("/api/pets/:id", async (req, res) => {
         });
     }
 });
-
 
 app.post("/api/pets", async (req, res) => {
     try {
@@ -735,17 +684,6 @@ app.post("/api/pets", async (req, res) => {
             });
         }
 
-        if (
-            foto !== null &&
-            foto !== undefined &&
-            foto !== "" &&
-            typeof foto !== "string"
-        ) {
-            return res.status(400).json({
-                mensagem: "Foto do pet inválida."
-            });
-        }
-
         const possuiCarteira =
             tem_carteira_vacinacao === true ||
             tem_carteira_vacinacao === 1 ||
@@ -754,44 +692,15 @@ app.post("/api/pets", async (req, res) => {
             tem_carteira_vacinacao === "sim" ||
             tem_carteira_vacinacao === "Sim";
 
-        if (
-            carteira_vacinacao !== null &&
-            carteira_vacinacao !== undefined &&
-            carteira_vacinacao !== "" &&
-            typeof carteira_vacinacao !== "string"
-        ) {
-            return res.status(400).json({
-                mensagem: "Arquivo da carteira de vacinação inválido."
-            });
-        }
-
         const carteiraFinal = possuiCarteira
             ? carteira_vacinacao || null
             : null;
-
-        const nomeFinal = String(nome).trim();
-        const especieFinal = String(especie).trim();
-        const racaFinal = String(raca).trim();
-        const idadeFinal = String(idade).trim();
-        const pesoFinal = String(peso).trim();
 
         const dataNascimentoFinal =
             data_nascimento &&
             String(data_nascimento).trim() !== ""
                 ? String(data_nascimento).trim()
                 : null;
-
-        if (
-            !nomeFinal ||
-            !especieFinal ||
-            !racaFinal ||
-            !idadeFinal ||
-            !pesoFinal
-        ) {
-            return res.status(400).json({
-                mensagem: "Preencha todos os campos obrigatórios do pet."
-            });
-        }
 
         const [resultado] = await conexao.execute(`
             INSERT INTO pets
@@ -811,13 +720,13 @@ app.post("/api/pets", async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `, [
             tutor_id,
-            nomeFinal,
-            especieFinal,
-            racaFinal,
-            idadeFinal,
+            String(nome).trim(),
+            String(especie).trim(),
+            String(raca).trim(),
+            String(idade).trim(),
             dataNascimentoFinal,
             sexo,
-            pesoFinal,
+            String(peso).trim(),
             foto || null,
             possuiCarteira ? 1 : 0,
             carteiraFinal
@@ -843,25 +752,20 @@ app.post("/api/pets", async (req, res) => {
             WHERE id = ?
         `, [resultado.insertId]);
 
-        return res.status(201).json({
+        res.status(201).json({
             mensagem: "Pet cadastrado com sucesso.",
             id: resultado.insertId,
             pet: novoPet[0]
         });
-
     } catch (erro) {
-        console.error("=================================");
-        console.error("ERRO AO CADASTRAR PET");
-        console.error(erro);
-        console.error("=================================");
+        console.error("Erro ao cadastrar pet:", erro);
 
-        return res.status(500).json({
+        res.status(500).json({
             mensagem: "Erro ao cadastrar pet.",
             erro: erro.message
         });
     }
 });
-
 
 app.put("/api/pets/:id", async (req, res) => {
     try {
@@ -969,17 +873,6 @@ app.put("/api/pets/:id", async (req, res) => {
             });
         }
 
-        if (
-            foto !== null &&
-            foto !== undefined &&
-            foto !== "" &&
-            typeof foto !== "string"
-        ) {
-            return res.status(400).json({
-                mensagem: "Foto do pet inválida."
-            });
-        }
-
         const possuiCarteira =
             tem_carteira_vacinacao === true ||
             tem_carteira_vacinacao === 1 ||
@@ -988,26 +881,9 @@ app.put("/api/pets/:id", async (req, res) => {
             tem_carteira_vacinacao === "sim" ||
             tem_carteira_vacinacao === "Sim";
 
-        if (
-            carteira_vacinacao !== null &&
-            carteira_vacinacao !== undefined &&
-            carteira_vacinacao !== "" &&
-            typeof carteira_vacinacao !== "string"
-        ) {
-            return res.status(400).json({
-                mensagem: "Arquivo da carteira de vacinação inválido."
-            });
-        }
-
         const carteiraFinal = possuiCarteira
             ? carteira_vacinacao || null
             : null;
-
-        const nomeFinal = String(nome).trim();
-        const especieFinal = String(especie).trim();
-        const racaFinal = String(raca).trim();
-        const idadeFinal = String(idade).trim();
-        const pesoFinal = String(peso).trim();
 
         const dataNascimentoFinal =
             data_nascimento &&
@@ -1030,13 +906,13 @@ app.put("/api/pets/:id", async (req, res) => {
                 carteira_vacinacao = ?
             WHERE id = ?
         `, [
-            nomeFinal,
-            especieFinal,
-            racaFinal,
-            idadeFinal,
+            String(nome).trim(),
+            String(especie).trim(),
+            String(raca).trim(),
+            String(idade).trim(),
             dataNascimentoFinal,
             sexo,
-            pesoFinal,
+            String(peso).trim(),
             foto || null,
             possuiCarteira ? 1 : 0,
             carteiraFinal,
@@ -1063,24 +939,19 @@ app.put("/api/pets/:id", async (req, res) => {
             WHERE id = ?
         `, [id]);
 
-        return res.json({
+        res.json({
             mensagem: "Pet atualizado com sucesso.",
             pet: petAtualizado[0]
         });
-
     } catch (erro) {
-        console.error("=================================");
-        console.error("ERRO AO ATUALIZAR PET");
-        console.error(erro);
-        console.error("=================================");
+        console.error("Erro ao atualizar pet:", erro);
 
-        return res.status(500).json({
+        res.status(500).json({
             mensagem: "Erro ao atualizar pet.",
             erro: erro.message
         });
     }
 });
-
 
 app.delete("/api/pets/:id", async (req, res) => {
     try {
@@ -1106,7 +977,6 @@ app.delete("/api/pets/:id", async (req, res) => {
         res.json({
             mensagem: "Pet excluído com sucesso."
         });
-
     } catch (erro) {
         console.error("Erro ao excluir pet:", erro);
 
@@ -1117,10 +987,7 @@ app.delete("/api/pets/:id", async (req, res) => {
     }
 });
 
-
-/* =========================
-   CLÍNICAS
-========================= */
+/* ==================== CLÍNICAS ==================== */
 
 app.get("/api/clinicas", async (req, res) => {
     try {
@@ -1131,7 +998,6 @@ app.get("/api/clinicas", async (req, res) => {
         `);
 
         res.json(clinicas);
-
     } catch (erro) {
         console.error("Erro ao buscar clínicas:", erro);
 
@@ -1141,7 +1007,6 @@ app.get("/api/clinicas", async (req, res) => {
         });
     }
 });
-
 
 app.get("/api/clinicas/:id", async (req, res) => {
     try {
@@ -1166,7 +1031,6 @@ app.get("/api/clinicas/:id", async (req, res) => {
         }
 
         res.json(clinicas[0]);
-
     } catch (erro) {
         console.error("Erro ao buscar clínica:", erro);
 
@@ -1177,10 +1041,7 @@ app.get("/api/clinicas/:id", async (req, res) => {
     }
 });
 
-
-/* =========================
-   VETERINÁRIOS
-========================= */
+/* ==================== VETERINÁRIOS ==================== */
 
 app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
     try {
@@ -1207,7 +1068,6 @@ app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
         `, [id]);
 
         res.json(veterinarios);
-
     } catch (erro) {
         console.error("Erro ao buscar veterinários:", erro);
 
@@ -1218,10 +1078,7 @@ app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
     }
 });
 
-
-/* =========================
-   SERVIÇOS
-========================= */
+/* ==================== SERVIÇOS ==================== */
 
 app.get("/api/clinicas/:id/servicos", async (req, res) => {
     try {
@@ -1254,7 +1111,6 @@ app.get("/api/clinicas/:id/servicos", async (req, res) => {
         `, [id]);
 
         res.json(servicos);
-
     } catch (erro) {
         console.error("Erro ao buscar serviços:", erro);
 
@@ -1265,10 +1121,7 @@ app.get("/api/clinicas/:id/servicos", async (req, res) => {
     }
 });
 
-
-/* =========================
-   AGENDAMENTOS DO TUTOR
-========================= */
+/* ==================== AGENDAMENTOS ==================== */
 
 app.get("/api/tutores/:id/agendamentos", async (req, res) => {
     try {
@@ -1312,12 +1165,8 @@ app.get("/api/tutores/:id/agendamentos", async (req, res) => {
         `, [id]);
 
         res.json(agendamentos);
-
     } catch (erro) {
-        console.error(
-            "Erro ao buscar agendamentos do tutor:",
-            erro
-        );
+        console.error("Erro ao buscar agendamentos do tutor:", erro);
 
         res.status(500).json({
             mensagem: "Erro ao buscar agendamentos.",
@@ -1325,11 +1174,6 @@ app.get("/api/tutores/:id/agendamentos", async (req, res) => {
         });
     }
 });
-
-
-/* =========================
-   DISPONIBILIDADE
-========================= */
 
 app.get("/api/agendamentos/disponibilidade", async (req, res) => {
     try {
@@ -1377,12 +1221,8 @@ app.get("/api/agendamentos/disponibilidade", async (req, res) => {
             data,
             horarios_ocupados: agendamentos
         });
-
     } catch (erro) {
-        console.error(
-            "Erro ao verificar disponibilidade:",
-            erro
-        );
+        console.error("Erro ao verificar disponibilidade:", erro);
 
         res.status(500).json({
             mensagem: "Erro ao verificar disponibilidade.",
@@ -1390,11 +1230,6 @@ app.get("/api/agendamentos/disponibilidade", async (req, res) => {
         });
     }
 });
-
-
-/* =========================
-   TODOS OS AGENDAMENTOS
-========================= */
 
 app.get("/api/agendamentos", async (req, res) => {
     try {
@@ -1462,19 +1297,14 @@ app.get("/api/agendamentos", async (req, res) => {
                 a.horario ASC
         `;
 
-        const [agendamentos] =
-            await conexao.execute(
-                sql,
-                valores
-            );
+        const [agendamentos] = await conexao.execute(
+            sql,
+            valores
+        );
 
         res.json(agendamentos);
-
     } catch (erro) {
-        console.error(
-            "Erro ao buscar agendamentos:",
-            erro
-        );
+        console.error("Erro ao buscar agendamentos:", erro);
 
         res.status(500).json({
             mensagem: "Erro ao buscar agendamentos.",
@@ -1482,11 +1312,6 @@ app.get("/api/agendamentos", async (req, res) => {
         });
     }
 });
-
-
-/* =========================
-   AGENDAMENTO POR ID
-========================= */
 
 app.get("/api/agendamentos/:id", async (req, res) => {
     try {
@@ -1521,7 +1346,6 @@ app.get("/api/agendamentos/:id", async (req, res) => {
                 tr.endereco_coleta AS transporte_endereco,
                 tr.data_coleta AS transporte_data,
                 tr.horario_coleta AS transporte_horario,
-                tr.observacoes AS transporte_observacoes,
                 tr.status AS transporte_status
             FROM agendamentos a
             INNER JOIN tutores t
@@ -1551,12 +1375,8 @@ app.get("/api/agendamentos/:id", async (req, res) => {
             agendamento.transporte_id !== null;
 
         res.json(agendamento);
-
     } catch (erro) {
-        console.error(
-            "Erro ao buscar agendamento:",
-            erro
-        );
+        console.error("Erro ao buscar agendamento:", erro);
 
         res.status(500).json({
             mensagem: "Erro ao buscar agendamento.",
@@ -1564,11 +1384,6 @@ app.get("/api/agendamentos/:id", async (req, res) => {
         });
     }
 });
-
-
-/* =========================
-   CRIAR AGENDAMENTO
-========================= */
 
 app.post("/api/agendamentos", async (req, res) => {
     try {
@@ -1842,12 +1657,8 @@ app.post("/api/agendamentos", async (req, res) => {
             id: resultado.insertId,
             agendamento: agendamento[0]
         });
-
     } catch (erro) {
-        console.error(
-            "Erro ao criar agendamento:",
-            erro
-        );
+        console.error("Erro ao criar agendamento:", erro);
 
         res.status(500).json({
             mensagem: "Erro ao criar agendamento.",
@@ -1855,11 +1666,6 @@ app.post("/api/agendamentos", async (req, res) => {
         });
     }
 });
-
-
-/* =========================
-   ALTERAR STATUS
-========================= */
 
 app.put("/api/agendamentos/:id/status", async (req, res) => {
     try {
@@ -1875,8 +1681,7 @@ app.put("/api/agendamentos/:id/status", async (req, res) => {
 
         if (!validarId(id)) {
             return res.status(400).json({
-                mensagem:
-                    "ID do agendamento inválido."
+                mensagem: "ID do agendamento inválido."
             });
         }
 
@@ -1907,12 +1712,8 @@ app.put("/api/agendamentos/:id/status", async (req, res) => {
             mensagem:
                 "Status atualizado com sucesso."
         });
-
     } catch (erro) {
-        console.error(
-            "Erro ao alterar status:",
-            erro
-        );
+        console.error("Erro ao alterar status:", erro);
 
         res.status(500).json({
             mensagem:
@@ -1922,10 +1723,7 @@ app.put("/api/agendamentos/:id/status", async (req, res) => {
     }
 });
 
-
-/* =========================
-   TRANSPORTE
-========================= */
+/* ==================== TRANSPORTE ==================== */
 
 app.get(
     "/api/agendamentos/:id/transporte",
@@ -1955,12 +1753,8 @@ app.get(
             }
 
             res.json(transportes[0]);
-
         } catch (erro) {
-            console.error(
-                "Erro ao buscar transporte:",
-                erro
-            );
+            console.error("Erro ao buscar transporte:", erro);
 
             res.status(500).json({
                 mensagem:
@@ -1971,7 +1765,6 @@ app.get(
     }
 );
 
-
 app.post(
     "/api/agendamentos/:id/transporte",
     async (req, res) => {
@@ -1981,8 +1774,7 @@ app.post(
             const {
                 endereco_coleta,
                 data_coleta,
-                horario_coleta,
-                observacoes
+                horario_coleta
             } = req.body;
 
             if (!validarId(id)) {
@@ -2049,14 +1841,12 @@ app.post(
                     SET
                         endereco_coleta = ?,
                         data_coleta = ?,
-                        horario_coleta = ?,
-                        observacoes = ?
+                        horario_coleta = ?
                     WHERE agendamento_id = ?
                 `, [
                     endereco_coleta.trim(),
                     data_coleta,
                     horarioBanco,
-                    observacoes || null,
                     id
                 ]);
             } else {
@@ -2066,16 +1856,14 @@ app.post(
                         agendamento_id,
                         endereco_coleta,
                         data_coleta,
-                        horario_coleta,
-                        observacoes
+                        horario_coleta
                     )
-                    VALUES (?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?)
                 `, [
                     id,
                     endereco_coleta.trim(),
                     data_coleta,
-                    horarioBanco,
-                    observacoes || null
+                    horarioBanco
                 ]);
             }
 
@@ -2091,12 +1879,8 @@ app.post(
                     "Transporte solicitado com sucesso.",
                 transporte: transporte[0]
             });
-
         } catch (erro) {
-            console.error(
-                "Erro ao solicitar transporte:",
-                erro
-            );
+            console.error("Erro ao solicitar transporte:", erro);
 
             res.status(500).json({
                 mensagem:
@@ -2107,12 +1891,9 @@ app.post(
     }
 );
 
+/* ==================== SOS ANIMAIS ==================== */
 
-/* =========================
-   SOS ANIMAIS
-========================= */
-
-app.get("/api/animais-perdidos", async (req, res) => {
+async function buscarAnimais(req, res) {
     try {
         const [animais] = await conexao.execute(`
             SELECT *
@@ -2121,23 +1902,20 @@ app.get("/api/animais-perdidos", async (req, res) => {
         `);
 
         res.json(animais);
-
     } catch (erro) {
-        console.error(
-            "Erro ao buscar animais:",
-            erro
-        );
+        console.error("Erro ao buscar animais:", erro);
 
         res.status(500).json({
-            mensagem:
-                "Erro ao buscar animais.",
+            mensagem: "Erro ao buscar animais.",
             erro: erro.message
         });
     }
-});
+}
 
+app.get("/api/animais", buscarAnimais);
+app.get("/api/animais-perdidos", buscarAnimais);
 
-app.post("/api/animais-perdidos", async (req, res) => {
+async function cadastrarAnimal(req, res) {
     try {
         const {
             tutor_id,
@@ -2146,8 +1924,10 @@ app.post("/api/animais-perdidos", async (req, res) => {
             raca,
             cor,
             data_perdido,
+            data,
             bairro,
             local_perdido,
+            local,
             descricao,
             contato,
             foto,
@@ -2165,15 +1945,25 @@ app.post("/api/animais-perdidos", async (req, res) => {
             });
         }
 
+        const dataFinal =
+            data_perdido ||
+            data ||
+            null;
+
         if (
-            data_perdido &&
-            !validarData(data_perdido)
+            dataFinal &&
+            !validarData(dataFinal)
         ) {
             return res.status(400).json({
                 mensagem:
                     "Data inválida."
             });
         }
+
+        const localFinal =
+            local_perdido ||
+            local ||
+            null;
 
         const statusFinal =
             status === "encontrado"
@@ -2226,9 +2016,9 @@ app.post("/api/animais-perdidos", async (req, res) => {
                 especie,
                 raca || null,
                 cor || null,
-                data_perdido || null,
+                dataFinal,
                 bairro || null,
-                local_perdido || null,
+                localFinal,
                 descricao || null,
                 contato,
                 foto || null,
@@ -2248,12 +2038,8 @@ app.post("/api/animais-perdidos", async (req, res) => {
             id: resultado.insertId,
             animal: animal[0]
         });
-
     } catch (erro) {
-        console.error(
-            "Erro ao cadastrar animal:",
-            erro
-        );
+        console.error("Erro ao cadastrar animal:", erro);
 
         res.status(500).json({
             mensagem:
@@ -2261,89 +2047,69 @@ app.post("/api/animais-perdidos", async (req, res) => {
             erro: erro.message
         });
     }
-});
+}
 
+app.post("/api/animais", cadastrarAnimal);
+app.post("/api/animais-perdidos", cadastrarAnimal);
 
-app.delete(
-    "/api/animais-perdidos/:id",
-    async (req, res) => {
-        try {
-            const { id } = req.params;
+async function excluirAnimal(req, res) {
+    try {
+        const { id } = req.params;
 
-            if (!validarId(id)) {
-                return res.status(400).json({
-                    mensagem:
-                        "ID inválido."
-                });
-            }
-
-            const [resultado] =
-                await conexao.execute(`
-                    DELETE FROM animais_perdidos
-                    WHERE id = ?
-                `, [id]);
-
-            if (resultado.affectedRows === 0) {
-                return res.status(404).json({
-                    mensagem:
-                        "Animal não encontrado."
-                });
-            }
-
-            res.json({
+        if (!validarId(id)) {
+            return res.status(400).json({
                 mensagem:
-                    "Animal removido com sucesso."
-            });
-
-        } catch (erro) {
-            console.error(
-                "Erro ao remover animal:",
-                erro
-            );
-
-            res.status(500).json({
-                mensagem:
-                    "Erro ao remover animal.",
-                erro: erro.message
+                    "ID inválido."
             });
         }
+
+        const [resultado] =
+            await conexao.execute(`
+                DELETE FROM animais_perdidos
+                WHERE id = ?
+            `, [id]);
+
+        if (resultado.affectedRows === 0) {
+            return res.status(404).json({
+                mensagem:
+                    "Animal não encontrado."
+            });
+        }
+
+        res.json({
+            mensagem:
+                "Animal removido com sucesso."
+        });
+    } catch (erro) {
+        console.error("Erro ao remover animal:", erro);
+
+        res.status(500).json({
+            mensagem:
+                "Erro ao remover animal.",
+            erro: erro.message
+        });
     }
-);
+}
 
+app.delete("/api/animais/:id", excluirAnimal);
+app.delete("/api/animais-perdidos/:id", excluirAnimal);
 
-/* =========================
-   ROTA NÃO ENCONTRADA
-========================= */
+/* ==================== ERROS ==================== */
 
 app.use((req, res) => {
     res.status(404).json({
-        mensagem:
-            "Rota não encontrada."
+        mensagem: "Rota não encontrada."
     });
 });
 
-
-/* =========================
-   TRATAMENTO DE ERRO
-========================= */
-
 app.use((erro, req, res, next) => {
-    console.error(
-        "Erro interno:",
-        erro
-    );
+    console.error("Erro interno:", erro);
 
     res.status(500).json({
-        mensagem:
-            "Erro interno do servidor.",
+        mensagem: "Erro interno do servidor.",
         erro: erro.message
     });
 });
-
-
-/* =========================
-   INICIAR SERVIDOR
-========================= */
 
 app.listen(PORT, () => {
     console.log(
