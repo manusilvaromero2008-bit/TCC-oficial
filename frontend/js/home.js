@@ -2,14 +2,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const API_URL = "http://localhost:3000/api";
 
-    const pesquisa =
-        document.getElementById("pesquisa");
-
-    const regiao =
-        document.getElementById("regiao");
-
-    const listaClinicas =
-        document.getElementById("listaClinicas");
+    const pesquisa = document.getElementById("pesquisa");
+    const regiao = document.getElementById("regiao");
+    const listaClinicas = document.getElementById("listaClinicas");
 
     let clinicas = [];
 
@@ -22,22 +17,36 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
     function normalizarTexto(valor) {
-
         return String(valor || "")
             .normalize("NFD")
             .replace(/[\u0300-\u036f]/g, "")
             .toLowerCase()
             .trim()
             .replace(/\s+/g, " ");
-
     }
 
 
     function normalizarRegiao(valor) {
-
         return normalizarTexto(valor)
             .replace(/[-_]/g, " ");
+    }
 
+
+    function escaparHTML(valor) {
+        if (
+            valor === null ||
+            valor === undefined
+        ) {
+            return "";
+        }
+
+        const elemento =
+            document.createElement("div");
+
+        elemento.textContent =
+            String(valor);
+
+        return elemento.innerHTML;
     }
 
 
@@ -70,6 +79,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 dados
             );
 
+
             if (!Array.isArray(dados)) {
 
                 throw new Error(
@@ -77,6 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 );
 
             }
+
 
             clinicas = dados;
 
@@ -98,9 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     Verifique se o servidor está rodando.
                 </p>
             `;
-
         }
-
     }
 
 
@@ -117,11 +126,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             `;
 
             return;
-
         }
 
 
-        lista.forEach(clinica => {
+        lista.forEach((clinica) => {
 
             const cardLink =
                 document.createElement("a");
@@ -149,6 +157,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 new URLSearchParams(
                     window.location.search
                 );
+
 
             const tutorId =
                 parametrosPagina.get("tutor_id");
@@ -198,27 +207,19 @@ document.addEventListener("DOMContentLoaded", async () => {
             switch (Number(clinica.id)) {
 
                 case 1:
-
                     classeClinica = "petvida";
-
                     break;
 
                 case 2:
-
                     classeClinica = "animalcare";
-
                     break;
 
                 case 3:
-
                     classeClinica = "vetcare";
-
                     break;
 
                 case 4:
-
                     classeClinica = "pethealth";
-
                     break;
 
             }
@@ -283,32 +284,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             );
 
         });
-
-    }
-
-
-    function escaparHTML(valor) {
-
-        if (
-            valor === null ||
-            valor === undefined
-        ) {
-
-            return "";
-
-        }
-
-
-        const elemento =
-            document.createElement("div");
-
-
-        elemento.textContent =
-            String(valor);
-
-
-        return elemento.innerHTML;
-
     }
 
 
@@ -339,7 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         let quantidadeVisivel = 0;
 
 
-        cards.forEach(cardLink => {
+        cards.forEach((cardLink) => {
 
             const card =
                 cardLink.querySelector(
@@ -348,9 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             if (!card) {
-
                 return;
-
             }
 
 
@@ -393,9 +366,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
             if (deveMostrar) {
-
                 quantidadeVisivel++;
-
             }
 
         });
@@ -439,13 +410,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
 
             if (mensagem) {
-
                 mensagem.remove();
-
             }
 
         }
-
     }
 
 

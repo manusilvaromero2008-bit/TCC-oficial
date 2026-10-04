@@ -8,14 +8,24 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+app.use(express.json({ limit: "20mb" }));
+app.use(express.urlencoded({ extended: true, limit: "20mb" }));
+
+
+/* =========================
+   ROTA PRINCIPAL
+========================= */
 
 app.get("/", (req, res) => {
     res.json({
         mensagem: "API Agenda Pet funcionando!"
     });
 });
+
+
+/* =========================
+   STATUS
+========================= */
 
 app.get("/api/status", async (req, res) => {
     try {
@@ -48,6 +58,7 @@ function validarNome(nome) {
     );
 }
 
+
 function validarCPF(cpf) {
     if (!cpf) {
         return false;
@@ -58,12 +69,14 @@ function validarCPF(cpf) {
     return cpfLimpo.length === 11;
 }
 
+
 function validarEmail(email) {
     return (
         typeof email === "string" &&
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
     );
 }
+
 
 function validarTelefone(telefone) {
     if (!telefone) {
@@ -75,6 +88,7 @@ function validarTelefone(telefone) {
     return numero.length >= 10 && numero.length <= 11;
 }
 
+
 function validarCEP(cep) {
     if (!cep) {
         return true;
@@ -85,9 +99,11 @@ function validarCEP(cep) {
     return numero.length === 8;
 }
 
+
 function validarId(id) {
     return /^\d+$/.test(String(id));
 }
+
 
 function validarData(data) {
     if (!data) {
@@ -96,6 +112,7 @@ function validarData(data) {
 
     return /^\d{4}-\d{2}-\d{2}$/.test(String(data));
 }
+
 
 function validarHorario(horario) {
     if (!horario) {
@@ -121,6 +138,7 @@ app.get("/api/tutores", async (req, res) => {
                 email,
                 endereco,
                 cep,
+                foto,
                 created_at,
                 updated_at
             FROM tutores
@@ -128,6 +146,7 @@ app.get("/api/tutores", async (req, res) => {
         `);
 
         res.json(tutores);
+
     } catch (erro) {
         console.error("Erro ao buscar tutores:", erro);
 
@@ -158,6 +177,7 @@ app.get("/api/tutores/:id", async (req, res) => {
                 email,
                 endereco,
                 cep,
+                foto,
                 created_at,
                 updated_at
             FROM tutores
@@ -171,6 +191,7 @@ app.get("/api/tutores/:id", async (req, res) => {
         }
 
         res.json(tutores[0]);
+
     } catch (erro) {
         console.error("Erro ao buscar tutor:", erro);
 
@@ -190,7 +211,8 @@ app.post("/api/tutores", async (req, res) => {
             telefone,
             email,
             endereco,
-            cep
+            cep,
+            foto
         } = req.body;
 
         if (
@@ -232,6 +254,17 @@ app.post("/api/tutores", async (req, res) => {
         if (!validarCEP(cep)) {
             return res.status(400).json({
                 mensagem: "CEP inválido."
+            });
+        }
+
+        if (
+            foto !== undefined &&
+            foto !== null &&
+            foto !== "" &&
+            typeof foto !== "string"
+        ) {
+            return res.status(400).json({
+                mensagem: "Foto do tutor inválida."
             });
         }
 
@@ -276,16 +309,18 @@ app.post("/api/tutores", async (req, res) => {
                 telefone,
                 email,
                 endereco,
-                cep
+                cep,
+                foto
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `, [
             nome.trim(),
             cpfLimpo,
             telefoneLimpo,
             email.trim(),
             endereco.trim(),
-            cepLimpo
+            cepLimpo,
+            foto || null
         ]);
 
         const [novoTutor] = await conexao.execute(`
@@ -297,6 +332,7 @@ app.post("/api/tutores", async (req, res) => {
                 email,
                 endereco,
                 cep,
+                foto,
                 created_at,
                 updated_at
             FROM tutores
@@ -330,14 +366,54 @@ app.put("/api/tutores/:id", async (req, res) => {
             });
         }
 
-        const {
-            nome,
-            cpf,
-            telefone,
-            email,
-            endereco,
-            cep
-        } = req.body;
+        const [tutorExiste] = await conexao.execute(`
+            SELECT *
+            FROM tutores
+            WHERE id = ?
+        `, [id]);
+
+        if (tutorExiste.length === 0) {
+            return res.status(404).json({
+                mensagem: "Tutor não encontrado."
+            });
+        }
+
+        const tutorAtual = tutorExiste[0];
+
+        const nome =
+            req.body.nome !== undefined
+                ? req.body.nome
+                : tutorAtual.nome;
+
+        const cpf =
+            req.body.cpf !== undefined
+                ? req.body.cpf
+                : tutorAtual.cpf;
+
+        const telefone =
+            req.body.telefone !== undefined
+                ? req.body.telefone
+                : tutorAtual.telefone;
+
+        const email =
+            req.body.email !== undefined
+                ? req.body.email
+                : tutorAtual.email;
+
+        const endereco =
+            req.body.endereco !== undefined
+                ? req.body.endereco
+                : tutorAtual.endereco;
+
+        const cep =
+            req.body.cep !== undefined
+                ? req.body.cep
+                : tutorAtual.cep;
+
+        const foto =
+            req.body.foto !== undefined
+                ? req.body.foto
+                : tutorAtual.foto;
 
         if (
             !nome ||
@@ -381,24 +457,23 @@ app.put("/api/tutores/:id", async (req, res) => {
             });
         }
 
+        if (
+            foto !== null &&
+            foto !== undefined &&
+            foto !== "" &&
+            typeof foto !== "string"
+        ) {
+            return res.status(400).json({
+                mensagem: "Foto do tutor inválida."
+            });
+        }
+
         const cpfLimpo = String(cpf).replace(/\D/g, "");
         const telefoneLimpo = String(telefone).replace(/\D/g, "");
 
         const cepLimpo = cep
             ? String(cep).replace(/\D/g, "")
             : null;
-
-        const [tutorExiste] = await conexao.execute(`
-            SELECT id
-            FROM tutores
-            WHERE id = ?
-        `, [id]);
-
-        if (tutorExiste.length === 0) {
-            return res.status(404).json({
-                mensagem: "Tutor não encontrado."
-            });
-        }
 
         const [cpfDuplicado] = await conexao.execute(`
             SELECT id
@@ -436,7 +511,8 @@ app.put("/api/tutores/:id", async (req, res) => {
                 telefone = ?,
                 email = ?,
                 endereco = ?,
-                cep = ?
+                cep = ?,
+                foto = ?
             WHERE id = ?
         `, [
             nome.trim(),
@@ -445,6 +521,7 @@ app.put("/api/tutores/:id", async (req, res) => {
             email.trim(),
             endereco.trim(),
             cepLimpo,
+            foto || null,
             id
         ]);
 
@@ -457,6 +534,7 @@ app.put("/api/tutores/:id", async (req, res) => {
                 email,
                 endereco,
                 cep,
+                foto,
                 created_at,
                 updated_at
             FROM tutores
@@ -496,6 +574,7 @@ app.get("/api/pets", async (req, res) => {
         `);
 
         res.json(pets);
+
     } catch (erro) {
         console.error("Erro ao buscar pets:", erro);
 
@@ -528,6 +607,7 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
                 data_nascimento,
                 sexo,
                 peso,
+                foto,
                 tem_carteira_vacinacao,
                 carteira_vacinacao,
                 created_at,
@@ -538,6 +618,7 @@ app.get("/api/tutores/:id/pets", async (req, res) => {
         `, [id]);
 
         res.json(pets);
+
     } catch (erro) {
         console.error("Erro ao buscar pets do tutor:", erro);
 
@@ -576,6 +657,7 @@ app.get("/api/pets/:id", async (req, res) => {
         }
 
         res.json(pets[0]);
+
     } catch (erro) {
         console.error("Erro ao buscar pet:", erro);
 
@@ -598,6 +680,7 @@ app.post("/api/pets", async (req, res) => {
             data_nascimento,
             sexo,
             peso,
+            foto,
             tem_carteira_vacinacao,
             carteira_vacinacao
         } = req.body;
@@ -628,14 +711,11 @@ app.post("/api/pets", async (req, res) => {
             });
         }
 
-        const [tutor] = await conexao.execute(
-            `
+        const [tutor] = await conexao.execute(`
             SELECT id
             FROM tutores
             WHERE id = ?
-            `,
-            [tutor_id]
-        );
+        `, [tutor_id]);
 
         if (tutor.length === 0) {
             return res.status(404).json({
@@ -652,6 +732,17 @@ app.post("/api/pets", async (req, res) => {
         if (data_nascimento && !validarData(data_nascimento)) {
             return res.status(400).json({
                 mensagem: "Data de nascimento inválida."
+            });
+        }
+
+        if (
+            foto !== null &&
+            foto !== undefined &&
+            foto !== "" &&
+            typeof foto !== "string"
+        ) {
+            return res.status(400).json({
+                mensagem: "Foto do pet inválida."
             });
         }
 
@@ -683,19 +774,26 @@ app.post("/api/pets", async (req, res) => {
         const racaFinal = String(raca).trim();
         const idadeFinal = String(idade).trim();
         const pesoFinal = String(peso).trim();
+
         const dataNascimentoFinal =
-            data_nascimento && String(data_nascimento).trim() !== ""
+            data_nascimento &&
+            String(data_nascimento).trim() !== ""
                 ? String(data_nascimento).trim()
                 : null;
 
-        if (!nomeFinal || !especieFinal || !racaFinal || !idadeFinal || !pesoFinal) {
+        if (
+            !nomeFinal ||
+            !especieFinal ||
+            !racaFinal ||
+            !idadeFinal ||
+            !pesoFinal
+        ) {
             return res.status(400).json({
                 mensagem: "Preencha todos os campos obrigatórios do pet."
             });
         }
 
-        const [resultado] = await conexao.execute(
-            `
+        const [resultado] = await conexao.execute(`
             INSERT INTO pets
             (
                 tutor_id,
@@ -706,27 +804,26 @@ app.post("/api/pets", async (req, res) => {
                 data_nascimento,
                 sexo,
                 peso,
+                foto,
                 tem_carteira_vacinacao,
                 carteira_vacinacao
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `,
-            [
-                tutor_id,
-                nomeFinal,
-                especieFinal,
-                racaFinal,
-                idadeFinal,
-                dataNascimentoFinal,
-                sexo,
-                pesoFinal,
-                possuiCarteira ? 1 : 0,
-                carteiraFinal
-            ]
-        );
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+            tutor_id,
+            nomeFinal,
+            especieFinal,
+            racaFinal,
+            idadeFinal,
+            dataNascimentoFinal,
+            sexo,
+            pesoFinal,
+            foto || null,
+            possuiCarteira ? 1 : 0,
+            carteiraFinal
+        ]);
 
-        const [novoPet] = await conexao.execute(
-            `
+        const [novoPet] = await conexao.execute(`
             SELECT
                 id,
                 tutor_id,
@@ -737,15 +834,14 @@ app.post("/api/pets", async (req, res) => {
                 data_nascimento,
                 sexo,
                 peso,
+                foto,
                 tem_carteira_vacinacao,
                 carteira_vacinacao,
                 created_at,
                 updated_at
             FROM pets
             WHERE id = ?
-            `,
-            [resultado.insertId]
-        );
+        `, [resultado.insertId]);
 
         return res.status(201).json({
             mensagem: "Pet cadastrado com sucesso.",
@@ -777,17 +873,69 @@ app.put("/api/pets/:id", async (req, res) => {
             });
         }
 
-        const {
-            nome,
-            especie,
-            raca,
-            idade,
-            data_nascimento,
-            sexo,
-            peso,
-            tem_carteira_vacinacao,
-            carteira_vacinacao
-        } = req.body;
+        const [petExiste] = await conexao.execute(`
+            SELECT *
+            FROM pets
+            WHERE id = ?
+        `, [id]);
+
+        if (petExiste.length === 0) {
+            return res.status(404).json({
+                mensagem: "Pet não encontrado."
+            });
+        }
+
+        const petAtual = petExiste[0];
+
+        const nome =
+            req.body.nome !== undefined
+                ? req.body.nome
+                : petAtual.nome;
+
+        const especie =
+            req.body.especie !== undefined
+                ? req.body.especie
+                : petAtual.especie;
+
+        const raca =
+            req.body.raca !== undefined
+                ? req.body.raca
+                : petAtual.raca;
+
+        const idade =
+            req.body.idade !== undefined
+                ? req.body.idade
+                : petAtual.idade;
+
+        const data_nascimento =
+            req.body.data_nascimento !== undefined
+                ? req.body.data_nascimento
+                : petAtual.data_nascimento;
+
+        const sexo =
+            req.body.sexo !== undefined
+                ? req.body.sexo
+                : petAtual.sexo;
+
+        const peso =
+            req.body.peso !== undefined
+                ? req.body.peso
+                : petAtual.peso;
+
+        const foto =
+            req.body.foto !== undefined
+                ? req.body.foto
+                : petAtual.foto;
+
+        const tem_carteira_vacinacao =
+            req.body.tem_carteira_vacinacao !== undefined
+                ? req.body.tem_carteira_vacinacao
+                : petAtual.tem_carteira_vacinacao;
+
+        const carteira_vacinacao =
+            req.body.carteira_vacinacao !== undefined
+                ? req.body.carteira_vacinacao
+                : petAtual.carteira_vacinacao;
 
         if (
             !nome ||
@@ -812,24 +960,23 @@ app.put("/api/pets/:id", async (req, res) => {
             });
         }
 
-        if (data_nascimento && !validarData(data_nascimento)) {
+        if (
+            data_nascimento &&
+            !validarData(data_nascimento)
+        ) {
             return res.status(400).json({
                 mensagem: "Data de nascimento inválida."
             });
         }
 
-        const [petExiste] = await conexao.execute(
-            `
-            SELECT id
-            FROM pets
-            WHERE id = ?
-            `,
-            [id]
-        );
-
-        if (petExiste.length === 0) {
-            return res.status(404).json({
-                mensagem: "Pet não encontrado."
+        if (
+            foto !== null &&
+            foto !== undefined &&
+            foto !== "" &&
+            typeof foto !== "string"
+        ) {
+            return res.status(400).json({
+                mensagem: "Foto do pet inválida."
             });
         }
 
@@ -863,12 +1010,12 @@ app.put("/api/pets/:id", async (req, res) => {
         const pesoFinal = String(peso).trim();
 
         const dataNascimentoFinal =
-            data_nascimento && String(data_nascimento).trim() !== ""
+            data_nascimento &&
+            String(data_nascimento).trim() !== ""
                 ? String(data_nascimento).trim()
                 : null;
 
-        await conexao.execute(
-            `
+        await conexao.execute(`
             UPDATE pets
             SET
                 nome = ?,
@@ -878,26 +1025,25 @@ app.put("/api/pets/:id", async (req, res) => {
                 data_nascimento = ?,
                 sexo = ?,
                 peso = ?,
+                foto = ?,
                 tem_carteira_vacinacao = ?,
                 carteira_vacinacao = ?
             WHERE id = ?
-            `,
-            [
-                nomeFinal,
-                especieFinal,
-                racaFinal,
-                idadeFinal,
-                dataNascimentoFinal,
-                sexo,
-                pesoFinal,
-                possuiCarteira ? 1 : 0,
-                carteiraFinal,
-                id
-            ]
-        );
+        `, [
+            nomeFinal,
+            especieFinal,
+            racaFinal,
+            idadeFinal,
+            dataNascimentoFinal,
+            sexo,
+            pesoFinal,
+            foto || null,
+            possuiCarteira ? 1 : 0,
+            carteiraFinal,
+            id
+        ]);
 
-        const [petAtualizado] = await conexao.execute(
-            `
+        const [petAtualizado] = await conexao.execute(`
             SELECT
                 id,
                 tutor_id,
@@ -908,15 +1054,14 @@ app.put("/api/pets/:id", async (req, res) => {
                 data_nascimento,
                 sexo,
                 peso,
+                foto,
                 tem_carteira_vacinacao,
                 carteira_vacinacao,
                 created_at,
                 updated_at
             FROM pets
             WHERE id = ?
-            `,
-            [id]
-        );
+        `, [id]);
 
         return res.json({
             mensagem: "Pet atualizado com sucesso.",
@@ -986,6 +1131,7 @@ app.get("/api/clinicas", async (req, res) => {
         `);
 
         res.json(clinicas);
+
     } catch (erro) {
         console.error("Erro ao buscar clínicas:", erro);
 
@@ -1020,6 +1166,7 @@ app.get("/api/clinicas/:id", async (req, res) => {
         }
 
         res.json(clinicas[0]);
+
     } catch (erro) {
         console.error("Erro ao buscar clínica:", erro);
 
@@ -1060,6 +1207,7 @@ app.get("/api/clinicas/:id/veterinarios", async (req, res) => {
         `, [id]);
 
         res.json(veterinarios);
+
     } catch (erro) {
         console.error("Erro ao buscar veterinários:", erro);
 
@@ -1106,6 +1254,7 @@ app.get("/api/clinicas/:id/servicos", async (req, res) => {
         `, [id]);
 
         res.json(servicos);
+
     } catch (erro) {
         console.error("Erro ao buscar serviços:", erro);
 
@@ -1163,6 +1312,7 @@ app.get("/api/tutores/:id/agendamentos", async (req, res) => {
         `, [id]);
 
         res.json(agendamentos);
+
     } catch (erro) {
         console.error(
             "Erro ao buscar agendamentos do tutor:",
@@ -2189,7 +2339,6 @@ app.use((erro, req, res, next) => {
         erro: erro.message
     });
 });
-
 
 
 /* =========================

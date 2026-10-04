@@ -30,41 +30,96 @@ document.addEventListener("DOMContentLoaded", async () => {
             .replace(/'/g, "&#039;");
     }
 
-    function limparTutorSalvo() {
-        sessionStorage.removeItem("tutor_id");
-        localStorage.removeItem("tutor_id");
-    }
-
     function obterTutorId() {
-        const sessionTutorId = sessionStorage.getItem("tutor_id");
+        const params = new URLSearchParams(
+            window.location.search
+        );
 
-        if (sessionTutorId) {
-            return sessionTutorId;
+        const tutorIdUrl =
+            params.get("tutor_id") ||
+            params.get("id");
+
+        if (tutorIdUrl) {
+            sessionStorage.setItem(
+                "agendaPetTutorId",
+                String(tutorIdUrl)
+            );
+
+            sessionStorage.setItem(
+                "tutor_id",
+                String(tutorIdUrl)
+            );
+
+            console.log(
+                "Tutor encontrado pela URL:",
+                tutorIdUrl
+            );
+
+            return String(tutorIdUrl);
         }
 
-        const localTutorId = localStorage.getItem("tutor_id");
+        const agendaPetTutorId =
+            sessionStorage.getItem(
+                "agendaPetTutorId"
+            );
 
-        if (localTutorId) {
-            return localTutorId;
+        if (agendaPetTutorId) {
+            console.log(
+                "Tutor encontrado no sessionStorage:",
+                agendaPetTutorId
+            );
+
+            return String(agendaPetTutorId);
         }
+
+        const tutorIdAntigo =
+            sessionStorage.getItem("tutor_id");
+
+        if (tutorIdAntigo) {
+            sessionStorage.setItem(
+                "agendaPetTutorId",
+                String(tutorIdAntigo)
+            );
+
+            console.log(
+                "Tutor encontrado na chave antiga:",
+                tutorIdAntigo
+            );
+
+            return String(tutorIdAntigo);
+        }
+
+        console.error(
+            "Nenhum tutor_id encontrado."
+        );
 
         return null;
     }
 
     function mostrarMensagemCadastro() {
-        const modalExistente = document.getElementById("modalCadastroObrigatorio");
+        const modalExistente =
+            document.getElementById(
+                "modalCadastroObrigatorio"
+            );
 
         if (modalExistente) {
             return;
         }
 
-        const fundo = document.createElement("div");
+        const fundo =
+            document.createElement("div");
 
-        fundo.id = "modalCadastroObrigatorio";
+        fundo.id =
+            "modalCadastroObrigatorio";
 
         fundo.innerHTML = `
             <div class="modal-cadastro-conteudo">
-                <button class="fechar-modal-cadastro" id="fecharModalCadastro" type="button">
+
+                <button
+                    class="fechar-modal-cadastro"
+                    id="fecharModalCadastro"
+                    type="button"
+                >
                     <i class="fa-solid fa-xmark"></i>
                 </button>
 
@@ -80,15 +135,25 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </p>
 
                 <div class="acoes-cadastro">
-                    <a href="perfil.html" class="btn-ir-perfil">
+
+                    <a
+                        href="perfil.html"
+                        class="btn-ir-perfil"
+                    >
                         <i class="fa-solid fa-user"></i>
                         Ir para meu perfil
                     </a>
 
-                    <button class="btn-agora-nao" id="btnAgoraNao" type="button">
+                    <button
+                        class="btn-agora-nao"
+                        id="btnAgoraNao"
+                        type="button"
+                    >
                         Agora não
                     </button>
+
                 </div>
+
             </div>
         `;
 
@@ -98,22 +163,38 @@ document.addEventListener("DOMContentLoaded", async () => {
             fundo.remove();
         };
 
-        const btnFechar = document.getElementById("fecharModalCadastro");
-        const btnAgoraNao = document.getElementById("btnAgoraNao");
+        const btnFechar =
+            document.getElementById(
+                "fecharModalCadastro"
+            );
+
+        const btnAgoraNao =
+            document.getElementById(
+                "btnAgoraNao"
+            );
 
         if (btnFechar) {
-            btnFechar.addEventListener("click", fechar);
+            btnFechar.addEventListener(
+                "click",
+                fechar
+            );
         }
 
         if (btnAgoraNao) {
-            btnAgoraNao.addEventListener("click", fechar);
+            btnAgoraNao.addEventListener(
+                "click",
+                fechar
+            );
         }
 
-        fundo.addEventListener("click", event => {
-            if (event.target === fundo) {
-                fechar();
+        fundo.addEventListener(
+            "click",
+            (event) => {
+                if (event.target === fundo) {
+                    fechar();
+                }
             }
-        });
+        );
     }
 
     async function verificarCadastro() {
@@ -123,73 +204,132 @@ document.addEventListener("DOMContentLoaded", async () => {
             return null;
         }
 
+        console.log(
+            "Verificando tutor:",
+            tutorId
+        );
+
         try {
-            const resposta = await fetch(
-                `${API_URL}/tutores/${encodeURIComponent(tutorId)}`
+            const resposta =
+                await fetch(
+                    `${API_URL}/tutores/${encodeURIComponent(tutorId)}`
+                );
+
+            console.log(
+                "Status da busca do tutor:",
+                resposta.status
+            );
+
+            const dados =
+                await resposta.json();
+
+            console.log(
+                "Dados retornados pelo servidor:",
+                dados
             );
 
             if (!resposta.ok) {
-                limparTutorSalvo();
+                console.error(
+                    "Tutor não encontrado:",
+                    dados
+                );
+
                 return null;
             }
 
-            const dados = await resposta.json();
-
-            const tutor = dados.tutor || dados;
+            const tutor =
+                dados.tutor || dados;
 
             if (!tutor || !tutor.id) {
-                limparTutorSalvo();
+                console.error(
+                    "Resposta não possui ID do tutor:",
+                    dados
+                );
+
                 return null;
             }
 
+            sessionStorage.setItem(
+                "agendaPetTutorId",
+                String(tutor.id)
+            );
+
+            sessionStorage.setItem(
+                "tutor_id",
+                String(tutor.id)
+            );
+
             return tutor;
+
         } catch (erro) {
-            console.error("Erro ao verificar cadastro:", erro);
-            limparTutorSalvo();
+            console.error(
+                "Erro ao verificar cadastro:",
+                erro
+            );
+
             return null;
         }
     }
 
     async function carregarClinica() {
         try {
-            const resposta = await fetch(`${API_URL}/clinicas/${clinicaId}`);
-            const dados = await resposta.json();
+            const resposta =
+                await fetch(
+                    `${API_URL}/clinicas/${clinicaId}`
+                );
+
+            const dados =
+                await resposta.json();
 
             if (!resposta.ok) {
                 throw new Error(
-                    dados.mensagem || "Erro ao carregar clínica."
+                    dados.mensagem ||
+                    "Erro ao carregar clínica."
                 );
             }
 
             if (nomeClinica) {
                 nomeClinica.innerHTML = `
                     <i class="fa-solid fa-hospital"></i>
-                    ${escaparHTML(dados.nome || "Clínica")}
+                    ${escaparHTML(
+                        dados.nome ||
+                        "Clínica"
+                    )}
                 `;
             }
 
-            document.title = dados.nome || "Clínica";
+            document.title =
+                dados.nome ||
+                "Clínica";
 
             if (enderecoClinica) {
                 enderecoClinica.innerHTML = `
                     <i class="fa-solid fa-location-dot"></i>
-                    ${escaparHTML(dados.endereco || "Endereço não informado")}
+                    ${escaparHTML(
+                        dados.endereco ||
+                        "Endereço não informado"
+                    )}
                 `;
             }
 
             if (telefoneClinica) {
                 telefoneClinica.innerHTML = `
                     <i class="fa-solid fa-phone"></i>
-                    ${escaparHTML(dados.telefone || "Telefone não informado")}
+                    ${escaparHTML(
+                        dados.telefone ||
+                        "Telefone não informado"
+                    )}
                 `;
             }
 
             if (horarioClinica) {
                 let horario =
-                    dados.horario_atendimento || "Horário não informado";
+                    dados.horario_atendimento ||
+                    "Horário não informado";
 
                 if (dados.atendimento_24h) {
-                    horario = "Atendimento 24 horas";
+                    horario =
+                        "Atendimento 24 horas";
                 }
 
                 horarioClinica.innerHTML = `
@@ -197,8 +337,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                     ${escaparHTML(horario)}
                 `;
             }
+
         } catch (erro) {
-            console.error("Erro ao carregar clínica:", erro);
+            console.error(
+                "Erro ao carregar clínica:",
+                erro
+            );
 
             if (nomeClinica) {
                 nomeClinica.innerHTML = `
@@ -236,112 +380,191 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/clinicas/${clinicaId}/servicos`
-            );
+            const resposta =
+                await fetch(
+                    `${API_URL}/clinicas/${clinicaId}/servicos`
+                );
 
-            const servicos = await resposta.json();
+            const servicos =
+                await resposta.json();
 
             if (!resposta.ok) {
                 throw new Error(
-                    servicos.mensagem || "Erro ao carregar serviços."
+                    servicos.mensagem ||
+                    "Erro ao carregar serviços."
                 );
             }
 
             listaServicos.innerHTML = "";
 
-            if (!Array.isArray(servicos) || servicos.length === 0) {
+            if (
+                !Array.isArray(servicos) ||
+                servicos.length === 0
+            ) {
                 listaServicos.innerHTML = `
                     <p>Nenhum serviço disponível.</p>
                 `;
 
                 if (precoConsulta) {
-                    precoConsulta.textContent = "Consultar valor";
+                    precoConsulta.textContent =
+                        "Consultar valor";
                 }
 
                 return;
             }
 
-            const consulta = servicos.find(servico => {
-                const tipo = String(servico.tipo || "").toLowerCase();
-                const nome = String(servico.nome || "").toLowerCase();
+            const consulta =
+                servicos.find((servico) => {
+                    const tipo =
+                        String(
+                            servico.tipo || ""
+                        ).toLowerCase();
 
-                return tipo.includes("consulta") || nome.includes("consulta");
-            });
+                    const nome =
+                        String(
+                            servico.nome || ""
+                        ).toLowerCase();
+
+                    return (
+                        tipo.includes("consulta") ||
+                        nome.includes("consulta")
+                    );
+                });
 
             if (precoConsulta) {
-                if (consulta && consulta.preco !== null) {
-                    const valor = Number(consulta.preco);
+                if (
+                    consulta &&
+                    consulta.preco !== null &&
+                    consulta.preco !== undefined
+                ) {
+                    const valor =
+                        Number(
+                            consulta.preco
+                        );
 
-                    if (!Number.isNaN(valor)) {
+                    if (
+                        !Number.isNaN(
+                            valor
+                        )
+                    ) {
                         precoConsulta.textContent =
-                            valor.toLocaleString("pt-BR", {
-                                style: "currency",
-                                currency: "BRL"
-                            });
+                            valor.toLocaleString(
+                                "pt-BR",
+                                {
+                                    style:
+                                        "currency",
+                                    currency:
+                                        "BRL"
+                                }
+                            );
                     } else {
-                        precoConsulta.textContent = `R$ ${consulta.preco}`;
+                        precoConsulta.textContent =
+                            `R$ ${consulta.preco}`;
                     }
                 } else {
-                    precoConsulta.textContent = "Consultar valor";
+                    precoConsulta.textContent =
+                        "Consultar valor";
                 }
             }
 
-            servicos.forEach(servico => {
-                const card = document.createElement("div");
+            servicos.forEach(
+                (servico) => {
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-                card.className = "exame";
+                    card.className =
+                        "exame";
 
-                const preco =
-                    servico.preco !== null &&
-                    servico.preco !== undefined
-                        ? Number(servico.preco).toLocaleString("pt-BR", {
-                            style: "currency",
-                            currency: "BRL"
-                        })
-                        : "";
+                    const preco =
+                        servico.preco !== null &&
+                        servico.preco !== undefined
+                            ? Number(
+                                  servico.preco
+                              ).toLocaleString(
+                                  "pt-BR",
+                                  {
+                                      style:
+                                          "currency",
+                                      currency:
+                                          "BRL"
+                                  }
+                              )
+                            : "";
 
-                card.innerHTML = `
-                    <div class="icone-exame">
-                        <i class="fa-solid fa-flask"></i>
-                    </div>
+                    card.innerHTML = `
+                        <div class="icone-exame">
+                            <i class="fa-solid fa-flask"></i>
+                        </div>
 
-                    <div class="exame-info">
-                        <h3>
-                            ${escaparHTML(servico.nome || "Serviço")}
-                        </h3>
+                        <div class="exame-info">
 
-                        ${
-                            servico.tipo
-                                ? `<span class="tipo-exame">${escaparHTML(servico.tipo)}</span>`
-                                : ""
-                        }
+                            <h3>
+                                ${escaparHTML(
+                                    servico.nome ||
+                                    "Serviço"
+                                )}
+                            </h3>
 
-                        ${
-                            servico.descricao
-                                ? `<p>${escaparHTML(servico.descricao)}</p>`
-                                : ""
-                        }
+                            ${
+                                servico.tipo
+                                    ? `
+                                        <span class="tipo-exame">
+                                            ${escaparHTML(
+                                                servico.tipo
+                                            )}
+                                        </span>
+                                    `
+                                    : ""
+                            }
 
-                        ${
-                            preco
-                                ? `<strong>${preco}</strong>`
-                                : ""
-                        }
-                    </div>
-                `;
+                            ${
+                                servico.descricao
+                                    ? `
+                                        <p>
+                                            ${escaparHTML(
+                                                servico.descricao
+                                            )}
+                                        </p>
+                                    `
+                                    : ""
+                            }
 
-                listaServicos.appendChild(card);
-            });
+                            ${
+                                preco
+                                    ? `
+                                        <strong>
+                                            ${preco}
+                                        </strong>
+                                    `
+                                    : ""
+                            }
+
+                        </div>
+                    `;
+
+                    listaServicos.appendChild(
+                        card
+                    );
+                }
+            );
+
         } catch (erro) {
-            console.error("Erro ao carregar serviços:", erro);
+            console.error(
+                "Erro ao carregar serviços:",
+                erro
+            );
 
             listaServicos.innerHTML = `
-                <p>Não foi possível carregar os serviços.</p>
+                <p>
+                    Não foi possível carregar os serviços.
+                </p>
             `;
 
             if (precoConsulta) {
-                precoConsulta.textContent = "Não informado";
+                precoConsulta.textContent =
+                    "Não informado";
             }
         }
     }
@@ -352,11 +575,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-            const resposta = await fetch(
-                `${API_URL}/clinicas/${clinicaId}/veterinarios`
-            );
+            const resposta =
+                await fetch(
+                    `${API_URL}/clinicas/${clinicaId}/veterinarios`
+                );
 
-            const veterinarios = await resposta.json();
+            const veterinarios =
+                await resposta.json();
 
             if (!resposta.ok) {
                 throw new Error(
@@ -367,114 +592,182 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             listaVeterinarios.innerHTML = "";
 
-            if (!Array.isArray(veterinarios) || veterinarios.length === 0) {
+            if (
+                !Array.isArray(
+                    veterinarios
+                ) ||
+                veterinarios.length === 0
+            ) {
                 listaVeterinarios.innerHTML = `
-                    <p>Nenhum veterinário disponível.</p>
+                    <p>
+                        Nenhum veterinário disponível.
+                    </p>
                 `;
+
                 return;
             }
 
-            veterinarios.forEach(veterinario => {
-                const card = document.createElement("div");
+            veterinarios.forEach(
+                (veterinario) => {
+                    const card =
+                        document.createElement(
+                            "div"
+                        );
 
-                card.className = "vet-card";
+                    card.className =
+                        "vet-card";
 
-                const disponivel =
-                    veterinario.disponivel === true ||
-                    veterinario.disponivel === 1 ||
-                    veterinario.disponivel === "1";
+                    const disponivel =
+                        veterinario.disponivel === true ||
+                        veterinario.disponivel === 1 ||
+                        veterinario.disponivel === "1";
 
-                card.innerHTML = `
-                    <div class="vet-icon">
-                        <i class="fa-solid fa-user-doctor"></i>
-                    </div>
+                    card.innerHTML = `
+                        <div class="vet-icon">
+                            <i class="fa-solid fa-user-doctor"></i>
+                        </div>
 
-                    <div class="vet-info">
-                        <h3>
-                            ${escaparHTML(veterinario.nome || "Veterinário")}
-                        </h3>
+                        <div class="vet-info">
 
-                        ${
-                            veterinario.especialidade
-                                ? `
-                                    <p>
-                                        <i class="fa-solid fa-stethoscope"></i>
-                                        ${escaparHTML(veterinario.especialidade)}
-                                    </p>
-                                `
-                                : ""
-                        }
+                            <h3>
+                                ${escaparHTML(
+                                    veterinario.nome ||
+                                    "Veterinário"
+                                )}
+                            </h3>
 
-                        ${
-                            veterinario.telefone
-                                ? `
-                                    <p>
-                                        <i class="fa-solid fa-phone"></i>
-                                        ${escaparHTML(veterinario.telefone)}
-                                    </p>
-                                `
-                                : ""
-                        }
+                            ${
+                                veterinario.especialidade
+                                    ? `
+                                        <p>
+                                            <i class="fa-solid fa-stethoscope"></i>
+                                            ${escaparHTML(
+                                                veterinario.especialidade
+                                            )}
+                                        </p>
+                                    `
+                                    : ""
+                            }
 
-                        ${
-                            veterinario.email
-                                ? `
-                                    <p>
-                                        <i class="fa-solid fa-envelope"></i>
-                                        ${escaparHTML(veterinario.email)}
-                                    </p>
-                                `
-                                : ""
-                        }
+                            ${
+                                veterinario.telefone
+                                    ? `
+                                        <p>
+                                            <i class="fa-solid fa-phone"></i>
+                                            ${escaparHTML(
+                                                veterinario.telefone
+                                            )}
+                                        </p>
+                                    `
+                                    : ""
+                            }
 
-                        <span class="status ${
-                            disponivel ? "disponivel" : "indisponivel"
-                        }">
-                            <i class="fa-solid fa-circle"></i>
-                            ${disponivel ? "Disponível" : "Indisponível"}
-                        </span>
-                    </div>
-                `;
+                            ${
+                                veterinario.email
+                                    ? `
+                                        <p>
+                                            <i class="fa-solid fa-envelope"></i>
+                                            ${escaparHTML(
+                                                veterinario.email
+                                            )}
+                                        </p>
+                                    `
+                                    : ""
+                            }
 
-                listaVeterinarios.appendChild(card);
-            });
+                            <span class="status ${
+                                disponivel
+                                    ? "disponivel"
+                                    : "indisponivel"
+                            }">
+                                <i class="fa-solid fa-circle"></i>
+                                ${
+                                    disponivel
+                                        ? "Disponível"
+                                        : "Indisponível"
+                                }
+                            </span>
+
+                        </div>
+                    `;
+
+                    listaVeterinarios.appendChild(
+                        card
+                    );
+                }
+            );
+
         } catch (erro) {
-            console.error("Erro ao carregar veterinários:", erro);
+            console.error(
+                "Erro ao carregar veterinários:",
+                erro
+            );
 
             listaVeterinarios.innerHTML = `
-                <p>Não foi possível carregar os veterinários.</p>
+                <p>
+                    Não foi possível carregar os veterinários.
+                </p>
             `;
         }
     }
 
     if (btnAgendar) {
-        btnAgendar.addEventListener("click", async event => {
-            event.preventDefault();
+        btnAgendar.addEventListener(
+            "click",
+            async (event) => {
+                event.preventDefault();
 
-            btnAgendar.style.pointerEvents = "none";
+                btnAgendar.disabled = true;
 
-            const tutor = await verificarCadastro();
+                const tutor =
+                    await verificarCadastro();
 
-            btnAgendar.style.pointerEvents = "";
+                btnAgendar.disabled = false;
 
-            if (!tutor) {
-                mostrarMensagemCadastro();
-                return;
+                if (!tutor) {
+                    mostrarMensagemCadastro();
+                    return;
+                }
+
+                const tutorId =
+                    String(tutor.id);
+
+                sessionStorage.setItem(
+                    "agendaPetTutorId",
+                    tutorId
+                );
+
+                sessionStorage.setItem(
+                    "tutor_id",
+                    tutorId
+                );
+
+                sessionStorage.setItem(
+                    "clinica_id",
+                    String(clinicaId)
+                );
+
+                const parametros =
+                    new URLSearchParams();
+
+                parametros.set(
+                    "clinica_id",
+                    String(clinicaId)
+                );
+
+                parametros.set(
+                    "tutor_id",
+                    tutorId
+                );
+
+                window.location.href =
+                    `dataehorario.html?${parametros.toString()}`;
             }
-
-            sessionStorage.setItem("clinica_id", String(clinicaId));
-            sessionStorage.setItem("tutor_id", String(tutor.id));
-
-            const parametros = new URLSearchParams();
-
-            parametros.set("clinica_id", String(clinicaId));
-            parametros.set("tutor_id", String(tutor.id));
-
-            window.location.href =
-                `dataehorario.html?${parametros.toString()}`;
-        });
+        );
     } else {
-        console.error("Botão Agendar Consulta não encontrado.");
+        console.error(
+            "Botão Agendar Consulta não encontrado."
+        );
     }
 
     await carregarClinica();

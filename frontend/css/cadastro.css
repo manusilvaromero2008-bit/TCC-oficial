@@ -12,18 +12,10 @@ body {
 }
 
 .cadastro-header {
+    position: relative;
     background: linear-gradient(135deg, #0756a6, #63b1f0);
     color: white;
-    padding: 40px;
-}
-
-.cadastro-header h1 {
-    font-size: 38px;
-    margin: 15px 0 10px;
-}
-
-.cadastro-header p {
-    font-size: 17px;
+    padding: 28px 40px 35px;
 }
 
 .voltar {
@@ -41,10 +33,36 @@ body {
     transform: translateX(-3px);
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-top: 22px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo i {
+    font-size: 25px;
+}
+
+.titulo-cadastro {
+    margin-top: 18px;
+}
+
+.cadastro-header h1 {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.cadastro-header p {
+    font-size: 17px;
+}
+
 .container {
     max-width: 1100px;
     margin: 40px auto;
-    padding: 0 20px;
+    padding: 0 20px 50px;
 }
 
 .box {
@@ -59,20 +77,9 @@ body {
     color: #044281;
     margin-bottom: 25px;
     font-size: 28px;
-}
-
-.box h3 {
-    color: #044281;
-    margin-bottom: 20px;
-    font-size: 22px;
-}
-
-.pet {
-    border: 2px solid #9ac9ed;
-    border-radius: 18px;
-    padding: 25px;
-    margin-bottom: 25px;
-    background: #f8fcff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .grid {
@@ -144,63 +151,132 @@ body {
     background: #044281;
 }
 
-/* Carteira de vacinação */
+.pet-card {
+    border: 2px solid #9ac9ed;
+    border-radius: 18px;
+    padding: 25px;
+    margin-bottom: 25px;
+    background: #f8fcff;
+}
 
-.carteira-area {
-    grid-column: span 2;
-    margin-top: 5px;
-    padding: 20px;
+.pet-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 22px;
+}
+
+.pet-header h3 {
+    color: #044281;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.btn-remover-pet {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 10px;
+    background: #fcecec;
+    color: #b23b3b;
+    cursor: pointer;
+    font-size: 16px;
+    transition: .3s;
+}
+
+.btn-remover-pet:hover {
+    background: #f5d2d2;
+    transform: translateY(-2px);
+}
+
+.foto-pet-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px;
+    margin-bottom: 22px;
     border: 2px solid #b7d7ef;
     border-radius: 15px;
-    background: #f5faff;
+    background: #ffffff;
 }
 
-.carteira-area .titulo-carteira {
-    color: #044281;
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 12px;
+.foto-pet-preview {
+    width: 105px;
+    height: 105px;
+    min-width: 105px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #e0effa;
+    border: 3px solid #9ac9ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0757a6;
+    font-size: 35px;
 }
 
-.carteira-area .descricao-carteira {
-    color: #5d7182;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 15px;
+.foto-pet-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.carteira-upload {
+.foto-pet-conteudo {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    flex: 1;
 }
 
-.carteira-upload label {
+.foto-pet-conteudo label {
     font-weight: bold;
     color: #163b5c;
 }
 
-.carteira-status {
-    margin-top: 12px;
-    padding: 12px 15px;
+.foto-pet-conteudo input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #b7d7ef;
     border-radius: 10px;
-    background: #e0effa;
-    color: #0757a6;
-    font-size: 14px;
+    background: #f5faff;
+    cursor: pointer;
+}
+
+.foto-pet-conteudo input[type="file"]::file-selector-button {
+    border: none;
+    background: #0757a6;
+    color: white;
+    padding: 8px 13px;
+    border-radius: 8px;
+    margin-right: 10px;
+    cursor: pointer;
     font-weight: bold;
 }
 
-.carteira-status.sem-carteira {
-    background: #f0f5f9;
-    color: #647585;
+.foto-pet-conteudo small,
+.campo-arquivo-carteira small {
+    color: #687d8f;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
-.carteira-status.tem-carteira {
-    background: #e0effa;
-    color: #0757a6;
+.campo-arquivo-carteira {
+    grid-column: span 2;
+    padding: 18px;
+    border-radius: 14px;
+    border: 2px solid #b7d7ef;
+    background: #f5faff;
 }
 
-/* Botão adicionar pet */
+.campo-arquivo-carteira label {
+    margin-bottom: 10px;
+}
+
+.campo-arquivo-carteira input {
+    margin-bottom: 8px;
+}
 
 .btn-add {
     width: 100%;
@@ -220,8 +296,6 @@ body {
     border-color: #044281;
     color: #044281;
 }
-
-/* Botão salvar */
 
 .btn-confirmar {
     width: 100%;
@@ -248,8 +322,6 @@ body {
     transform: none;
 }
 
-/* Mensagens */
-
 .mensagem {
     padding: 14px 18px;
     margin-bottom: 20px;
@@ -269,8 +341,6 @@ body {
     border: 1px solid #e5aaaa;
 }
 
-/* Responsivo */
-
 @media (max-width: 768px) {
 
     .grid {
@@ -278,12 +348,12 @@ body {
     }
 
     .full,
-    .carteira-area {
+    .campo-arquivo-carteira {
         grid-column: span 1;
     }
 
     .cadastro-header {
-        padding: 30px 20px;
+        padding: 25px 20px 30px;
     }
 
     .cadastro-header h1 {
@@ -294,15 +364,26 @@ body {
         padding: 20px;
     }
 
-    .pet {
+    .pet-card {
         padding: 20px;
+    }
+
+    .foto-pet-area {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .foto-pet-preview {
+        width: 100px;
+        height: 100px;
+        min-width: 100px;
     }
 }
 
 @media (max-width: 500px) {
 
     .container {
-        padding: 0 12px;
+        padding: 0 12px 40px;
     }
 
     .cadastro-header h1 {
@@ -322,7 +403,15 @@ body {
         font-size: 15px;
     }
 
-    .carteira-area {
+    .pet-header h3 {
+        font-size: 19px;
+    }
+
+    .foto-pet-area {
         padding: 15px;
+    }
+
+    .btn-confirmar {
+        font-size: 18px;
     }
 }

@@ -2,175 +2,124 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const API_URL = "http://localhost:3000/api";
 
-    const btnVoltar =
-        document.getElementById("btnVoltar");
+    const btnVoltar = document.getElementById("btnVoltar");
+    const btnCadastrar = document.getElementById("btnCadastrar");
 
-    const btnCadastrar =
-        document.getElementById("btnCadastrar");
+    const areaCadastro = document.getElementById("areaCadastro");
+    const areaPerfil = document.getElementById("areaPerfil");
 
-    const areaCadastro =
-        document.getElementById("areaCadastro");
+    const fotoPerfil = document.getElementById("fotoPerfil");
+    const btnAlterarFoto = document.getElementById("btnAlterarFoto");
+    const btnRemoverFoto = document.getElementById("btnRemoverFoto");
+    const inputFotoPerfil = document.getElementById("inputFotoPerfil");
 
-    const areaPerfil =
-        document.getElementById("areaPerfil");
+    const nomeTutor = document.getElementById("nomeTutor");
+    const cpfTutor = document.getElementById("cpfTutor");
+    const telefoneTutor = document.getElementById("telefoneTutor");
+    const emailTutor = document.getElementById("emailTutor");
+    const enderecoTutor = document.getElementById("enderecoTutor");
+    const cepTutor = document.getElementById("cepTutor");
 
-    const btnEditarTutor =
-        document.getElementById("btnEditarTutor");
+    const formulario = document.getElementById("formulario");
+    const btnEditarPerfil = document.getElementById("btnEditarPerfil");
+    const btnCancelarEdicao = document.getElementById("btnCancelarEdicao");
 
-    const btnCancelarTutor =
-        document.getElementById("btnCancelarTutor");
+    const inputNome = document.getElementById("nome");
+    const inputCpf = document.getElementById("cpf");
+    const inputTelefone = document.getElementById("telefone");
+    const inputEmail = document.getElementById("email");
+    const inputEndereco = document.getElementById("endereco");
+    const inputCep = document.getElementById("cep");
 
-    const formTutor =
-        document.getElementById("formTutor");
+    const listaPets = document.getElementById("lista-pets");
+    const adicionarPet = document.getElementById("adicionarPet");
 
-    const dadosTutor =
-        document.getElementById("dadosTutor");
+    const modalPet = document.getElementById("modalPet");
+    const btnFecharModal = document.getElementById("btnFecharModal");
+    const btnCancelarPet = document.getElementById("btnCancelarPet");
+    const formPet = document.getElementById("formPet");
+    const tituloModalPet = document.getElementById("tituloModalPet");
 
-    const btnAdicionarPet =
-        document.getElementById("btnAdicionarPet");
+    const fotoPet = document.getElementById("fotoPet");
+    const previewFotoPet = document.getElementById("previewFotoPet");
 
-    const listaPets =
-        document.getElementById("listaPets");
+    const nomePet = document.getElementById("nomePet");
+    const especiePet = document.getElementById("especiePet");
+    const racaPet = document.getElementById("racaPet");
+    const idadePet = document.getElementById("idadePet");
+    const unidadeIdadePet = document.getElementById("unidadeIdadePet");
+    const dataNascimentoPet = document.getElementById("dataNascimentoPet");
+    const sexoPet = document.getElementById("sexoPet");
+    const pesoPet = document.getElementById("pesoPet");
 
-    const modalPet =
-        document.getElementById("modalPet");
+    const carteiraPet = document.getElementById("carteiraPet");
+    const campoArquivoCarteira = document.getElementById("campoArquivoCarteira");
+    const carteiraArquivoPet = document.getElementById("carteiraArquivoPet");
+    const nomeCarteiraArquivo = document.getElementById("nomeCarteiraArquivo");
+    const btnVisualizarCarteiraPet = document.getElementById("btnVisualizarCarteiraPet");
 
-    const btnFecharModal =
-        document.getElementById("btnFecharModal");
+    const mensagem = document.getElementById("mensagem");
 
-    const btnCancelarPet =
-        document.getElementById("btnCancelarPet");
+    let tutorId = null;
+    let petEditando = null;
+    let petsAtuais = [];
 
-    const formPet =
-        document.getElementById("formPet");
+    let fotoTutorBase64 = null;
+    let fotoPetBase64 = null;
+    let carteiraBase64 = null;
 
-    const tituloModalPet =
-        document.getElementById("tituloModalPet");
+    const parametros = new URLSearchParams(window.location.search);
 
-    const mensagem =
-        document.getElementById("mensagem");
+    tutorId =
+        parametros.get("tutor_id") ||
+        parametros.get("id") ||
+        sessionStorage.getItem("agendaPetTutorId");
 
-    const inputFotoPerfil =
-        document.getElementById("inputFotoPerfil");
+    if (tutorId) {
 
-    const fotoPerfil =
-        document.getElementById("fotoPerfil");
+        tutorId = String(tutorId);
 
-    const nomePerfilFoto =
-        document.getElementById("nomePerfilFoto");
-
-    const btnRemoverFoto =
-        document.getElementById("btnRemoverFoto");
-
-    const parametros =
-        new URLSearchParams(
-            window.location.search
+        sessionStorage.setItem(
+            "agendaPetTutorId",
+            tutorId
         );
 
-    let tutorId =
-        parametros.get("tutor_id") ||
-        parametros.get("id");
+        carregarTutor();
 
-    const returnUrl =
-        parametros.get("returnUrl");
+    } else {
 
-    let tutor = null;
-    let pets = [];
-    let petEditando = null;
+        mostrarAreaCadastro();
 
-    const fotoPadrao =
-        "../img/perfil-padrao.png";
-
-    function mostrarMensagem(texto) {
-        if (!mensagem) return;
-
-        mensagem.textContent = texto;
-
-        mensagem.classList.add("mostrar");
-
-        setTimeout(() => {
-            mensagem.classList.remove(
-                "mostrar"
-            );
-        }, 3000);
     }
 
-    function mostrarErro(texto) {
-        if (!mensagem) return;
+    function mostrarMensagem(texto) {
 
         mensagem.textContent = texto;
-
         mensagem.classList.add("mostrar");
 
         setTimeout(() => {
-            mensagem.classList.remove(
-                "mostrar"
-            );
-        }, 4000);
+            mensagem.classList.remove("mostrar");
+        }, 3000);
+
     }
 
     function mostrarAreaCadastro() {
-        if (areaCadastro) {
-            areaCadastro.style.display =
-                "flex";
 
-            areaCadastro.classList.remove(
-                "hidden"
-            );
-        }
+        areaCadastro.style.display = "flex";
+        areaPerfil.style.display = "none";
 
-        if (areaPerfil) {
-            areaPerfil.style.display =
-                "none";
-
-            areaPerfil.classList.add(
-                "hidden"
-            );
-        }
     }
 
     function mostrarAreaPerfil() {
-        if (areaCadastro) {
-            areaCadastro.style.display =
-                "none";
 
-            areaCadastro.classList.add(
-                "hidden"
-            );
-        }
+        areaCadastro.style.display = "none";
+        areaPerfil.style.display = "block";
 
-        if (areaPerfil) {
-            areaPerfil.style.display =
-                "block";
-
-            areaPerfil.classList.remove(
-                "hidden"
-            );
-        }
-    }
-
-    function verificarTutorId() {
-        if (
-            !tutorId ||
-            Number.isNaN(
-                Number(tutorId)
-            ) ||
-            Number(tutorId) <= 0
-        ) {
-            mostrarAreaCadastro();
-            return false;
-        }
-
-        tutorId = Number(tutorId);
-
-        return true;
     }
 
     function escaparHTML(valor) {
-        if (
-            valor === null ||
-            valor === undefined
-        ) {
+
+        if (valor === null || valor === undefined) {
             return "";
         }
 
@@ -180,1061 +129,712 @@ document.addEventListener("DOMContentLoaded", () => {
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
+
     }
 
     function formatarCPF(valor) {
-        const numeros =
-            String(valor || "")
-                .replace(/\D/g, "")
-                .slice(0, 11);
 
-        if (numeros.length <= 3) {
-            return numeros;
+        if (!valor) {
+            return "-";
         }
 
-        if (numeros.length <= 6) {
-            return `${numeros.slice(0, 3)}.${numeros.slice(3)}`;
+        const numeros = String(valor).replace(/\D/g, "");
+
+        if (numeros.length !== 11) {
+            return valor;
         }
 
-        if (numeros.length <= 9) {
-            return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6)}`;
-        }
+        return numeros.replace(
+            /(\d{3})(\d{3})(\d{3})(\d{2})/,
+            "$1.$2.$3-$4"
+        );
 
-        return `${numeros.slice(0, 3)}.${numeros.slice(3, 6)}.${numeros.slice(6, 9)}-${numeros.slice(9, 11)}`;
     }
 
     function formatarTelefone(valor) {
-        const numeros =
-            String(valor || "")
-                .replace(/\D/g, "")
-                .slice(0, 11);
 
-        if (numeros.length <= 2) {
-            return numeros;
+        if (!valor) {
+            return "-";
         }
 
-        if (numeros.length <= 6) {
-            return `(${numeros.slice(0, 2)}) ${numeros.slice(2)}`;
+        const numeros = String(valor).replace(/\D/g, "");
+
+        if (numeros.length === 11) {
+
+            return numeros.replace(
+                /(\d{2})(\d{5})(\d{4})/,
+                "($1) $2-$3"
+            );
+
         }
 
-        if (numeros.length <= 10) {
-            return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 6)}-${numeros.slice(6)}`;
+        if (numeros.length === 10) {
+
+            return numeros.replace(
+                /(\d{2})(\d{4})(\d{4})/,
+                "($1) $2-$3"
+            );
+
         }
 
-        return `(${numeros.slice(0, 2)}) ${numeros.slice(2, 7)}-${numeros.slice(7, 11)}`;
+        return valor;
+
     }
 
     function formatarCEP(valor) {
-        const numeros =
-            String(valor || "")
-                .replace(/\D/g, "")
-                .slice(0, 8);
 
-        if (numeros.length <= 5) {
-            return numeros;
+        if (!valor) {
+            return "-";
         }
 
-        return `${numeros.slice(0, 5)}-${numeros.slice(5)}`;
+        const numeros = String(valor).replace(/\D/g, "");
+
+        if (numeros.length === 8) {
+
+            return numeros.replace(
+                /(\d{5})(\d{3})/,
+                "$1-$2"
+            );
+
+        }
+
+        return valor;
+
     }
 
-    function validarCPF(valor) {
-        const cpf =
-            String(valor || "")
-                .replace(/\D/g, "");
+    function formatarData(data) {
 
-        if (cpf.length !== 11) {
-            return false;
+        if (!data) {
+            return "-";
         }
 
-        if (/^(\d)\1{10}$/.test(cpf)) {
-            return false;
+        const parte = String(data).split("T")[0];
+        const partes = parte.split("-");
+
+        if (partes.length !== 3) {
+            return data;
         }
 
-        let soma = 0;
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
 
-        for (let i = 0; i < 9; i++) {
-            soma +=
-                Number(cpf[i]) *
-                (10 - i);
-        }
+    }
 
-        let resto =
-            (soma * 10) % 11;
-
-        if (resto === 10) {
-            resto = 0;
-        }
-
-        if (
-            resto !==
-            Number(cpf[9])
-        ) {
-            return false;
-        }
-
-        soma = 0;
-
-        for (let i = 0; i < 10; i++) {
-            soma +=
-                Number(cpf[i]) *
-                (11 - i);
-        }
-
-        resto =
-            (soma * 10) % 11;
-
-        if (resto === 10) {
-            resto = 0;
-        }
+    function possuiCarteira(pet) {
 
         return (
-            resto ===
-            Number(cpf[10])
+            pet.tem_carteira_vacinacao === true ||
+            pet.tem_carteira_vacinacao === 1 ||
+            pet.tem_carteira_vacinacao === "1" ||
+            pet.tem_carteira_vacinacao === "true" ||
+            pet.tem_carteira_vacinacao === "sim" ||
+            Boolean(pet.carteira_vacinacao)
         );
-    }
 
-    function validarTelefone(valor) {
-        const telefone =
-            String(valor || "")
-                .replace(/\D/g, "");
-
-        return (
-            telefone.length === 10 ||
-            telefone.length === 11
-        );
-    }
-
-    function validarEmail(valor) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-            String(valor || "").trim()
-        );
-    }
-
-    async function validarCEP(valor) {
-        const cep =
-            String(valor || "")
-                .replace(/\D/g, "");
-
-        if (!cep) {
-            return true;
-        }
-
-        if (cep.length !== 8) {
-            return false;
-        }
-
-        try {
-            const resposta =
-                await fetch(
-                    `https://viacep.com.br/ws/${cep}/json/`
-                );
-
-            if (!resposta.ok) {
-                return false;
-            }
-
-            const dados =
-                await resposta.json();
-
-            return !dados.erro;
-
-        } catch (erro) {
-            console.error(
-                "Erro ao consultar CEP:",
-                erro
-            );
-
-            return false;
-        }
-    }
-
-    function configurarFormatacaoCampos() {
-        const cpfTutor =
-            document.getElementById(
-                "cpfTutor"
-            );
-
-        const telefoneTutor =
-            document.getElementById(
-                "telefoneTutor"
-            );
-
-        const cepTutor =
-            document.getElementById(
-                "cepTutor"
-            );
-
-        if (cpfTutor) {
-            cpfTutor.addEventListener(
-                "input",
-                () => {
-                    cpfTutor.value =
-                        formatarCPF(
-                            cpfTutor.value
-                        );
-                }
-            );
-        }
-
-        if (telefoneTutor) {
-            telefoneTutor.addEventListener(
-                "input",
-                () => {
-                    telefoneTutor.value =
-                        formatarTelefone(
-                            telefoneTutor.value
-                        );
-                }
-            );
-        }
-
-        if (cepTutor) {
-            cepTutor.addEventListener(
-                "input",
-                () => {
-                    cepTutor.value =
-                        formatarCEP(
-                            cepTutor.value
-                        );
-                }
-            );
-        }
     }
 
     async function carregarTutor() {
-        if (!verificarTutorId()) {
-            return;
-        }
 
         try {
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}`
-                );
 
-            const dados =
-                await resposta.json();
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}`
+            );
 
             if (!resposta.ok) {
-                throw new Error(
-                    dados.mensagem ||
-                    "Não foi possível carregar o tutor."
+
+                sessionStorage.removeItem(
+                    "agendaPetTutorId"
                 );
+
+                mostrarAreaCadastro();
+
+                return;
+
             }
 
-            tutor =
-                dados.tutor ||
-                dados;
+            const dados = await resposta.json();
+            const tutor = dados.tutor || dados;
 
-            atualizarDadosTutor();
+            if (!tutor || !tutor.id) {
 
-            preencherFormularioTutor();
+                sessionStorage.removeItem(
+                    "agendaPetTutorId"
+                );
+
+                mostrarAreaCadastro();
+
+                return;
+
+            }
+
+            tutorId = String(tutor.id);
+
+            sessionStorage.setItem(
+                "agendaPetTutorId",
+                tutorId
+            );
 
             mostrarAreaPerfil();
 
+            nomeTutor.textContent =
+                tutor.nome || "Tutor";
+
+            cpfTutor.textContent =
+                formatarCPF(tutor.cpf);
+
+            telefoneTutor.textContent =
+                formatarTelefone(tutor.telefone);
+
+            emailTutor.textContent =
+                tutor.email || "-";
+
+            enderecoTutor.textContent =
+                tutor.endereco || "-";
+
+            cepTutor.textContent =
+                formatarCEP(tutor.cep);
+
+            inputNome.value =
+                tutor.nome || "";
+
+            inputCpf.value =
+                tutor.cpf || "";
+
+            inputTelefone.value =
+                tutor.telefone || "";
+
+            inputEmail.value =
+                tutor.email || "";
+
+            inputEndereco.value =
+                tutor.endereco || "";
+
+            inputCep.value =
+                tutor.cep || "";
+
+            fotoTutorBase64 =
+                tutor.foto || null;
+
+            fotoPerfil.src =
+                tutor.foto ||
+                "../img/perfil-padrao.png";
+
             await carregarPets();
 
-            carregarFotoPerfil();
-
         } catch (erro) {
-            console.error(
-                "Erro ao carregar tutor:",
-                erro
-            );
 
-            tutor = null;
+            console.error(erro);
 
             mostrarAreaCadastro();
 
-            mostrarErro(
-                erro.message ||
-                "Não foi possível carregar os dados do tutor."
-            );
         }
+
     }
 
     async function carregarPets() {
-        if (!tutorId) {
-            pets = [];
-            mostrarPets();
-            return;
-        }
 
         try {
-            const resposta =
-                await fetch(
-                    `${API_URL}/tutores/${tutorId}/pets`
-                );
 
-            const dados =
-                await resposta.json();
-
-            if (!resposta.ok) {
-                throw new Error(
-                    dados.mensagem ||
-                    "Não foi possível carregar os pets."
-                );
-            }
-
-            pets =
-                Array.isArray(dados)
-                    ? dados
-                    : dados.pets || [];
-
-            mostrarPets();
-
-        } catch (erro) {
-            console.error(
-                "Erro ao carregar pets:",
-                erro
+            const resposta = await fetch(
+                `${API_URL}/tutores/${tutorId}/pets`
             );
 
-            pets = [];
+            if (!resposta.ok) {
 
-            if (listaPets) {
                 listaPets.innerHTML = `
                     <div class="sem-pets">
                         <i class="fa-solid fa-triangle-exclamation"></i>
-                        <p>Não foi possível carregar seus pets.</p>
+                        Não foi possível carregar os pets.
                     </div>
                 `;
+
+                return;
+
             }
+
+            const dados = await resposta.json();
+
+            petsAtuais = Array.isArray(dados)
+                ? dados
+                : (dados.pets || []);
+
+            mostrarPets(petsAtuais);
+
+        } catch (erro) {
+
+            console.error(erro);
+
+            listaPets.innerHTML = `
+                <div class="sem-pets">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    Não foi possível carregar os pets.
+                </div>
+            `;
+
         }
+
     }
 
-    function atualizarDadosTutor() {
-        if (!tutor) return;
+    function mostrarPets(pets) {
 
-        const perfilNome =
-            document.getElementById(
-                "perfilNome"
-            );
+        petsAtuais = pets;
 
-        const perfilCpf =
-            document.getElementById(
-                "perfilCpf"
-            );
+        if (!pets.length) {
 
-        const perfilTelefone =
-            document.getElementById(
-                "perfilTelefone"
-            );
-
-        const perfilEmail =
-            document.getElementById(
-                "perfilEmail"
-            );
-
-        const perfilEndereco =
-            document.getElementById(
-                "perfilEndereco"
-            );
-
-        const perfilCep =
-            document.getElementById(
-                "perfilCep"
-            );
-
-        if (perfilNome) {
-            perfilNome.textContent =
-                tutor.nome ||
-                "Não informado";
-        }
-
-        if (perfilCpf) {
-            perfilCpf.textContent =
-                formatarCPF(
-                    tutor.cpf || ""
-                );
-        }
-
-        if (perfilTelefone) {
-            perfilTelefone.textContent =
-                formatarTelefone(
-                    tutor.telefone || ""
-                );
-        }
-
-        if (perfilEmail) {
-            perfilEmail.textContent =
-                tutor.email ||
-                "Não informado";
-        }
-
-        if (perfilEndereco) {
-            perfilEndereco.textContent =
-                tutor.endereco ||
-                "Não informado";
-        }
-
-        if (perfilCep) {
-            perfilCep.textContent =
-                tutor.cep
-                    ? formatarCEP(
-                        tutor.cep
-                    )
-                    : "Não informado";
-        }
-
-        if (nomePerfilFoto) {
-            nomePerfilFoto.textContent =
-                tutor.nome ||
-                "Usuário";
-        }
-    }
-
-    function preencherFormularioTutor() {
-        if (!tutor) return;
-
-        const nomeTutor =
-            document.getElementById(
-                "nomeTutor"
-            );
-
-        const cpfTutor =
-            document.getElementById(
-                "cpfTutor"
-            );
-
-        const telefoneTutor =
-            document.getElementById(
-                "telefoneTutor"
-            );
-
-        const emailTutor =
-            document.getElementById(
-                "emailTutor"
-            );
-
-        const enderecoTutor =
-            document.getElementById(
-                "enderecoTutor"
-            );
-
-        const cepTutor =
-            document.getElementById(
-                "cepTutor"
-            );
-
-        if (nomeTutor) {
-            nomeTutor.value =
-                tutor.nome || "";
-        }
-
-        if (cpfTutor) {
-            cpfTutor.value =
-                formatarCPF(
-                    tutor.cpf || ""
-                );
-        }
-
-        if (telefoneTutor) {
-            telefoneTutor.value =
-                formatarTelefone(
-                    tutor.telefone || ""
-                );
-        }
-
-        if (emailTutor) {
-            emailTutor.value =
-                tutor.email || "";
-        }
-
-        if (enderecoTutor) {
-            enderecoTutor.value =
-                tutor.endereco || "";
-        }
-
-        if (cepTutor) {
-            cepTutor.value =
-                formatarCEP(
-                    tutor.cep || ""
-                );
-        }
-    }
-
-    function fecharFormularioTutor() {
-        if (dadosTutor) {
-            dadosTutor.classList.remove(
-                "hidden"
-            );
-        }
-
-        if (formTutor) {
-            formTutor.classList.add(
-                "hidden"
-            );
-        }
-    }
-
-    function mostrarPets() {
-        if (!listaPets) return;
-
-        listaPets.innerHTML = "";
-
-        if (pets.length === 0) {
             listaPets.innerHTML = `
                 <div class="sem-pets">
                     <i class="fa-solid fa-paw"></i>
-                    <p>Você ainda não possui pets cadastrados.</p>
+                    Você ainda não possui pets cadastrados.
                 </div>
             `;
 
             return;
+
         }
 
-        pets.forEach((pet) => {
-            const card =
-                document.createElement(
-                    "div"
-                );
+        listaPets.innerHTML = pets.map(pet => {
 
-            card.className =
-                "pet-card";
+            const foto =
+                pet.foto ||
+                "../img/pata.png";
 
-            const carteira =
-                pet.tem_carteira_vacinacao === true ||
-                pet.tem_carteira_vacinacao === 1 ||
-                pet.tem_carteira_vacinacao === "1" ||
-                pet.tem_carteira_vacinacao === "true";
+            const carteiraPossui =
+                possuiCarteira(pet);
 
-            const dataNascimento =
+            const idade =
+                pet.idade || "-";
+
+            const nascimento =
                 pet.data_nascimento
-                    ? String(
-                        pet.data_nascimento
-                    ).slice(0, 10)
-                    : "";
+                    ? formatarData(pet.data_nascimento)
+                    : "-";
 
-            card.innerHTML = `
-                <div class="pet-icone">
-                    <i class="fa-solid fa-paw"></i>
-                </div>
+            const peso =
+                pet.peso !== null &&
+                pet.peso !== undefined &&
+                pet.peso !== ""
+                    ? `${pet.peso} kg`
+                    : "-";
 
-                <div class="pet-dados">
+            return `
+                <div class="pet-card">
 
-                    <h3>
-                        ${escaparHTML(
-                            pet.nome ||
-                            "Pet sem nome"
-                        )}
-                    </h3>
+                    <div class="pet-topo">
 
-                    <p>
-                        <strong>Espécie:</strong>
-                        ${escaparHTML(
-                            pet.especie ||
-                            "Não informada"
-                        )}
-                    </p>
+                        <img
+                            class="foto-pet-card"
+                            src="${escaparHTML(foto)}"
+                            alt="Foto de ${escaparHTML(pet.nome)}"
+                        >
 
-                    <p>
-                        <strong>Raça:</strong>
-                        ${escaparHTML(
-                            pet.raca ||
-                            "Não informada"
-                        )}
-                    </p>
+                        <div>
 
-                    <p>
-                        <strong>Idade:</strong>
-                        ${escaparHTML(
-                            pet.idade ??
-                            "Não informada"
-                        )}
-                    </p>
+                            <h4>
+                                <i class="fa-solid fa-paw"></i>
+                                ${escaparHTML(pet.nome)}
+                            </h4>
 
-                    <p>
-                        <strong>Data de nascimento:</strong>
-                        ${escaparHTML(
-                            dataNascimento ||
-                            "Não informada"
-                        )}
-                    </p>
+                            <p>
+                                ${escaparHTML(pet.especie || "-")}
+                            </p>
 
-                    <p>
-                        <strong>Sexo:</strong>
-                        ${escaparHTML(
-                            pet.sexo ||
-                            "Não informado"
-                        )}
-                    </p>
+                        </div>
 
-                    <p>
-                        <strong>Peso:</strong>
+                    </div>
+
+                    <div class="pet-dados">
+
+                        <div class="pet-dado">
+                            <span>
+                                <i class="fa-solid fa-dog"></i>
+                                Raça
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(pet.raca || "-")}
+                            </strong>
+                        </div>
+
+                        <div class="pet-dado">
+                            <span>
+                                <i class="fa-solid fa-calendar"></i>
+                                Idade
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(idade)}
+                            </strong>
+                        </div>
+
+                        <div class="pet-dado">
+                            <span>
+                                <i class="fa-solid fa-calendar-days"></i>
+                                Nascimento
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(nascimento)}
+                            </strong>
+                        </div>
+
+                        <div class="pet-dado">
+                            <span>
+                                <i class="fa-solid fa-venus-mars"></i>
+                                Sexo
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(pet.sexo || "-")}
+                            </strong>
+                        </div>
+
+                        <div class="pet-dado">
+                            <span>
+                                <i class="fa-solid fa-weight-scale"></i>
+                                Peso
+                            </span>
+
+                            <strong>
+                                ${escaparHTML(peso)}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                    <div class="status-carteira-container">
+
+                        <span class="status-carteira ${carteiraPossui ? "possui" : "nao-possui"}">
+
+                            <i class="fa-solid ${carteiraPossui ? "fa-circle-check" : "fa-circle-xmark"}"></i>
+
+                            ${carteiraPossui
+                                ? "Possui carteira"
+                                : "Não possui carteira"}
+
+                        </span>
+
+                    </div>
+
+                    <div class="acoes-pet">
+
                         ${
-                            pet.peso !== null &&
-                            pet.peso !== undefined &&
-                            pet.peso !== ""
-                                ? escaparHTML(
-                                    `${pet.peso} kg`
-                                )
-                                : "Não informado"
-                        }
-                    </p>
+                            pet.carteira_vacinacao
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="secundario"
+                                        onclick="visualizarCarteira(${Number(pet.id)})">
 
-                    <p>
-                        <strong>Carteira de vacinação:</strong>
-                        ${carteira ? "Sim" : "Não"}
-                    </p>
+                                        <i class="fa-solid fa-file-medical"></i>
+                                        Visualizar carteira
+
+                                    </button>
+                                `
+                                : ""
+                        }
+
+                        <button
+                            type="button"
+                            onclick="abrirEdicaoPet(${Number(pet.id)})">
+
+                            <i class="fa-solid fa-pen"></i>
+                            Editar pet
+
+                        </button>
+
+                    </div>
 
                 </div>
-
-                <button
-                    type="button"
-                    class="btn-editar-pet"
-                >
-                    <i class="fa-solid fa-pen"></i>
-                    Editar
-                </button>
             `;
 
-            const botaoEditar =
-                card.querySelector(
-                    ".btn-editar-pet"
-                );
+        }).join("");
 
-            if (botaoEditar) {
-                botaoEditar.addEventListener(
-                    "click",
-                    () => {
-                        abrirEdicaoPet(
-                            pet
-                        );
-                    }
-                );
-            }
-
-            listaPets.appendChild(
-                card
-            );
-        });
     }
 
-    function abrirEdicaoPet(pet) {
-        if (
-            !pet ||
-            !modalPet ||
-            !formPet
-        ) {
-            return;
-        }
+    function abrirModalPet() {
 
-        petEditando = pet;
+        modalPet.classList.add("mostrar");
+        document.body.style.overflow = "hidden";
 
-        if (tituloModalPet) {
-            tituloModalPet.textContent =
-                "Editar Pet";
-        }
-
-        const nomePet =
-            document.getElementById(
-                "nomePet"
-            );
-
-        const especiePet =
-            document.getElementById(
-                "especiePet"
-            );
-
-        const racaPet =
-            document.getElementById(
-                "racaPet"
-            );
-
-        const idadePet =
-            document.getElementById(
-                "idadePet"
-            );
-
-        const dataNascimentoPet =
-            document.getElementById(
-                "dataNascimentoPet"
-            );
-
-        const sexoPet =
-            document.getElementById(
-                "sexoPet"
-            );
-
-        const pesoPet =
-            document.getElementById(
-                "pesoPet"
-            );
-
-        const carteiraPet =
-            document.getElementById(
-                "carteiraPet"
-            );
-
-        if (nomePet) {
-            nomePet.value =
-                pet.nome || "";
-        }
-
-        if (especiePet) {
-            especiePet.value =
-                pet.especie || "";
-        }
-
-        if (racaPet) {
-            racaPet.value =
-                pet.raca || "";
-        }
-
-        if (idadePet) {
-            idadePet.value =
-                pet.idade ?? "";
-        }
-
-        if (dataNascimentoPet) {
-            dataNascimentoPet.value =
-                pet.data_nascimento
-                    ? String(
-                        pet.data_nascimento
-                    ).slice(0, 10)
-                    : "";
-        }
-
-        if (sexoPet) {
-            sexoPet.value =
-                pet.sexo || "";
-        }
-
-        if (pesoPet) {
-            pesoPet.value =
-                pet.peso ?? "";
-        }
-
-        if (carteiraPet) {
-            const possuiCarteira =
-                pet.tem_carteira_vacinacao === true ||
-                pet.tem_carteira_vacinacao === 1 ||
-                pet.tem_carteira_vacinacao === "1" ||
-                pet.tem_carteira_vacinacao === "true";
-
-            carteiraPet.value =
-                possuiCarteira
-                    ? "sim"
-                    : "nao";
-        }
-
-        modalPet.classList.add(
-            "mostrar"
-        );
-    }
-
-    function abrirNovoPet() {
-        if (
-            !modalPet ||
-            !formPet
-        ) {
-            return;
-        }
-
-        petEditando = null;
-
-        if (tituloModalPet) {
-            tituloModalPet.textContent =
-                "Adicionar Pet";
-        }
-
-        formPet.reset();
-
-        const carteiraPet =
-            document.getElementById(
-                "carteiraPet"
-            );
-
-        if (carteiraPet) {
-            carteiraPet.value =
-                "nao";
-        }
-
-        modalPet.classList.add(
-            "mostrar"
-        );
     }
 
     function fecharModalPet() {
-        if (!modalPet) return;
 
-        modalPet.classList.remove(
-            "mostrar"
-        );
+        modalPet.classList.remove("mostrar");
+        document.body.style.overflow = "";
 
-        if (formPet) {
-            formPet.reset();
-        }
+        formPet.reset();
 
         petEditando = null;
+
+        fotoPetBase64 = null;
+        carteiraBase64 = null;
+
+        tituloModalPet.innerHTML =
+            '<i class="fa-solid fa-paw"></i> Adicionar pet';
+
+        previewFotoPet.src = "";
+        previewFotoPet.classList.remove("mostrar");
+
+        campoArquivoCarteira.style.display =
+            "none";
+
+        nomeCarteiraArquivo.textContent =
+            "";
+
+        btnVisualizarCarteiraPet.style.display =
+            "none";
+
+        fotoPet.value = "";
+        carteiraArquivoPet.value = "";
+
     }
 
-    function voltarParaOrigem() {
-        if (returnUrl) {
-            const origem =
-                new URL(
-                    returnUrl,
-                    window.location.href
-                );
+    adicionarPet.addEventListener(
+        "click",
+        () => {
 
-            if (tutorId) {
-                origem.searchParams.set(
-                    "tutor_id",
-                    tutorId
-                );
-            }
+            fecharModalPet();
+            abrirModalPet();
 
-            window.location.href =
-                origem.href;
-
-            return;
         }
+    );
 
-        const urlHome =
-            new URL(
-                "../pages/home.html",
-                window.location.href
-            );
+    btnFecharModal.addEventListener(
+        "click",
+        fecharModalPet
+    );
 
-        if (tutorId) {
-            urlHome.searchParams.set(
-                "tutor_id",
-                tutorId
-            );
+    btnCancelarPet.addEventListener(
+        "click",
+        fecharModalPet
+    );
+
+    modalPet.addEventListener(
+        "click",
+        evento => {
+
+            if (evento.target === modalPet) {
+                fecharModalPet();
+            }
+
         }
+    );
 
-        window.location.href =
-            urlHome.href;
-    }
+    btnEditarPerfil.addEventListener(
+        "click",
+        () => {
 
-    if (btnVoltar) {
-        btnVoltar.addEventListener(
-            "click",
-            (event) => {
-                event.preventDefault();
-                voltarParaOrigem();
-            }
-        );
-    }
+            document.getElementById(
+                "perfil-resumo"
+            ).style.display = "none";
 
-    if (btnCadastrar) {
-        btnCadastrar.addEventListener(
-            "click",
-            () => {
-                const parametrosCadastro =
-                    new URLSearchParams();
+            formulario.style.display =
+                "grid";
 
-                if (tutorId) {
-                    parametrosCadastro.set(
-                        "tutor_id",
-                        tutorId
-                    );
-                }
+            btnEditarPerfil.style.display =
+                "none";
 
-                const origemAtual =
-                    new URL(
-                        window.location.href
-                    );
+        }
+    );
 
-                origemAtual.searchParams.delete(
-                    "returnUrl"
-                );
+    btnCancelarEdicao.addEventListener(
+        "click",
+        () => {
 
-                parametrosCadastro.set(
-                    "returnUrl",
-                    origemAtual.href
-                );
+            formulario.style.display =
+                "none";
 
-                const query =
-                    parametrosCadastro.toString();
+            document.getElementById(
+                "perfil-resumo"
+            ).style.display = "grid";
 
-                window.location.href =
-                    `cadastro.html?${query}`;
-            }
-        );
-    }
+            btnEditarPerfil.style.display =
+                "inline-block";
 
-    if (btnEditarTutor) {
-        btnEditarTutor.addEventListener(
-            "click",
-            () => {
-                preencherFormularioTutor();
+        }
+    );
 
-                if (dadosTutor) {
-                    dadosTutor.classList.add(
-                        "hidden"
-                    );
-                }
+    formulario.addEventListener(
+        "submit",
+        async evento => {
 
-                if (formTutor) {
-                    formTutor.classList.remove(
-                        "hidden"
-                    );
-                }
-            }
-        );
-    }
+            evento.preventDefault();
 
-    if (btnCancelarTutor) {
-        btnCancelarTutor.addEventListener(
-            "click",
-            fecharFormularioTutor
-        );
-    }
+            try {
 
-    if (formTutor) {
-        formTutor.addEventListener(
-            "submit",
-            async (event) => {
-                event.preventDefault();
+                const resposta = await fetch(
+                    `${API_URL}/tutores/${tutorId}`,
+                    {
+                        method: "PUT",
 
-                if (!tutorId) {
-                    mostrarErro(
-                        "Tutor não identificado."
-                    );
-                    return;
-                }
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
 
-                const nomeTutor =
-                    document.getElementById(
-                        "nomeTutor"
-                    );
+                        body: JSON.stringify({
 
-                const cpfTutor =
-                    document.getElementById(
-                        "cpfTutor"
-                    );
+                            nome:
+                                inputNome.value.trim(),
 
-                const telefoneTutor =
-                    document.getElementById(
-                        "telefoneTutor"
-                    );
+                            cpf:
+                                inputCpf.value.trim(),
 
-                const emailTutor =
-                    document.getElementById(
-                        "emailTutor"
-                    );
+                            telefone:
+                                inputTelefone.value.trim(),
 
-                const enderecoTutor =
-                    document.getElementById(
-                        "enderecoTutor"
-                    );
+                            email:
+                                inputEmail.value.trim(),
 
-                const cepTutor =
-                    document.getElementById(
-                        "cepTutor"
-                    );
+                            endereco:
+                                inputEndereco.value.trim(),
 
-                const nome =
-                    nomeTutor
-                        ? nomeTutor.value.trim()
-                        : "";
+                            cep:
+                                inputCep.value.trim(),
 
-                const cpf =
-                    cpfTutor
-                        ? cpfTutor.value.trim()
-                        : "";
+                            foto:
+                                fotoTutorBase64
 
-                const telefone =
-                    telefoneTutor
-                        ? telefoneTutor.value.trim()
-                        : "";
-
-                const email =
-                    emailTutor
-                        ? emailTutor.value.trim()
-                        : "";
-
-                const endereco =
-                    enderecoTutor
-                        ? enderecoTutor.value.trim()
-                        : "";
-
-                const cep =
-                    cepTutor
-                        ? cepTutor.value.trim()
-                        : "";
-
-                if (
-                    !nome ||
-                    !cpf ||
-                    !telefone ||
-                    !email ||
-                    !endereco
-                ) {
-                    mostrarErro(
-                        "Preencha todos os campos obrigatórios."
-                    );
-                    return;
-                }
-
-                if (!validarCPF(cpf)) {
-                    mostrarErro(
-                        "Digite um CPF válido."
-                    );
-                    return;
-                }
-
-                if (
-                    !validarTelefone(
-                        telefone
-                    )
-                ) {
-                    mostrarErro(
-                        "Digite um telefone válido."
-                    );
-                    return;
-                }
-
-                if (
-                    !validarEmail(
-                        email
-                    )
-                ) {
-                    mostrarErro(
-                        "Digite um e-mail válido."
-                    );
-                    return;
-                }
-
-                if (cep) {
-                    const cepValido =
-                        await validarCEP(
-                            cep
-                        );
-
-                    if (!cepValido) {
-                        mostrarErro(
-                            "O CEP informado não foi encontrado."
-                        );
-                        return;
+                        })
                     }
+                );
+
+                const dados =
+                    await resposta.json();
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        dados.mensagem ||
+                        dados.message ||
+                        "Erro ao atualizar perfil."
+                    );
+
                 }
 
-                const dadosAtualizados = {
-                    nome,
-                    cpf,
-                    telefone,
-                    email,
-                    endereco,
-                    cep:
-                        cep || null
-                };
+                mostrarMensagem(
+                    "Perfil atualizado com sucesso!"
+                );
+
+                formulario.style.display =
+                    "none";
+
+                document.getElementById(
+                    "perfil-resumo"
+                ).style.display = "grid";
+
+                btnEditarPerfil.style.display =
+                    "inline-block";
+
+                await carregarTutor();
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    erro.message ||
+                    "Erro ao atualizar perfil."
+                );
+
+            }
+
+        }
+    );
+
+    btnAlterarFoto.addEventListener(
+        "click",
+        () => {
+
+            inputFotoPerfil.click();
+
+        }
+    );
+
+    inputFotoPerfil.addEventListener(
+        "change",
+        evento => {
+
+            const arquivo =
+                evento.target.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            if (!arquivo.type.startsWith("image/")) {
+
+                mostrarMensagem(
+                    "Escolha uma imagem válida."
+                );
+
+                inputFotoPerfil.value = "";
+
+                return;
+
+            }
+
+            if (arquivo.size > 5 * 1024 * 1024) {
+
+                mostrarMensagem(
+                    "A imagem deve ter no máximo 5 MB."
+                );
+
+                inputFotoPerfil.value = "";
+
+                return;
+
+            }
+
+            const leitor =
+                new FileReader();
+
+            leitor.onload = async () => {
+
+                fotoTutorBase64 =
+                    leitor.result;
+
+                fotoPerfil.src =
+                    fotoTutorBase64;
 
                 try {
+
                     const resposta =
                         await fetch(
                             `${API_URL}/tutores/${tutorId}`,
                             {
                                 method: "PUT",
+
                                 headers: {
                                     "Content-Type":
                                         "application/json"
                                 },
-                                body:
-                                    JSON.stringify(
-                                        dadosAtualizados
-                                    )
+
+                                body: JSON.stringify({
+
+                                    nome:
+                                        inputNome.value.trim(),
+
+                                    cpf:
+                                        inputCpf.value.trim(),
+
+                                    telefone:
+                                        inputTelefone.value.trim(),
+
+                                    email:
+                                        inputEmail.value.trim(),
+
+                                    endereco:
+                                        inputEndereco.value.trim(),
+
+                                    cep:
+                                        inputCep.value.trim(),
+
+                                    foto:
+                                        fotoTutorBase64
+
+                                })
                             }
                         );
 
@@ -1242,379 +842,768 @@ document.addEventListener("DOMContentLoaded", () => {
                         await resposta.json();
 
                     if (!resposta.ok) {
+
                         throw new Error(
                             dados.mensagem ||
-                            dados.message ||
-                            "Erro ao atualizar os dados."
+                            "Erro ao salvar foto."
                         );
+
                     }
 
-                    tutor =
-                        dados.tutor ||
-                        dadosAtualizados;
-
-                    atualizarDadosTutor();
-
-                    preencherFormularioTutor();
-
-                    fecharFormularioTutor();
-
                     mostrarMensagem(
-                        "Dados do tutor atualizados com sucesso!"
+                        "Foto atualizada!"
                     );
 
                 } catch (erro) {
-                    console.error(
-                        "Erro ao atualizar tutor:",
-                        erro
-                    );
 
-                    mostrarErro(
-                        erro.message ||
-                        "Não foi possível atualizar os dados do tutor."
-                    );
-                }
-            }
-        );
-    }
-
-    if (btnAdicionarPet) {
-        btnAdicionarPet.addEventListener(
-            "click",
-            abrirNovoPet
-        );
-    }
-
-    if (btnFecharModal) {
-        btnFecharModal.addEventListener(
-            "click",
-            fecharModalPet
-        );
-    }
-
-    if (btnCancelarPet) {
-        btnCancelarPet.addEventListener(
-            "click",
-            fecharModalPet
-        );
-    }
-
-    if (modalPet) {
-        modalPet.addEventListener(
-            "click",
-            (event) => {
-                if (
-                    event.target ===
-                    modalPet
-                ) {
-                    fecharModalPet();
-                }
-            }
-        );
-    }
-
-    if (formPet) {
-        formPet.addEventListener(
-            "submit",
-            async (event) => {
-                event.preventDefault();
-
-                if (!tutorId) {
-                    mostrarErro(
-                        "Tutor não identificado."
-                    );
-                    return;
-                }
-
-                const nomePet =
-                    document.getElementById(
-                        "nomePet"
-                    );
-
-                const especiePet =
-                    document.getElementById(
-                        "especiePet"
-                    );
-
-                const racaPet =
-                    document.getElementById(
-                        "racaPet"
-                    );
-
-                const idadePet =
-                    document.getElementById(
-                        "idadePet"
-                    );
-
-                const dataNascimentoPet =
-                    document.getElementById(
-                        "dataNascimentoPet"
-                    );
-
-                const sexoPet =
-                    document.getElementById(
-                        "sexoPet"
-                    );
-
-                const pesoPet =
-                    document.getElementById(
-                        "pesoPet"
-                    );
-
-                const carteiraPet =
-                    document.getElementById(
-                        "carteiraPet"
-                    );
-
-                const nome =
-                    nomePet
-                        ? nomePet.value.trim()
-                        : "";
-
-                const especie =
-                    especiePet
-                        ? especiePet.value
-                        : "";
-
-                const raca =
-                    racaPet
-                        ? racaPet.value.trim()
-                        : "";
-
-                const idade =
-                    idadePet
-                        ? idadePet.value.trim()
-                        : "";
-
-                const dataNascimento =
-                    dataNascimentoPet
-                        ? dataNascimentoPet.value
-                        : "";
-
-                const sexo =
-                    sexoPet
-                        ? sexoPet.value
-                        : "";
-
-                const peso =
-                    pesoPet
-                        ? pesoPet.value.trim()
-                        : "";
-
-                const possuiCarteira =
-                    carteiraPet &&
-                    carteiraPet.value ===
-                        "sim";
-
-                if (
-                    !nome ||
-                    !especie ||
-                    !raca ||
-                    !idade ||
-                    !sexo ||
-                    !peso
-                ) {
-                    mostrarErro(
-                        "Preencha todos os campos obrigatórios do pet."
-                    );
-                    return;
-                }
-
-                const pesoNumerico =
-                    Number(
-                        peso
-                            .replace(",", ".")
-                            .replace(
-                                /[^\d.]/g,
-                                ""
-                            )
-                    );
-
-                if (
-                    Number.isNaN(
-                        pesoNumerico
-                    ) ||
-                    pesoNumerico <= 0
-                ) {
-                    mostrarErro(
-                        "Digite um peso válido para o pet."
-                    );
-                    return;
-                }
-
-                const dadosPet = {
-                    tutor_id:
-                        Number(tutorId),
-                    nome,
-                    especie,
-                    raca,
-                    idade:
-                        String(
-                            idade
-                        ).trim(),
-                    data_nascimento:
-                        dataNascimento ||
-                        null,
-                    sexo,
-                    peso:
-                        String(
-                            pesoNumerico
-                        ),
-                    tem_carteira_vacinacao:
-                        possuiCarteira,
-                    carteira_vacinacao:
-                        null
-                };
-
-                try {
-                    let resposta;
-
-                    if (petEditando) {
-                        resposta =
-                            await fetch(
-                                `${API_URL}/pets/${petEditando.id}`,
-                                {
-                                    method: "PUT",
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-                                    body:
-                                        JSON.stringify(
-                                            dadosPet
-                                        )
-                                }
-                            );
-                    } else {
-                        resposta =
-                            await fetch(
-                                `${API_URL}/pets`,
-                                {
-                                    method: "POST",
-                                    headers: {
-                                        "Content-Type":
-                                            "application/json"
-                                    },
-                                    body:
-                                        JSON.stringify(
-                                            dadosPet
-                                        )
-                                }
-                            );
-                    }
-
-                    const texto =
-                        await resposta.text();
-
-                    let dados = {};
-
-                    try {
-                        dados =
-                            texto
-                                ? JSON.parse(
-                                    texto
-                                )
-                                : {};
-                    } catch {
-                        dados = {};
-                    }
-
-                    if (!resposta.ok) {
-                        throw new Error(
-                            dados.mensagem ||
-                            dados.message ||
-                            `Erro ${resposta.status} ao salvar o pet.`
-                        );
-                    }
-
-                    await carregarPets();
-
-                    const mensagemPet =
-                        petEditando
-                            ? "Pet atualizado com sucesso!"
-                            : "Pet cadastrado com sucesso!";
-
-                    fecharModalPet();
+                    console.error(erro);
 
                     mostrarMensagem(
-                        mensagemPet
+                        "Não foi possível salvar a foto."
                     );
 
-                } catch (erro) {
-                    console.error(
-                        "Erro ao salvar pet:",
-                        erro
-                    );
-
-                    mostrarErro(
-                        erro.message ||
-                        "Não foi possível salvar o pet."
-                    );
-                }
-            }
-        );
-    }
-
-    function carregarFotoPerfil() {
-        if (!fotoPerfil) return;
-
-        fotoPerfil.src =
-            fotoPadrao;
-    }
-
-    if (inputFotoPerfil) {
-        inputFotoPerfil.addEventListener(
-            "change",
-            (event) => {
-                const arquivo =
-                    event.target.files[0];
-
-                if (!arquivo) return;
-
-                const leitor =
-                    new FileReader();
-
-                leitor.onload = () => {
-                    if (fotoPerfil) {
-                        fotoPerfil.src =
-                            leitor.result;
-                    }
-                };
-
-                leitor.readAsDataURL(
-                    arquivo
-                );
-            }
-        );
-    }
-
-    if (btnRemoverFoto) {
-        btnRemoverFoto.addEventListener(
-            "click",
-            () => {
-                if (fotoPerfil) {
-                    fotoPerfil.src =
-                        fotoPadrao;
                 }
 
-                if (inputFotoPerfil) {
-                    inputFotoPerfil.value =
-                        "";
-                }
+            };
 
-                mostrarMensagem(
-                    "Foto removida com sucesso!"
-                );
-            }
-        );
-    }
+            leitor.readAsDataURL(arquivo);
 
-    configurarFormatacaoCampos();
-
-    console.log(
-        "Tutor ID carregado no perfil:",
-        tutorId
+        }
     );
 
-    carregarTutor();
+    btnRemoverFoto.addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        `${API_URL}/tutores/${tutorId}`,
+                        {
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                nome:
+                                    inputNome.value.trim(),
+
+                                cpf:
+                                    inputCpf.value.trim(),
+
+                                telefone:
+                                    inputTelefone.value.trim(),
+
+                                email:
+                                    inputEmail.value.trim(),
+
+                                endereco:
+                                    inputEndereco.value.trim(),
+
+                                cep:
+                                    inputCep.value.trim(),
+
+                                foto: null
+
+                            })
+                        }
+                    );
+
+                const dados =
+                    await resposta.json();
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        dados.mensagem ||
+                        "Erro ao remover foto."
+                    );
+
+                }
+
+                fotoTutorBase64 = null;
+
+                fotoPerfil.src =
+                    "../img/perfil-padrao.png";
+
+                inputFotoPerfil.value = "";
+
+                mostrarMensagem(
+                    "Foto removida!"
+                );
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    "Não foi possível remover a foto."
+                );
+
+            }
+
+        }
+    );
+
+    fotoPet.addEventListener(
+        "change",
+        evento => {
+
+            const arquivo =
+                evento.target.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            if (!arquivo.type.startsWith("image/")) {
+
+                mostrarMensagem(
+                    "Escolha uma imagem válida."
+                );
+
+                fotoPet.value = "";
+
+                return;
+
+            }
+
+            if (arquivo.size > 5 * 1024 * 1024) {
+
+                mostrarMensagem(
+                    "A foto do pet deve ter no máximo 5 MB."
+                );
+
+                fotoPet.value = "";
+
+                return;
+
+            }
+
+            const leitor =
+                new FileReader();
+
+            leitor.onload = () => {
+
+                fotoPetBase64 =
+                    leitor.result;
+
+                previewFotoPet.src =
+                    fotoPetBase64;
+
+                previewFotoPet.classList.add(
+                    "mostrar"
+                );
+
+            };
+
+            leitor.readAsDataURL(arquivo);
+
+        }
+    );
+
+    carteiraPet.addEventListener(
+        "change",
+        () => {
+
+            if (carteiraPet.value === "sim") {
+
+                campoArquivoCarteira.style.display =
+                    "flex";
+
+            } else {
+
+                campoArquivoCarteira.style.display =
+                    "none";
+
+                carteiraArquivoPet.value =
+                    "";
+
+                carteiraBase64 =
+                    null;
+
+                nomeCarteiraArquivo.textContent =
+                    "";
+
+                btnVisualizarCarteiraPet.style.display =
+                    "none";
+
+            }
+
+        }
+    );
+
+    carteiraArquivoPet.addEventListener(
+        "change",
+        evento => {
+
+            const arquivo =
+                evento.target.files[0];
+
+            if (!arquivo) {
+                return;
+            }
+
+            const tiposPermitidos = [
+                "image/png",
+                "image/jpeg",
+                "image/webp",
+                "application/pdf"
+            ];
+
+            if (!tiposPermitidos.includes(arquivo.type)) {
+
+                mostrarMensagem(
+                    "Escolha uma imagem ou PDF válido."
+                );
+
+                carteiraArquivoPet.value = "";
+
+                return;
+
+            }
+
+            if (arquivo.size > 5 * 1024 * 1024) {
+
+                mostrarMensagem(
+                    "A carteira deve ter no máximo 5 MB."
+                );
+
+                carteiraArquivoPet.value = "";
+
+                return;
+
+            }
+
+            const leitor =
+                new FileReader();
+
+            leitor.onload = () => {
+
+                carteiraBase64 =
+                    leitor.result;
+
+                nomeCarteiraArquivo.textContent =
+                    arquivo.name;
+
+                btnVisualizarCarteiraPet.style.display =
+                    "inline-block";
+
+            };
+
+            leitor.readAsDataURL(arquivo);
+
+        }
+    );
+
+    btnVisualizarCarteiraPet.addEventListener(
+        "click",
+        () => {
+
+            if (!carteiraBase64) {
+                return;
+            }
+
+            abrirArquivoCarteira(
+                carteiraBase64,
+                nomePet.value
+            );
+
+        }
+    );
+
+    function abrirArquivoCarteira(
+        arquivo,
+        nome
+    ) {
+
+        const janela =
+            window.open("", "_blank");
+
+        if (!janela) {
+
+            mostrarMensagem(
+                "Permita a abertura de novas janelas no navegador."
+            );
+
+            return;
+
+        }
+
+        janela.document.write(`
+            <!DOCTYPE html>
+
+            <html lang="pt-BR">
+
+            <head>
+
+                <meta charset="UTF-8">
+
+                <title>
+                    Carteira de vacinação - ${escaparHTML(nome)}
+                </title>
+
+                <style>
+
+                    body {
+                        margin: 0;
+                        background: #f5f5f5;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        min-height: 100vh;
+                    }
+
+                    iframe {
+                        width: 95vw;
+                        height: 95vh;
+                        border: none;
+                        background: white;
+                    }
+
+                    img {
+                        max-width: 95vw;
+                        max-height: 95vh;
+                        object-fit: contain;
+                    }
+
+                </style>
+
+            </head>
+
+            <body>
+
+                ${
+                    arquivo.startsWith("data:application/pdf")
+                        ? `<iframe src="${arquivo}"></iframe>`
+                        : `<img src="${arquivo}" alt="Carteira de vacinação">`
+                }
+
+            </body>
+
+            </html>
+        `);
+
+        janela.document.close();
+
+    }
+
+    formPet.addEventListener(
+        "submit",
+        async evento => {
+
+            evento.preventDefault();
+
+            const numeroIdade =
+                idadePet.value.trim();
+
+            const unidade =
+                unidadeIdadePet.value;
+
+            if (!numeroIdade) {
+
+                mostrarMensagem(
+                    "Informe a idade do pet."
+                );
+
+                return;
+
+            }
+
+            const idadeNumerica =
+                Number(
+                    numeroIdade.replace(",", ".")
+                );
+
+            if (
+                Number.isNaN(idadeNumerica) ||
+                idadeNumerica < 0
+            ) {
+
+                mostrarMensagem(
+                    "Informe uma idade válida."
+                );
+
+                return;
+
+            }
+
+            const idade =
+                `${numeroIdade.replace(",", ".")} ${unidade}`;
+
+            const temCarteira =
+                carteiraPet.value === "sim";
+
+            const dadosPet = {
+
+                tutor_id:
+                    Number(tutorId),
+
+                nome:
+                    nomePet.value.trim(),
+
+                especie:
+                    especiePet.value,
+
+                raca:
+                    racaPet.value.trim(),
+
+                idade:
+                    idade,
+
+                data_nascimento:
+                    dataNascimentoPet.value || null,
+
+                sexo:
+                    sexoPet.value,
+
+                peso:
+                    pesoPet.value
+                        ? Number(pesoPet.value)
+                        : null,
+
+                tem_carteira_vacinacao:
+                    temCarteira,
+
+                carteira_vacinacao:
+                    temCarteira
+                        ? carteiraBase64
+                        : null,
+
+                foto:
+                    fotoPetBase64
+
+            };
+
+            try {
+
+                const foiEdicao =
+                    Boolean(petEditando);
+
+                let resposta;
+
+                if (foiEdicao) {
+
+                    resposta =
+                        await fetch(
+                            `${API_URL}/pets/${petEditando.id}`,
+                            {
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        dadosPet
+                                    )
+                            }
+                        );
+
+                } else {
+
+                    resposta =
+                        await fetch(
+                            `${API_URL}/pets`,
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        dadosPet
+                                    )
+                            }
+                        );
+
+                }
+
+                const dados =
+                    await resposta.json();
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        dados.mensagem ||
+                        dados.message ||
+                        "Não foi possível salvar o pet."
+                    );
+
+                }
+
+                fecharModalPet();
+
+                await carregarPets();
+
+                mostrarMensagem(
+                    foiEdicao
+                        ? "Pet atualizado com sucesso!"
+                        : "Pet cadastrado com sucesso!"
+                );
+
+            } catch (erro) {
+
+                console.error(erro);
+
+                mostrarMensagem(
+                    erro.message ||
+                    "Erro ao salvar o pet."
+                );
+
+            }
+
+        }
+    );
+
+    window.abrirEdicaoPet =
+        function (id) {
+
+            const pet =
+                petsAtuais.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+            if (!pet) {
+
+                mostrarMensagem(
+                    "Não foi possível encontrar este pet."
+                );
+
+                return;
+
+            }
+
+            petEditando = pet;
+
+            tituloModalPet.innerHTML =
+                '<i class="fa-solid fa-pen"></i> Editar pet';
+
+            nomePet.value =
+                pet.nome || "";
+
+            especiePet.value =
+                pet.especie || "";
+
+            racaPet.value =
+                pet.raca || "";
+
+            let idadeValor =
+                pet.idade || "";
+
+            const correspondencia =
+                String(idadeValor).match(
+                    /^(\d+(?:[.,]\d+)?)\s+(meses?|anos?)$/i
+                );
+
+            if (correspondencia) {
+
+                idadePet.value =
+                    correspondencia[1].replace(
+                        ",",
+                        "."
+                    );
+
+                unidadeIdadePet.value =
+                    correspondencia[2]
+                        .toLowerCase()
+                        .startsWith("mes")
+                        ? "meses"
+                        : "anos";
+
+            } else {
+
+                const somenteNumero =
+                    String(idadeValor).match(
+                        /\d+(?:[.,]\d+)?/
+                    );
+
+                idadePet.value =
+                    somenteNumero
+                        ? somenteNumero[0].replace(
+                            ",",
+                            "."
+                        )
+                        : "";
+
+                unidadeIdadePet.value =
+                    "anos";
+
+            }
+
+            if (pet.data_nascimento) {
+
+                dataNascimentoPet.value =
+                    String(
+                        pet.data_nascimento
+                    ).split("T")[0];
+
+            } else {
+
+                dataNascimentoPet.value =
+                    "";
+
+            }
+
+            sexoPet.value =
+                pet.sexo || "";
+
+            pesoPet.value =
+                pet.peso !== null &&
+                pet.peso !== undefined
+                    ? pet.peso
+                    : "";
+
+            fotoPetBase64 =
+                pet.foto || null;
+
+            if (pet.foto) {
+
+                previewFotoPet.src =
+                    pet.foto;
+
+                previewFotoPet.classList.add(
+                    "mostrar"
+                );
+
+            } else {
+
+                previewFotoPet.src =
+                    "";
+
+                previewFotoPet.classList.remove(
+                    "mostrar"
+                );
+
+            }
+
+            const possui =
+                possuiCarteira(pet);
+
+            carteiraPet.value =
+                possui
+                    ? "sim"
+                    : "nao";
+
+            if (possui) {
+
+                campoArquivoCarteira.style.display =
+                    "flex";
+
+                carteiraBase64 =
+                    pet.carteira_vacinacao ||
+                    null;
+
+                if (carteiraBase64) {
+
+                    nomeCarteiraArquivo.textContent =
+                        "Carteira já cadastrada";
+
+                    btnVisualizarCarteiraPet.style.display =
+                        "inline-block";
+
+                } else {
+
+                    nomeCarteiraArquivo.textContent =
+                        "";
+
+                    btnVisualizarCarteiraPet.style.display =
+                        "none";
+
+                }
+
+            } else {
+
+                campoArquivoCarteira.style.display =
+                    "none";
+
+                carteiraBase64 =
+                    null;
+
+                nomeCarteiraArquivo.textContent =
+                    "";
+
+                btnVisualizarCarteiraPet.style.display =
+                    "none";
+
+            }
+
+            abrirModalPet();
+
+        };
+
+    window.visualizarCarteira =
+        function (id) {
+
+            const pet =
+                petsAtuais.find(
+                    item =>
+                        String(item.id) ===
+                        String(id)
+                );
+
+            if (!pet) {
+
+                mostrarMensagem(
+                    "Não foi possível encontrar este pet."
+                );
+
+                return;
+
+            }
+
+            if (!pet.carteira_vacinacao) {
+
+                mostrarMensagem(
+                    "Este pet não possui carteira cadastrada."
+                );
+
+                return;
+
+            }
+
+            abrirArquivoCarteira(
+                pet.carteira_vacinacao,
+                pet.nome
+            );
+
+        };
+
+    btnVoltar.addEventListener(
+        "click",
+        () => {
+
+            window.location.href =
+                "../pages/home.html";
+
+        }
+    );
+
+    btnCadastrar.addEventListener(
+        "click",
+        () => {
+
+            const retorno =
+                encodeURIComponent(
+                    window.location.href
+                );
+
+            window.location.href =
+                `cadastro.html?returnUrl=${retorno}`;
+
+        }
+    );
+
 });
