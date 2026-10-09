@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS agenda_pet;
 
 CREATE DATABASE agenda_pet
@@ -6,272 +7,367 @@ COLLATE utf8mb4_unicode_ci;
 
 USE agenda_pet;
 
--- Tabela tutores
+-- TABELA TUTORES
+
 CREATE TABLE tutores (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(150) NOT NULL,
+    nome VARCHAR(100) NOT NULL,
     cpf VARCHAR(14) NOT NULL UNIQUE,
     telefone VARCHAR(20) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    endereco VARCHAR(255),
-    cep VARCHAR(10),
+    email VARCHAR(100) NOT NULL UNIQUE,
+    endereco VARCHAR(255) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    foto LONGTEXT NULL,
     senha_hash VARCHAR(255) NULL,
-    foto LONGTEXT,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP
-);
+) ENGINE=InnoDB;
 
--- Tabela pets
+-- TABELA PETS
+
 CREATE TABLE pets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tutor_id INT NOT NULL,
     nome VARCHAR(100) NOT NULL,
     especie VARCHAR(50) NOT NULL,
-    raca VARCHAR(100),
-    idade VARCHAR(30),
-    data_nascimento DATE,
-    sexo ENUM('Macho', 'Fêmea'),
-    peso DECIMAL(6,2),
-    tem_carteira_vacinacao BOOLEAN DEFAULT FALSE,
-    carteira_vacinacao LONGTEXT,
-    foto LONGTEXT,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    raca VARCHAR(100) NOT NULL,
+    idade VARCHAR(30) NOT NULL,
+    data_nascimento DATE NULL,
+    sexo ENUM('Macho', 'Fêmea') NOT NULL,
+    peso VARCHAR(30) NOT NULL,
+    tem_carteira_vacinacao BOOLEAN NOT NULL DEFAULT FALSE,
+    carteira_vacinacao LONGTEXT NULL,
+    foto LONGTEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_pets_tutores
-        FOREIGN KEY (tutor_id) REFERENCES tutores(id)
-        ON DELETE CASCADE
-);
 
--- Tabela clinicas
+    CONSTRAINT fk_pets_tutores
+        FOREIGN KEY (tutor_id)
+        REFERENCES tutores(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    INDEX idx_pets_tutor (tutor_id)
+) ENGINE=InnoDB;
+
+-- TABELA CLÍNICAS
+
 CREATE TABLE clinicas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
+    regiao VARCHAR(100) NOT NULL,
     endereco VARCHAR(255) NOT NULL,
-    telefone VARCHAR(20),
-    email VARCHAR(150),
-    descricao TEXT,
-    imagem VARCHAR(255),
-    latitude DECIMAL(10,7),
-    longitude DECIMAL(10,7),
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+    telefone VARCHAR(20) NULL,
+    horario_atendimento VARCHAR(100) NULL,
+    atendimento_24h BOOLEAN DEFAULT FALSE,
+    descricao TEXT NULL,
+    imagem VARCHAR(255) NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB;
 
--- Tabela veterinarios
+-- TABELA VETERINÁRIOS
+
 CREATE TABLE veterinarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     clinica_id INT NOT NULL,
-    nome VARCHAR(150) NOT NULL,
-    especialidade VARCHAR(100),
-    telefone VARCHAR(20),
-    email VARCHAR(150),
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_veterinarios_clinicas
-        FOREIGN KEY (clinica_id) REFERENCES clinicas(id)
-        ON DELETE CASCADE
-);
+    nome VARCHAR(100) NOT NULL,
+    especialidade VARCHAR(100) NULL,
+    telefone VARCHAR(20) NULL,
+    email VARCHAR(100) NULL,
+    disponivel BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
 
--- Tabela servicos
+    CONSTRAINT fk_veterinarios_clinicas
+        FOREIGN KEY (clinica_id)
+        REFERENCES clinicas(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    INDEX idx_veterinarios_clinica (clinica_id)
+) ENGINE=InnoDB;
+
+-- TABELA SERVIÇOS
+
 CREATE TABLE servicos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     clinica_id INT NOT NULL,
+    veterinario_id INT NULL,
     nome VARCHAR(150) NOT NULL,
-    descricao TEXT,
+    tipo VARCHAR(100) NOT NULL,
+    descricao TEXT NULL,
     preco DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    duracao_minutos INT DEFAULT 30,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_servicos_clinicas
-        FOREIGN KEY (clinica_id) REFERENCES clinicas(id)
-        ON DELETE CASCADE
-);
+    duracao_minutos INT NOT NULL DEFAULT 30,
+    ativo BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
 
--- Tabela agendamentos
+    CONSTRAINT fk_servicos_clinicas
+        FOREIGN KEY (clinica_id)
+        REFERENCES clinicas(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_servicos_veterinarios
+        FOREIGN KEY (veterinario_id)
+        REFERENCES veterinarios(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    INDEX idx_servicos_clinica (clinica_id),
+    INDEX idx_servicos_veterinario (veterinario_id)
+) ENGINE=InnoDB;
+
+-- TABELA AGENDAMENTOS
+
 CREATE TABLE agendamentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tutor_id INT NOT NULL,
     pet_id INT NOT NULL,
     clinica_id INT NOT NULL,
     veterinario_id INT NULL,
-    servico_id INT NULL,
+    servico_id INT NOT NULL,
     data_agendamento DATE NOT NULL,
     horario TIME NOT NULL,
-    observacoes TEXT,
+
     status ENUM(
         'Agendado',
         'Confirmado',
         'Cancelado',
         'Concluído'
-    ) DEFAULT 'Agendado',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT fk_agendamentos_tutores
-        FOREIGN KEY (tutor_id) REFERENCES tutores(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_agendamentos_pets
-        FOREIGN KEY (pet_id) REFERENCES pets(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_agendamentos_clinicas
-        FOREIGN KEY (clinica_id) REFERENCES clinicas(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_agendamentos_veterinarios
-        FOREIGN KEY (veterinario_id) REFERENCES veterinarios(id)
-        ON DELETE SET NULL,
-    CONSTRAINT fk_agendamentos_servicos
-        FOREIGN KEY (servico_id) REFERENCES servicos(id)
-        ON DELETE SET NULL
-);
+    ) NOT NULL DEFAULT 'Agendado',
 
--- Tabela transportes
+    observacoes TEXT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_agendamentos_tutores
+        FOREIGN KEY (tutor_id)
+        REFERENCES tutores(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamentos_pets
+        FOREIGN KEY (pet_id)
+        REFERENCES pets(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamentos_clinicas
+        FOREIGN KEY (clinica_id)
+        REFERENCES clinicas(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamentos_veterinarios
+        FOREIGN KEY (veterinario_id)
+        REFERENCES veterinarios(id)
+        ON DELETE SET NULL
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_agendamentos_servicos
+        FOREIGN KEY (servico_id)
+        REFERENCES servicos(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    INDEX idx_agendamentos_tutor (tutor_id),
+    INDEX idx_agendamentos_pet (pet_id),
+    INDEX idx_agendamentos_clinica (clinica_id),
+    INDEX idx_agendamentos_data_horario (
+        clinica_id,
+        data_agendamento,
+        horario
+    )
+) ENGINE=InnoDB;
+
+-- TABELA TRANSPORTES
+
 CREATE TABLE transportes (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    tutor_id INT NOT NULL,
-    pet_id INT NOT NULL,
-    clinica_id INT NULL,
-    endereco_origem VARCHAR(255) NOT NULL,
-    endereco_destino VARCHAR(255) NOT NULL,
-    data_transporte DATE,
-    horario TIME,
-    observacoes TEXT,
+    agendamento_id INT NOT NULL UNIQUE,
+    endereco_coleta VARCHAR(255) NOT NULL,
+    data_coleta DATE NOT NULL,
+    horario_coleta TIME NOT NULL,
+    observacoes TEXT NULL,
+
     status ENUM(
         'Solicitado',
         'Confirmado',
+        'Em andamento',
         'Concluído',
         'Cancelado'
-    ) DEFAULT 'Solicitado',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_transportes_tutores
-        FOREIGN KEY (tutor_id) REFERENCES tutores(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_transportes_pets
-        FOREIGN KEY (pet_id) REFERENCES pets(id)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_transportes_clinicas
-        FOREIGN KEY (clinica_id) REFERENCES clinicas(id)
-        ON DELETE SET NULL
-);
+    ) NOT NULL DEFAULT 'Solicitado',
 
--- Tabela animais perdidos
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ON UPDATE CURRENT_TIMESTAMP,
+
+    CONSTRAINT fk_transportes_agendamentos
+        FOREIGN KEY (agendamento_id)
+        REFERENCES agendamentos(id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- TABELA DE ANIMAIS PERDIDOS E ENCONTRADOS
+
 CREATE TABLE animais_perdidos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     tutor_id INT NULL,
-    nome VARCHAR(100),
+    nome VARCHAR(100) NULL,
     especie VARCHAR(50) NOT NULL,
-    raca VARCHAR(100),
-    cor VARCHAR(100),
-    porte VARCHAR(50),
-    descricao TEXT,
-    foto LONGTEXT,
-    telefone_contato VARCHAR(20) NOT NULL,
-    endereco VARCHAR(255),
-    data_desaparecimento DATE,
-    status ENUM('Perdido', 'Encontrado') DEFAULT 'Perdido',
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    raca VARCHAR(100) NULL,
+    cor VARCHAR(100) NULL,
+    data_perdido DATE NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
+    local_perdido VARCHAR(255) NOT NULL,
+    descricao TEXT NULL,
+    contato VARCHAR(20) NOT NULL,
+    foto LONGTEXT NULL,
+
+    status ENUM(
+        'perdido',
+        'encontrado'
+    ) NOT NULL DEFAULT 'perdido',
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         ON UPDATE CURRENT_TIMESTAMP,
+
     CONSTRAINT fk_animais_perdidos_tutores
-        FOREIGN KEY (tutor_id) REFERENCES tutores(id)
+        FOREIGN KEY (tutor_id)
+        REFERENCES tutores(id)
         ON DELETE SET NULL
-);
+        ON UPDATE CASCADE,
 
--- Índices
-CREATE INDEX idx_pets_tutor ON pets(tutor_id);
-CREATE INDEX idx_veterinarios_clinica ON veterinarios(clinica_id);
-CREATE INDEX idx_servicos_clinica ON servicos(clinica_id);
-CREATE INDEX idx_agendamentos_tutor ON agendamentos(tutor_id);
-CREATE INDEX idx_agendamentos_pet ON agendamentos(pet_id);
-CREATE INDEX idx_agendamentos_clinica ON agendamentos(clinica_id);
-CREATE INDEX idx_transportes_tutor ON transportes(tutor_id);
-CREATE INDEX idx_animais_perdidos_status ON animais_perdidos(status);
+    INDEX idx_animais_perdidos_status (status),
+    INDEX idx_animais_perdidos_especie (especie),
+    INDEX idx_animais_perdidos_bairro (bairro),
+    INDEX idx_animais_perdidos_tutor (tutor_id)
+) ENGINE=InnoDB;
 
--- Dados das clínicas
-INSERT INTO clinicas
-(nome, endereco, telefone, email, descricao, imagem, latitude, longitude)
+-- CADASTRO DAS CLÍNICAS
+
+INSERT INTO clinicas (
+    nome,
+    regiao,
+    endereco,
+    telefone,
+    horario_atendimento,
+    atendimento_24h,
+    descricao,
+    imagem
+)
 VALUES
 (
     'Pet Vida Veterinária',
-    'Av. Ralfo Leite de Barros, 93, Jardim Nova Europa, Campinas - SP',
-    NULL,
-    NULL,
-    'Atendimento veterinário para cuidar da saúde dos animais.',
-    'petvida.jpg',
-    NULL,
-    NULL
+    'Jardim Nova Europa',
+    'Av. Ralfo Leite de Barros, 93 - Jardim Nova Europa, Campinas - SP',
+    '(19) 3232-1000',
+    '08:00 às 18:00',
+    FALSE,
+    'Clínica veterinária com atendimento clínico, consultas e serviços para cães e gatos.',
+    'petvida.jpg'
 ),
 (
     'Clínica HVNC',
-    'Av. Dr. Jesuíno Marcondes Machado, 1077, Nova Campinas, Campinas - SP',
-    NULL,
-    NULL,
-    'Clínica veterinária com atendimento especializado.',
-    NULL,
-    NULL,
-    NULL
+    'Nova Campinas',
+    'Av. Dr. Jesuíno Marcondes Machado, 1077 - Nova Campinas, Campinas - SP, 13092-001',
+    '(19) 3234-2000',
+    '08:00 às 19:00',
+    FALSE,
+    'Atendimento veterinário para cães e gatos.',
+    'hvnc.jpg'
 ),
 (
     '+PET',
-    'Av. Heitor Penteado, 861 e 865, Campinas - SP',
-    NULL,
-    NULL,
-    'Atendimento e serviços para animais de estimação.',
-    NULL,
-    NULL,
-    NULL
+    'Jardim Nossa Sra. Auxiliadora',
+    'Av. Dr. Heitor Penteado, 861 e 865 - Jardim Nossa Sra. Auxiliadora, Campinas - SP, 13087-000',
+    '(19) 3255-3000',
+    '08:00 às 18:00',
+    FALSE,
+    'Clínica veterinária para atendimento e cuidados com pets.',
+    'pet.jpg'
 ),
 (
     'S.O.S Animal & Cia',
-    'Rua Tobias de Aguiar, 1098, Campinas - SP',
-    NULL,
-    NULL,
-    'Atendimento veterinário e cuidado animal.',
-    NULL,
-    NULL,
-    NULL
+    'Jardim Aurélia',
+    'Av. Brg. Rafael Tobias de Aguiar, 1098 - Jardim Aurélia, Campinas - SP, 13033-140',
+    '(19) 3289-4000',
+    '08:00 às 20:00',
+    FALSE,
+    'Atendimento veterinário completo para pets.',
+    'sos-animal.jpg'
 );
 
--- Dados dos veterinários
-INSERT INTO veterinarios
-(clinica_id, nome, especialidade)
+-- CADASTRO DOS VETERINÁRIOS
+
+INSERT INTO veterinarios (
+    clinica_id,
+    nome,
+    especialidade,
+    telefone,
+    email,
+    disponivel
+)
 VALUES
-(1, 'Dra. Ana Paula', 'Clínica geral'),
-(1, 'Dr. Rafael Mendes', 'Dermatologia veterinária'),
-(2, 'Dra. Camila Oliveira', 'Clínica geral'),
-(2, 'Dr. Felipe Santos', 'Cirurgia veterinária'),
-(3, 'Dra. Juliana Costa', 'Clínica geral'),
-(3, 'Dr. Lucas Almeida', 'Ortopedia veterinária'),
-(4, 'Dra. Beatriz Lima', 'Clínica geral'),
-(4, 'Dr. Gabriel Souza', 'Medicina preventiva');
+(1, 'Dra. Ana Paula', 'Clínica Geral', '(19) 3232-1001', 'ana@petvida.com.br', TRUE),
+(1, 'Dr. Carlos Eduardo', 'Dermatologia Veterinária', '(19) 3232-1002', 'carlos@petvida.com.br', TRUE),
+(2, 'Dra. Mariana Silva', 'Clínica Geral', '(19) 3234-2001', 'mariana@animalcare.com.br', TRUE),
+(2, 'Dr. Rafael Souza', 'Cirurgia Veterinária', '(19) 3234-2002', 'rafael@animalcare.com.br', TRUE),
+(3, 'Dra. Juliana Martins', 'Clínica Geral', '(19) 3255-3001', 'juliana@vetcare.com.br', TRUE),
+(3, 'Dr. Felipe Almeida', 'Cardiologia Veterinária', '(19) 3255-3002', 'felipe@vetcare.com.br', TRUE),
+(4, 'Dra. Beatriz Oliveira', 'Clínica Geral', '(19) 3289-4001', 'beatriz@pethealth.com.br', TRUE),
+(4, 'Dr. Lucas Ferreira', 'Cirurgia Veterinária', '(19) 3289-4002', 'lucas@pethealth.com.br', TRUE);
 
--- Dados dos serviços
-INSERT INTO servicos
-(clinica_id, nome, descricao, preco, duracao_minutos)
+-- CADASTRO DOS SERVIÇOS
+
+INSERT INTO servicos (
+    clinica_id,
+    veterinario_id,
+    nome,
+    tipo,
+    descricao,
+    preco,
+    duracao_minutos,
+    ativo
+)
 VALUES
-(1, 'Consulta veterinária', 'Avaliação geral da saúde do pet.', 120.00, 30),
-(1, 'Vacinação', 'Aplicação de vacina conforme orientação veterinária.', 80.00, 20),
-(1, 'Exame de sangue', 'Coleta e análise de sangue.', 100.00, 30),
-(1, 'Retorno veterinário', 'Reavaliação após consulta.', 60.00, 20),
-(2, 'Consulta veterinária', 'Avaliação clínica do animal.', 150.00, 30),
-(2, 'Consulta especializada', 'Atendimento veterinário especializado.', 200.00, 45),
-(2, 'Exame de imagem', 'Exame de imagem mediante indicação veterinária.', 180.00, 40),
-(2, 'Cirurgia veterinária', 'Procedimento cirúrgico conforme avaliação.', 500.00, 120),
-(3, 'Consulta veterinária', 'Avaliação geral do pet.', 110.00, 30),
-(3, 'Vacinação', 'Aplicação de vacina conforme orientação veterinária.', 75.00, 20),
-(3, 'Banho e tosa', 'Higiene e cuidados com a pelagem.', 90.00, 60),
-(3, 'Exame de sangue', 'Coleta e análise de sangue.', 95.00, 30),
-(4, 'Consulta veterinária', 'Avaliação geral do animal.', 100.00, 30),
-(4, 'Vacinação', 'Aplicação de vacina conforme orientação veterinária.', 70.00, 20),
-(4, 'Atendimento preventivo', 'Orientações para prevenção de doenças.', 85.00, 30),
-(4, 'Retorno veterinário', 'Reavaliação após consulta.', 50.00, 20);
+(1, 1, 'Consulta Veterinária', 'Consulta', 'Consulta veterinária geral.', 120.00, 40, TRUE),
+(1, 2, 'Consulta Dermatológica', 'Consulta', 'Avaliação dermatológica do pet.', 180.00, 50, TRUE),
+(1, 1, 'Vacinação', 'Vacina', 'Aplicação de vacina para cães e gatos.', 90.00, 20, TRUE),
+(1, 2, 'Avaliação Dermatológica', 'Exame', 'Avaliação da pele e pelagem.', 150.00, 40, TRUE),
 
--- Verificação das tabelas
-SHOW TABLES;
+(2, 3, 'Consulta Veterinária', 'Consulta', 'Consulta veterinária geral.', 150.00, 40, TRUE),
+(2, 4, 'Consulta Cirúrgica', 'Consulta', 'Avaliação pré-cirúrgica.', 180.00, 50, TRUE),
+(2, 3, 'Vacinação', 'Vacina', 'Aplicação de vacinas.', 95.00, 20, TRUE),
+(2, 4, 'Cirurgia Veterinária', 'Cirurgia', 'Procedimentos cirúrgicos veterinários.', 350.00, 90, TRUE),
 
--- Verificação das clínicas
+(3, 5, 'Consulta Veterinária', 'Consulta', 'Consulta veterinária geral.', 100.00, 40, TRUE),
+(3, 6, 'Consulta Cardiológica', 'Consulta', 'Avaliação cardiológica do pet.', 200.00, 50, TRUE),
+(3, 5, 'Vacinação', 'Vacina', 'Aplicação de vacinas.', 85.00, 20, TRUE),
+(3, 6, 'Exame Cardiológico', 'Exame', 'Avaliação do sistema cardiovascular.', 180.00, 45, TRUE),
+
+(4, 7, 'Consulta Veterinária', 'Consulta', 'Consulta veterinária geral.', 130.00, 40, TRUE),
+(4, 8, 'Consulta Cirúrgica', 'Consulta', 'Avaliação para procedimentos cirúrgicos.', 170.00, 50, TRUE),
+(4, 7, 'Vacinação', 'Vacina', 'Aplicação de vacinas.', 90.00, 20, TRUE),
+(4, 8, 'Cirurgia Veterinária', 'Cirurgia', 'Procedimentos cirúrgicos veterinários.', 400.00, 90, TRUE);
+
+-- VERIFICAÇÃO DO BANCO
+
 SELECT * FROM clinicas;
-
--- Verificação dos veterinários
 SELECT * FROM veterinarios;
-
--- Verificação dos serviços
 SELECT * FROM servicos;
+SELECT * FROM tutores;
+SELECT * FROM pets;
+SELECT * FROM agendamentos;
+SELECT * FROM transportes;
+SELECT * FROM animais_perdidos;

@@ -1,486 +1,196 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perdidos & Encontrados | Agenda Pet</title>
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="../css/animais.css">
 </head>
-
 <body>
-
     <header class="header">
-
         <div class="logo-area">
-
-            <div class="logo">
-                <i class="fa-solid fa-paw"></i>
-            </div>
-
+            <div class="logo"><i class="fa-solid fa-paw"></i></div>
             <div>
                 <h1>Agenda Pet</h1>
                 <span>Perdidos & Encontrados</span>
             </div>
-
         </div>
-
         <a href="home.html" class="btn-inicio">
-    <i class="fa-solid fa-house"></i>
-    Início
-</a>
-
+            <i class="fa-solid fa-house"></i> Início
+        </a>
     </header>
 
     <section class="hero">
-
         <div class="hero-text">
-
-            <span class="tag">
-                <i class="fa-solid fa-heart"></i>
-                Ajude um pet
-            </span>
-
-            <h2>
-                Perdidos & <span>Encontrados</span>
-            </h2>
-
-            <p>
-                Encontre animais perdidos ou ajude a reunir um pet
-                encontrado com sua família.
-            </p>
-
+            <span class="tag"><i class="fa-solid fa-heart"></i> Ajude um pet</span>
+            <h2>Perdidos & <span>Encontrados</span></h2>
+            <p>Encontre animais perdidos ou ajude a reunir um pet encontrado com sua família.</p>
         </div>
-
-        <div class="hero-icon">
-            <i class="fa-solid fa-paw"></i>
-        </div>
-
+        <div class="hero-icon"><i class="fa-solid fa-paw"></i></div>
     </section>
 
     <section class="filtros-container">
-
         <div class="pesquisa">
-
             <i class="fa-solid fa-magnifying-glass"></i>
-
-            <input
-                type="text"
-                id="pesquisaAnimal"
-                placeholder="Pesquise por nome, bairro ou característica..."
-            >
-
+            <input type="text" id="pesquisaAnimal" placeholder="Pesquise por nome, bairro ou característica...">
         </div>
 
         <div class="filtros">
-
-            <button
-                type="button"
-                class="filtro ativo"
-                data-status="todos">
-                Todos
+            <button type="button" class="filtro ativo" data-status="todos">Todos</button>
+            <button type="button" class="filtro" data-status="perdido">
+                <i class="fa-solid fa-circle-exclamation"></i> Perdidos
             </button>
-
-            <button
-                type="button"
-                class="filtro"
-                data-status="perdido">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                Perdidos
+            <button type="button" class="filtro" data-status="encontrado">
+                <i class="fa-solid fa-heart"></i> Encontrados
             </button>
-
-            <button
-                type="button"
-                class="filtro"
-                data-status="encontrado">
-                <i class="fa-solid fa-heart"></i>
-                Encontrados
-            </button>
-
         </div>
 
         <div class="filtro-especie">
-
             <select id="filtroEspecie">
-
-                <option value="todos">
-                    Todas as espécies
-                </option>
-
-                <option value="cachorro">
-                    Cachorros
-                </option>
-
-                <option value="gato">
-                    Gatos
-                </option>
-
-                <option value="outro">
-                    Outros
-                </option>
-
+                <option value="todos">Todas as espécies</option>
+                <option value="cachorro">Cachorros</option>
+                <option value="gato">Gatos</option>
+                <option value="outro">Outros / Não identificados</option>
             </select>
-
         </div>
-
     </section>
 
     <section class="cadastrar-area">
-
         <div>
-
-            <h3>
-                Seu pet está perdido ou você encontrou um animal?
-            </h3>
-
-            <p>
-                Cadastre as informações para ajudar a encontrá-lo.
-            </p>
-
+            <h3>Seu pet está perdido ou você encontrou um animal?</h3>
+            <p>Cadastre as informações para ajudar a encontrá-lo.</p>
         </div>
-
-        <button
-            type="button"
-            id="btnAbrirFormulario"
-            class="btn-cadastrar">
-
-            <i class="fa-solid fa-plus"></i>
-            Cadastrar animal
-
+        <button type="button" id="btnAbrirFormulario" class="btn-cadastrar">
+            <i class="fa-solid fa-plus"></i> Cadastrar animal
         </button>
-
     </section>
 
     <main class="animais-container">
-
         <div class="titulo-lista">
-
             <div>
-
-                <h2>
-                    Animais cadastrados
-                </h2>
-
-                <p>
-                    Confira os pets que precisam de ajuda.
-                </p>
-
+                <h2>Animais cadastrados</h2>
+                <p>Confira os pets que precisam de ajuda.</p>
             </div>
-
-            <span id="contadorAnimais">
-                0 animais
-            </span>
-
+            <span id="contadorAnimais">0 animais</span>
         </div>
 
-        <div
-            id="listaAnimais"
-            class="lista-animais">
-        </div>
+        <div id="listaAnimais" class="lista-animais"></div>
 
-        <div
-            id="nenhumAnimal"
-            class="nenhum-animal">
-
+        <div id="nenhumAnimal" class="nenhum-animal">
             <i class="fa-solid fa-paw"></i>
-
-            <h3>
-                Nenhum animal encontrado
-            </h3>
-
-            <p>
-                Tente mudar os filtros ou cadastrar um novo animal.
-            </p>
-
+            <h3>Nenhum animal encontrado</h3>
+            <p>Tente mudar os filtros ou cadastrar um novo animal.</p>
         </div>
-
     </main>
 
-    <div
-        id="modalCadastro"
-        class="modal">
-
+    <div id="modalCadastro" class="modal">
         <div class="modal-conteudo">
-
-            <button
-                type="button"
-                id="fecharModal"
-                class="fechar"
-                aria-label="Fechar">
-
+            <button type="button" id="fecharModal" class="fechar" aria-label="Fechar">
                 <i class="fa-solid fa-xmark"></i>
-
             </button>
 
             <div class="modal-titulo">
-
-                <div class="icone-modal">
-                    <i class="fa-solid fa-paw"></i>
-                </div>
-
+                <div class="icone-modal"><i class="fa-solid fa-paw"></i></div>
                 <div>
-
-                    <h2>
-                        Cadastrar animal
-                    </h2>
-
-                    <p>
-                        Preencha as informações abaixo.
-                    </p>
-
+                    <h2>Cadastrar animal</h2>
+                    <p>Preencha as informações abaixo.</p>
                 </div>
-
             </div>
 
             <form id="formAnimal">
-
                 <div class="campo foto-campo">
-
-                    <label for="fotoAnimal">
-                        Foto do animal
-                    </label>
-
+                    <label for="fotoAnimal">Foto do animal</label>
                     <div class="upload-area">
-
                         <i class="fa-solid fa-camera"></i>
-
-                        <span>
-                            Clique para adicionar uma foto
-                        </span>
-
-                        <input
-                            type="file"
-                            id="fotoAnimal"
-                            accept="image/*">
-
+                        <span>Clique para adicionar uma foto</span>
+                        <input type="file" id="fotoAnimal" accept="image/*">
                     </div>
-
-                    <img
-                        id="previewFoto"
-                        class="preview-foto"
-                        alt="Prévia da foto">
-
+                    <img id="previewFoto" class="preview-foto" alt="Prévia da foto">
                 </div>
 
                 <div class="campo">
-
-                    <label>
-                        Situação do animal *
-                    </label>
-
+                    <label>Situação do animal *</label>
                     <div class="status-opcoes">
-
                         <label class="status-option perdido">
-
-                            <input
-                                type="radio"
-                                name="status"
-                                value="perdido"
-                                checked>
-
-                            <span>
-                                <i class="fa-solid fa-circle-exclamation"></i>
-                                Animal perdido
-                            </span>
-
+                            <input type="radio" name="status" value="perdido" checked>
+                            <span><i class="fa-solid fa-circle-exclamation"></i> Animal perdido</span>
                         </label>
-
                         <label class="status-option encontrado">
-
-                            <input
-                                type="radio"
-                                name="status"
-                                value="encontrado">
-
-                            <span>
-                                <i class="fa-solid fa-heart"></i>
-                                Animal encontrado
-                            </span>
-
+                            <input type="radio" name="status" value="encontrado">
+                            <span><i class="fa-solid fa-heart"></i> Animal encontrado</span>
                         </label>
-
                     </div>
-
+                    <p id="ajudaStatus" class="ajuda-campo">Informe os dados do seu animal que está perdido.</p>
                 </div>
 
                 <div class="linha">
-
                     <div class="campo">
-
-                        <label for="nomeAnimal">
-                            Nome
-                        </label>
-
-                        <input
-                            type="text"
-                            id="nomeAnimal"
-                            placeholder="Ex.: Thor">
-
+                        <label for="nomeAnimal" id="labelNomeAnimal">Nome *</label>
+                        <input type="text" id="nomeAnimal" maxlength="100" placeholder="Ex.: Thor" required>
+                        <small id="ajudaNome" class="ajuda-campo">Informe o nome do seu animal.</small>
                     </div>
 
                     <div class="campo">
-
-                        <label for="especieAnimal">
-                            Espécie *
-                        </label>
-
-                        <select
-                            id="especieAnimal"
-                            required>
-
-                            <option value="">
-                                Selecione
-                            </option>
-
-                            <option value="cachorro">
-                                Cachorro
-                            </option>
-
-                            <option value="gato">
-                                Gato
-                            </option>
-
-                            <option value="outro">
-                                Outro
-                            </option>
-
+                        <label for="especieAnimal">Espécie *</label>
+                        <select id="especieAnimal" required>
+                            <option value="">Selecione</option>
+                            <option value="cachorro">Cachorro</option>
+                            <option value="gato">Gato</option>
+                            <option value="outro">Outro / Não sei identificar</option>
                         </select>
-
                     </div>
-
                 </div>
 
                 <div class="linha">
-
                     <div class="campo">
-
-                        <label for="racaAnimal">
-                            Raça
-                        </label>
-
-                        <input
-                            type="text"
-                            id="racaAnimal"
-                            placeholder="Ex.: Golden Retriever">
-
+                        <label for="racaAnimal">Raça</label>
+                        <input type="text" id="racaAnimal" placeholder="Ex.: Golden Retriever">
                     </div>
-
                     <div class="campo">
-
-                        <label for="corAnimal">
-                            Cor
-                        </label>
-
-                        <input
-                            type="text"
-                            id="corAnimal"
-                            placeholder="Ex.: Caramelo">
-
+                        <label for="corAnimal">Cor</label>
+                        <input type="text" id="corAnimal" placeholder="Ex.: Caramelo">
                     </div>
-
                 </div>
 
                 <div class="linha">
-
                     <div class="campo">
-
-                        <label for="dataAnimal">
-                            Data *
-                        </label>
-
-                        <input
-                            type="date"
-                            id="dataAnimal"
-                            required>
-
+                        <label for="dataAnimal">Data *</label>
+                        <input type="date" id="dataAnimal" required>
                     </div>
-
                     <div class="campo">
-
-                        <label for="bairroAnimal">
-                            Bairro *
-                        </label>
-
-                        <input
-                            type="text"
-                            id="bairroAnimal"
-                            placeholder="Ex.: Taquaral"
-                            required>
-
+                        <label for="bairroAnimal">Bairro *</label>
+                        <input type="text" id="bairroAnimal" placeholder="Ex.: Taquaral" required>
                     </div>
-
                 </div>
 
                 <div class="campo">
-
-                    <label for="localAnimal">
-                        Local onde foi perdido/encontrado *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="localAnimal"
-                        placeholder="Ex.: Próximo à praça..."
-                        required>
-
+                    <label for="localAnimal" id="labelLocalAnimal">Local onde foi perdido *</label>
+                    <input type="text" id="localAnimal" placeholder="Ex.: Próximo à praça..." required>
                 </div>
 
                 <div class="campo">
-
-                    <label for="descricaoAnimal">
-                        Características / informações
-                    </label>
-
-                    <textarea
-                        id="descricaoAnimal"
-                        rows="4"
-                        placeholder="Descreva características importantes do animal..."></textarea>
-
+                    <label for="descricaoAnimal">Características / informações</label>
+                    <textarea id="descricaoAnimal" rows="4" placeholder="Descreva características importantes do animal..."></textarea>
                 </div>
 
                 <div class="campo">
-
-                    <label for="contatoAnimal">
-                        Telefone para contato *
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="contatoAnimal"
-                        placeholder="(19) 99999-9999"
-                        required>
-
+                    <label for="contatoAnimal">Telefone para contato *</label>
+                    <input type="tel" id="contatoAnimal" placeholder="(19) 99999-9999" required>
                 </div>
 
-                <button
-                    type="submit"
-                    class="btn-enviar">
-
-                    <i class="fa-solid fa-paw"></i>
-                    Publicar anúncio
-
+                <button type="submit" class="btn-enviar">
+                    <i class="fa-solid fa-paw"></i> Publicar anúncio
                 </button>
-
             </form>
-
         </div>
-
     </div>
 
     <footer>
-
-        <p>
-            © 2026 Agenda Pet — Cuidando de quem faz parte da família.
-        </p>
-
+        <p>© 2026 Agenda Pet — Cuidando de quem faz parte da família.</p>
     </footer>
 
     <script src="../js/animais.js"></script>
-
 </body>
-
 </html>

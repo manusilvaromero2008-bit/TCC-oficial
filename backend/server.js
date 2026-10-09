@@ -1956,6 +1956,9 @@ app.post(
 
 /* ==================== SOS ANIMAIS ==================== */
 
+
+/* ==================== SOS ANIMAIS ==================== */
+
 async function buscarAnimais(req, res) {
     try {
         const [animais] = await conexao.execute(`
@@ -1969,8 +1972,7 @@ async function buscarAnimais(req, res) {
         console.error("Erro ao buscar animais:", erro);
 
         res.status(500).json({
-            mensagem: "Erro ao buscar animais.",
-            erro: erro.message
+            mensagem: "Erro ao buscar animais."
         });
     }
 }
@@ -1997,117 +1999,122 @@ async function cadastrarAnimal(req, res) {
             status
         } = req.body;
 
-        if (
-            !nome ||
-            !especie ||
-            !contato
-        ) {
+        if (!validarId(tutor_id)) {
             return res.status(400).json({
-                mensagem:
-                    "Nome, espécie e contato são obrigatórios."
+                mensagem: "Não foi possível identificar o tutor."
             });
         }
 
-        const dataFinal =
-            data_perdido ||
-            data ||
-            null;
+        const tutorId = Number(tutor_id);
+        const nomeFinal = typeof nome === "string" ? nome.trim() : "";
+        const statusFinal = status === "encontrado" ? "encontrado" : "perdido";
+        const especieFinal = String(especie || "").trim().toLowerCase();
+        const dataFinal = data_perdido || data;
+        const bairroFinal = String(bairro || "").trim();
+        const localFinal = String(local_perdido || local || "").trim();
+        const contatoFinal = String(contato || "").trim();
 
-        if (
-            dataFinal &&
-            !validarData(dataFinal)
-        ) {
+        if (status !== "perdido" && status !== "encontrado") {
             return res.status(400).json({
-                mensagem:
-                    "Data inválida."
+                mensagem: "Selecione uma situação válida para o animal."
             });
         }
 
-        const localFinal =
-            local_perdido ||
-            local ||
-            null;
-
-        const statusFinal =
-            status === "encontrado"
-                ? "encontrado"
-                : "perdido";
-
-        const tutorFinal =
-            tutor_id &&
-            validarId(tutor_id)
-                ? tutor_id
-                : null;
-
-        if (tutorFinal) {
-            const [tutorExiste] =
-                await conexao.execute(`
-                    SELECT id
-                    FROM tutores
-                    WHERE id = ?
-                `, [tutorFinal]);
-
-            if (tutorExiste.length === 0) {
-                return res.status(404).json({
-                    mensagem:
-                        "Tutor não encontrado."
-                });
-            }
+        if (statusFinal === "perdido" && !nomeFinal) {
+            return res.status(400).json({
+                mensagem: "O nome é obrigatório para um animal perdido."
+            });
         }
 
-        const [resultado] =
-            await conexao.execute(`
-                INSERT INTO animais_perdidos
-                (
-                    tutor_id,
-                    nome,
-                    especie,
-                    raca,
-                    cor,
-                    data_perdido,
-                    bairro,
-                    local_perdido,
-                    descricao,
-                    contato,
-                    foto,
-                    status
-                )
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `, [
-                tutorFinal,
-                nome.trim(),
+        if (!["cachorro", "gato", "outro"].includes(especieFinal)) {
+            return res.status(400).json({
+                mensagem: "Selecione uma espécie válida."
+            });
+        }
+
+        if (!dataFinal || !validarData(dataFinal)) {
+            return res.status(400).json({
+                mensagem: "Informe uma data válida."
+            });
+        }
+
+        if (!bairroFinal || !localFinal || !contatoFinal) {
+            return res.status(400).json({
+                mensagem: "Preencha o bairro, o local e o telefone para contato."
+            });
+        }
+
+        if (
+            foto !== undefined &&
+            foto !== null &&
+            foto !== "" &&
+            (typeof foto !== "string" || foto.length > 7 * 1024 * 1024)
+        ) {
+            return res.status(400).json({
+                mensagem: "A foto é inválida ou muito grande."
+            });
+        }
+
+        const [tutores] = await conexao.execute(`
+            SELECT id
+            FROM tutores
+            WHERE id = ?
+        `, [tutorId]);
+
+        if (tutores.length === 0) {
+            return res.status(404).json({
+                mensagem: "Tutor não encontrado. Entre novamente no sistema."
+            });
+        }
+
+        const [resultado] = await conexao.execute(`
+            INSERT INTO animais_perdidos
+            (
+                tutor_id,
+                nome,
                 especie,
-                raca || null,
-                cor || null,
-                dataFinal,
-                bairro || null,
-                localFinal,
-                descricao || null,
+                raca,
+                cor,
+                data_perdido,
+                bairro,
+                local_perdido,
+                descricao,
                 contato,
-                foto || null,
-                statusFinal
-            ]);
+                foto,
+                status
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+            tutorId,
+            nomeFinal || null,
+            especieFinal,
+            String(raca || "").trim() || null,
+            String(cor || "").trim() || null,
+            dataFinal,
+            bairroFinal,
+            localFinal,
+            String(descricao || "").trim() || null,
+            contatoFinal,
+            foto || null,
+            statusFinal
+        ]);
 
-        const [animal] =
-            await conexao.execute(`
-                SELECT *
-                FROM animais_perdidos
-                WHERE id = ?
-            `, [resultado.insertId]);
+        const [animais] = await conexao.execute(`
+            SELECT *
+            FROM animais_perdidos
+            WHERE id = ?
+        `, [resultado.insertId]);
 
         res.status(201).json({
-            mensagem:
-                "Animal cadastrado com sucesso.",
+            mensagem: "Animal cadastrado com sucesso.",
             id: resultado.insertId,
-            animal: animal[0]
+            animal: animais[0]
         });
     } catch (erro) {
         console.error("Erro ao cadastrar animal:", erro);
 
         res.status(500).json({
-            mensagem:
-                "Erro ao cadastrar animal.",
-            erro: erro.message
+            mensagem: "Erro ao cadastrar animal. Verifique os dados e a estrutura da tabela."
         });
     }
 }
@@ -2115,47 +2122,117 @@ async function cadastrarAnimal(req, res) {
 app.post("/api/animais", cadastrarAnimal);
 app.post("/api/animais-perdidos", cadastrarAnimal);
 
+app.put("/api/animais/:id/status", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { tutor_id, status } = req.body;
+
+        if (!validarId(id) || !validarId(tutor_id)) {
+            return res.status(400).json({
+                mensagem: "ID do anúncio ou do tutor inválido."
+            });
+        }
+
+        if (!["perdido", "encontrado"].includes(status)) {
+            return res.status(400).json({
+                mensagem: "Status inválido."
+            });
+        }
+
+        const [animais] = await conexao.execute(`
+            SELECT id, tutor_id, status
+            FROM animais_perdidos
+            WHERE id = ?
+            LIMIT 1
+        `, [id]);
+
+        if (animais.length === 0) {
+            return res.status(404).json({
+                mensagem: "Anúncio não encontrado."
+            });
+        }
+
+        if (
+            animais[0].tutor_id === null ||
+            Number(animais[0].tutor_id) !== Number(tutor_id)
+        ) {
+            return res.status(403).json({
+                mensagem: "Somente o responsável pela publicação pode alterar o status."
+            });
+        }
+
+        await conexao.execute(`
+            UPDATE animais_perdidos
+            SET status = ?
+            WHERE id = ?
+        `, [status, id]);
+
+        res.json({
+            mensagem: "Status atualizado com sucesso.",
+            status
+        });
+    } catch (erro) {
+        console.error("Erro ao alterar status do animal:", erro);
+
+        res.status(500).json({
+            mensagem: "Não foi possível alterar o status do anúncio."
+        });
+    }
+});
+
 async function excluirAnimal(req, res) {
     try {
         const { id } = req.params;
+        const tutorId = req.query.tutor_id;
 
-        if (!validarId(id)) {
+        if (!validarId(id) || !validarId(tutorId)) {
             return res.status(400).json({
-                mensagem:
-                    "ID inválido."
+                mensagem: "ID do anúncio ou do tutor inválido."
             });
         }
 
-        const [resultado] =
-            await conexao.execute(`
-                DELETE FROM animais_perdidos
-                WHERE id = ?
-            `, [id]);
+        const [animais] = await conexao.execute(`
+            SELECT id, tutor_id
+            FROM animais_perdidos
+            WHERE id = ?
+            LIMIT 1
+        `, [id]);
 
-        if (resultado.affectedRows === 0) {
+        if (animais.length === 0) {
             return res.status(404).json({
-                mensagem:
-                    "Animal não encontrado."
+                mensagem: "Anúncio não encontrado."
             });
         }
+
+        if (
+            animais[0].tutor_id === null ||
+            Number(animais[0].tutor_id) !== Number(tutorId)
+        ) {
+            return res.status(403).json({
+                mensagem: "Somente o responsável pela publicação pode remover o anúncio."
+            });
+        }
+
+        await conexao.execute(`
+            DELETE FROM animais_perdidos
+            WHERE id = ?
+        `, [id]);
 
         res.json({
-            mensagem:
-                "Animal removido com sucesso."
+            mensagem: "Anúncio removido com sucesso."
         });
     } catch (erro) {
         console.error("Erro ao remover animal:", erro);
 
         res.status(500).json({
-            mensagem:
-                "Erro ao remover animal.",
-            erro: erro.message
+            mensagem: "Não foi possível remover o anúncio."
         });
     }
 }
 
 app.delete("/api/animais/:id", excluirAnimal);
 app.delete("/api/animais-perdidos/:id", excluirAnimal);
+
 
 /* ==================== ERROS ==================== */
 

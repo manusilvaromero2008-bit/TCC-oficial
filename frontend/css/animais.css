@@ -851,3 +851,65 @@ footer {
         font-size: 18px;
     }
 }
+
+
+.ajuda-campo {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.4;
+    font-weight: normal;
+}
+
+.acoes-anuncio {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 7px;
+}
+
+.btn-status {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 9px;
+    background: #e0effa;
+    color: #04407c;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-status:hover {
+    background: #0757a6;
+    color: white;
+}
+
+.btn-status:disabled,
+.btn-remover:disabled,
+.btn-enviar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-remover {
+    margin-top: 0;
+}
+
+.campo small.ajuda-campo {
+    font-weight: normal;
+}
+
+@media (max-width: 500px) {
+    .acoes-anuncio {
+        gap: 8px;
+    }
+
+    .btn-status,
+    .btn-remover {
+        padding: 10px;
+    }
+}
