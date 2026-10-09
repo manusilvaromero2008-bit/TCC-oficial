@@ -1,191 +1,150 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Cadastro - Agenda Pet</title>
-
     <link rel="stylesheet" href="../css/cadastro.css">
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-    >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
-
 <body>
+    <header class="cadastro-header">
+        <a href="#" id="btnVoltarCadastro" class="voltar">
+            <i class="fa-solid fa-arrow-left"></i> Voltar
+        </a>
 
-<header class="cadastro-header">
+        <div class="logo">
+            <i class="fa-solid fa-paw"></i>
+            <span>Agenda Pet</span>
+        </div>
 
-    <a href="#" id="btnVoltarCadastro" class="voltar">
-        <i class="fa-solid fa-arrow-left"></i>
-        Voltar
-    </a>
+        <div class="titulo-cadastro">
+            <h1>Meu Cadastro</h1>
+            <p>Cadastre seus dados e os dados dos seus pets.</p>
+        </div>
+    </header>
 
-    <div class="logo">
-        <i class="fa-solid fa-paw"></i>
-        <span>Agenda Pet</span>
-    </div>
+    <main class="container">
+        <form id="formCadastro">
+            <section class="box">
+                <h2><i class="fa-solid fa-user"></i> Dados do Tutor</h2>
 
-    <div class="titulo-cadastro">
+                <div class="grid">
+                    <div class="campo">
+                        <label for="nomeTutor">Nome Completo *</label>
+                        <input type="text" id="nomeTutor" placeholder="Digite seu nome" required>
+                    </div>
 
-        <h1>Meu Cadastro</h1>
+                    <div class="campo">
+                        <label for="cpfTutor">CPF *</label>
+                        <input type="text" id="cpfTutor" placeholder="000.000.000-00" required>
+                    </div>
 
-        <p>
-            Cadastre seus dados e os dados dos seus pets.
-        </p>
+                    <div class="campo">
+                        <label for="telefoneTutor">Telefone *</label>
+                        <input type="tel" id="telefoneTutor" placeholder="(19) 99999-9999" required>
+                    </div>
 
-    </div>
+                    <div class="campo">
+                        <label for="emailTutor">E-mail *</label>
+                        <input type="email" id="emailTutor" placeholder="email@email.com" required>
+                    </div>
 
-</header>
+                    <div class="campo">
+                        <label for="enderecoTutor">Endereço *</label>
+                        <input type="text" id="enderecoTutor" placeholder="Rua, número e bairro" required>
+                    </div>
 
-<main class="container">
+                    <div class="campo">
+                        <label for="cep">CEP</label>
+                        <input type="text" id="cep" placeholder="Digite o CEP">
+                    </div>
 
-    <form id="formCadastro">
+                    <div class="campo campo-senha-cadastro">
+                        <label for="senhaTutor">Senha *</label>
+                        <div class="campo-senha">
+                            <input
+                                type="password"
+                                id="senhaTutor"
+                                autocomplete="new-password"
+                                placeholder="Crie uma senha"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="mostrar-senha"
+                                data-alvo="senhaTutor"
+                                aria-label="Mostrar senha"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                        <small class="ajuda-senha">
+                            Mínimo de 8 caracteres, com maiúscula, minúscula, número e caractere especial.
+                        </small>
+                    </div>
 
-        <section class="box">
-
-            <h2>
-                <i class="fa-solid fa-user"></i>
-                Dados do Tutor
-            </h2>
-
-            <div class="grid">
-
-                <div class="campo">
-
-                    <label for="nomeTutor">
-                        Nome Completo *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="nomeTutor"
-                        placeholder="Digite seu nome"
-                        required
-                    >
-
+                    <div class="campo campo-senha-cadastro">
+                        <label for="confirmarSenhaTutor">Confirmar senha *</label>
+                        <div class="campo-senha">
+                            <input
+                                type="password"
+                                id="confirmarSenhaTutor"
+                                autocomplete="new-password"
+                                placeholder="Digite a senha novamente"
+                                required
+                            >
+                            <button
+                                type="button"
+                                class="mostrar-senha"
+                                data-alvo="confirmarSenhaTutor"
+                                aria-label="Mostrar confirmação da senha"
+                            >
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <div class="campo">
+            <section class="box">
+                <h2><i class="fa-solid fa-paw"></i> Meus Pets</h2>
 
-                    <label for="cpfTutor">
-                        CPF *
-                    </label>
+                <div id="pets"></div>
 
-                    <input
-                        type="text"
-                        id="cpfTutor"
-                        placeholder="000.000.000-00"
-                        required
-                    >
+                <button type="button" id="adicionarPet" class="btn-add">
+                    <i class="fa-solid fa-plus"></i> Adicionar outro pet
+                </button>
+            </section>
 
-                </div>
-
-                <div class="campo">
-
-                    <label for="telefoneTutor">
-                        Telefone *
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="telefoneTutor"
-                        placeholder="(19) 99999-9999"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="emailTutor">
-                        E-mail *
-                    </label>
-
-                    <input
-                        type="email"
-                        id="emailTutor"
-                        placeholder="email@email.com"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="enderecoTutor">
-                        Endereço *
-                    </label>
-
-                    <input
-                        type="text"
-                        id="enderecoTutor"
-                        placeholder="Rua, número e bairro"
-                        required
-                    >
-
-                </div>
-
-                <div class="campo">
-
-                    <label for="cep">
-                        CEP
-                    </label>
-
-                    <input
-                        type="text"
-                        id="cep"
-                        placeholder="Digite o CEP"
-                    >
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <section class="box">
-
-            <h2>
-                <i class="fa-solid fa-paw"></i>
-                Meus Pets
-            </h2>
-
-            <div id="pets"></div>
-
-            <button
-                type="button"
-                id="adicionarPet"
-                class="btn-add"
-            >
-
-                <i class="fa-solid fa-plus"></i>
-                Adicionar outro pet
-
+            <button type="submit" id="btnProsseguir" class="btn-confirmar">
+                <i class="fa-solid fa-check"></i> Salvar cadastro
             </button>
+        </form>
+    </main>
 
-        </section>
+    <script src="../js/cadastro.js"></script>
+    <script>
+        document.querySelectorAll(".mostrar-senha").forEach((botao) => {
+            botao.addEventListener("click", () => {
+                const campo = document.getElementById(botao.dataset.alvo);
 
-        <button
-            type="submit"
-            id="btnProsseguir"
-            class="btn-confirmar"
-        >
+                if (!campo) return;
 
-            <i class="fa-solid fa-check"></i>
-            Salvar cadastro
+                const mostrar = campo.type === "password";
 
-        </button>
+                campo.type = mostrar ? "text" : "password";
 
-    </form>
+                botao.innerHTML = mostrar
+                    ? '<i class="fa-solid fa-eye-slash"></i>'
+                    : '<i class="fa-solid fa-eye"></i>';
 
-</main>
-
-<script src="../js/cadastro.js"></script>
-
+                botao.setAttribute(
+                    "aria-label",
+                    mostrar ? "Ocultar senha" : "Mostrar senha"
+                );
+            });
+        });
+    </script>
 </body>
-
 </html>

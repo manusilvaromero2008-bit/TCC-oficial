@@ -1014,6 +1014,11 @@ async function carregarTutor() {
         return;
     }
 
+    document.querySelectorAll(".campo-senha-cadastro").forEach((campo) => {
+        campo.style.display = "none";
+        campo.querySelectorAll("input").forEach((input) => input.required = false);
+    });
+
     try {
         const respostaTutor =
             await fetch(
@@ -1351,15 +1356,35 @@ if (formCadastro) {
                     return;
                 }
 
+                const senhaCampo = document.getElementById("senhaTutor");
+                const confirmarSenhaCampo = document.getElementById("confirmarSenhaTutor");
+                const senha = senhaCampo ? senhaCampo.value : "";
+                const confirmarSenha = confirmarSenhaCampo ? confirmarSenhaCampo.value : "";
+
+                if (!tutorId) {
+                    if (senha.length < 8 || !/[A-Z]/.test(senha) || !/[a-z]/.test(senha) || !/\d/.test(senha) || !/[^A-Za-z0-9]/.test(senha)) {
+                        alert("A senha precisa ter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial.");
+                        return;
+                    }
+
+                    if (senha !== confirmarSenha) {
+                        alert("As senhas não coincidem.");
+                        return;
+                    }
+                }
+
                 const dadosTutor = {
                     nome,
                     cpf,
                     telefone,
                     email,
                     endereco,
-                    cep:
-                        cep || null
+                    cep: cep || null
                 };
+
+                if (!tutorId) {
+                    dadosTutor.senha = senha;
+                }
 
                 const resultadoTutor =
                     await cadastrarTutor(

@@ -1,46 +1,69 @@
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+:root {
+    --azul: #0757a6;
+    --azul-escuro: #04407c;
+    --azul-claro: #e0effa;
+    --fundo: #f5faff;
+    --texto: #18324a;
+    --texto-suave: #64748b;
+    --borda: #e2edf7;
+    --branco: #ffffff;
+    --sombra: 0 8px 28px rgba(7, 55, 100, 0.07);
+}
+
 body {
     font-family: Arial, sans-serif;
-    background: #f5faff;
-    color: #18324a;
+    background: var(--fundo);
+    color: var(--texto);
     min-height: 100vh;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
 }
 
 header {
     width: 100%;
-    background: #0757a6;
-    color: white;
+    min-height: 145px;
     padding: 25px 5%;
-    min-height: 150px;
+    background: var(--azul);
+    color: var(--branco);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
+    gap: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .logo-area {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 16px;
 }
 
 .logo {
-    width: 65px;
-    height: 65px;
+    width: 68px;
+    height: 68px;
+    flex-shrink: 0;
     border-radius: 50%;
-    background: white;
-    color: #0757a6;
+    background: var(--branco);
+    color: var(--azul);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .logo i {
@@ -50,34 +73,30 @@ header {
 .logo-area h1 {
     font-size: 32px;
     margin-bottom: 5px;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .logo-area span {
     font-size: 17px;
-    font-weight: 500;
 }
 
 header button {
     border: none;
-    background: white;
-    color: #0757a6;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    background: var(--branco);
+    color: var(--azul);
+    padding: 12px 19px;
+    border-radius: 10px;
     font-weight: bold;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: 0.2s;
 }
 
 header button:hover {
+    background: #edf6ff;
     transform: translateY(-2px);
-}
-
-header button i {
-    font-size: 14px;
 }
 
 main {
@@ -90,25 +109,28 @@ main {
     justify-content: center;
     align-items: center;
     min-height: 65vh;
+    padding: 30px 15px;
 }
 
 .cadastro-card {
     width: 100%;
-    max-width: 500px;
-    background: white;
-    border-radius: 18px;
-    padding: 40px;
+    max-width: 540px;
+    background: var(--branco);
+    border: 1px solid #eaf2fa;
+    border-radius: 22px;
+    padding: 42px 35px;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 10px 35px rgba(7, 87, 166, 0.09);
+    animation: aparecer 0.35s ease;
 }
 
 .icone-cadastro {
-    width: 75px;
-    height: 75px;
-    margin: 0 auto 15px;
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 20px;
     border-radius: 50%;
-    background: #e0effa;
-    color: #0757a6;
+    background: var(--azul-claro);
+    color: var(--azul);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -116,14 +138,17 @@ main {
 }
 
 .cadastro-card h2 {
-    color: #0757a6;
+    color: var(--azul);
+    font-size: 25px;
+    line-height: 1.4;
     margin-bottom: 12px;
 }
 
 .cadastro-card p {
-    color: #64748b;
+    color: var(--texto-suave);
+    font-size: 15px;
+    line-height: 1.7;
     margin-bottom: 25px;
-    line-height: 1.5;
 }
 
 .cadastro-card button,
@@ -131,25 +156,51 @@ main {
 .botoes-formulario button:first-child,
 .botoes-modal button:first-child {
     border: none;
-    background: #0757a6;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    background: var(--azul);
+    color: var(--branco);
+    padding: 13px 20px;
+    border-radius: 9px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: 0.2s;
+    transition: background 0.2s, transform 0.2s;
 }
 
 .cadastro-card button:hover,
 .pets-titulo button:hover,
 .botoes-formulario button:first-child:hover,
 .botoes-modal button:first-child:hover {
-    background: #04407c;
+    background: var(--azul-escuro);
     transform: translateY(-1px);
+}
+
+.link-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 26px;
+    padding-top: 21px;
+    border-top: 1px solid var(--borda);
+    font-size: 14px;
+}
+
+.link-login span {
+    color: var(--texto-suave);
+}
+
+.link-login a {
+    color: var(--azul);
+    font-weight: bold;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.link-login a:hover {
+    color: var(--azul-escuro);
+    text-decoration: underline;
 }
 
 .area-perfil {
@@ -159,22 +210,24 @@ main {
 .perfil-container {
     width: 100%;
     max-width: 1000px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 .perfil-topo {
-    background: white;
+    background: var(--branco);
+    border: 1px solid var(--borda);
     border-radius: 18px;
     padding: 30px;
     display: flex;
     align-items: center;
     gap: 25px;
     margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    box-shadow: var(--sombra);
 }
 
 .foto-perfil-container {
     text-align: center;
+    flex-shrink: 0;
 }
 
 #fotoPerfil {
@@ -182,7 +235,7 @@ main {
     height: 130px;
     border-radius: 50%;
     object-fit: cover;
-    border: 4px solid #dceeff;
+    border: 4px solid var(--azul-claro);
     display: block;
 }
 
@@ -196,11 +249,10 @@ main {
 
 .botoes-foto button {
     border: none;
-    padding: 7px 10px;
-    border-radius: 6px;
-    background: #e0effa;
-    color: #0757a6;
-    cursor: pointer;
+    padding: 8px 10px;
+    border-radius: 7px;
+    background: var(--azul-claro);
+    color: var(--azul);
     font-size: 12px;
     display: flex;
     align-items: center;
@@ -213,37 +265,40 @@ main {
 }
 
 .dados-principais h2 {
-    color: #0757a6;
+    color: var(--azul);
     font-size: 27px;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
+    overflow-wrap: anywhere;
 }
 
 .dados-principais p {
-    color: #718096;
+    color: var(--texto-suave);
     display: flex;
     align-items: center;
     gap: 7px;
 }
 
 .dados-principais p i {
-    color: #0757a6;
+    color: var(--azul);
 }
 
-.dados-tutor {
-    background: white;
+.dados-tutor,
+.pets-section {
+    background: var(--branco);
+    border: 1px solid var(--borda);
     border-radius: 18px;
     padding: 30px;
     margin-bottom: 25px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
+    box-shadow: var(--sombra);
 }
 
 .dados-tutor h3,
 .pets-section h3 {
-    color: #0757a6;
+    color: var(--azul);
     margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 9px;
 }
 
 .dados-tutor h3 i,
@@ -253,44 +308,47 @@ main {
 
 .resumo-dados {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
 }
 
 .campo-resumo {
-    background: #f5faff;
-    border-radius: 10px;
-    padding: 14px;
+    min-width: 0;
+    background: #f7fbff;
+    border: 1px solid #edf3f9;
+    border-radius: 11px;
+    padding: 15px;
 }
 
 .campo-resumo span {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     font-size: 13px;
-    color: #718096;
-    margin-bottom: 5px;
+    color: var(--texto-suave);
+    margin-bottom: 7px;
 }
 
 .campo-resumo span i {
-    color: #0757a6;
+    color: var(--azul);
 }
 
 .campo-resumo strong {
-    color: #18324a;
-    word-break: break-word;
+    color: var(--texto);
+    overflow-wrap: anywhere;
 }
 
 #formulario {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
 }
 
 .campo {
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    gap: 8px;
     margin-bottom: 15px;
 }
 
@@ -300,11 +358,11 @@ main {
     color: #34495e;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
 }
 
 .campo label i {
-    color: #0757a6;
+    color: var(--azul);
     width: 16px;
     text-align: center;
 }
@@ -312,55 +370,57 @@ main {
 .campo input,
 .campo select {
     width: 100%;
+    min-width: 0;
     border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    padding: 11px;
+    border-radius: 9px;
+    padding: 12px;
     outline: none;
-    background: white;
-    color: #18324a;
+    background: var(--branco);
+    color: var(--texto);
     font-family: Arial, sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .campo input:focus,
 .campo select:focus {
-    border-color: #0757a6;
-    box-shadow: 0 0 0 2px rgba(7, 87, 166, 0.08);
+    border-color: var(--azul);
+    box-shadow: 0 0 0 3px rgba(7, 87, 166, 0.1);
 }
 
 .botoes-formulario {
     grid-column: 1 / -1;
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .botoes-formulario button:last-child,
 .botoes-modal button:last-child {
     border: none;
-    background: #e2e8f0;
+    background: #e8eef5;
     color: #334155;
     padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+    border-radius: 9px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: 0.2s;
 }
 
 .botoes-formulario button:last-child:hover,
 .botoes-modal button:last-child:hover {
-    background: #cbd5e1;
+    background: #d8e2ed;
 }
 
 #btnEditarPerfil {
     margin-top: 20px;
     border: none;
-    background: #e0effa;
-    color: #0757a6;
-    padding: 11px 18px;
-    border-radius: 8px;
-    cursor: pointer;
+    background: var(--azul-claro);
+    color: var(--azul);
+    padding: 12px 18px;
+    border-radius: 9px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
@@ -372,13 +432,6 @@ main {
     background: #cfe5f7;
 }
 
-.pets-section {
-    background: white;
-    border-radius: 18px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07);
-}
-
 .pets-titulo {
     display: flex;
     align-items: center;
@@ -388,21 +441,23 @@ main {
 }
 
 .pets-titulo h3 {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
 .pets-titulo p {
-    color: #718096;
+    color: var(--texto-suave);
     font-size: 14px;
+    line-height: 1.5;
 }
 
 .lista-pets {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
 }
 
 .pet-card {
+    min-width: 0;
     border: 1px solid #dceeff;
     border-radius: 15px;
     padding: 18px;
@@ -419,19 +474,21 @@ main {
 .foto-pet-card {
     width: 85px;
     height: 85px;
+    flex-shrink: 0;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid #dceeff;
-    background: #e0effa;
+    background: var(--azul-claro);
 }
 
 .pet-topo h4 {
-    color: #0757a6;
+    color: var(--azul);
     font-size: 20px;
-    margin-bottom: 4px;
+    margin-bottom: 5px;
     display: flex;
     align-items: center;
     gap: 6px;
+    overflow-wrap: anywhere;
 }
 
 .pet-topo h4 i {
@@ -439,38 +496,40 @@ main {
 }
 
 .pet-topo p {
-    color: #718096;
+    color: var(--texto-suave);
+    overflow-wrap: anywhere;
 }
 
 .pet-dados {
     display: grid;
-    gap: 8px;
+    gap: 9px;
     margin-bottom: 15px;
 }
 
 .pet-dado {
     display: flex;
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     border-bottom: 1px solid #edf2f7;
-    padding-bottom: 7px;
+    padding-bottom: 8px;
 }
 
 .pet-dado span:first-child {
-    color: #718096;
+    color: var(--texto-suave);
     display: flex;
     align-items: center;
     gap: 6px;
 }
 
 .pet-dado span i {
-    color: #0757a6;
+    color: var(--azul);
     width: 15px;
     text-align: center;
 }
 
 .pet-dado strong {
     text-align: right;
+    overflow-wrap: anywhere;
 }
 
 .status-carteira-container {
@@ -481,8 +540,8 @@ main {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 7px 10px;
-    border-radius: 7px;
+    padding: 8px 10px;
+    border-radius: 8px;
     font-size: 13px;
     font-weight: bold;
     margin-bottom: 10px;
@@ -510,11 +569,10 @@ main {
 
 .acoes-pet button {
     border: none;
-    background: #0757a6;
-    color: white;
-    padding: 9px 13px;
-    border-radius: 7px;
-    cursor: pointer;
+    background: var(--azul);
+    color: var(--branco);
+    padding: 10px 13px;
+    border-radius: 8px;
     font-size: 13px;
     display: inline-flex;
     align-items: center;
@@ -524,12 +582,12 @@ main {
 }
 
 .acoes-pet button:hover {
-    background: #04407c;
+    background: var(--azul-escuro);
 }
 
 .acoes-pet button.secundario {
-    background: #e0effa;
-    color: #0757a6;
+    background: var(--azul-claro);
+    color: var(--azul);
 }
 
 .acoes-pet button.secundario:hover {
@@ -539,13 +597,13 @@ main {
 .sem-pets {
     text-align: center;
     padding: 30px;
-    color: #718096;
+    color: var(--texto-suave);
     background: #f8fbff;
     border-radius: 12px;
 }
 
 .sem-pets i {
-    color: #0757a6;
+    color: var(--azul);
     font-size: 25px;
     display: block;
     margin-bottom: 10px;
@@ -554,7 +612,8 @@ main {
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(15, 35, 55, 0.55);
+    backdrop-filter: blur(3px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -567,27 +626,31 @@ main {
 }
 
 .modal-conteudo {
-    background: white;
+    background: var(--branco);
     width: 100%;
     max-width: 650px;
     max-height: 90vh;
     overflow-y: auto;
     border-radius: 18px;
     padding: 25px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: aparecer 0.25s ease;
 }
 
 .modal-cabecalho {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
     margin-bottom: 20px;
 }
 
 .modal-cabecalho h2 {
-    color: #0757a6;
+    color: var(--azul);
     display: flex;
     align-items: center;
     gap: 8px;
+    font-size: 22px;
 }
 
 .modal-cabecalho h2 i {
@@ -597,9 +660,9 @@ main {
 #btnFecharModal {
     border: none;
     background: transparent;
-    font-size: 30px;
+    font-size: 27px;
     cursor: pointer;
-    color: #64748b;
+    color: var(--texto-suave);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -607,7 +670,7 @@ main {
 }
 
 #btnFecharModal:hover {
-    color: #0757a6;
+    color: var(--azul);
 }
 
 .foto-pet-area {
@@ -632,15 +695,15 @@ main {
 }
 
 .btn-foto-pet {
-    background: #e0effa;
-    color: #0757a6;
-    padding: 10px 15px;
-    border-radius: 8px;
-    cursor: pointer;
+    background: var(--azul-claro);
+    color: var(--azul);
+    padding: 11px 15px;
+    border-radius: 9px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    cursor: pointer;
 }
 
 .btn-foto-pet:hover {
@@ -649,23 +712,23 @@ main {
 
 .idade-container {
     display: grid;
-    grid-template-columns: 1fr 130px;
+    grid-template-columns: minmax(0, 1fr) 130px;
     gap: 10px;
 }
 
 #nomeCarteiraArquivo {
     font-size: 13px;
-    color: #64748b;
+    color: var(--texto-suave);
     margin-top: 3px;
+    overflow-wrap: anywhere;
 }
 
 #btnVisualizarCarteiraPet {
     border: none;
-    background: #e0effa;
-    color: #0757a6;
-    padding: 9px 12px;
-    border-radius: 7px;
-    cursor: pointer;
+    background: var(--azul-claro);
+    color: var(--azul);
+    padding: 10px 12px;
+    border-radius: 8px;
     font-weight: bold;
     display: inline-flex;
     align-items: center;
@@ -691,11 +754,12 @@ main {
     position: fixed;
     right: 20px;
     bottom: 20px;
+    max-width: calc(100% - 40px);
     z-index: 2000;
-    background: #0757a6;
-    color: white;
+    background: var(--azul);
+    color: var(--branco);
     padding: 13px 18px;
-    border-radius: 9px;
+    border-radius: 10px;
     display: none;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -704,11 +768,22 @@ main {
     display: block;
 }
 
-@media (max-width: 700px) {
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
 
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 700px) {
     header {
         padding: 18px;
-        min-height: 110px;
+        min-height: 105px;
     }
 
     .logo-area {
@@ -718,7 +793,6 @@ main {
     .logo {
         width: 52px;
         height: 52px;
-        font-size: 25px;
     }
 
     .logo i {
@@ -734,7 +808,7 @@ main {
     }
 
     header button {
-        padding: 9px 12px;
+        padding: 10px 12px;
         font-size: 13px;
     }
 
@@ -742,19 +816,43 @@ main {
         padding: 20px 12px;
     }
 
+    .area-cadastro {
+        min-height: 65vh;
+        padding: 20px 5px;
+    }
+
+    .cadastro-card {
+        padding: 32px 22px;
+        border-radius: 18px;
+    }
+
+    .cadastro-card h2 {
+        font-size: 22px;
+    }
+
+    .cadastro-card p {
+        font-size: 14px;
+    }
+
     .perfil-topo {
         flex-direction: column;
         text-align: center;
+        padding: 24px 16px;
     }
 
     .dados-principais p {
         justify-content: center;
     }
 
+    .dados-tutor,
+    .pets-section {
+        padding: 22px 16px;
+    }
+
     .resumo-dados,
     #formulario,
     .lista-pets {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .pets-titulo {
@@ -771,7 +869,7 @@ main {
     }
 
     .idade-container {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr) 110px;
     }
 
     .botoes-modal,
@@ -779,8 +877,9 @@ main {
         flex-direction: column;
     }
 
-    .cadastro-card {
-        padding: 30px 20px;
+    .botoes-modal button,
+    .botoes-formulario button {
+        width: 100%;
     }
 
     .pet-card {
@@ -793,5 +892,24 @@ main {
 
     .acoes-pet button {
         width: 100%;
+    }
+}
+
+@media (max-width: 380px) {
+    header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    header button {
+        align-self: flex-end;
+    }
+
+    .logo-area h1 {
+        font-size: 21px;
+    }
+
+    .idade-container {
+        grid-template-columns: minmax(0, 1fr);
     }
 }

@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
 const conexao = require("./config/database");
@@ -52,6 +53,15 @@ function validarCPF(cpf) {
     const cpfLimpo = String(cpf).replace(/\D/g, "");
 
     return cpfLimpo.length === 11;
+}
+
+function validarSenha(senha) {
+    return typeof senha === "string" &&
+        senha.length >= 8 &&
+        /[A-Z]/.test(senha) &&
+        /[a-z]/.test(senha) &&
+        /\d/.test(senha) &&
+        /[^A-Za-z0-9]/.test(senha);
 }
 
 function validarEmail(email) {
@@ -132,6 +142,48 @@ app.get("/api/tutores", async (req, res) => {
     }
 });
 
+app.post("/api/tutores/login", async (req, res) => {
+    try {
+        const cpf = String(req.body.cpf || "").replace(/\D/g, "");
+        const senha = req.body.senha;
+
+        if (cpf.length !== 11 || typeof senha !== "string" || !senha) {
+            return res.status(400).json({ mensagem: "Informe CPF e senha." });
+        }
+
+        const [tutores] = await conexao.execute(`
+            SELECT id, nome, cpf, telefone, email, endereco, cep, foto, senha_hash
+            FROM tutores
+            WHERE cpf = ?
+            LIMIT 1
+        `, [cpf]);
+
+        if (!tutores.length) {
+            return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
+        }
+
+        const tutor = tutores[0];
+
+        if (!tutor.senha_hash) {
+            return res.status(409).json({
+                mensagem: "Este cadastro é antigo e ainda não possui senha. Para preservar seus dados, peça ao responsável pelo sistema para ativar o acesso."
+            });
+        }
+
+        const senhaCorreta = await bcrypt.compare(senha, tutor.senha_hash);
+
+        if (!senhaCorreta) {
+            return res.status(401).json({ mensagem: "CPF ou senha incorretos." });
+        }
+
+        delete tutor.senha_hash;
+        res.json({ mensagem: "Login realizado com sucesso.", tutor });
+    } catch (erro) {
+        console.error("Erro no login do tutor:", erro);
+        res.status(500).json({ mensagem: "Não foi possível entrar agora." });
+    }
+});
+
 app.get("/api/tutores/:id", async (req, res) => {
     try {
         const { id } = req.params;
@@ -184,7 +236,8 @@ app.post("/api/tutores", async (req, res) => {
             email,
             endereco,
             cep,
-            foto
+            foto,
+            senha
         } = req.body;
 
         if (
@@ -196,6 +249,12 @@ app.post("/api/tutores", async (req, res) => {
         ) {
             return res.status(400).json({
                 mensagem: "Preencha todos os campos obrigatórios."
+            });
+        }
+
+        if (!validarSenha(senha)) {
+            return res.status(400).json({
+                mensagem: "A senha precisa ter pelo menos 8 caracteres, uma letra maiúscula, uma minúscula, um número e um caractere especial."
             });
         }
 
@@ -273,6 +332,8 @@ app.post("/api/tutores", async (req, res) => {
             });
         }
 
+        const senhaHash = await bcrypt.hash(senha, 12);
+
         const [resultado] = await conexao.execute(`
             INSERT INTO tutores
             (
@@ -282,9 +343,10 @@ app.post("/api/tutores", async (req, res) => {
                 email,
                 endereco,
                 cep,
-                foto
+                foto,
+                senha_hash
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `, [
             nome.trim(),
             cpfLimpo,
@@ -292,7 +354,8 @@ app.post("/api/tutores", async (req, res) => {
             email.trim(),
             endereco.trim(),
             cepLimpo,
-            foto || null
+            foto || null,
+            senhaHash
         ]);
 
         const [novoTutor] = await conexao.execute(`
